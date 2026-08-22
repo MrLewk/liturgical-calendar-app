@@ -306,19 +306,19 @@ export default function App() {
     <div className="w-full flex" style={{ minHeight: "100dvh", backgroundColor: theme.bgOuter }}>
       {/* Desktop sidebar — replaces the mobile header + bottom tab bar at the lg breakpoint */}
       <aside
-        className="hidden lg:flex lg:flex-col w-[240px] flex-shrink-0 border-r px-4 py-6"
+        className="hidden lg:flex lg:flex-col w-[280px] flex-shrink-0 border-r px-5 py-8"
         style={{ borderColor: theme.border, backgroundColor: theme.surfaceRaised }}
       >
-        <div className="px-2 mb-8">
-          <p className="text-[10px] uppercase tracking-[0.25em] mb-1" style={{ color: accent }}>
+        <div className="px-2 mb-10">
+          <p className="text-[12px] uppercase tracking-[0.25em] mb-1.5" style={{ color: accent }}>
             {tradition}
           </p>
-          <h1 className="text-[20px] tracking-wide" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+          <h1 className="text-[26px] tracking-wide" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
             Ordo
           </h1>
         </div>
 
-        <nav className="flex flex-col gap-1">
+        <nav className="flex flex-col gap-1.5">
           {navItems.map((item) => (
             <SidebarNavButton
               key={item.key}
@@ -337,10 +337,10 @@ export default function App() {
           <ThemeToggleButton />
           <button
             onClick={() => setShowSettings(true)}
-            className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl text-[13px]"
+            className="flex-1 flex items-center gap-2.5 px-4 py-3 rounded-xl text-[15px]"
             style={{ backgroundColor: theme.bg, color: alpha(theme.text, 0.8) }}
           >
-            <Settings2 size={15} />
+            <Settings2 size={18} />
             Settings
           </button>
         </div>
@@ -382,7 +382,7 @@ export default function App() {
               internally instead of stretching the flex column (which would drag
               the header and tab bar along with it) */}
           <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-4 lg:px-12 lg:py-10 no-scrollbar">
-            <div className="lg:max-w-3xl lg:mx-auto">{content}</div>
+            {content}
           </div>
 
           {/* Bottom tab bar — hidden on desktop. Padded for the home indicator via safe-area-inset */}
@@ -446,13 +446,13 @@ function SidebarNavButton({ icon: Icon, label, active, color, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13.5px] text-left"
+      className="flex items-center gap-3.5 px-4 py-3 rounded-xl text-[16px] text-left"
       style={{
         backgroundColor: active ? alpha(color, 0.14) : "transparent",
         color: active ? color : alpha(theme.text, 0.65),
       }}
     >
-      <Icon size={17} strokeWidth={active ? 2.4 : 1.8} />
+      <Icon size={20} strokeWidth={active ? 2.4 : 1.8} />
       {label}
     </button>
   );
@@ -479,7 +479,7 @@ function SheetOverlay({ onClose, children }) {
     <div className="fixed inset-0 z-50 flex items-end justify-center lg:items-center" onClick={onClose}>
       <div className="absolute inset-0" style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }} />
       <div
-        className="relative w-full lg:w-auto lg:min-w-[440px] lg:max-w-[520px] rounded-t-3xl lg:rounded-2xl p-6 pb-10 lg:pb-6 max-h-[85vh] overflow-y-auto no-scrollbar"
+        className="relative w-full lg:w-auto lg:min-w-[480px] lg:max-w-[560px] rounded-t-3xl lg:rounded-2xl p-6 lg:p-8 pb-10 lg:pb-8 max-h-[85vh] overflow-y-auto no-scrollbar"
         style={{ backgroundColor: theme.surfaceRaised }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -720,49 +720,50 @@ function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, traditi
   const nextFeast = FEASTS[0];
   const readingRef = firstReadingRef(tradition);
   return (
-    <div className="pt-2 lg:pt-0 lg:grid lg:grid-cols-[1fr_360px] lg:gap-8 lg:items-start">
+    <div className="pt-2 lg:pt-0 lg:grid lg:grid-cols-[1fr_420px] lg:gap-10 lg:items-start">
       <div>
         {/* Hero card */}
         <div
-          className="rounded-3xl p-6 mb-4 relative overflow-hidden"
+          className="rounded-3xl p-6 lg:p-9 mb-4 lg:mb-6 relative overflow-hidden"
           style={{ backgroundColor: alpha(season.color, 0.13), border: `1px solid ${alpha(season.color, 0.33)}` }}
         >
-          <p className="text-[10px] uppercase tracking-[0.3em] mb-1" style={{ color: accent }}>
+          <p className="text-[10px] lg:text-[13px] uppercase tracking-[0.3em] mb-1 lg:mb-2" style={{ color: accent }}>
             {season.latin}
           </p>
           <h2
-            className="text-[32px] leading-tight mb-1"
+            className="text-[32px] lg:text-[48px] leading-tight mb-1 lg:mb-2"
             style={{ fontFamily: "'Fraunces', serif", color: theme.text }}
           >
             {season.name}
           </h2>
-          <p className="text-[13px] mb-5" style={{ color: alpha(theme.text, 0.6) }}>
+          <p className="text-[13px] lg:text-[16px] mb-5 lg:mb-7" style={{ color: alpha(theme.text, 0.6) }}>
             {season.weekLabel} · Saturday, August 22
           </p>
 
           {/* Candle progress bar */}
-          <div className="flex items-center gap-2">
-            <Flame size={14} color={accent} />
-            <div className="flex-1 h-[6px] rounded-full overflow-hidden" style={{ backgroundColor: alpha(theme.text, 0.12) }}>
+          <div className="flex items-center gap-2 lg:gap-3">
+            <Flame size={14} className="lg:hidden" color={accent} />
+            <Flame size={18} className="hidden lg:block" color={accent} />
+            <div className="flex-1 h-[6px] lg:h-[8px] rounded-full overflow-hidden" style={{ backgroundColor: alpha(theme.text, 0.12) }}>
               <div
                 className="h-full rounded-full"
                 style={{ width: `${progressPct}%`, backgroundColor: accent }}
               />
             </div>
-            <span className="text-[11px]" style={{ color: alpha(theme.text, 0.5) }}>
+            <span className="text-[11px] lg:text-[14px]" style={{ color: alpha(theme.text, 0.5) }}>
               {season.dayInSeason}/{season.seasonLength}d
             </span>
           </div>
         </div>
 
         {/* Color swatch card */}
-        <div className="rounded-2xl p-4 mb-4 flex items-center gap-3" style={{ backgroundColor: theme.surface }}>
-          <div className="w-10 h-10 rounded-full border-2" style={{ backgroundColor: season.color, borderColor: alpha(theme.text, 0.2) }} />
+        <div className="rounded-2xl p-4 lg:p-5 mb-4 lg:mb-5 flex items-center gap-3 lg:gap-4" style={{ backgroundColor: theme.surface }}>
+          <div className="w-10 h-10 lg:w-14 lg:h-14 rounded-full border-2 flex-shrink-0" style={{ backgroundColor: season.color, borderColor: alpha(theme.text, 0.2) }} />
           <div>
-            <p className="text-[13px]" style={{ color: theme.text }}>
+            <p className="text-[13px] lg:text-[16px]" style={{ color: theme.text }}>
               Liturgical color
             </p>
-            <p className="text-[11px]" style={{ color: alpha(theme.text, 0.4) }}>
+            <p className="text-[11px] lg:text-[14px]" style={{ color: alpha(theme.text, 0.4) }}>
               Green — growth, ordinary discipleship
             </p>
           </div>
@@ -771,46 +772,49 @@ function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, traditi
         {/* Reading teaser — clicks through to the full Readings tab */}
         <button
           onClick={onOpenReadings}
-          className="w-full rounded-2xl p-4 mb-4 flex items-center justify-between text-left"
+          className="w-full rounded-2xl p-4 lg:p-5 mb-4 lg:mb-5 flex items-center justify-between text-left"
           style={{ backgroundColor: theme.surface }}
         >
-          <div className="flex items-center gap-3">
-            <BookOpen size={18} color={accent} />
+          <div className="flex items-center gap-3 lg:gap-4">
+            <BookOpen size={18} className="lg:hidden" color={accent} />
+            <BookOpen size={22} className="hidden lg:block" color={accent} />
             <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
+              <p className="text-[10px] lg:text-[12px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
                 Today's reading
               </p>
-              <p className="text-[14px]" style={{ color: theme.text }}>
+              <p className="text-[14px] lg:text-[17px]" style={{ color: theme.text }}>
                 {readingRef}
               </p>
             </div>
           </div>
-          <ChevronRight size={18} color={alpha(theme.text, 0.33)} />
+          <ChevronRight size={18} className="lg:hidden" color={alpha(theme.text, 0.33)} />
+          <ChevronRight size={22} className="hidden lg:block" color={alpha(theme.text, 0.33)} />
         </button>
 
         {/* Next feast teaser — clicks through to the same bio sheet as the Feasts tab */}
         <button
           onClick={() => onSelectFeast(nextFeast)}
-          className="w-full rounded-2xl p-4 flex items-center justify-between text-left"
+          className="w-full rounded-2xl p-4 lg:p-5 flex items-center justify-between text-left"
           style={{ backgroundColor: theme.surface }}
         >
           <div>
-            <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
+            <p className="text-[10px] lg:text-[12px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
               Next feast
             </p>
-            <p className="text-[14px]" style={{ color: theme.text }}>
+            <p className="text-[14px] lg:text-[17px]" style={{ color: theme.text }}>
               {nextFeast.name}
             </p>
-            <p className="text-[11px]" style={{ color: alpha(theme.text, 0.4) }}>
+            <p className="text-[11px] lg:text-[14px]" style={{ color: alpha(theme.text, 0.4) }}>
               {nextFeast.date} · {nextFeast.rank}
             </p>
           </div>
-          <ChevronRight size={18} color={alpha(theme.text, 0.33)} />
+          <ChevronRight size={18} className="lg:hidden" color={alpha(theme.text, 0.33)} />
+          <ChevronRight size={22} className="hidden lg:block" color={alpha(theme.text, 0.33)} />
         </button>
 
         {/* Sync button */}
         <button
-          className="w-full mt-4 rounded-2xl py-3 flex items-center justify-center gap-2 text-[13px]"
+          className="w-full mt-4 lg:mt-6 rounded-2xl py-3 lg:py-4 flex items-center justify-center gap-2 text-[13px] lg:text-[16px]"
           style={{ backgroundColor: season.color, color: "#EDE7DC" }}
         >
           <Download size={15} />
@@ -820,11 +824,11 @@ function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, traditi
 
       {/* Desktop-only: year-at-a-glance wheel alongside Today, so the two most
           "visual" views sit together rather than requiring a tab switch. */}
-      <div className="hidden lg:block rounded-3xl p-6" style={{ backgroundColor: theme.surface }}>
-        <p className="text-[11px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
+      <div className="hidden lg:block rounded-3xl p-8" style={{ backgroundColor: theme.surface }}>
+        <p className="text-[13px] uppercase tracking-[0.2em] mb-2" style={{ color: alpha(theme.text, 0.4) }}>
           Year at a glance
         </p>
-        <WheelView season={season} tradition={tradition} calendar={calendar} compact />
+        <WheelView season={season} tradition={tradition} calendar={calendar} />
       </div>
     </div>
   );
@@ -842,14 +846,15 @@ function GridView({ season, onSelectDay }) {
   const theme = useTheme();
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const highlightDays = { 24: "#A32638", 28: theme.mode === "dark" ? "#EDE7DC" : "#2B2620" };
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   return (
-    <div className="pt-2">
-      <h3 className="text-[18px] mb-3" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+    <div className="pt-2 lg:max-w-3xl">
+      <h3 className="text-[18px] lg:text-[26px] mb-3 lg:mb-5" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
         August
       </h3>
-      <div className="grid grid-cols-7 gap-1.5 mb-2">
-        {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-          <div key={i} className="text-center text-[10px] pb-1" style={{ color: alpha(theme.text, 0.33) }}>
+      <div className="grid grid-cols-7 gap-1.5 lg:gap-2.5 mb-2">
+        {dayNames.map((d, i) => (
+          <div key={i} className="text-center text-[10px] lg:text-[13px] pb-1 lg:pb-2" style={{ color: alpha(theme.text, 0.33) }}>
             {d}
           </div>
         ))}
@@ -864,7 +869,7 @@ function GridView({ season, onSelectDay }) {
             <button
               key={d}
               onClick={() => onSelectDay(d)}
-              className="aspect-square rounded-lg flex items-center justify-center text-[12px] relative"
+              className="aspect-square rounded-lg lg:rounded-xl flex items-center justify-center text-[12px] lg:text-[16px] relative"
               style={{
                 backgroundColor: isToday ? season.color : highlight ? alpha(highlight, 0.13) : theme.surface,
                 color: isToday ? "#FFFFFF" : alpha(theme.text, 0.8),
@@ -876,7 +881,7 @@ function GridView({ season, onSelectDay }) {
               {d}
               {highlight && (
                 <span
-                  className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full"
+                  className="absolute top-1.5 right-1.5 lg:top-2.5 lg:right-2.5 w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full"
                   style={{ backgroundColor: highlight, border: `1px solid ${alpha(theme.text, 0.15)}` }}
                 />
               )}
@@ -884,7 +889,7 @@ function GridView({ season, onSelectDay }) {
           );
         })}
       </div>
-      <p className="text-[11px] mt-3" style={{ color: alpha(theme.text, 0.33) }}>
+      <p className="text-[11px] lg:text-[14px] mt-3 lg:mt-4" style={{ color: alpha(theme.text, 0.33) }}>
         Tap a day for its details · bottom border shows its season · dot marks a feast day.
       </p>
     </div>
@@ -1035,79 +1040,80 @@ function ReadingsView({ tradition, season }) {
   const activeData = data.kind === "office" ? data[validSegment] : data.kind === "mass" ? data.mass : data.daily;
 
   return (
-    <div className="pt-2 lg:max-w-2xl">
-      <div className="flex items-center justify-between mb-1">
-        <h3 className="text-[18px] lg:text-[22px]" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+    <div className="pt-2 lg:pt-0 lg:max-w-3xl">
+      <div className="flex items-center justify-between mb-1 lg:mb-2">
+        <h3 className="text-[18px] lg:text-[28px]" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
           Prayer &amp; Readings
         </h3>
-        <span className="text-[10px] uppercase tracking-[0.2em]" style={{ color: alpha(theme.text, 0.33) }}>
+        <span className="text-[10px] lg:text-[13px] uppercase tracking-[0.2em]" style={{ color: alpha(theme.text, 0.33) }}>
           {tradition}
         </span>
       </div>
 
       {segments && (
-        <div className="flex gap-1.5 mb-4 mt-3">
+        <div className="flex gap-1.5 lg:gap-2.5 mb-4 lg:mb-6 mt-3 lg:mt-5">
           {segments.map((s) => (
             <button
               key={s.key}
               onClick={() => setSegment(s.key)}
-              className="flex-1 rounded-xl py-2 flex items-center justify-center gap-1.5 text-[12px]"
+              className="flex-1 rounded-xl py-2 lg:py-3 flex items-center justify-center gap-1.5 lg:gap-2 text-[12px] lg:text-[15px]"
               style={{
                 backgroundColor: validSegment === s.key ? season.color : theme.surface,
                 color: validSegment === s.key ? "#FFFFFF" : alpha(theme.text, 0.53),
               }}
             >
-              <s.icon size={13} />
+              <s.icon size={13} className="lg:hidden" />
+              <s.icon size={17} className="hidden lg:block" />
               {s.label}
             </button>
           ))}
         </div>
       )}
       {!segments && (
-        <p className="text-[12px] mb-4 mt-2" style={{ color: alpha(theme.text, 0.4) }}>
+        <p className="text-[12px] lg:text-[15px] mb-4 lg:mb-6 mt-2 lg:mt-4" style={{ color: alpha(theme.text, 0.4) }}>
           {activeData.label}
         </p>
       )}
 
-      <div className="flex items-center gap-4 mb-3">
-        <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-0.5 rounded-full" style={{ backgroundColor: season.color }} />
-          <span className="text-[10px]" style={{ color: alpha(theme.text, 0.4) }}>
+      <div className="flex items-center gap-4 lg:gap-6 mb-3 lg:mb-5">
+        <div className="flex items-center gap-1.5 lg:gap-2">
+          <span className="w-2.5 lg:w-3.5 h-0.5 rounded-full" style={{ backgroundColor: season.color }} />
+          <span className="text-[10px] lg:text-[13px]" style={{ color: alpha(theme.text, 0.4) }}>
             Prayer
           </span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-0.5 rounded-full" style={{ backgroundColor: "#C9A227" }} />
-          <span className="text-[10px]" style={{ color: alpha(theme.text, 0.4) }}>
+        <div className="flex items-center gap-1.5 lg:gap-2">
+          <span className="w-2.5 lg:w-3.5 h-0.5 rounded-full" style={{ backgroundColor: "#C9A227" }} />
+          <span className="text-[10px] lg:text-[13px]" style={{ color: alpha(theme.text, 0.4) }}>
             Scripture
           </span>
         </div>
       </div>
 
-      <div className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-3 lg:space-y-0">
+      <div className="space-y-3 lg:space-y-5">
         {activeData.sequence.map((item, i) => (
           <div
             key={i}
-            className="rounded-2xl p-4"
+            className="rounded-2xl p-4 lg:p-6"
             style={{
               backgroundColor: theme.surface,
-              borderLeft: item.type === "prayer" ? `3px solid ${season.color}` : "3px solid #C9A227",
+              borderLeft: item.type === "prayer" ? `4px solid ${season.color}` : "4px solid #C9A227",
             }}
           >
             {item.role && (
-              <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: accent }}>
+              <p className="text-[10px] lg:text-[13px] uppercase tracking-[0.2em] mb-1 lg:mb-1.5" style={{ color: accent }}>
                 {item.role}
               </p>
             )}
-            <p className="text-[13px] mb-2" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+            <p className="text-[13px] lg:text-[19px] mb-2 lg:mb-3" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
               {item.ref}
             </p>
-            <p className="text-[12.5px] leading-relaxed" style={{ color: alpha(theme.text, 0.73) }}>
+            <p className="text-[12.5px] lg:text-[16px] leading-relaxed" style={{ color: alpha(theme.text, 0.73) }}>
               {item.text}
               {item.truncated && <span style={{ color: alpha(theme.text, 0.33) }}> …</span>}
             </p>
             {item.truncated && (
-              <button className="text-[11px] mt-2 underline decoration-dotted" style={{ color: accent }}>
+              <button className="text-[11px] lg:text-[14px] mt-2 lg:mt-3 underline decoration-dotted" style={{ color: accent }}>
                 {item.type === "prayer" ? "Read full text" : "Read full passage"}
               </button>
             )}
@@ -1115,7 +1121,7 @@ function ReadingsView({ tradition, season }) {
         ))}
       </div>
 
-      <p className="text-[10px] mt-4 leading-relaxed" style={{ color: alpha(theme.text, 0.27) }}>
+      <p className="text-[10px] lg:text-[13px] mt-4 lg:mt-6 leading-relaxed" style={{ color: alpha(theme.text, 0.27) }}>
         Prayers and readings shown here use public-domain or traditional wording (KJV, 1662 BCP,
         ancient liturgical formulas) for mockup purposes. A shipped app would need to license each
         tradition's current official translation, or fall back to a public-domain edition.
@@ -1127,31 +1133,32 @@ function ReadingsView({ tradition, season }) {
 function FeastsView({ onSelectFeast }) {
   const theme = useTheme();
   return (
-    <div className="pt-2 lg:max-w-2xl">
-      <h3 className="text-[18px] lg:text-[22px] mb-3" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+    <div className="pt-2 lg:pt-0 lg:max-w-3xl">
+      <h3 className="text-[18px] lg:text-[28px] mb-3 lg:mb-6" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
         Upcoming feasts
       </h3>
-      <div className="space-y-2 lg:grid lg:grid-cols-2 lg:gap-2.5 lg:space-y-0">
+      <div className="space-y-2 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
         {FEASTS.map((f, i) => (
           <button
             key={i}
             onClick={() => onSelectFeast(f)}
-            className="w-full rounded-2xl p-3.5 flex items-center gap-3 text-left"
+            className="w-full rounded-2xl p-3.5 lg:p-5 flex items-center gap-3 lg:gap-4 text-left"
             style={{ backgroundColor: theme.surface }}
           >
             <div
-              className="w-1.5 h-10 rounded-full flex-shrink-0"
+              className="w-1.5 lg:w-2 h-10 lg:h-14 rounded-full flex-shrink-0"
               style={{ backgroundColor: f.color, border: `1px solid ${alpha(theme.text, 0.15)}` }}
             />
             <div className="flex-1">
-              <p className="text-[13px]" style={{ color: theme.text }}>
+              <p className="text-[13px] lg:text-[17px]" style={{ color: theme.text }}>
                 {f.name}
               </p>
-              <p className="text-[11px]" style={{ color: alpha(theme.text, 0.4) }}>
+              <p className="text-[11px] lg:text-[14px]" style={{ color: alpha(theme.text, 0.4) }}>
                 {f.date} · {f.rank}
               </p>
             </div>
-            <ChevronRight size={16} color={alpha(theme.text, 0.33)} />
+            <ChevronRight size={16} className="lg:hidden" color={alpha(theme.text, 0.33)} />
+            <ChevronRight size={20} className="hidden lg:block" color={alpha(theme.text, 0.33)} />
           </button>
         ))}
       </div>
