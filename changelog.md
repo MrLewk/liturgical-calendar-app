@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.10.1] — Fix low-contrast feast dots
+
+- **Fixed:** Feast-day markers using light liturgical colors (white, gold) had a faint border and blended into the app's cream background, making them hard to spot. The border around feast markers is now darker and slightly thicker across the Grid tab dots, the Feasts tab list bars, and the feast detail sheet icon.
+
 ## [0.10.0] — Full-text scripture readings, close buttons on all sheets
 
 - **Added:** Every scripture reading on the Prayer & Readings tab is now tappable, opening the full passage — verse-numbered, complete text — in a new `ScripturePassageModal` sheet.

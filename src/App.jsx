@@ -1184,7 +1184,7 @@ function FeastModal({ feast, onClose }) {
       <div className="flex items-center gap-2 mb-1">
         <span
           className="w-3 h-3 rounded-full flex-shrink-0"
-          style={{ backgroundColor: feast.color, border: `1px solid ${alpha(theme.text, 0.2)}` }}
+          style={{ backgroundColor: feast.color, border: `1.5px solid ${alpha(theme.text, 0.4)}` }}
         />
         <p className="text-[11px] uppercase tracking-[0.2em]" style={{ color: alpha(theme.text, 0.4) }}>
           {shortDate(feast.date)} · {feast.rank}
@@ -1529,7 +1529,7 @@ function GridView({ today, tradition, calendar, onSelectDay }) {
               {feast && (
                 <span
                   className="absolute top-1.5 right-1.5 lg:top-2.5 lg:right-2.5 w-1.5 h-1.5 lg:w-3 lg:h-3 rounded-full"
-                  style={{ backgroundColor: feast.color, border: `1px solid ${alpha(theme.text, 0.15)}` }}
+                  style={{ backgroundColor: feast.color, border: `1.5px solid ${alpha(theme.text, 0.4)}` }}
                 />
               )}
             </button>
@@ -1827,7 +1827,7 @@ function FeastsView({ tradition, calendar, today, onSelectFeast }) {
           >
             <div
               className="w-1.5 lg:w-2 h-10 lg:h-14 rounded-full flex-shrink-0"
-              style={{ backgroundColor: f.color, border: `1px solid ${alpha(theme.text, 0.15)}` }}
+              style={{ backgroundColor: f.color, border: `1.5px solid ${alpha(theme.text, 0.35)}` }}
             />
             <div className="flex-1">
               <p className="text-[13px] lg:text-[17px]" style={{ color: theme.text }}>

@@ -6,6 +6,13 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.10.1",
+    title: "Fix low-contrast feast dots",
+    changes: [
+      { type: "Fixed", text: "Feast-day markers in light liturgical colors (white, gold) had a faint border and blended into the app's cream background. The border is now darker and slightly thicker across the Grid tab, Feasts tab, and feast detail sheet." },
+    ],
+  },
+  {
     version: "0.10.0",
     title: "Full-text scripture readings, close buttons on all sheets",
     changes: [
