@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, Download, BookOpen, Sun, Moon, SunMoon } from "lucide-react";
 import { useTheme } from "./ThemeContext";
 import { alpha, seasonAccent } from "./theme";
+import UpdateToast from "./UpdateToast";
 
 // ---- Static demo data (real logic comes later) ----
 const SEASONS = {
@@ -306,7 +307,7 @@ export default function App() {
     <div className="w-full flex" style={{ minHeight: "100dvh", backgroundColor: theme.bgOuter }}>
       {/* Desktop sidebar — replaces the mobile header + bottom tab bar at the lg breakpoint */}
       <aside
-        className="hidden lg:flex lg:flex-col w-[280px] flex-shrink-0 border-r px-5 py-8"
+        className="hidden lg:flex lg:flex-col lg:fixed lg:left-0 lg:top-0 lg:h-[100dvh] lg:overflow-y-auto w-[280px] flex-shrink-0 border-r px-5 py-8"
         style={{ borderColor: theme.border, backgroundColor: theme.surfaceRaised }}
       >
         <div className="px-2 mb-10">
@@ -346,8 +347,9 @@ export default function App() {
         </div>
       </aside>
 
-      {/* Main column */}
-      <div className="flex-1 flex items-center justify-center lg:items-stretch lg:justify-stretch">
+      {/* Main column — offset by the sidebar's fixed width on desktop, since a
+          position:fixed element is removed from normal document flow. */}
+      <div className="flex-1 flex items-center justify-center lg:items-stretch lg:justify-stretch lg:ml-[280px]">
         <div
           className="relative w-full max-w-[480px] lg:max-w-none flex flex-col sm:my-6 sm:rounded-[2rem] sm:shadow-2xl lg:my-0 lg:rounded-none lg:shadow-none overflow-hidden lg:overflow-visible"
           style={{ minHeight: "100dvh", backgroundColor: theme.bg }}
@@ -437,6 +439,8 @@ export default function App() {
           )}
         </div>
       </div>
+
+      <UpdateToast />
     </div>
   );
 }
@@ -828,7 +832,7 @@ function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, traditi
         <p className="text-[13px] uppercase tracking-[0.2em] mb-2" style={{ color: alpha(theme.text, 0.4) }}>
           Year at a glance
         </p>
-        <WheelView season={season} tradition={tradition} calendar={calendar} />
+        <WheelView season={season} tradition={tradition} calendar={calendar} variant="panel" />
       </div>
     </div>
   );
@@ -854,7 +858,7 @@ function GridView({ season, onSelectDay }) {
       </h3>
       <div className="grid grid-cols-7 gap-1.5 lg:gap-2.5 mb-2">
         {dayNames.map((d, i) => (
-          <div key={i} className="text-center text-[10px] lg:text-[13px] pb-1 lg:pb-2" style={{ color: alpha(theme.text, 0.33) }}>
+          <div key={i} className="text-center text-[10px] lg:text-[13px] pb-1 lg:pb-2 font-medium" style={{ color: alpha(theme.text, 0.6) }}>
             {d}
           </div>
         ))}
@@ -904,11 +908,13 @@ function doyLabel(doy) {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-function WheelView({ season, tradition, calendar, compact = false }) {
+function WheelView({ season, tradition, calendar, variant = "standalone" }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
-  const size = compact ? 200 : 260;
-  const cx = size / 2, cy = size / 2, r = compact ? 76 : 100;
+  // Internal coordinate system stays fixed — the rendered pixel size scales
+  // via the svg's CSS width/height (below), which scales the whole drawing,
+  // text included, without needing separate markup per size.
+  const cx = 130, cy = 130, r = 100;
   const [hovered, setHovered] = useState(null);
   const [pinned, setPinned] = useState(null);
   const activeIdx = hovered ?? pinned;
@@ -925,15 +931,17 @@ function WheelView({ season, tradition, calendar, compact = false }) {
     setHovered(null);
   }, [tradition, calendar]);
 
+  const svgSizeClass = variant === "panel" ? "w-[260px] h-[260px] lg:w-[340px] lg:h-[340px]" : "w-[260px] h-[260px] lg:w-[460px] lg:h-[460px]";
+
   return (
-    <div className={`flex flex-col items-center ${compact ? "" : "pt-4"}`}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <div className="flex flex-col items-center pt-4 lg:pt-2">
+      <svg viewBox="0 0 260 260" className={svgSizeClass}>
         {wheel.map((seg, i) => {
           const startAngle = (seg.span[0] / 365) * 360;
           const endAngle = (seg.span[1] / 365) * 360;
           const color = seg.color || "#3F6B4F";
           const isCurrent = i === currentIdx;
-          const segRadius = isCurrent ? r + (compact ? 7 : 10) : r;
+          const segRadius = isCurrent ? r + 10 : r;
           return (
             <path
               key={i}
@@ -956,7 +964,7 @@ function WheelView({ season, tradition, calendar, compact = false }) {
         {/* Clock hand: today's position within the year */}
         {(() => {
           const todayAngle = (TODAY_DAY_OF_YEAR / 365) * 360;
-          const [hx, hy] = polarToXY(cx, cy, r + (compact ? 10 : 14), todayAngle);
+          const [hx, hy] = polarToXY(cx, cy, r + 14, todayAngle);
           return (
             <g>
               <line x1={cx} y1={cy} x2={hx} y2={hy} stroke={theme.text} strokeWidth="2" strokeLinecap="round" />
@@ -964,25 +972,25 @@ function WheelView({ season, tradition, calendar, compact = false }) {
             </g>
           );
         })()}
-        <circle cx={cx} cy={cy} r={compact ? 36 : 48} fill={theme.bg} stroke={theme.surface} strokeWidth="1" />
-        <text x={cx} y={cy - 4} textAnchor="middle" fill={theme.text} fontSize={compact ? 10 : 12} fontFamily="'Fraunces', serif">
+        <circle cx={cx} cy={cy} r={48} fill={theme.bg} stroke={theme.surface} strokeWidth="1" />
+        <text x={cx} y={cy - 4} textAnchor="middle" fill={theme.text} fontSize="12" fontFamily="'Fraunces', serif">
           Aug 22
         </text>
-        <text x={cx} y={cy + 14} textAnchor="middle" fill={alpha(theme.text, 0.6)} fontSize={compact ? 7 : 8}>
+        <text x={cx} y={cy + 14} textAnchor="middle" fill={alpha(theme.text, 0.6)} fontSize="8">
           {currentSeg?.label}
         </text>
       </svg>
 
       {tradition === "Orthodox" && (
-        <p className="text-[10px] uppercase tracking-[0.15em] -mt-1 mb-1" style={{ color: alpha(theme.text, 0.27) }}>
+        <p className="text-[10px] lg:text-[13px] uppercase tracking-[0.15em] -mt-1 mb-1" style={{ color: alpha(theme.text, 0.27) }}>
           {calendar === "Julian" ? "Julian (Old Calendar)" : "Gregorian (New Calendar)"}
         </p>
       )}
 
       {/* Tap (or hover, on desktop) a wedge to see its date range */}
-      <div className="h-9 flex items-center justify-center text-center px-2">
+      <div className="h-9 lg:h-12 flex items-center justify-center text-center px-2">
         {activeSeg ? (
-          <p className="text-[12px]" style={{ color: alpha(theme.text, 0.8) }}>
+          <p className="text-[12px] lg:text-[16px]" style={{ color: alpha(theme.text, 0.8) }}>
             <span style={{ fontFamily: "'Fraunces', serif" }}>{activeSeg.label}</span>
             <span style={{ color: alpha(theme.text, 0.4) }}>
               {" "}
@@ -990,18 +998,18 @@ function WheelView({ season, tradition, calendar, compact = false }) {
             </span>
           </p>
         ) : (
-          <p className="text-[11px]" style={{ color: alpha(theme.text, 0.27) }}>
+          <p className="text-[11px] lg:text-[14px]" style={{ color: alpha(theme.text, 0.27) }}>
             Tap a wedge for its date range
           </p>
         )}
       </div>
 
-      {!compact && (
-        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-1 w-full px-2">
+      {variant !== "panel" && (
+        <div className="grid grid-cols-2 gap-x-4 lg:gap-x-8 gap-y-1.5 lg:gap-y-2.5 mt-1 lg:mt-3 w-full px-2 lg:max-w-md">
           {wheel.map((s, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: s.color }} />
-              <span className="text-[10.5px] leading-tight" style={{ color: alpha(theme.text, 0.67) }}>
+            <div key={i} className="flex items-center gap-2 lg:gap-2.5">
+              <span className="w-2.5 h-2.5 lg:w-3.5 lg:h-3.5 rounded-full flex-shrink-0" style={{ backgroundColor: s.color }} />
+              <span className="text-[10.5px] lg:text-[14px] leading-tight" style={{ color: alpha(theme.text, 0.67) }}>
                 {s.label}
               </span>
             </div>
@@ -1012,11 +1020,21 @@ function WheelView({ season, tradition, calendar, compact = false }) {
   );
 }
 
+// Picks a sensible default Daily Office segment from the person's real
+// local clock: Sunday gets the Eucharistic lectionary regardless of time,
+// otherwise Morning Prayer before noon and Evening Prayer after. The person
+// can still switch manually — this only decides the initial selection.
+function autoOfficeSegment() {
+  const now = new Date();
+  if (now.getDay() === 0) return "eucharist";
+  return now.getHours() < 12 ? "am" : "pm";
+}
+
 function ReadingsView({ tradition, season }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   const data = READINGS[tradition];
-  const defaultSegment = data.kind === "office" ? "am" : data.kind === "mass" ? "mass" : "daily";
+  const defaultSegment = data.kind === "office" ? autoOfficeSegment() : data.kind === "mass" ? "mass" : "daily";
   const [segment, setSegment] = useState(defaultSegment);
 
   useEffect(() => {
