@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.9.4",
+    title: "Anglican season labels, bigger feast dots, nav renames",
+    changes: [
+      { type: "Changed", text: "Anglican \"Epiphany\" and \"Trinity\" seasons now display as \"Ordinary Time (Epiphany)\" and \"Ordinary Time (Trinity)\" wherever the season name appears." },
+      { type: "Changed", text: "Feast-day dots on the Grid tab are bigger on desktop for better visibility." },
+      { type: "Changed", text: "Nav renamed: \"Grid\" is now \"Calendar\" and \"Wheel\" is now \"Chart\"." },
+    ],
+  },
+  {
     version: "0.9.3",
     title: "Wordmark logo and Grid tab season subheading",
     changes: [

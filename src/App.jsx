@@ -233,8 +233,8 @@ export default function App() {
 
   const navItems = [
     { key: "today", icon: Flame, label: "Today" },
-    { key: "grid", icon: CalendarDays, label: "Grid" },
-    { key: "wheel", icon: CircleDot, label: "Wheel" },
+    { key: "grid", icon: CalendarDays, label: "Calendar" },
+    { key: "wheel", icon: CircleDot, label: "Chart" },
     { key: "readings", icon: BookOpen, label: "Prayer" },
     { key: "feasts", icon: Star, label: "Feasts" },
   ];
@@ -1293,7 +1293,7 @@ function GridView({ today, tradition, calendar, onSelectDay }) {
               {d}
               {feast && (
                 <span
-                  className="absolute top-1.5 right-1.5 lg:top-2.5 lg:right-2.5 w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full"
+                  className="absolute top-1.5 right-1.5 lg:top-2.5 lg:right-2.5 w-1.5 h-1.5 lg:w-3 lg:h-3 rounded-full"
                   style={{ backgroundColor: feast.color, border: `1px solid ${alpha(theme.text, 0.15)}` }}
                 />
               )}

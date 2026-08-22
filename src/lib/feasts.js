@@ -55,7 +55,7 @@ export function westernSeasons(today, labelSet = "Catholic") {
     { key: "christmas", name: "Christmastide", latin: "Tempus Nativitatis", color: COLOR.gold, start: christmas, end: addDays(epiphanySeasonStart, -1) },
     {
       key: "ordinary1",
-      name: labelSet === "Anglican" ? "Epiphany" : "Ordinary Time",
+      name: labelSet === "Anglican" ? "Ordinary Time (Epiphany)" : "Ordinary Time",
       latin: "Tempus per Annum",
       color: COLOR.green,
       start: epiphanySeasonStart,
@@ -66,7 +66,7 @@ export function westernSeasons(today, labelSet = "Catholic") {
     { key: "easter", name: "Eastertide", latin: "Tempus Paschale", color: COLOR.gold, start: easter, end: pentecost },
     {
       key: "ordinary2",
-      name: labelSet === "Anglican" ? "Trinity" : "Ordinary Time",
+      name: labelSet === "Anglican" ? "Ordinary Time (Trinity)" : "Ordinary Time",
       latin: "Tempus per Annum",
       color: COLOR.green,
       start: addDays(pentecost, 1),

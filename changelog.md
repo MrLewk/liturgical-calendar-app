@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.9.4] — Anglican season labels, bigger feast dots, nav renames
+
+- **Changed:** Anglican "Epiphany" and "Trinity" season names now read "Ordinary Time (Epiphany)" and "Ordinary Time (Trinity)" everywhere a season name is shown (Today tab, Grid subheading, day detail sheet, Wheel legend/tooltips), making the Ordinary Time connection clear alongside the Anglican-specific label. Catholic and Orthodox season names are unaffected.
+- **Changed:** Feast-day dots on the Grid tab are bigger on desktop (8px → 12px) for better visibility; mobile size is unchanged.
+- **Changed:** Nav labels renamed for clarity — "Grid" is now "Calendar" and "Wheel" is now "Chart". Internal tab keys and behavior are unchanged.
+
 ## [0.9.3] — Wordmark logo and Grid tab season subheading
 
 - **Added:** The gold cross app icon now sits to the left of the "Officium" wordmark in both the desktop sidebar header and the mobile header, matching the app icon used elsewhere (favicon, PWA icons, social share image).
