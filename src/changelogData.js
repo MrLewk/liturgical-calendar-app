@@ -6,6 +6,13 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.9.2",
+    title: "Fix missing feasts on the Grid tab",
+    changes: [
+      { type: "Fixed", text: "Most fixed-date feasts were computed for the wrong calendar year, so they fell outside the liturgical year actually being viewed — the Grid tab showed no feasts until around Christ the King (~Nov 22), even though the Today tab's \"next feast\" looked correct. Feast dates now land in the right year across Catholic, Anglican, and Orthodox." },
+    ],
+  },
+  {
     version: "0.9.1",
     title: "Fix Today tab crash",
     changes: [
