@@ -3,7 +3,9 @@ import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, Download
 import { useTheme } from "./ThemeContext";
 import { alpha, seasonAccent } from "./theme";
 import UpdateToast from "./UpdateToast";
+import CookieConsent from "./CookieConsent";
 import { usePersistedState } from "./usePersistedState";
+import { loadGoogleAnalytics, disableGoogleAnalytics } from "./analytics";
 
 // ---- Static demo data (real logic comes later) ----
 const SEASONS = {
@@ -273,7 +275,20 @@ export default function App() {
   const [selectedFeast, setSelectedFeast] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
   const [calendar, setCalendar] = usePersistedState("officium-calendar", "Gregorian"); // "Gregorian" (New Calendar) | "Julian" (Old Calendar) — only meaningful for Orthodox
+  const [cookieConsent, setCookieConsent] = usePersistedState("officium-cookie-consent", null); // null (undecided) | "accepted" | "rejected"
+  const [showPrivacy, setShowPrivacy] = useState(false);
   const season = CURRENT;
+
+  // Google Analytics is only ever loaded here, gated on consent — never on
+  // app start regardless of consent state. Covers both the initial decision
+  // and someone changing their mind later via Settings.
+  useEffect(() => {
+    if (cookieConsent === "accepted") {
+      loadGoogleAnalytics();
+    } else if (cookieConsent === "rejected") {
+      disableGoogleAnalytics();
+    }
+  }, [cookieConsent]);
   const accent = seasonAccent(season, theme.mode);
   const progressPct = Math.round((season.dayInSeason / season.seasonLength) * 100);
 
@@ -420,8 +435,14 @@ export default function App() {
               }}
               onClose={() => setShowSettings(false)}
               season={season}
+              cookieConsent={cookieConsent}
+              onChangeCookieConsent={setCookieConsent}
+              onOpenPrivacy={() => setShowPrivacy(true)}
             />
           )}
+
+          {/* Privacy Policy sheet — reachable from the cookie banner and from Settings */}
+          {showPrivacy && <PrivacyPolicySheet onClose={() => setShowPrivacy(false)} />}
 
           {/* Feast bio sheet — reachable from Today's "Next feast", the Feasts tab, and a day's detail sheet */}
           {selectedFeast && <FeastModal feast={selectedFeast} onClose={() => setSelectedFeast(null)} />}
@@ -440,6 +461,16 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {/* Cookie consent banner — shown until the person accepts or rejects.
+          No dismiss button; the choice itself is what closes it. */}
+      {cookieConsent === null && (
+        <CookieConsent
+          onAccept={() => setCookieConsent("accepted")}
+          onReject={() => setCookieConsent("rejected")}
+          onOpenPrivacy={() => setShowPrivacy(true)}
+        />
+      )}
 
       <UpdateToast />
     </div>
@@ -495,7 +526,7 @@ function SheetOverlay({ onClose, children }) {
   );
 }
 
-function SettingsSheet({ tradition, calendar, onApply, onClose, season }) {
+function SettingsSheet({ tradition, calendar, onApply, onClose, season, cookieConsent, onChangeCookieConsent, onOpenPrivacy }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   // Local draft so picking an option doesn't change the app until confirmed —
@@ -596,6 +627,197 @@ function SettingsSheet({ tradition, calendar, onApply, onClose, season }) {
         style={{ backgroundColor: season.color, color: "#EDE7DC" }}
       >
         Apply
+      </button>
+
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-3 mt-6" style={{ color: alpha(theme.text, 0.4) }}>
+        Privacy & Cookies
+      </p>
+      <div
+        className="w-full flex items-center justify-between px-4 py-3 rounded-xl mb-2"
+        style={{ backgroundColor: theme.bg, border: "1px solid transparent" }}
+      >
+        <div>
+          <p className="text-[13px]" style={{ color: theme.text }}>
+            Analytics cookies
+          </p>
+          <p className="text-[10.5px] mt-0.5" style={{ color: alpha(theme.text, 0.4) }}>
+            {cookieConsent === "accepted" ? "Currently accepted" : cookieConsent === "rejected" ? "Currently rejected" : "Not yet decided"}
+          </p>
+        </div>
+        <button
+          onClick={() => onChangeCookieConsent(cookieConsent === "accepted" ? "rejected" : "accepted")}
+          className="text-[12px] px-3 py-1.5 rounded-lg flex-shrink-0"
+          style={{ backgroundColor: alpha(accent, 0.14), color: accent }}
+        >
+          {cookieConsent === "accepted" ? "Reject" : "Accept"}
+        </button>
+      </div>
+      <button onClick={onOpenPrivacy} className="text-[11px] underline decoration-dotted" style={{ color: alpha(theme.text, 0.4) }}>
+        Read our Privacy Policy
+      </button>
+    </SheetOverlay>
+  );
+}
+
+// NOTE for the developer: GDPR expects a direct way to reach the data
+// controller, not just a public issue tracker. If you have (or set up) a
+// contact email for this project, add it below alongside the GitHub link.
+const PRIVACY_CONTACT_EMAIL = null; // e.g. "privacy@yourdomain.com"
+
+function PrivacyPolicySheet({ onClose }) {
+  const theme = useTheme();
+  const sectionTitle = "text-[12px] uppercase tracking-[0.18em] mt-5 mb-2";
+  const body = "text-[13px] leading-relaxed";
+  const bodyMuted = { color: alpha(theme.text, 0.75) };
+  const label = { color: alpha(theme.text, 0.4) };
+  return (
+    <SheetOverlay onClose={onClose}>
+      <h2 className="text-[19px] mb-1" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+        Privacy Policy
+      </h2>
+      <p className="text-[11px] mb-4" style={label}>
+        Last updated August 2026
+      </p>
+
+      <p className={body} style={bodyMuted}>
+        Officium is a liturgical calendar app. This policy explains what data is collected, why, and the choices
+        and rights you have over it.
+      </p>
+
+      <p className={sectionTitle} style={label}>
+        Who is responsible for your data
+      </p>
+      <p className={body} style={bodyMuted}>
+        Officium is an independent, open-source project maintained by a single developer (not a company). For any
+        privacy question, correction, deletion request, or complaint, please{" "}
+        {PRIVACY_CONTACT_EMAIL ? (
+          <>
+            email{" "}
+            <a href={`mailto:${PRIVACY_CONTACT_EMAIL}`} className="underline decoration-dotted" style={{ color: theme.text }}>
+              {PRIVACY_CONTACT_EMAIL}
+            </a>{" "}
+            or open an issue on the{" "}
+          </>
+        ) : (
+          "open an issue on the "
+        )}
+        <a
+          href="https://github.com/MrLewk/liturgical-calendar-app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline decoration-dotted"
+          style={{ color: theme.text }}
+        >
+          GitHub repository
+        </a>
+        .
+      </p>
+
+      <p className={sectionTitle} style={label}>
+        Data stored on your device
+      </p>
+      <p className={body} style={bodyMuted}>
+        Your chosen tradition, calendar, theme, and cookie preference are saved in your browser's local storage.
+        This data never leaves your device, isn't sent to us, and isn't shared with anyone. It's kept until you
+        clear your browser data or uninstall the app. This storage is strictly necessary for the app to function
+        and doesn't require consent under GDPR/PECR.
+      </p>
+
+      <p className={sectionTitle} style={label}>
+        Analytics cookies (Google Analytics)
+      </p>
+      <p className={body} style={bodyMuted}>
+        If you accept, we use Google Analytics 4 to understand how Officium is used — for example which tabs are
+        popular and roughly how many people visit. This is not switched on by default; it only loads after you
+        actively accept, and you can withdraw consent at any time (see below).
+      </p>
+      <p className={body} style={{ ...bodyMuted, marginTop: 6 }}>
+        <strong style={{ color: theme.text }}>Legal basis:</strong> your consent (UK GDPR Art. 6(1)(a) / EU GDPR
+        Art. 6(1)(a), and PECR/ePrivacy for the cookie itself). You may withdraw consent at any time without
+        affecting the lawfulness of processing before withdrawal.
+      </p>
+      <p className={body} style={{ ...bodyMuted, marginTop: 6 }}>
+        <strong style={{ color: theme.text }}>What's collected:</strong> approximate location (derived from IP
+        address, which Google truncates/anonymises before storage), device and browser type, pages/tabs viewed,
+        session duration, and referral source. We do not collect your name, email, or any other information that
+        directly identifies you, and analytics data is never used for advertising or combined with other data to
+        build a profile of you.
+      </p>
+      <p className={body} style={{ ...bodyMuted, marginTop: 6 }}>
+        <strong style={{ color: theme.text }}>Cookies used:</strong> Google Analytics sets first-party cookies
+        (typically <code>_ga</code> and <code>_ga_*</code>) to distinguish visitors. These normally expire after
+        13 months, per Google's default retention settings.
+      </p>
+      <p className={body} style={{ ...bodyMuted, marginTop: 6 }}>
+        <strong style={{ color: theme.text }}>International transfer:</strong> Google Analytics is operated by
+        Google, which may process and store data on servers outside your country, including in the United States.
+        Where this involves a transfer out of the UK/EEA, Google relies on the EU-US Data Privacy Framework and/or
+        Standard Contractual Clauses as its transfer safeguard.
+      </p>
+      <p className={body} style={{ ...bodyMuted, marginTop: 6 }}>
+        <strong style={{ color: theme.text }}>Retention:</strong> analytics event data is retained by Google for
+        14 months before automatic deletion, per this app's Google Analytics configuration.
+      </p>
+
+      <p className={sectionTitle} style={label}>
+        Your rights
+      </p>
+      <p className={body} style={bodyMuted}>
+        Under UK/EU GDPR, you have the right to: access the data held about you; request correction or deletion;
+        restrict or object to processing; request a portable copy of your data; and withdraw consent at any time.
+        Because analytics data isn't linked to your name or account, some of these rights (like providing you a
+        personal copy) may be limited in practice — but you can always stop future collection instantly by
+        rejecting analytics in Settings. You also have the right to lodge a complaint with your local data
+        protection authority (in the UK, the{" "}
+        <a
+          href="https://ico.org.uk"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline decoration-dotted"
+          style={{ color: theme.text }}
+        >
+          ICO
+        </a>
+        ).
+      </p>
+
+      <p className={sectionTitle} style={label}>
+        Children's data
+      </p>
+      <p className={body} style={bodyMuted}>
+        Officium isn't directed at children and doesn't knowingly collect data from children. Analytics, where
+        accepted, collects only the general, non-identifying information described above.
+      </p>
+
+      <p className={sectionTitle} style={label}>
+        Changing your mind
+      </p>
+      <p className={body} style={bodyMuted}>
+        You can accept or reject analytics cookies at any time from Settings → Privacy & Cookies. Rejecting stops
+        further data collection immediately, though it can't retroactively delete data Google has already
+        processed under a prior consent.
+      </p>
+
+      <p className={sectionTitle} style={label}>
+        Changes to this policy
+      </p>
+      <p className={body} style={bodyMuted}>
+        If this policy changes materially, the "Last updated" date above will change accordingly. Since Officium
+        has no accounts or email addresses, we can't notify you directly — please check back occasionally.
+      </p>
+
+      <p className="text-[10.5px] mt-5 leading-relaxed" style={{ color: alpha(theme.text, 0.35) }}>
+        This policy is provided to help you understand and comply with GDPR/UK GDPR and PECR, but it isn't legal
+        advice. If you have a large user base or specific regulatory exposure, consider having it reviewed by a
+        lawyer.
+      </p>
+
+      <button
+        onClick={onClose}
+        className="w-full rounded-2xl py-3 text-[14px] mt-6"
+        style={{ backgroundColor: theme.surface, color: theme.text, border: `1px solid ${theme.border}` }}
+      >
+        Close
       </button>
     </SheetOverlay>
   );

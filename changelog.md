@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.6.0] — Google Analytics with GDPR-compliant cookie consent
+
+- **Added:** `CookieConsent` banner — shown on first visit (bottom-center above the tab bar on mobile, bottom-right on desktop, matching `UpdateToast`'s positioning). No dismiss/X button by design — Accept or Reject is the only way to close it, and that choice is what's persisted.
+- **Added:** `src/analytics.js` — Google Analytics (GA4) is now integrated, but the `gtag.js` script and dataLayer are only injected via `loadGoogleAnalytics()` *after* the person accepts the cookie banner. It is never loaded on app start, and rejecting (or later switching to reject) calls `disableGoogleAnalytics()` (`window['ga-disable-<ID>']`) to stop further collection.
+- **Added:** New in-app Privacy Policy sheet (`PrivacyPolicySheet`), matching the existing bottom-sheet/dialog style. Written to cover UK/EU GDPR and PECR essentials: data controller identity and contact (with an easy spot in code to add a dedicated privacy email — `PRIVACY_CONTACT_EMAIL` in `App.jsx`), legal basis for processing, what's stored in `localStorage` vs. what Google Analytics collects, the specific GA cookies and their duration, international transfer disclosure, data retention period, a full list of GDPR rights including the right to complain to the ICO, a children's data statement, and how to withdraw consent. Includes a plain-language disclaimer that it isn't a substitute for legal review. Reachable from the cookie banner ("Read our Privacy Policy") and from Settings.
+- **Added:** "Privacy & Cookies" section in the Settings sheet showing the current consent status (Accepted / Rejected / Not yet decided) with a button to change it at any time, plus a link to the Privacy Policy — so consent can be withdrawn as easily as it was given.
+- **Added:** `officium-cookie-consent` persisted to `localStorage` (`usePersistedState`) alongside the existing tradition/calendar/theme keys — `null` until a choice is made, then `"accepted"` or `"rejected"` indefinitely.
+
 ## [0.5.0] — Rebrand to Officium, app icons, social share preview
 
 - **Changed:** App renamed from "Ordo" to "Officium" throughout — page title, PWA manifest `name`/`short_name`, sidebar and mobile header wordmark, `package.json` name, and README.
