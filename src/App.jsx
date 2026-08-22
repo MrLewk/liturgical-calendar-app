@@ -6,6 +6,7 @@ import UpdateToast from "./UpdateToast";
 import CookieConsent from "./CookieConsent";
 import { usePersistedState } from "./usePersistedState";
 import { loadGoogleAnalytics, disableGoogleAnalytics } from "./analytics";
+import { CHANGELOG } from "./changelogData";
 
 // ---- Static demo data (real logic comes later) ----
 const SEASONS = {
@@ -277,6 +278,7 @@ export default function App() {
   const [calendar, setCalendar] = usePersistedState("officium-calendar", "Gregorian"); // "Gregorian" (New Calendar) | "Julian" (Old Calendar) — only meaningful for Orthodox
   const [cookieConsent, setCookieConsent] = usePersistedState("officium-cookie-consent", null); // null (undecided) | "accepted" | "rejected"
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showChangelog, setShowChangelog] = useState(false);
   const season = CURRENT;
 
   // Google Analytics is only ever loaded here, gated on consent — never on
@@ -438,11 +440,15 @@ export default function App() {
               cookieConsent={cookieConsent}
               onChangeCookieConsent={setCookieConsent}
               onOpenPrivacy={() => setShowPrivacy(true)}
+              onOpenChangelog={() => setShowChangelog(true)}
             />
           )}
 
           {/* Privacy Policy sheet — reachable from the cookie banner and from Settings */}
           {showPrivacy && <PrivacyPolicySheet onClose={() => setShowPrivacy(false)} />}
+
+          {/* Changelog sheet — reachable from Settings */}
+          {showChangelog && <ChangelogSheet onClose={() => setShowChangelog(false)} />}
 
           {/* Feast bio sheet — reachable from Today's "Next feast", the Feasts tab, and a day's detail sheet */}
           {selectedFeast && <FeastModal feast={selectedFeast} onClose={() => setSelectedFeast(null)} />}
@@ -526,7 +532,7 @@ function SheetOverlay({ onClose, children }) {
   );
 }
 
-function SettingsSheet({ tradition, calendar, onApply, onClose, season, cookieConsent, onChangeCookieConsent, onOpenPrivacy }) {
+function SettingsSheet({ tradition, calendar, onApply, onClose, season, cookieConsent, onChangeCookieConsent, onOpenPrivacy, onOpenChangelog }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   // Local draft so picking an option doesn't change the app until confirmed —
@@ -654,6 +660,12 @@ function SettingsSheet({ tradition, calendar, onApply, onClose, season, cookieCo
       </div>
       <button onClick={onOpenPrivacy} className="text-[11px] underline decoration-dotted" style={{ color: alpha(theme.text, 0.4) }}>
         Read our Privacy Policy
+      </button>
+      <span className="text-[11px] mx-2" style={{ color: alpha(theme.text, 0.25) }}>
+        ·
+      </span>
+      <button onClick={onOpenChangelog} className="text-[11px] underline decoration-dotted" style={{ color: alpha(theme.text, 0.4) }}>
+        What's new (v{CHANGELOG[0].version})
       </button>
     </SheetOverlay>
   );
@@ -811,6 +823,72 @@ function PrivacyPolicySheet({ onClose }) {
         advice. If you have a large user base or specific regulatory exposure, consider having it reviewed by a
         lawyer.
       </p>
+
+      <button
+        onClick={onClose}
+        className="w-full rounded-2xl py-3 text-[14px] mt-6"
+        style={{ backgroundColor: theme.surface, color: theme.text, border: `1px solid ${theme.border}` }}
+      >
+        Close
+      </button>
+    </SheetOverlay>
+  );
+}
+
+const CHANGE_TYPE_COLOR = {
+  Added: "#3F6B4F",
+  Changed: "#7C5BA8",
+  Fixed: "#C9A227",
+  Removed: "#A32638",
+  Note: "#8A8578",
+};
+
+function ChangelogSheet({ onClose }) {
+  const theme = useTheme();
+  return (
+    <SheetOverlay onClose={onClose}>
+      <h2 className="text-[19px] mb-1" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+        What's new
+      </h2>
+      <p className="text-[11px] mb-5" style={{ color: alpha(theme.text, 0.4) }}>
+        A history of updates to Officium.
+      </p>
+
+      <div className="space-y-6">
+        {CHANGELOG.map((entry, i) => (
+          <div key={entry.version}>
+            <div className="flex items-baseline gap-2 mb-2">
+              <p className="text-[14px]" style={{ color: theme.text, fontFamily: "'Fraunces', serif" }}>
+                v{entry.version}
+              </p>
+              {i === 0 && (
+                <span
+                  className="text-[9.5px] uppercase tracking-[0.12em] px-1.5 py-0.5 rounded"
+                  style={{ backgroundColor: alpha("#C9A227", 0.18), color: "#C9A227" }}
+                >
+                  Latest
+                </span>
+              )}
+              <p className="text-[12px]" style={{ color: alpha(theme.text, 0.5) }}>
+                {entry.title}
+              </p>
+            </div>
+            <ul className="space-y-1.5">
+              {entry.changes.map((c, j) => (
+                <li key={j} className="text-[12.5px] leading-snug flex gap-2" style={{ color: alpha(theme.text, 0.72) }}>
+                  <span
+                    className="text-[9.5px] uppercase tracking-[0.08em] flex-shrink-0 mt-[1px]"
+                    style={{ color: CHANGE_TYPE_COLOR[c.type] || alpha(theme.text, 0.4) }}
+                  >
+                    {c.type}
+                  </span>
+                  <span>{c.text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
 
       <button
         onClick={onClose}

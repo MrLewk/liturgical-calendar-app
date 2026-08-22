@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.7.0] — In-app changelog viewer
+
+- **Added:** `src/changelogData.js` — a structured, in-app mirror of this changelog file, rendered via a new `ChangelogSheet` component matching the existing bottom-sheet/dialog style. Grouped by version with color-coded Added/Changed/Fixed/Removed/Note labels and a "Latest" badge on the newest release. **This file must be updated alongside `changelog.md` for every future release** — see the note at the top of `changelogData.js`.
+- **Added:** "What's new (vX.X.X)" link at the bottom of the Settings sheet, next to "Read our Privacy Policy", opening the changelog viewer.
+
 ## [0.6.0] — Google Analytics with GDPR-compliant cookie consent
 
 - **Added:** `CookieConsent` banner — shown on first visit (bottom-center above the tab bar on mobile, bottom-right on desktop, matching `UpdateToast`'s positioning). No dismiss/X button by design — Accept or Reject is the only way to close it, and that choice is what's persisted.

@@ -1,28 +1,56 @@
 # Officium — Liturgical Calendar
 
-A mobile-first PWA for tracking the liturgical year — seasons, feast days, prayers, and scripture readings — across Catholic, Anglican, and Orthodox traditions.
+**Officium** is a mobile-first web app for tracking your place in the Christian liturgical year — the cycle of
+seasons, feast days, and daily prayer that runs alongside the ordinary calendar. It supports **Catholic, Anglican,
+and Orthodox** traditions, each with their own season boundaries, feast days, liturgical colors, and daily office.
+
+🔗 **[Open the app](https://liturgical-calendar-year.vercel.app/)** — installable as a PWA, works offline.
+
+## What it does
+
+The liturgical year isn't a fixed grid — it moves. Easter (and Orthodox Pascha) falls on a different date every
+year, and everything from Ash Wednesday to the start of Advent shifts around it. Officium tracks where you are in
+that cycle right now, and lets you look ahead or back.
+
+- **Today** — your current season, its liturgical color, how far through it you are, and what's coming next
+- **Grid** — a familiar month-by-month calendar, with each day colored by its liturgical season and feast days marked
+- **Wheel** — a circular, at-a-glance view of the whole year — Advent, Christmas, Lent, Easter, and Ordinary Time laid out as a wheel instead of a list, so you can see the shape of the year rather than just the next date
+- **Prayer** — the Daily Office for your tradition: Morning/Evening/Sunday prayer (Anglican, Book of Common Prayer), Mass readings and key prayers (Catholic), and the daily cycle and key prayers (Orthodox) — all traditional or public-domain text
+- **Feasts** — a browsable list of upcoming feast days with short biographies of the saints and events behind them
+
+Switch tradition at any time (Catholic / Anglican / Orthodox), and Orthodox users can further choose between the
+Gregorian ("New Calendar") and Julian ("Old Calendar") reckonings, since these can place fixed feasts weeks apart.
+
+## Why
+
+Most calendar apps only know about the civil year. If you've ever lost track of whether you're in Ordinary Time or
+Lent, or wanted a quick reference for which color the vestments should be this Sunday, this app is for that. It's
+built to be glanced at daily — light enough to open on your phone each morning, with a proper desktop layout too.
+
+## Privacy
+
+Officium stores your settings (tradition, calendar, theme) only in your browser's local storage — never on a
+server, never tied to an account, because there are no accounts. Optional, privacy-conscious analytics (Google
+Analytics) are off by default and only switch on if you explicitly accept the cookie prompt; you can change your
+mind at any time from Settings. Full details are in the in-app Privacy Policy (Settings → Privacy & Cookies).
 
 ## Status
 
-🚧 Early scaffold. The UI is fully built but still running on static demo data (pinned to Aug 22, 2026). The real date-calculation engine (Western Easter + Orthodox Pascha via the Julian Paschalion, and everything derived from them) is the next phase.
+🚧 Early development. The UI is fully built but still running on static demo data (pinned to Aug 22, 2026). The
+real date-calculation engine — computing actual season boundaries and feast dates for any given year — is the
+next major piece of work; see [Roadmap](#roadmap) below.
 
-## Features (current)
+## Tech stack
 
-- **Today** — current season, liturgical color, position within the season, next feast and reading teasers
-- **Grid** — month view with per-day season borders and feast markers; tap a day for its detail sheet
-- **Wheel** — circular year view with a "today" hand and tappable wedges showing date ranges; separate Western and Orthodox wheels (Orthodox further splits by Gregorian/Julian calendar)
-- **Prayer** — BCP Daily Office (Morning/Evening/Sunday), Catholic Mass readings + key prayers, Orthodox daily cycle + key prayers — all in public-domain/traditional text
-- **Feasts** — browsable feast days with short bios
-- Tradition switcher (Catholic / Anglican / Orthodox) and, for Orthodox, a Gregorian/Julian calendar switcher
-
-## Stack
-
-- [Vite](https://vite.dev/) + React 19
+- [Vite](https://vite.dev/) + [React 19](https://react.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
-- [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) for the manifest, icons, and offline service worker
-- [lucide-react](https://lucide.dev/) for icons
+- [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) — installable PWA manifest, icons, offline service worker
+- [lucide-react](https://lucide.dev/) — icons
+- Google Analytics (GA4), loaded only after cookie consent
 
-## Development
+No backend — it's a fully static, client-side app. All user preferences persist via `localStorage`.
+
+## Running it locally
 
 ```bash
 npm install
@@ -33,7 +61,19 @@ npm run preview  # serve the production build locally
 
 ## Roadmap
 
-1. Real date-calculation engine (Western Easter algorithm, Orthodox Paschalion, derived season boundaries) replacing the static demo data
-2. Actual feast/reading/prayer data per tradition and date, not just the demo entries
-3. `.ics` export and Google Calendar sync
-4. Licensing decision for prayer/reading translations (currently public-domain/traditional text only)
+1. **Real date-calculation engine** — Western Easter algorithm, Orthodox Paschalion, and every season boundary and
+   feast date derived from them for any year, replacing the current static demo data
+2. **Full feast/reading/prayer data** per tradition and date, not just the current demo entries
+3. **Calendar export** — `.ics` download and Google Calendar sync, so feast days and season changes show up
+   alongside your other events
+4. Licensing review for prayer/reading translations (currently public-domain/traditional text only)
+
+## Contributing
+
+This is a solo, early-stage project — issues and suggestions are welcome via the
+[GitHub issue tracker](https://github.com/MrLewk/liturgical-calendar-app/issues). Pull requests are welcome too,
+though given the app is still on demo data, it's worth opening an issue first to check a change fits the roadmap.
+
+## License
+
+See [LICENSE](./LICENSE).
