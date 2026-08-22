@@ -6,6 +6,18 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.10.0",
+    title: "Full-text scripture readings, close buttons on all sheets",
+    changes: [
+      { type: "Added", text: "Every scripture reading on the Prayer & Readings tab now opens the full passage in a new Scripture sheet — verse-numbered, complete, and readable offline once viewed." },
+      { type: "Added", text: "Passage text comes from the World English Bible, which is public domain, so it can be bundled and read offline with no licensing concerns (unlike the KJV outside the US, where it's under Crown copyright in the UK)." },
+      { type: "Added", text: "Three WEB editions are bundled to match each tradition's canon: World English Bible (Catholic) with Deuterocanon, World English Bible British Edition with Apocrypha, and World English Bible Updated with Apocrypha. Catholic defaults to the Catholic edition, Anglican to the British edition, Orthodox to the Updated edition — overridable in Settings under a new \"Bible text\" section." },
+      { type: "Added", text: "The Scripture sheet also links out to BibleGateway.com for anyone who wants a different translation, with a searchable version picker (233 translations across 68 languages) — defaults to a version set in Settings, changeable per-passage." },
+      { type: "Added", text: "Bible text is fetched per-book rather than bundled upfront, and cached by the service worker the first time each book is opened, so it becomes available offline progressively instead of bloating the initial install." },
+      { type: "Added", text: "Every bottom sheet / modal (Settings, Privacy Policy, Changelog, Export, Feast bio, Day detail, and the new Scripture sheet) now has an explicit close (X) button, in addition to tapping outside." },
+    ],
+  },
+  {
     version: "0.9.4",
     title: "Anglican season labels, bigger feast dots, nav renames",
     changes: [

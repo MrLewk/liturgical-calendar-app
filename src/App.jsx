@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon } from "lucide-react";
+import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon, X } from "lucide-react";
 import { useTheme } from "./ThemeContext";
 import { alpha, seasonAccent } from "./theme";
 import UpdateToast from "./UpdateToast";
@@ -10,6 +10,8 @@ import { CHANGELOG } from "./changelogData";
 import { liturgicalYearData, seasonAt, feastOnDate, upcomingFeasts, withDisplay } from "./lib/feasts";
 import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
+import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
+import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
 
 const TRADITIONS = ["Catholic", "Anglican", "Orthodox"];
 
@@ -212,6 +214,13 @@ export default function App() {
   const [cookieConsent, setCookieConsent] = usePersistedState("officium-cookie-consent", null); // null (undecided) | "accepted" | "rejected"
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showChangelog, setShowChangelog] = useState(false);
+  // "auto" follows the tradition -> WEB edition mapping in DEFAULT_WEB_VERSION;
+  // otherwise pinned to one of the three bundled editions regardless of tradition.
+  const [webBibleVersion, setWebBibleVersion] = usePersistedState("officium-bible-version", "auto");
+  // BibleGateway.com version code preselected on the "Open on BibleGateway" link.
+  const [bibleGatewayVersion, setBibleGatewayVersion] = usePersistedState("officium-biblegateway-version", "NRSVA");
+  const [scriptureRef, setScriptureRef] = useState(null); // reference string, or null when the modal is closed
+  const resolvedWebVersion = webBibleVersion === "auto" ? DEFAULT_WEB_VERSION[tradition] || "engwebu" : webBibleVersion;
 
   const today = useToday();
   const { seasons, feasts } = useMemo(() => liturgicalYearData(tradition, calendar, today), [tradition, calendar, today]);
@@ -259,7 +268,9 @@ export default function App() {
         <GridView today={today} tradition={tradition} calendar={calendar} onSelectDay={setSelectedDay} />
       )}
       {tab === "wheel" && <WheelView season={season} seasons={seasons} today={today} tradition={tradition} calendar={calendar} />}
-      {tab === "readings" && <ReadingsView tradition={tradition} season={season} />}
+      {tab === "readings" && (
+        <ReadingsView tradition={tradition} season={season} onOpenPassage={setScriptureRef} />
+      )}
       {tab === "feasts" && (
         <FeastsView tradition={tradition} calendar={calendar} today={today} onSelectFeast={setSelectedFeast} />
       )}
@@ -388,6 +399,10 @@ export default function App() {
               onChangeCookieConsent={setCookieConsent}
               onOpenPrivacy={() => setShowPrivacy(true)}
               onOpenChangelog={() => setShowChangelog(true)}
+              webBibleVersion={webBibleVersion}
+              onChangeWebBibleVersion={setWebBibleVersion}
+              bibleGatewayVersion={bibleGatewayVersion}
+              onChangeBibleGatewayVersion={setBibleGatewayVersion}
             />
           )}
 
@@ -396,6 +411,18 @@ export default function App() {
 
           {/* Changelog sheet — reachable from Settings */}
           {showChangelog && <ChangelogSheet onClose={() => setShowChangelog(false)} />}
+
+          {/* Scripture passage sheet — reachable from any reading citation on the Readings tab */}
+          {scriptureRef && (
+            <ScripturePassageModal
+              key={scriptureRef}
+              reference={scriptureRef}
+              webVersion={resolvedWebVersion}
+              bibleGatewayVersion={bibleGatewayVersion}
+              season={season}
+              onClose={() => setScriptureRef(null)}
+            />
+          )}
 
           {/* Export / sync-to-calendar sheet */}
           {showExport && (
@@ -483,14 +510,57 @@ function SheetOverlay({ onClose, children }) {
         style={{ backgroundColor: theme.surfaceRaised }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-10 h-1 rounded-full mx-auto mb-5 lg:hidden" style={{ backgroundColor: theme.border }} />
+        {/* Own row (not absolutely overlaid) so a long heading in any sheet
+            below can never render underneath the close button. */}
+        <div className="relative flex items-center justify-center mb-5" style={{ minHeight: 32 }}>
+          <div className="w-10 h-1 rounded-full lg:hidden" style={{ backgroundColor: theme.border }} />
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center"
+            style={{ backgroundColor: theme.bg }}
+          >
+            <X size={15} color={alpha(theme.text, 0.6)} />
+          </button>
+        </div>
         {children}
       </div>
     </div>
   );
 }
 
-function SettingsSheet({ tradition, calendar, onApply, onClose, season, cookieConsent, onChangeCookieConsent, onOpenPrivacy, onOpenChangelog }) {
+// Groups the flat BIBLEGATEWAY_VERSIONS list into [language, versions][]
+// pairs (in first-seen order) so it can back a native <select> with
+// <optgroup> sections — much more scannable than 233 flat options.
+function groupVersionsByLanguage(versions) {
+  const order = [];
+  const groups = new Map();
+  for (const v of versions) {
+    const key = v.language || "Other";
+    if (!groups.has(key)) {
+      groups.set(key, []);
+      order.push(key);
+    }
+    groups.get(key).push(v);
+  }
+  return order.map((language) => [language, groups.get(language)]);
+}
+
+function SettingsSheet({
+  tradition,
+  calendar,
+  onApply,
+  onClose,
+  season,
+  cookieConsent,
+  onChangeCookieConsent,
+  onOpenPrivacy,
+  onOpenChangelog,
+  webBibleVersion,
+  onChangeWebBibleVersion,
+  bibleGatewayVersion,
+  onChangeBibleGatewayVersion,
+}) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   // Local draft so picking an option doesn't change the app until confirmed —
@@ -570,6 +640,68 @@ function SettingsSheet({ tradition, calendar, onApply, onClose, season, cookieCo
 
       <p className="text-[11px] mt-4 mb-5" style={{ color: alpha(theme.text, 0.33) }}>
         Calendar dates and feast days adjust to match.
+      </p>
+
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: alpha(theme.text, 0.4) }}>
+        Bible text
+      </p>
+      <div className="space-y-2 mb-2">
+        {[
+          { key: "auto", label: "Match my tradition", sub: `Currently ${WEB_VERSION_LABELS[DEFAULT_WEB_VERSION[tradition]]}` },
+          { key: "eng-web-c", label: WEB_VERSION_LABELS["eng-web-c"] },
+          { key: "eng-webbe", label: WEB_VERSION_LABELS["eng-webbe"] },
+          { key: "engwebu", label: WEB_VERSION_LABELS["engwebu"] },
+        ].map((o) => (
+          <button
+            key={o.key}
+            onClick={() => onChangeWebBibleVersion(o.key)}
+            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-left"
+            style={{
+              backgroundColor: webBibleVersion === o.key ? alpha(season.color, 0.2) : theme.bg,
+              border: webBibleVersion === o.key ? `1px solid ${seasonAccent(season, theme.mode)}` : "1px solid transparent",
+            }}
+          >
+            <div>
+              <p className="text-[13.5px]" style={{ color: theme.text }}>
+                {o.label}
+              </p>
+              {o.sub && (
+                <p className="text-[10.5px] mt-0.5" style={{ color: alpha(theme.text, 0.4) }}>
+                  {o.sub}
+                </p>
+              )}
+            </div>
+            {webBibleVersion === o.key && <span style={{ color: seasonAccent(season, theme.mode) }}>●</span>}
+          </button>
+        ))}
+      </div>
+      <p className="text-[11px] mb-4" style={{ color: alpha(theme.text, 0.33) }}>
+        Used for the full passage text shown when you tap a scripture reading. All three are the public-domain
+        World English Bible, so they can be read offline.
+      </p>
+
+      <label className="text-[11px] uppercase tracking-[0.2em] mb-2 block" style={{ color: alpha(theme.text, 0.4) }}>
+        BibleGateway link version
+      </label>
+      <select
+        value={bibleGatewayVersion}
+        onChange={(e) => onChangeBibleGatewayVersion(e.target.value)}
+        className="w-full px-4 py-3 rounded-xl text-[13.5px] mb-1"
+        style={{ backgroundColor: theme.bg, color: theme.text, border: `1px solid ${theme.border}` }}
+      >
+        {groupVersionsByLanguage(BIBLEGATEWAY_VERSIONS).map(([language, versions]) => (
+          <optgroup key={language} label={language}>
+            {versions.map((v) => (
+              <option key={v.code} value={v.code}>
+                {v.label} ({v.code})
+              </option>
+            ))}
+          </optgroup>
+        ))}
+      </select>
+      <p className="text-[11px] mb-5" style={{ color: alpha(theme.text, 0.33) }}>
+        Preselected when you tap "Open on BibleGateway" for a different translation than the WEB — you can still
+        change it per-passage.
       </p>
 
       {theme.mode !== "system" && (
@@ -851,6 +983,109 @@ function ChangelogSheet({ onClose }) {
       <button
         onClick={onClose}
         className="w-full rounded-2xl py-3 text-[14px] mt-6"
+        style={{ backgroundColor: theme.surface, color: theme.text, border: `1px solid ${theme.border}` }}
+      >
+        Close
+      </button>
+    </SheetOverlay>
+  );
+}
+
+// Full text of a scripture reading, fetched on open from the bundled WEB
+// edition JSON under /bible/{version}/. Offers a link out to BibleGateway
+// for anyone who wants a different translation.
+function ScripturePassageModal({ reference, webVersion, bibleGatewayVersion, season, onClose }) {
+  const theme = useTheme();
+  const accent = seasonAccent(season, theme.mode);
+  const [state, setState] = useState({ status: "loading" });
+  const [gwVersion, setGwVersion] = useState(bibleGatewayVersion);
+
+  useEffect(() => {
+    let cancelled = false;
+    setState({ status: "loading" });
+    getPassage(reference, webVersion)
+      .then((passage) => {
+        if (!cancelled) setState({ status: "ready", passage });
+      })
+      .catch((err) => {
+        if (!cancelled) setState({ status: "error", message: err.message || "Couldn't load that passage." });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [reference, webVersion]);
+
+  return (
+    <SheetOverlay onClose={onClose}>
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-1.5" style={{ color: alpha(theme.text, 0.4) }}>
+        Scripture
+      </p>
+      <h2 className="text-[19px] lg:text-[24px] mb-4" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+        {state.status === "ready" ? state.passage.reference : reference}
+      </h2>
+
+      {state.status === "loading" && (
+        <p className="text-[13px] mb-4" style={{ color: alpha(theme.text, 0.4) }}>
+          Loading passage…
+        </p>
+      )}
+      {state.status === "error" && (
+        <p className="text-[13px] mb-4" style={{ color: alpha(theme.text, 0.5) }}>
+          {state.message}
+        </p>
+      )}
+      {state.status === "ready" && (
+        <>
+          <div className="text-[14px] lg:text-[16.5px] leading-relaxed mb-1.5" style={{ color: alpha(theme.text, 0.85) }}>
+            {state.passage.verses.map((v) => (
+              <span key={`${v.chapter}-${v.verse}`}>
+                <sup className="mr-0.5" style={{ color: alpha(theme.text, 0.4) }}>
+                  {v.verse}
+                </sup>
+                {v.text}{" "}
+              </span>
+            ))}
+          </div>
+          <p className="text-[10.5px] mb-5" style={{ color: alpha(theme.text, 0.33) }}>
+            World English Bible — {WEB_VERSION_LABELS[webVersion]}. Public domain.
+          </p>
+        </>
+      )}
+
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-2" style={{ color: alpha(theme.text, 0.4) }}>
+        Read in another translation
+      </p>
+      <div className="flex items-center gap-2 mb-5">
+        <select
+          value={gwVersion}
+          onChange={(e) => setGwVersion(e.target.value)}
+          className="flex-1 min-w-0 px-3 py-2.5 rounded-xl text-[12.5px]"
+          style={{ backgroundColor: theme.bg, color: theme.text, border: `1px solid ${theme.border}` }}
+        >
+          {groupVersionsByLanguage(BIBLEGATEWAY_VERSIONS).map(([language, versions]) => (
+            <optgroup key={language} label={language}>
+              {versions.map((v) => (
+                <option key={v.code} value={v.code}>
+                  {v.label} ({v.code})
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+        <a
+          href={bibleGatewayUrl(reference, gwVersion)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-shrink-0 px-4 py-2.5 rounded-xl text-[12.5px] text-center"
+          style={{ backgroundColor: accent, color: "#FFFFFF" }}
+        >
+          Open
+        </a>
+      </div>
+
+      <button
+        onClick={onClose}
+        className="w-full rounded-2xl py-3 text-[14px]"
         style={{ backgroundColor: theme.surface, color: theme.text, border: `1px solid ${theme.border}` }}
       >
         Close
@@ -1448,7 +1683,7 @@ function autoOfficeSegment() {
   return now.getHours() < 17 ? "am" : "pm";
 }
 
-function ReadingsView({ tradition, season }) {
+function ReadingsView({ tradition, season, onOpenPassage }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   const data = READINGS[tradition];
@@ -1548,9 +1783,18 @@ function ReadingsView({ tradition, season }) {
               {item.text}
               {item.truncated && <span style={{ color: alpha(theme.text, 0.33) }}> …</span>}
             </p>
-            {item.truncated && (
+            {item.type === "reading" && (
+              <button
+                onClick={() => onOpenPassage(item.ref)}
+                className="text-[11px] lg:text-[14px] mt-2 lg:mt-3 underline decoration-dotted"
+                style={{ color: accent }}
+              >
+                Read full passage
+              </button>
+            )}
+            {item.type === "prayer" && item.truncated && (
               <button className="text-[11px] lg:text-[14px] mt-2 lg:mt-3 underline decoration-dotted" style={{ color: accent }}>
-                {item.type === "prayer" ? "Read full text" : "Read full passage"}
+                Read full text
               </button>
             )}
           </div>

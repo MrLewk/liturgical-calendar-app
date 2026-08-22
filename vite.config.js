@@ -25,7 +25,22 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,svg,png,woff2}"]
+        globPatterns: ["**/*.{js,css,html,svg,png,woff2}"],
+        // Bundled WEB Bible text (public/bible/**/*.json) is deliberately left
+        // out of the precache glob above — at ~16MB it would badly bloat the
+        // initial install. Instead each book is cached the first time it's
+        // actually fetched (i.e. the first time someone opens that reading),
+        // after which it's available offline like everything else.
+        runtimeCaching: [
+          {
+            urlPattern: /\/bible\/.*\.json$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "bible-text",
+              expiration: { maxEntries: 250, maxAgeSeconds: 60 * 60 * 24 * 365 }
+            }
+          }
+        ]
       }
     })
   ]

@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.10.0] — Full-text scripture readings, close buttons on all sheets
+
+- **Added:** Every scripture reading on the Prayer & Readings tab is now tappable, opening the full passage — verse-numbered, complete text — in a new `ScripturePassageModal` sheet.
+- **Added:** Passage text is drawn from the World English Bible (WEB), which is public domain worldwide, avoiding the copyright issue with the KJV outside the US (it's under Crown copyright in the UK). Three WEB editions are bundled to match each tradition's canon:
+  - `eng-web-c` — World English Bible (Catholic), Old Testament + Deuterocanon — default for Catholic
+  - `eng-webbe` — World English Bible British Edition with Apocrypha — default for Anglican
+  - `engwebu` — World English Bible Updated, with Apocrypha — default for Orthodox
+  - Extracted from the source epubs into per-book JSON (`public/bible/{edition}/{BOOK}.json`), footnote markers stripped, one JSON file per book (~16MB total across all three editions).
+- **Added:** `src/lib/bibleRef.js` — parses reference strings like "Isaiah 26:1–9" or "Luke 1:26–2:7" (including cross-chapter ranges) into a structured range.
+- **Added:** `src/data/bibleBooks.js` — canonical book list with collision-checked aliases/abbreviations (numerals, roman numerals, "First/Second", common short forms) so references resolve reliably.
+- **Added:** `src/lib/scripture.js` — fetches and assembles passage text from the bundled JSON, with a fallback for the Catholic edition's merged Daniel/Esther (Greek additions folded into the base book rather than kept as separate files), and builds BibleGateway.com passage links.
+- **Added:** `src/data/bibleGatewayVersions.js` — the full BibleGateway version list (233 translations, 68 languages), used to power a "read in another translation" picker in the Scripture sheet and a new default-version setting.
+- **Added:** New "Bible text" section in Settings — pick which WEB edition to read (or leave it following your tradition automatically), and set a default BibleGateway version for the "Open on BibleGateway" link.
+- **Added:** `vite.config.js` now registers a runtime-caching rule (`CacheFirst`, 1yr expiry) for `/bible/**/*.json` — each book is cached the first time it's actually opened rather than being precached upfront, so offline availability builds up progressively without bloating the initial install (~16MB of text would otherwise be downloaded on first load).
+- **Added:** Every bottom sheet / modal (`SettingsSheet`, `PrivacyPolicySheet`, `ChangelogSheet`, `ExportSheet`, `FeastModal`, `DayDetailSheet`, and the new Scripture sheet) now has an explicit close (X) button in `SheetOverlay`, in its own reserved row so it can never sit under a long heading. Tap-outside-to-close still works as before.
+
 ## [0.9.4] — Anglican season labels, bigger feast dots, nav renames
 
 - **Changed:** Anglican "Epiphany" and "Trinity" season names now read "Ordinary Time (Epiphany)" and "Ordinary Time (Trinity)" everywhere a season name is shown (Today tab, Grid subheading, day detail sheet, Wheel legend/tooltips), making the Ordinary Time connection clear alongside the Anglican-specific label. Catholic and Orthodox season names are unaffected.
