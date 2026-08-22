@@ -1518,9 +1518,13 @@ function GridView({ today, tradition, calendar, onSelectDay }) {
               onClick={() => onSelectDay(date)}
               className="aspect-square rounded-lg lg:rounded-xl flex items-center justify-center text-[12px] lg:text-[16px] relative"
               style={{
-                backgroundColor: isToday ? daySeason.color : feast ? alpha(feast.color, 0.13) : theme.surface,
+                backgroundColor: isToday ? daySeason.color : theme.surface,
                 color: isToday ? "#FFFFFF" : alpha(theme.text, 0.8),
-                border: isToday ? `1px solid ${seasonAccent(withDisplay(daySeason, date, tradition, seasons), theme.mode)}` : "1px solid transparent",
+                border: isToday
+                  ? `1px solid ${seasonAccent(withDisplay(daySeason, date, tradition, seasons), theme.mode)}`
+                  : feast
+                  ? `1px solid ${alpha(feast.color, 0.5)}`
+                  : "1px solid transparent",
                 borderBottom: isToday ? `1px solid ${seasonAccent(withDisplay(daySeason, date, tradition, seasons), theme.mode)}` : `3px solid ${dayColor}`,
                 boxSizing: "border-box",
               }}

@@ -6,6 +6,13 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.10.2",
+    title: "Fix feast tiles blending into the background",
+    changes: [
+      { type: "Fixed", text: "Feast-day tiles on the Grid tab used a tinted background that, for light colors (white, gold), nearly matched the page background and made the tile look washed-out. Feast tiles now keep the normal white card background and are marked by the corner dot and a colored ring instead." },
+    ],
+  },
+  {
     version: "0.10.1",
     title: "Fix low-contrast feast dots",
     changes: [

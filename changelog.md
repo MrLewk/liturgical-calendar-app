@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.10.2] — Fix feast tiles blending into the background
+
+- **Fixed:** Feast-day tiles on the Grid tab used a tinted background (feast color at low opacity) to stand out, but for light liturgical colors (white, gold) this tint landed almost exactly on the page's cream background, making the whole tile look washed-out and blend in rather than stand out. Feast tiles now keep the same white card background as every other day, with the feast indicated by the corner dot and a colored ring around the tile instead.
+
 ## [0.10.1] — Fix low-contrast feast dots
 
 - **Fixed:** Feast-day markers using light liturgical colors (white, gold) had a faint border and blended into the app's cream background, making them hard to spot. The border around feast markers is now darker and slightly thicker across the Grid tab dots, the Feasts tab list bars, and the feast detail sheet icon.
