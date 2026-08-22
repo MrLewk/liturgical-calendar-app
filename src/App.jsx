@@ -244,6 +244,7 @@ export default function App() {
       {tab === "today" && (
         <TodayView
           season={season}
+          seasons={seasons}
           today={today}
           nextFeast={nextFeast}
           progressPct={progressPct}
@@ -1060,7 +1061,7 @@ const COLOR_MEANING = {
   "#C97BA0": "Rose — a brief turn toward joy amid a penitential season",
 };
 
-function TodayView({ season, today, nextFeast, progressPct, onSelectFeast, onOpenReadings, onOpenExport, tradition, calendar }) {
+function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFeast, onOpenReadings, onOpenExport, tradition, calendar }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   const readingRef = firstReadingRef(tradition);

@@ -6,6 +6,13 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.9.1",
+    title: "Fix Today tab crash",
+    changes: [
+      { type: "Fixed", text: "The Today tab crashed on load — its desktop \"year at a glance\" wheel panel wasn't receiving the live season data it needed." },
+    ],
+  },
+  {
     version: "0.9.0",
     title: "Grid and Wheel tabs wired to live dates",
     changes: [

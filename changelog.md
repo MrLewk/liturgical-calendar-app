@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.9.1] — Fix Today tab crash
+
+- **Fixed:** The Today tab crashed on load (`seasons is not defined`) — its desktop "year at a glance" wheel panel needed the live `seasons` data, which wasn't being passed down from the app root.
+
 ## [0.9.0] — Grid and Wheel tabs wired to live dates
 
 - **Added:** `src/lib/feasts.js` gained `seasonAt()`, `feastOnDate()`, `upcomingFeasts()`, `weekLabel()`, and `withDisplay()` — general-purpose lookups (season/feast for an arbitrary date, sorted upcoming feasts merging the current and next liturgical year so the list never runs dry near a year boundary) plus a proper liturgical week/Sunday-numbering engine that the UI now uses everywhere instead of the old hand-picked demo data.
