@@ -3,6 +3,7 @@ import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, Download
 import { useTheme } from "./ThemeContext";
 import { alpha, seasonAccent } from "./theme";
 import UpdateToast from "./UpdateToast";
+import { usePersistedState } from "./usePersistedState";
 
 // ---- Static demo data (real logic comes later) ----
 const SEASONS = {
@@ -267,11 +268,11 @@ function arcPath(cx, cy, r, startDeg, endDeg) {
 export default function App() {
   const theme = useTheme();
   const [tab, setTab] = useState("today");
-  const [tradition, setTradition] = useState("Catholic");
+  const [tradition, setTradition] = usePersistedState("ordo-tradition", "Catholic");
   const [showSettings, setShowSettings] = useState(false);
   const [selectedFeast, setSelectedFeast] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
-  const [calendar, setCalendar] = useState("Gregorian"); // "Gregorian" (New Calendar) | "Julian" (Old Calendar) — only meaningful for Orthodox
+  const [calendar, setCalendar] = usePersistedState("ordo-calendar", "Gregorian"); // "Gregorian" (New Calendar) | "Julian" (Old Calendar) — only meaningful for Orthodox
   const season = CURRENT;
   const accent = seasonAccent(season, theme.mode);
   const progressPct = Math.round((season.dayInSeason / season.seasonLength) * 100);
@@ -1024,10 +1025,15 @@ function WheelView({ season, tradition, calendar, variant = "standalone" }) {
 // local clock: Sunday gets the Eucharistic lectionary regardless of time,
 // otherwise Morning Prayer before noon and Evening Prayer after. The person
 // can still switch manually — this only decides the initial selection.
+// Picks a sensible default Daily Office segment from the person's real
+// local clock: Sunday gets the Eucharistic lectionary regardless of time,
+// otherwise Morning Prayer through the afternoon and Evening Prayer once
+// evening actually starts (5pm) — not at noon, which is too early for most
+// people's day. The person can still switch manually.
 function autoOfficeSegment() {
   const now = new Date();
   if (now.getDay() === 0) return "eucharist";
-  return now.getHours() < 12 ? "am" : "pm";
+  return now.getHours() < 17 ? "am" : "pm";
 }
 
 function ReadingsView({ tradition, season }) {

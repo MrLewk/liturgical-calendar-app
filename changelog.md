@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.4.2] — Persist tradition and calendar settings
+
+- **Fixed:** Tradition (Catholic/Anglican/Orthodox) and calendar (Gregorian/Julian) settings weren't written to `localStorage` at all — only the theme mode was, so both reset to their defaults on every reload. Added a small reusable `usePersistedState` hook and wired both settings through it.
+
+## [0.4.1] — Fix Anglican morning/evening cutoff
+
+- **Fixed:** The automatic Morning/Evening Prayer default (added in 0.4.0) switched to Evening at noon, which is too early for most people's day — 3:40pm was showing Evening Prayer. Cutoff moved to 5pm.
+
 ## [0.4.0] — Update-available toast
 
 - **Added:** `UpdateToast` component — when a new service worker version is available, a toast appears (bottom-center on mobile above the tab bar, bottom-right on desktop) offering "Reload" or "Later". Also shows a brief "ready to work offline" confirmation the first time the service worker finishes precaching.
