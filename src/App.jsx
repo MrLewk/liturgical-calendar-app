@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, Download, BookOpen, Sun, Moon } from "lucide-react";
+import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, Download, BookOpen, Sun, Moon, SunMoon } from "lucide-react";
+import { useTheme } from "./ThemeContext";
+import { alpha, seasonAccent } from "./theme";
 
 // ---- Static demo data (real logic comes later) ----
 const SEASONS = {
@@ -262,6 +264,7 @@ function arcPath(cx, cy, r, startDeg, endDeg) {
 }
 
 export default function App() {
+  const theme = useTheme();
   const [tab, setTab] = useState("today");
   const [tradition, setTradition] = useState("Catholic");
   const [showSettings, setShowSettings] = useState(false);
@@ -269,120 +272,218 @@ export default function App() {
   const [selectedDay, setSelectedDay] = useState(null);
   const [calendar, setCalendar] = useState("Gregorian"); // "Gregorian" (New Calendar) | "Julian" (Old Calendar) — only meaningful for Orthodox
   const season = CURRENT;
+  const accent = seasonAccent(season, theme.mode);
   const progressPct = Math.round((season.dayInSeason / season.seasonLength) * 100);
 
+  const navItems = [
+    { key: "today", icon: Flame, label: "Today" },
+    { key: "grid", icon: CalendarDays, label: "Grid" },
+    { key: "wheel", icon: CircleDot, label: "Wheel" },
+    { key: "readings", icon: BookOpen, label: "Prayer" },
+    { key: "feasts", icon: Star, label: "Feasts" },
+  ];
+
+  const content = (
+    <>
+      {tab === "today" && (
+        <TodayView
+          season={season}
+          progressPct={progressPct}
+          onSelectFeast={setSelectedFeast}
+          onOpenReadings={() => setTab("readings")}
+          tradition={tradition}
+          calendar={calendar}
+        />
+      )}
+      {tab === "grid" && <GridView season={season} onSelectDay={setSelectedDay} />}
+      {tab === "wheel" && <WheelView season={season} tradition={tradition} calendar={calendar} />}
+      {tab === "readings" && <ReadingsView tradition={tradition} season={season} />}
+      {tab === "feasts" && <FeastsView onSelectFeast={setSelectedFeast} />}
+    </>
+  );
+
   return (
-    <div className="w-full flex items-center justify-center bg-[#0f0e0d]" style={{ minHeight: "100dvh" }}>
-      {/* App shell — full-bleed on phones, a centered column on wider screens
-          so this also works as a desktop-browser fallback for the PWA. */}
-      <div
-        className="relative w-full max-w-[480px] flex flex-col sm:my-6 sm:rounded-[2rem] sm:shadow-2xl overflow-hidden"
-        style={{ minHeight: "100dvh", backgroundColor: "#211F1D" }}
+    <div className="w-full flex" style={{ minHeight: "100dvh", backgroundColor: theme.bgOuter }}>
+      {/* Desktop sidebar — replaces the mobile header + bottom tab bar at the lg breakpoint */}
+      <aside
+        className="hidden lg:flex lg:flex-col w-[240px] flex-shrink-0 border-r px-4 py-6"
+        style={{ borderColor: theme.border, backgroundColor: theme.surfaceRaised }}
       >
-        {/* Header — padded for the device status bar / notch via safe-area-inset */}
-        <div
-          className="flex-shrink-0 flex items-center justify-between px-5 pb-3"
-          style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 14px)" }}
-        >
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.25em]" style={{ color: season.accent }}>
-              {tradition}
-            </p>
-            <h1
-              className="text-[15px] tracking-wide"
-              style={{ fontFamily: "'Fraunces', serif", color: "#EDE7DC" }}
-            >
-              Ordo
-            </h1>
-          </div>
+        <div className="px-2 mb-8">
+          <p className="text-[10px] uppercase tracking-[0.25em] mb-1" style={{ color: accent }}>
+            {tradition}
+          </p>
+          <h1 className="text-[20px] tracking-wide" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+            Ordo
+          </h1>
+        </div>
+
+        <nav className="flex flex-col gap-1">
+          {navItems.map((item) => (
+            <SidebarNavButton
+              key={item.key}
+              icon={item.icon}
+              label={item.label}
+              active={tab === item.key}
+              color={accent}
+              onClick={() => setTab(item.key)}
+            />
+          ))}
+        </nav>
+
+        <div className="flex-1" />
+
+        <div className="flex items-center gap-2 px-2">
+          <ThemeToggleButton />
           <button
             onClick={() => setShowSettings(true)}
-            className="w-9 h-9 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: "#2A2825" }}
+            className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl text-[13px]"
+            style={{ backgroundColor: theme.bg, color: alpha(theme.text, 0.8) }}
           >
-            <Settings2 size={16} color="#EDE7DC99" />
+            <Settings2 size={15} />
+            Settings
           </button>
         </div>
+      </aside>
 
-        {/* Scrollable content — min-h-0 is required here so this area scrolls
-            internally instead of stretching the flex column (which would drag
-            the header and tab bar along with it) */}
-        <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-4 no-scrollbar">
-          {tab === "today" && (
-            <TodayView
-              season={season}
-              progressPct={progressPct}
-              onSelectFeast={setSelectedFeast}
-              onOpenReadings={() => setTab("readings")}
+      {/* Main column */}
+      <div className="flex-1 flex items-center justify-center lg:items-stretch lg:justify-stretch">
+        <div
+          className="relative w-full max-w-[480px] lg:max-w-none flex flex-col sm:my-6 sm:rounded-[2rem] sm:shadow-2xl lg:my-0 lg:rounded-none lg:shadow-none overflow-hidden lg:overflow-visible"
+          style={{ minHeight: "100dvh", backgroundColor: theme.bg }}
+        >
+          {/* Mobile header — hidden on desktop, where the sidebar covers this role.
+              Padded for the device status bar / notch via safe-area-inset. */}
+          <div
+            className="lg:hidden flex-shrink-0 flex items-center justify-between px-5 pb-3"
+            style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 14px)" }}
+          >
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.25em]" style={{ color: accent }}>
+                {tradition}
+              </p>
+              <h1 className="text-[15px] tracking-wide" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+                Ordo
+              </h1>
+            </div>
+            <div className="flex items-center gap-2">
+              <ThemeToggleButton />
+              <button
+                onClick={() => setShowSettings(true)}
+                className="w-9 h-9 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: theme.surface }}
+              >
+                <Settings2 size={16} color={alpha(theme.text, 0.6)} />
+              </button>
+            </div>
+          </div>
+
+          {/* Scrollable content — min-h-0 is required here so this area scrolls
+              internally instead of stretching the flex column (which would drag
+              the header and tab bar along with it) */}
+          <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-4 lg:px-12 lg:py-10 no-scrollbar">
+            <div className="lg:max-w-3xl lg:mx-auto">{content}</div>
+          </div>
+
+          {/* Bottom tab bar — hidden on desktop. Padded for the home indicator via safe-area-inset */}
+          <div
+            className="lg:hidden flex-shrink-0 flex items-center justify-around border-t px-1 pt-2"
+            style={{
+              borderColor: theme.surface,
+              backgroundColor: theme.surfaceRaised,
+              paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
+            }}
+          >
+            {navItems.map((item) => (
+              <TabButton
+                key={item.key}
+                icon={item.icon}
+                label={item.label}
+                active={tab === item.key}
+                color={accent}
+                onClick={() => setTab(item.key)}
+              />
+            ))}
+          </div>
+
+          {/* Settings sheet */}
+          {showSettings && (
+            <SettingsSheet
               tradition={tradition}
+              calendar={calendar}
+              onApply={(t, c) => {
+                setTradition(t);
+                setCalendar(c);
+              }}
+              onClose={() => setShowSettings(false)}
+              season={season}
             />
           )}
-          {tab === "grid" && <GridView season={season} onSelectDay={setSelectedDay} />}
-          {tab === "wheel" && <WheelView season={season} tradition={tradition} calendar={calendar} />}
-          {tab === "readings" && <ReadingsView tradition={tradition} season={season} />}
-          {tab === "feasts" && <FeastsView onSelectFeast={setSelectedFeast} />}
+
+          {/* Feast bio sheet — reachable from Today's "Next feast", the Feasts tab, and a day's detail sheet */}
+          {selectedFeast && <FeastModal feast={selectedFeast} onClose={() => setSelectedFeast(null)} />}
+
+          {/* Day detail sheet — reachable by tapping any day on the Grid tab */}
+          {selectedDay && !selectedFeast && (
+            <DayDetailSheet
+              day={selectedDay}
+              tradition={tradition}
+              onClose={() => setSelectedDay(null)}
+              onOpenFeast={(f) => {
+                setSelectedDay(null);
+                setSelectedFeast(f);
+              }}
+            />
+          )}
         </div>
-
-        {/* Bottom tab bar — padded for the home indicator via safe-area-inset */}
-        <div
-          className="flex-shrink-0 flex items-center justify-around border-t px-1 pt-2"
-          style={{
-            borderColor: "#2A2825",
-            backgroundColor: "#1A1918",
-            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
-          }}
-        >
-          <TabButton icon={Flame} label="Today" active={tab === "today"} color={season.accent} onClick={() => setTab("today")} />
-          <TabButton icon={CalendarDays} label="Grid" active={tab === "grid"} color={season.accent} onClick={() => setTab("grid")} />
-          <TabButton icon={CircleDot} label="Wheel" active={tab === "wheel"} color={season.accent} onClick={() => setTab("wheel")} />
-          <TabButton icon={BookOpen} label="Prayer" active={tab === "readings"} color={season.accent} onClick={() => setTab("readings")} />
-          <TabButton icon={Star} label="Feasts" active={tab === "feasts"} color={season.accent} onClick={() => setTab("feasts")} />
-        </div>
-
-        {/* Settings sheet */}
-        {showSettings && (
-          <SettingsSheet
-            tradition={tradition}
-            calendar={calendar}
-            onApply={(t, c) => {
-              setTradition(t);
-              setCalendar(c);
-            }}
-            onClose={() => setShowSettings(false)}
-            season={season}
-          />
-        )}
-
-        {/* Feast bio sheet — reachable from Today's "Next feast", the Feasts tab, and a day's detail sheet */}
-        {selectedFeast && <FeastModal feast={selectedFeast} onClose={() => setSelectedFeast(null)} />}
-
-        {/* Day detail sheet — reachable by tapping any day on the Grid tab */}
-        {selectedDay && !selectedFeast && (
-          <DayDetailSheet
-            day={selectedDay}
-            tradition={tradition}
-            onClose={() => setSelectedDay(null)}
-            onOpenFeast={(f) => {
-              setSelectedDay(null);
-              setSelectedFeast(f);
-            }}
-          />
-        )}
       </div>
     </div>
   );
 }
 
-function SheetOverlay({ onClose, children }) {
+function SidebarNavButton({ icon: Icon, label, active, color, onClick }) {
+  const theme = useTheme();
   return (
-    <div className="absolute inset-0 z-50" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/60" />
+    <button
+      onClick={onClick}
+      className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13.5px] text-left"
+      style={{
+        backgroundColor: active ? alpha(color, 0.14) : "transparent",
+        color: active ? color : alpha(theme.text, 0.65),
+      }}
+    >
+      <Icon size={17} strokeWidth={active ? 2.4 : 1.8} />
+      {label}
+    </button>
+  );
+}
+
+function ThemeToggleButton() {
+  const theme = useTheme();
+  const Icon = theme.mode === "system" ? SunMoon : theme.effectiveMode === "dark" ? Moon : Sun;
+  return (
+    <button
+      onClick={theme.toggle}
+      title={theme.mode === "system" ? "Following system — tap to override" : `Switch to ${theme.effectiveMode === "dark" ? "light" : "dark"}`}
+      className="w-9 h-9 flex-shrink-0 rounded-full flex items-center justify-center"
+      style={{ backgroundColor: theme.surface }}
+    >
+      <Icon size={16} color={alpha(theme.text, 0.6)} />
+    </button>
+  );
+}
+
+function SheetOverlay({ onClose, children }) {
+  const theme = useTheme();
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center lg:items-center" onClick={onClose}>
+      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }} />
       <div
-        className="absolute left-0 right-0 bottom-0 rounded-t-3xl p-6 pb-10 max-h-[85%] overflow-y-auto"
-        style={{ backgroundColor: "#1A1918" }}
+        className="relative w-full lg:w-auto lg:min-w-[440px] lg:max-w-[520px] rounded-t-3xl lg:rounded-2xl p-6 pb-10 lg:pb-6 max-h-[85vh] overflow-y-auto no-scrollbar"
+        style={{ backgroundColor: theme.surfaceRaised }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-10 h-1 rounded-full mx-auto mb-5" style={{ backgroundColor: "#3a3835" }} />
+        <div className="w-10 h-1 rounded-full mx-auto mb-5 lg:hidden" style={{ backgroundColor: theme.border }} />
         {children}
       </div>
     </div>
@@ -390,13 +491,15 @@ function SheetOverlay({ onClose, children }) {
 }
 
 function SettingsSheet({ tradition, calendar, onApply, onClose, season }) {
+  const theme = useTheme();
+  const accent = seasonAccent(season, theme.mode);
   // Local draft so picking an option doesn't change the app until confirmed —
   // gives the user a clear moment where the change actually takes effect.
   const [draft, setDraft] = useState(tradition);
   const [draftCalendar, setDraftCalendar] = useState(calendar);
   return (
     <SheetOverlay onClose={onClose}>
-      <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: "#EDE7DC66" }}>
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: alpha(theme.text, 0.4) }}>
         Tradition
       </p>
       <div className="space-y-2">
@@ -406,18 +509,18 @@ function SettingsSheet({ tradition, calendar, onApply, onClose, season }) {
             onClick={() => setDraft(t)}
             className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[14px]"
             style={{
-              backgroundColor: draft === t ? `${season.color}33` : "#211F1D",
-              color: "#EDE7DC",
-              border: draft === t ? `1px solid ${season.accent}` : "1px solid transparent",
+              backgroundColor: draft === t ? alpha(season.color, 0.2) : theme.bg,
+              color: theme.text,
+              border: draft === t ? `1px solid ${accent}` : "1px solid transparent",
             }}
           >
             {t}
-            {draft === t && <span style={{ color: season.accent }}>●</span>}
+            {draft === t && <span style={{ color: accent }}>●</span>}
           </button>
         ))}
       </div>
 
-      <p className="text-[11px] uppercase tracking-[0.2em] mb-3 mt-5" style={{ color: "#EDE7DC66" }}>
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-3 mt-5" style={{ color: alpha(theme.text, 0.4) }}>
         Calendar
       </p>
       {draft === "Orthodox" ? (
@@ -432,23 +535,23 @@ function SettingsSheet({ tradition, calendar, onApply, onClose, season }) {
                 onClick={() => setDraftCalendar(c.key)}
                 className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-left"
                 style={{
-                  backgroundColor: draftCalendar === c.key ? `${season.color}33` : "#211F1D",
-                  border: draftCalendar === c.key ? `1px solid ${season.accent}` : "1px solid transparent",
+                  backgroundColor: draftCalendar === c.key ? alpha(season.color, 0.2) : theme.bg,
+                  border: draftCalendar === c.key ? `1px solid ${accent}` : "1px solid transparent",
                 }}
               >
                 <div>
-                  <p className="text-[14px]" style={{ color: "#EDE7DC" }}>
+                  <p className="text-[14px]" style={{ color: theme.text }}>
                     {c.label}
                   </p>
-                  <p className="text-[10.5px] mt-0.5 leading-snug" style={{ color: "#EDE7DC66" }}>
+                  <p className="text-[10.5px] mt-0.5 leading-snug" style={{ color: alpha(theme.text, 0.4) }}>
                     {c.sub}
                   </p>
                 </div>
-                {draftCalendar === c.key && <span style={{ color: season.accent }}>●</span>}
+                {draftCalendar === c.key && <span style={{ color: accent }}>●</span>}
               </button>
             ))}
           </div>
-          <p className="text-[10.5px] mt-3" style={{ color: "#EDE7DC55" }}>
+          <p className="text-[10.5px] mt-3" style={{ color: alpha(theme.text, 0.33) }}>
             Pascha and Great Lent are calculated the same way either way — this only shifts fixed feasts like
             the Nativity Fast and Christmas.
           </p>
@@ -456,18 +559,29 @@ function SettingsSheet({ tradition, calendar, onApply, onClose, season }) {
       ) : (
         <div
           className="w-full flex items-center justify-between px-4 py-3 rounded-xl"
-          style={{ backgroundColor: "#211F1D", border: "1px solid transparent" }}
+          style={{ backgroundColor: theme.bg, border: "1px solid transparent" }}
         >
-          <p className="text-[14px]" style={{ color: "#EDE7DC88" }}>
+          <p className="text-[14px]" style={{ color: alpha(theme.text, 0.53) }}>
             Gregorian
           </p>
-          <span style={{ color: "#EDE7DC44" }}>●</span>
+          <span style={{ color: alpha(theme.text, 0.27) }}>●</span>
         </div>
       )}
 
-      <p className="text-[11px] mt-4 mb-5" style={{ color: "#EDE7DC55" }}>
+      <p className="text-[11px] mt-4 mb-5" style={{ color: alpha(theme.text, 0.33) }}>
         Calendar dates and feast days adjust to match.
       </p>
+
+      {theme.mode !== "system" && (
+        <button
+          onClick={theme.useSystem}
+          className="text-[11px] underline decoration-dotted mb-3 block"
+          style={{ color: alpha(theme.text, 0.4) }}
+        >
+          Reset appearance to match system
+        </button>
+      )}
+
       <button
         onClick={() => {
           onApply(draft, draftCalendar);
@@ -483,25 +597,29 @@ function SettingsSheet({ tradition, calendar, onApply, onClose, season }) {
 }
 
 function FeastModal({ feast, onClose }) {
+  const theme = useTheme();
   return (
     <SheetOverlay onClose={onClose}>
       <div className="flex items-center gap-2 mb-1">
-        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: feast.color }} />
-        <p className="text-[11px] uppercase tracking-[0.2em]" style={{ color: "#EDE7DC66" }}>
+        <span
+          className="w-3 h-3 rounded-full flex-shrink-0"
+          style={{ backgroundColor: feast.color, border: `1px solid ${alpha(theme.text, 0.2)}` }}
+        />
+        <p className="text-[11px] uppercase tracking-[0.2em]" style={{ color: alpha(theme.text, 0.4) }}>
           {feast.date} · {feast.rank}
         </p>
       </div>
-      <h2 className="text-[24px] leading-tight mb-4" style={{ fontFamily: "'Fraunces', serif", color: "#EDE7DC" }}>
+      <h2 className="text-[24px] leading-tight mb-4" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
         {feast.name}
       </h2>
-      <p className="text-[13px] leading-relaxed mb-4" style={{ color: "#EDE7DCcc" }}>
+      <p className="text-[13px] leading-relaxed mb-4" style={{ color: alpha(theme.text, 0.8) }}>
         {feast.bio}
       </p>
-      <div className="rounded-xl p-3.5" style={{ backgroundColor: "#211F1D" }}>
-        <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: "#EDE7DC55" }}>
+      <div className="rounded-xl p-3.5" style={{ backgroundColor: theme.bg }}>
+        <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.33) }}>
           Why this color
         </p>
-        <p className="text-[12px] leading-relaxed" style={{ color: "#EDE7DCaa" }}>
+        <p className="text-[12px] leading-relaxed" style={{ color: alpha(theme.text, 0.67) }}>
           {feast.why}
         </p>
       </div>
@@ -519,35 +637,37 @@ function demoDayFeast(day) {
 }
 
 function DayDetailSheet({ day, tradition, onClose, onOpenFeast }) {
+  const theme = useTheme();
   const season = demoDaySeason(day);
+  const accent = seasonAccent(season, theme.mode);
   const feast = demoDayFeast(day);
   const readingRef = firstReadingRef(tradition);
 
   return (
     <SheetOverlay onClose={onClose}>
-      <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: "#EDE7DC66" }}>
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: alpha(theme.text, 0.4) }}>
         August {day}
       </p>
 
       <div
         className="rounded-2xl p-5 mb-4"
-        style={{ backgroundColor: `${season.color}22`, border: `1px solid ${season.color}55` }}
+        style={{ backgroundColor: alpha(season.color, 0.13), border: `1px solid ${alpha(season.color, 0.33)}` }}
       >
-        <p className="text-[10px] uppercase tracking-[0.3em] mb-1" style={{ color: season.accent }}>
+        <p className="text-[10px] uppercase tracking-[0.3em] mb-1" style={{ color: accent }}>
           {season.latin}
         </p>
-        <h2 className="text-[24px] leading-tight" style={{ fontFamily: "'Fraunces', serif", color: "#EDE7DC" }}>
+        <h2 className="text-[24px] leading-tight" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
           {season.name}
         </h2>
       </div>
 
-      <div className="rounded-2xl p-4 mb-3 flex items-center gap-3" style={{ backgroundColor: "#2A2825" }}>
-        <BookOpen size={18} color={season.accent} />
+      <div className="rounded-2xl p-4 mb-3 flex items-center gap-3" style={{ backgroundColor: theme.surface }}>
+        <BookOpen size={18} color={accent} />
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: "#EDE7DC66" }}>
+          <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
             Reading
           </p>
-          <p className="text-[13px]" style={{ color: "#EDE7DC" }}>
+          <p className="text-[13px]" style={{ color: theme.text }}>
             {readingRef}
           </p>
         </div>
@@ -557,23 +677,23 @@ function DayDetailSheet({ day, tradition, onClose, onOpenFeast }) {
         <button
           onClick={() => onOpenFeast(feast)}
           className="w-full rounded-2xl p-4 flex items-center gap-3 text-left"
-          style={{ backgroundColor: "#2A2825" }}
+          style={{ backgroundColor: theme.surface }}
         >
-          <Star size={18} color={season.accent} />
+          <Star size={18} color={accent} />
           <div className="flex-1">
-            <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: "#EDE7DC66" }}>
+            <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
               Feast
             </p>
-            <p className="text-[13px]" style={{ color: "#EDE7DC" }}>
+            <p className="text-[13px]" style={{ color: theme.text }}>
               {feast.name}
             </p>
           </div>
-          <ChevronRight size={16} color="#EDE7DC55" />
+          <ChevronRight size={16} color={alpha(theme.text, 0.33)} />
         </button>
       ) : (
-        <div className="rounded-2xl p-4 flex items-center gap-3" style={{ backgroundColor: "#2A2825" }}>
-          <Star size={18} color="#EDE7DC44" />
-          <p className="text-[13px]" style={{ color: "#EDE7DC66" }}>
+        <div className="rounded-2xl p-4 flex items-center gap-3" style={{ backgroundColor: theme.surface }}>
+          <Star size={18} color={alpha(theme.text, 0.27)} />
+          <p className="text-[13px]" style={{ color: alpha(theme.text, 0.4) }}>
             No major feast today
           </p>
         </div>
@@ -583,115 +703,129 @@ function DayDetailSheet({ day, tradition, onClose, onOpenFeast }) {
 }
 
 function TabButton({ icon: Icon, label, active, color, onClick }) {
+  const theme = useTheme();
   return (
     <button onClick={onClick} className="flex flex-col items-center gap-1 px-1.5 py-1 flex-1">
-      <Icon size={18} color={active ? color : "#EDE7DC55"} strokeWidth={active ? 2.4 : 1.8} />
-      <span className="text-[9px] tracking-wide" style={{ color: active ? color : "#EDE7DC55" }}>
+      <Icon size={18} color={active ? color : alpha(theme.text, 0.33)} strokeWidth={active ? 2.4 : 1.8} />
+      <span className="text-[9px] tracking-wide" style={{ color: active ? color : alpha(theme.text, 0.33) }}>
         {label}
       </span>
     </button>
   );
 }
 
-function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, tradition }) {
+function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, tradition, calendar }) {
+  const theme = useTheme();
+  const accent = seasonAccent(season, theme.mode);
   const nextFeast = FEASTS[0];
   const readingRef = firstReadingRef(tradition);
   return (
-    <div className="pt-2">
-      {/* Hero card */}
-      <div
-        className="rounded-3xl p-6 mb-4 relative overflow-hidden"
-        style={{ backgroundColor: `${season.color}22`, border: `1px solid ${season.color}55` }}
-      >
-        <p className="text-[10px] uppercase tracking-[0.3em] mb-1" style={{ color: season.accent }}>
-          {season.latin}
-        </p>
-        <h2
-          className="text-[32px] leading-tight mb-1"
-          style={{ fontFamily: "'Fraunces', serif", color: "#EDE7DC" }}
+    <div className="pt-2 lg:pt-0 lg:grid lg:grid-cols-[1fr_360px] lg:gap-8 lg:items-start">
+      <div>
+        {/* Hero card */}
+        <div
+          className="rounded-3xl p-6 mb-4 relative overflow-hidden"
+          style={{ backgroundColor: alpha(season.color, 0.13), border: `1px solid ${alpha(season.color, 0.33)}` }}
         >
-          {season.name}
-        </h2>
-        <p className="text-[13px] mb-5" style={{ color: "#EDE7DC99" }}>
-          {season.weekLabel} · Saturday, August 22
-        </p>
+          <p className="text-[10px] uppercase tracking-[0.3em] mb-1" style={{ color: accent }}>
+            {season.latin}
+          </p>
+          <h2
+            className="text-[32px] leading-tight mb-1"
+            style={{ fontFamily: "'Fraunces', serif", color: theme.text }}
+          >
+            {season.name}
+          </h2>
+          <p className="text-[13px] mb-5" style={{ color: alpha(theme.text, 0.6) }}>
+            {season.weekLabel} · Saturday, August 22
+          </p>
 
-        {/* Candle progress bar */}
-        <div className="flex items-center gap-2">
-          <Flame size={14} color={season.accent} />
-          <div className="flex-1 h-[6px] rounded-full overflow-hidden" style={{ backgroundColor: "#00000040" }}>
-            <div
-              className="h-full rounded-full"
-              style={{ width: `${progressPct}%`, backgroundColor: season.accent }}
-            />
+          {/* Candle progress bar */}
+          <div className="flex items-center gap-2">
+            <Flame size={14} color={accent} />
+            <div className="flex-1 h-[6px] rounded-full overflow-hidden" style={{ backgroundColor: alpha(theme.text, 0.12) }}>
+              <div
+                className="h-full rounded-full"
+                style={{ width: `${progressPct}%`, backgroundColor: accent }}
+              />
+            </div>
+            <span className="text-[11px]" style={{ color: alpha(theme.text, 0.5) }}>
+              {season.dayInSeason}/{season.seasonLength}d
+            </span>
           </div>
-          <span className="text-[11px]" style={{ color: "#EDE7DC80" }}>
-            {season.dayInSeason}/{season.seasonLength}d
-          </span>
         </div>
-      </div>
 
-      {/* Color swatch card */}
-      <div className="rounded-2xl p-4 mb-4 flex items-center gap-3" style={{ backgroundColor: "#2A2825" }}>
-        <div className="w-10 h-10 rounded-full border-2" style={{ backgroundColor: season.color, borderColor: "#EDE7DC33" }} />
-        <div>
-          <p className="text-[13px]" style={{ color: "#EDE7DC" }}>
-            Liturgical color
-          </p>
-          <p className="text-[11px]" style={{ color: "#EDE7DC66" }}>
-            Green — growth, ordinary discipleship
-          </p>
-        </div>
-      </div>
-
-      {/* Reading teaser — clicks through to the full Readings tab */}
-      <button
-        onClick={onOpenReadings}
-        className="w-full rounded-2xl p-4 mb-4 flex items-center justify-between text-left"
-        style={{ backgroundColor: "#2A2825" }}
-      >
-        <div className="flex items-center gap-3">
-          <BookOpen size={18} color={season.accent} />
+        {/* Color swatch card */}
+        <div className="rounded-2xl p-4 mb-4 flex items-center gap-3" style={{ backgroundColor: theme.surface }}>
+          <div className="w-10 h-10 rounded-full border-2" style={{ backgroundColor: season.color, borderColor: alpha(theme.text, 0.2) }} />
           <div>
-            <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: "#EDE7DC66" }}>
-              Today's reading
+            <p className="text-[13px]" style={{ color: theme.text }}>
+              Liturgical color
             </p>
-            <p className="text-[14px]" style={{ color: "#EDE7DC" }}>
-              {readingRef}
+            <p className="text-[11px]" style={{ color: alpha(theme.text, 0.4) }}>
+              Green — growth, ordinary discipleship
             </p>
           </div>
         </div>
-        <ChevronRight size={18} color="#EDE7DC55" />
-      </button>
 
-      {/* Next feast teaser — clicks through to the same bio sheet as the Feasts tab */}
-      <button
-        onClick={() => onSelectFeast(nextFeast)}
-        className="w-full rounded-2xl p-4 flex items-center justify-between text-left"
-        style={{ backgroundColor: "#2A2825" }}
-      >
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: "#EDE7DC66" }}>
-            Next feast
-          </p>
-          <p className="text-[14px]" style={{ color: "#EDE7DC" }}>
-            {nextFeast.name}
-          </p>
-          <p className="text-[11px]" style={{ color: "#EDE7DC66" }}>
-            {nextFeast.date} · {nextFeast.rank}
-          </p>
-        </div>
-        <ChevronRight size={18} color="#EDE7DC55" />
-      </button>
+        {/* Reading teaser — clicks through to the full Readings tab */}
+        <button
+          onClick={onOpenReadings}
+          className="w-full rounded-2xl p-4 mb-4 flex items-center justify-between text-left"
+          style={{ backgroundColor: theme.surface }}
+        >
+          <div className="flex items-center gap-3">
+            <BookOpen size={18} color={accent} />
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
+                Today's reading
+              </p>
+              <p className="text-[14px]" style={{ color: theme.text }}>
+                {readingRef}
+              </p>
+            </div>
+          </div>
+          <ChevronRight size={18} color={alpha(theme.text, 0.33)} />
+        </button>
 
-      {/* Sync button */}
-      <button
-        className="w-full mt-4 rounded-2xl py-3 flex items-center justify-center gap-2 text-[13px]"
-        style={{ backgroundColor: season.color, color: "#EDE7DC" }}
-      >
-        <Download size={15} />
-        Sync to calendar
-      </button>
+        {/* Next feast teaser — clicks through to the same bio sheet as the Feasts tab */}
+        <button
+          onClick={() => onSelectFeast(nextFeast)}
+          className="w-full rounded-2xl p-4 flex items-center justify-between text-left"
+          style={{ backgroundColor: theme.surface }}
+        >
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
+              Next feast
+            </p>
+            <p className="text-[14px]" style={{ color: theme.text }}>
+              {nextFeast.name}
+            </p>
+            <p className="text-[11px]" style={{ color: alpha(theme.text, 0.4) }}>
+              {nextFeast.date} · {nextFeast.rank}
+            </p>
+          </div>
+          <ChevronRight size={18} color={alpha(theme.text, 0.33)} />
+        </button>
+
+        {/* Sync button */}
+        <button
+          className="w-full mt-4 rounded-2xl py-3 flex items-center justify-center gap-2 text-[13px]"
+          style={{ backgroundColor: season.color, color: "#EDE7DC" }}
+        >
+          <Download size={15} />
+          Sync to calendar
+        </button>
+      </div>
+
+      {/* Desktop-only: year-at-a-glance wheel alongside Today, so the two most
+          "visual" views sit together rather than requiring a tab switch. */}
+      <div className="hidden lg:block rounded-3xl p-6" style={{ backgroundColor: theme.surface }}>
+        <p className="text-[11px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
+          Year at a glance
+        </p>
+        <WheelView season={season} tradition={tradition} calendar={calendar} compact />
+      </div>
     </div>
   );
 }
@@ -705,16 +839,17 @@ function demoDaySeasonColor(d) {
 }
 
 function GridView({ season, onSelectDay }) {
+  const theme = useTheme();
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
-  const highlightDays = { 24: "#A32638", 28: "#EDE7DC" };
+  const highlightDays = { 24: "#A32638", 28: theme.mode === "dark" ? "#EDE7DC" : "#2B2620" };
   return (
     <div className="pt-2">
-      <h3 className="text-[18px] mb-3" style={{ fontFamily: "'Fraunces', serif", color: "#EDE7DC" }}>
+      <h3 className="text-[18px] mb-3" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
         August
       </h3>
       <div className="grid grid-cols-7 gap-1.5 mb-2">
         {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-          <div key={i} className="text-center text-[10px] pb-1" style={{ color: "#EDE7DC55" }}>
+          <div key={i} className="text-center text-[10px] pb-1" style={{ color: alpha(theme.text, 0.33) }}>
             {d}
           </div>
         ))}
@@ -731,10 +866,10 @@ function GridView({ season, onSelectDay }) {
               onClick={() => onSelectDay(d)}
               className="aspect-square rounded-lg flex items-center justify-center text-[12px] relative"
               style={{
-                backgroundColor: isToday ? season.color : highlight ? `${highlight}22` : "#2A2825",
-                color: isToday ? "#EDE7DC" : "#EDE7DCcc",
-                border: isToday ? `1px solid ${season.accent}` : "1px solid transparent",
-                borderBottom: isToday ? `1px solid ${season.accent}` : `3px solid ${dayColor}`,
+                backgroundColor: isToday ? season.color : highlight ? alpha(highlight, 0.13) : theme.surface,
+                color: isToday ? "#FFFFFF" : alpha(theme.text, 0.8),
+                border: isToday ? `1px solid ${seasonAccent(season, theme.mode)}` : "1px solid transparent",
+                borderBottom: isToday ? `1px solid ${seasonAccent(season, theme.mode)}` : `3px solid ${dayColor}`,
                 boxSizing: "border-box",
               }}
             >
@@ -742,14 +877,14 @@ function GridView({ season, onSelectDay }) {
               {highlight && (
                 <span
                   className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: highlight }}
+                  style={{ backgroundColor: highlight, border: `1px solid ${alpha(theme.text, 0.15)}` }}
                 />
               )}
             </button>
           );
         })}
       </div>
-      <p className="text-[11px] mt-3" style={{ color: "#EDE7DC55" }}>
+      <p className="text-[11px] mt-3" style={{ color: alpha(theme.text, 0.33) }}>
         Tap a day for its details · bottom border shows its season · dot marks a feast day.
       </p>
     </div>
@@ -764,8 +899,11 @@ function doyLabel(doy) {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-function WheelView({ season, tradition, calendar }) {
-  const cx = 130, cy = 130, r = 100;
+function WheelView({ season, tradition, calendar, compact = false }) {
+  const theme = useTheme();
+  const accent = seasonAccent(season, theme.mode);
+  const size = compact ? 200 : 260;
+  const cx = size / 2, cy = size / 2, r = compact ? 76 : 100;
   const [hovered, setHovered] = useState(null);
   const [pinned, setPinned] = useState(null);
   const activeIdx = hovered ?? pinned;
@@ -783,21 +921,21 @@ function WheelView({ season, tradition, calendar }) {
   }, [tradition, calendar]);
 
   return (
-    <div className="pt-4 flex flex-col items-center">
-      <svg width="260" height="260" viewBox="0 0 260 260">
+    <div className={`flex flex-col items-center ${compact ? "" : "pt-4"}`}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         {wheel.map((seg, i) => {
           const startAngle = (seg.span[0] / 365) * 360;
           const endAngle = (seg.span[1] / 365) * 360;
           const color = seg.color || "#3F6B4F";
           const isCurrent = i === currentIdx;
-          const segRadius = isCurrent ? r + 10 : r;
+          const segRadius = isCurrent ? r + (compact ? 7 : 10) : r;
           return (
             <path
               key={i}
               d={arcPath(cx, cy, segRadius, startAngle, endAngle)}
               fill={color}
               opacity={isCurrent ? 1 : activeIdx === i ? 0.85 : 0.55}
-              stroke="#211F1D"
+              stroke={theme.bg}
               strokeWidth="1.5"
               style={{ cursor: "pointer" }}
               onMouseEnter={() => setHovered(i)}
@@ -813,61 +951,65 @@ function WheelView({ season, tradition, calendar }) {
         {/* Clock hand: today's position within the year */}
         {(() => {
           const todayAngle = (TODAY_DAY_OF_YEAR / 365) * 360;
-          const [hx, hy] = polarToXY(cx, cy, r + 14, todayAngle);
+          const [hx, hy] = polarToXY(cx, cy, r + (compact ? 10 : 14), todayAngle);
           return (
             <g>
-              <line x1={cx} y1={cy} x2={hx} y2={hy} stroke="#EDE7DC" strokeWidth="2" strokeLinecap="round" />
-              <circle cx={hx} cy={hy} r="4.5" fill="#EDE7DC" stroke={season.accent} strokeWidth="2" />
+              <line x1={cx} y1={cy} x2={hx} y2={hy} stroke={theme.text} strokeWidth="2" strokeLinecap="round" />
+              <circle cx={hx} cy={hy} r="4.5" fill={theme.text} stroke={accent} strokeWidth="2" />
             </g>
           );
         })()}
-        <circle cx={cx} cy={cy} r={48} fill="#211F1D" stroke="#2A2825" strokeWidth="1" />
-        <text x={cx} y={cy - 4} textAnchor="middle" fill="#EDE7DC" fontSize="12" fontFamily="'Fraunces', serif">
+        <circle cx={cx} cy={cy} r={compact ? 36 : 48} fill={theme.bg} stroke={theme.surface} strokeWidth="1" />
+        <text x={cx} y={cy - 4} textAnchor="middle" fill={theme.text} fontSize={compact ? 10 : 12} fontFamily="'Fraunces', serif">
           Aug 22
         </text>
-        <text x={cx} y={cy + 14} textAnchor="middle" fill="#EDE7DC99" fontSize="8">
+        <text x={cx} y={cy + 14} textAnchor="middle" fill={alpha(theme.text, 0.6)} fontSize={compact ? 7 : 8}>
           {currentSeg?.label}
         </text>
       </svg>
 
       {tradition === "Orthodox" && (
-        <p className="text-[10px] uppercase tracking-[0.15em] -mt-1 mb-1" style={{ color: "#EDE7DC44" }}>
+        <p className="text-[10px] uppercase tracking-[0.15em] -mt-1 mb-1" style={{ color: alpha(theme.text, 0.27) }}>
           {calendar === "Julian" ? "Julian (Old Calendar)" : "Gregorian (New Calendar)"}
         </p>
       )}
 
       {/* Tap (or hover, on desktop) a wedge to see its date range */}
-      <div className="h-9 flex items-center justify-center">
+      <div className="h-9 flex items-center justify-center text-center px-2">
         {activeSeg ? (
-          <p className="text-[12px]" style={{ color: "#EDE7DCcc" }}>
+          <p className="text-[12px]" style={{ color: alpha(theme.text, 0.8) }}>
             <span style={{ fontFamily: "'Fraunces', serif" }}>{activeSeg.label}</span>
-            <span style={{ color: "#EDE7DC66" }}>
+            <span style={{ color: alpha(theme.text, 0.4) }}>
               {" "}
               · {doyLabel(activeSeg.span[0])} – {doyLabel(activeSeg.span[1])}
             </span>
           </p>
         ) : (
-          <p className="text-[11px]" style={{ color: "#EDE7DC44" }}>
+          <p className="text-[11px]" style={{ color: alpha(theme.text, 0.27) }}>
             Tap a wedge for its date range
           </p>
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-1 w-full px-2">
-        {wheel.map((s, i) => (
-          <div key={i} className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: s.color }} />
-            <span className="text-[10.5px] leading-tight" style={{ color: "#EDE7DCaa" }}>
-              {s.label}
-            </span>
-          </div>
-        ))}
-      </div>
+      {!compact && (
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-1 w-full px-2">
+          {wheel.map((s, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: s.color }} />
+              <span className="text-[10.5px] leading-tight" style={{ color: alpha(theme.text, 0.67) }}>
+                {s.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
 function ReadingsView({ tradition, season }) {
+  const theme = useTheme();
+  const accent = seasonAccent(season, theme.mode);
   const data = READINGS[tradition];
   const defaultSegment = data.kind === "office" ? "am" : data.kind === "mass" ? "mass" : "daily";
   const [segment, setSegment] = useState(defaultSegment);
@@ -893,12 +1035,12 @@ function ReadingsView({ tradition, season }) {
   const activeData = data.kind === "office" ? data[validSegment] : data.kind === "mass" ? data.mass : data.daily;
 
   return (
-    <div className="pt-2">
+    <div className="pt-2 lg:max-w-2xl">
       <div className="flex items-center justify-between mb-1">
-        <h3 className="text-[18px]" style={{ fontFamily: "'Fraunces', serif", color: "#EDE7DC" }}>
+        <h3 className="text-[18px] lg:text-[22px]" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
           Prayer &amp; Readings
         </h3>
-        <span className="text-[10px] uppercase tracking-[0.2em]" style={{ color: "#EDE7DC55" }}>
+        <span className="text-[10px] uppercase tracking-[0.2em]" style={{ color: alpha(theme.text, 0.33) }}>
           {tradition}
         </span>
       </div>
@@ -911,8 +1053,8 @@ function ReadingsView({ tradition, season }) {
               onClick={() => setSegment(s.key)}
               className="flex-1 rounded-xl py-2 flex items-center justify-center gap-1.5 text-[12px]"
               style={{
-                backgroundColor: validSegment === s.key ? season.color : "#2A2825",
-                color: validSegment === s.key ? "#EDE7DC" : "#EDE7DC88",
+                backgroundColor: validSegment === s.key ? season.color : theme.surface,
+                color: validSegment === s.key ? "#FFFFFF" : alpha(theme.text, 0.53),
               }}
             >
               <s.icon size={13} />
@@ -922,7 +1064,7 @@ function ReadingsView({ tradition, season }) {
         </div>
       )}
       {!segments && (
-        <p className="text-[12px] mb-4 mt-2" style={{ color: "#EDE7DC66" }}>
+        <p className="text-[12px] mb-4 mt-2" style={{ color: alpha(theme.text, 0.4) }}>
           {activeData.label}
         </p>
       )}
@@ -930,42 +1072,42 @@ function ReadingsView({ tradition, season }) {
       <div className="flex items-center gap-4 mb-3">
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-0.5 rounded-full" style={{ backgroundColor: season.color }} />
-          <span className="text-[10px]" style={{ color: "#EDE7DC66" }}>
+          <span className="text-[10px]" style={{ color: alpha(theme.text, 0.4) }}>
             Prayer
           </span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-0.5 rounded-full" style={{ backgroundColor: "#C9A227" }} />
-          <span className="text-[10px]" style={{ color: "#EDE7DC66" }}>
+          <span className="text-[10px]" style={{ color: alpha(theme.text, 0.4) }}>
             Scripture
           </span>
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-3 lg:space-y-0">
         {activeData.sequence.map((item, i) => (
           <div
             key={i}
             className="rounded-2xl p-4"
             style={{
-              backgroundColor: "#2A2825",
+              backgroundColor: theme.surface,
               borderLeft: item.type === "prayer" ? `3px solid ${season.color}` : "3px solid #C9A227",
             }}
           >
             {item.role && (
-              <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: season.accent }}>
+              <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: accent }}>
                 {item.role}
               </p>
             )}
-            <p className="text-[13px] mb-2" style={{ fontFamily: "'Fraunces', serif", color: "#EDE7DC" }}>
+            <p className="text-[13px] mb-2" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
               {item.ref}
             </p>
-            <p className="text-[12.5px] leading-relaxed" style={{ color: "#EDE7DCbb" }}>
+            <p className="text-[12.5px] leading-relaxed" style={{ color: alpha(theme.text, 0.73) }}>
               {item.text}
-              {item.truncated && <span style={{ color: "#EDE7DC55" }}> …</span>}
+              {item.truncated && <span style={{ color: alpha(theme.text, 0.33) }}> …</span>}
             </p>
             {item.truncated && (
-              <button className="text-[11px] mt-2 underline decoration-dotted" style={{ color: season.accent }}>
+              <button className="text-[11px] mt-2 underline decoration-dotted" style={{ color: accent }}>
                 {item.type === "prayer" ? "Read full text" : "Read full passage"}
               </button>
             )}
@@ -973,7 +1115,7 @@ function ReadingsView({ tradition, season }) {
         ))}
       </div>
 
-      <p className="text-[10px] mt-4 leading-relaxed" style={{ color: "#EDE7DC44" }}>
+      <p className="text-[10px] mt-4 leading-relaxed" style={{ color: alpha(theme.text, 0.27) }}>
         Prayers and readings shown here use public-domain or traditional wording (KJV, 1662 BCP,
         ancient liturgical formulas) for mockup purposes. A shipped app would need to license each
         tradition's current official translation, or fall back to a public-domain edition.
@@ -983,29 +1125,33 @@ function ReadingsView({ tradition, season }) {
 }
 
 function FeastsView({ onSelectFeast }) {
+  const theme = useTheme();
   return (
-    <div className="pt-2">
-      <h3 className="text-[18px] mb-3" style={{ fontFamily: "'Fraunces', serif", color: "#EDE7DC" }}>
+    <div className="pt-2 lg:max-w-2xl">
+      <h3 className="text-[18px] lg:text-[22px] mb-3" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
         Upcoming feasts
       </h3>
-      <div className="space-y-2">
+      <div className="space-y-2 lg:grid lg:grid-cols-2 lg:gap-2.5 lg:space-y-0">
         {FEASTS.map((f, i) => (
           <button
             key={i}
             onClick={() => onSelectFeast(f)}
             className="w-full rounded-2xl p-3.5 flex items-center gap-3 text-left"
-            style={{ backgroundColor: "#2A2825" }}
+            style={{ backgroundColor: theme.surface }}
           >
-            <div className="w-1.5 h-10 rounded-full flex-shrink-0" style={{ backgroundColor: f.color }} />
+            <div
+              className="w-1.5 h-10 rounded-full flex-shrink-0"
+              style={{ backgroundColor: f.color, border: `1px solid ${alpha(theme.text, 0.15)}` }}
+            />
             <div className="flex-1">
-              <p className="text-[13px]" style={{ color: "#EDE7DC" }}>
+              <p className="text-[13px]" style={{ color: theme.text }}>
                 {f.name}
               </p>
-              <p className="text-[11px]" style={{ color: "#EDE7DC66" }}>
+              <p className="text-[11px]" style={{ color: alpha(theme.text, 0.4) }}>
                 {f.date} · {f.rank}
               </p>
             </div>
-            <ChevronRight size={16} color="#EDE7DC55" />
+            <ChevronRight size={16} color={alpha(theme.text, 0.33)} />
           </button>
         ))}
       </div>
