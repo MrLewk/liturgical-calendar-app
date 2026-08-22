@@ -7,6 +7,8 @@ import CookieConsent from "./CookieConsent";
 import { usePersistedState } from "./usePersistedState";
 import { loadGoogleAnalytics, disableGoogleAnalytics } from "./analytics";
 import { CHANGELOG } from "./changelogData";
+import { liturgicalYearData } from "./lib/feasts";
+import { buildIcs, downloadIcs } from "./lib/ics";
 
 // ---- Static demo data (real logic comes later) ----
 const SEASONS = {
@@ -273,6 +275,7 @@ export default function App() {
   const [tab, setTab] = useState("today");
   const [tradition, setTradition] = usePersistedState("officium-tradition", "Catholic");
   const [showSettings, setShowSettings] = useState(false);
+  const [showExport, setShowExport] = useState(false);
   const [selectedFeast, setSelectedFeast] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
   const [calendar, setCalendar] = usePersistedState("officium-calendar", "Gregorian"); // "Gregorian" (New Calendar) | "Julian" (Old Calendar) — only meaningful for Orthodox
@@ -310,6 +313,7 @@ export default function App() {
           progressPct={progressPct}
           onSelectFeast={setSelectedFeast}
           onOpenReadings={() => setTab("readings")}
+          onOpenExport={() => setShowExport(true)}
           tradition={tradition}
           calendar={calendar}
         />
@@ -449,6 +453,16 @@ export default function App() {
 
           {/* Changelog sheet — reachable from Settings */}
           {showChangelog && <ChangelogSheet onClose={() => setShowChangelog(false)} />}
+
+          {/* Export / sync-to-calendar sheet */}
+          {showExport && (
+            <ExportSheet
+              tradition={tradition}
+              calendar={calendar}
+              onClose={() => setShowExport(false)}
+              season={season}
+            />
+          )}
 
           {/* Feast bio sheet — reachable from Today's "Next feast", the Feasts tab, and a day's detail sheet */}
           {selectedFeast && <FeastModal feast={selectedFeast} onClose={() => setSelectedFeast(null)} />}
@@ -901,6 +915,89 @@ function ChangelogSheet({ onClose }) {
   );
 }
 
+// Builds real season + feast data for a tradition and triggers an .ics
+// download for it — a separate file per selected tradition, since a single
+// combined calendar can't cleanly represent three different season
+// structures without a tradition label on every event title.
+function exportTradition(t, orthodoxCalendar) {
+  const { seasons, feasts } = liturgicalYearData(t, orthodoxCalendar);
+  const label = t === "Orthodox" ? `Orthodox (${orthodoxCalendar})` : t;
+  const ics = buildIcs({ traditionLabel: label, seasons, feasts });
+  const filename = `officium-${t.toLowerCase()}${t === "Orthodox" ? "-" + orthodoxCalendar.toLowerCase() : ""}.ics`;
+  downloadIcs(filename, ics);
+}
+
+function ExportSheet({ tradition, calendar, onClose, season }) {
+  const theme = useTheme();
+  const accent = seasonAccent(season, theme.mode);
+  const [selected, setSelected] = useState(new Set([tradition]));
+  const [done, setDone] = useState(false);
+
+  const toggle = (t) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(t) ? next.delete(t) : next.add(t);
+      return next;
+    });
+  };
+
+  const handleDownload = () => {
+    selected.forEach((t) => exportTradition(t, calendar));
+    setDone(true);
+  };
+
+  return (
+    <SheetOverlay onClose={onClose}>
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
+        Sync to calendar
+      </p>
+      <h2 className="text-[20px] leading-tight mb-3" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+        Choose which calendars to export
+      </h2>
+      <p className="text-[12.5px] leading-relaxed mb-4" style={{ color: alpha(theme.text, 0.6) }}>
+        Downloads a .ics file per tradition — season blocks as multi-day all-day events, feast days as single-day
+        events, each colored to match its liturgical color. Import the file into your phone or Google Calendar.
+        {calendar && selected.has("Orthodox") ? ` Orthodox uses your ${calendar} calendar setting.` : ""}
+      </p>
+      <div className="space-y-2 mb-5">
+        {TRADITIONS.map((t) => (
+          <button
+            key={t}
+            onClick={() => toggle(t)}
+            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[14px]"
+            style={{
+              backgroundColor: selected.has(t) ? alpha(season.color, 0.2) : theme.bg,
+              color: theme.text,
+              border: selected.has(t) ? `1px solid ${accent}` : "1px solid transparent",
+            }}
+          >
+            {t}
+            {selected.has(t) && <span style={{ color: accent }}>●</span>}
+          </button>
+        ))}
+      </div>
+      <button
+        onClick={handleDownload}
+        disabled={selected.size === 0}
+        className="w-full rounded-2xl py-3 flex items-center justify-center gap-2 text-[14px]"
+        style={{
+          backgroundColor: selected.size === 0 ? alpha(theme.text, 0.15) : season.color,
+          color: "#EDE7DC",
+          opacity: selected.size === 0 ? 0.6 : 1,
+        }}
+      >
+        <Download size={15} />
+        Download {selected.size > 1 ? `${selected.size} calendars` : "calendar"}
+      </button>
+      {done && (
+        <p className="text-[11.5px] mt-3 text-center" style={{ color: alpha(theme.text, 0.5) }}>
+          Downloaded. Open the .ics file(s) to import — most phones add them straight to Calendar.
+        </p>
+      )}
+    </SheetOverlay>
+  );
+}
+
 function FeastModal({ feast, onClose }) {
   const theme = useTheme();
   return (
@@ -1019,7 +1116,7 @@ function TabButton({ icon: Icon, label, active, color, onClick }) {
   );
 }
 
-function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, tradition, calendar }) {
+function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, onOpenExport, tradition, calendar }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   const nextFeast = FEASTS[0];
@@ -1119,6 +1216,7 @@ function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, traditi
 
         {/* Sync button */}
         <button
+          onClick={onOpenExport}
           className="w-full mt-4 lg:mt-6 rounded-2xl py-3 lg:py-4 flex items-center justify-center gap-2 text-[13px] lg:text-[16px]"
           style={{ backgroundColor: season.color, color: "#EDE7DC" }}
         >

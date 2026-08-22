@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.8.0",
+    title: "Real date-calculation engine and .ics calendar export",
+    changes: [
+      { type: "Added", text: "A real Easter/Pascha date engine — season dates and feast days are now computed, not hardcoded, for Catholic, Anglican, and Orthodox (Gregorian and Julian)." },
+      { type: "Added", text: "A fuller major feast-day calendar for each tradition." },
+      { type: "Added", text: "\"Sync to calendar\" now works — pick one or more traditions and download a real .ics file, with season blocks and feast days colored to match." },
+    ],
+  },
+  {
     version: "0.7.0",
     title: "In-app changelog viewer",
     changes: [

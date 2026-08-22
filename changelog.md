@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.8.0] — Real date-calculation engine and .ics calendar export
+
+- **Added:** `src/lib/dates.js` — real liturgical date-calculation engine. Western Easter via the Meeus/Jones/Butcher algorithm; Orthodox Pascha via the classic Julian-calendar Easter algorithm, converted to a Gregorian date using the current Julian/Gregorian offset. Validated against known dates for 2024–2027 (e.g. 2026: Western Easter Apr 5, Orthodox Pascha Apr 12).
+- **Added:** `src/lib/feasts.js` — derives full liturgical-year season boundaries (Advent through the next Advent) for Catholic, Anglican, and Orthodox (both Gregorian "New Calendar" and Julian "Old Calendar" variants) from the date engine, replacing hand-picked demo ranges with computed ones for the current liturgical year. Added a fuller major-feast calendar per tradition — 12–24 feast days each, mixing fixed dates and dates computed relative to Easter/Pascha — up from the 4 hardcoded sample feasts.
+- **Added:** `src/lib/ics.js` — RFC 5545 `.ics` file generator. Each liturgical season becomes a multi-day all-day event, each feast day a single-day all-day event; events carry the season/feast's liturgical color via the `COLOR` property (RFC 7986) plus `X-APPLE-CALENDAR-COLOR` for wider client support, and a `CATEGORIES` tag. Output validated for correct line-folding and balanced `BEGIN:VEVENT`/`END:VEVENT` pairs.
+- **Added:** "Sync to calendar" on the Today tab now opens an export sheet instead of doing nothing — lets you multi-select which tradition(s) to export (Catholic / Anglican / Orthodox), then downloads one real `.ics` file per selection. Orthodox export respects the current Gregorian/Julian setting from Settings.
+- **Note:** The Grid and Wheel tabs still run on static demo data pinned to Aug 22, 2026 — this pass wires the new date engine into the export flow only. Rewiring the rest of the UI to live computed dates is still open.
+
 ## [0.7.0] — In-app changelog viewer
 
 - **Added:** `src/changelogData.js` — a structured, in-app mirror of this changelog file, rendered via a new `ChangelogSheet` component matching the existing bottom-sheet/dialog style. Grouped by version with color-coded Added/Changed/Fixed/Removed/Note labels and a "Latest" badge on the newest release. **This file must be updated alongside `changelog.md` for every future release** — see the note at the top of `changelogData.js`.
