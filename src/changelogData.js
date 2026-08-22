@@ -6,6 +6,14 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.9.3",
+    title: "Wordmark logo and Grid tab season subheading",
+    changes: [
+      { type: "Added", text: "The gold cross app icon now appears next to the \"Officium\" wordmark in the desktop sidebar and mobile header." },
+      { type: "Added", text: "The Grid tab shows a small subheading under the month/year title naming the liturgical season(s) in view — e.g. \"Lent – Easter\" for a month that straddles a season boundary." },
+    ],
+  },
+  {
     version: "0.9.2",
     title: "Fix missing feasts on the Grid tab",
     changes: [

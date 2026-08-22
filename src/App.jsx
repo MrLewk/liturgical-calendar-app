@@ -277,7 +277,8 @@ export default function App() {
           <p className="text-[12px] uppercase tracking-[0.25em] mb-1.5" style={{ color: accent }}>
             {tradition}
           </p>
-          <h1 className="text-[26px] tracking-wide" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+          <h1 className="flex items-center gap-2 text-[26px] tracking-wide" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+            <img src="/icons/icon-192.png" alt="" width={28} height={28} className="rounded-full flex-shrink-0" />
             Officium
           </h1>
         </div>
@@ -327,7 +328,8 @@ export default function App() {
               <p className="text-[10px] uppercase tracking-[0.25em]" style={{ color: accent }}>
                 {tradition}
               </p>
-              <h1 className="text-[15px] tracking-wide" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+              <h1 className="flex items-center gap-1.5 text-[15px] tracking-wide" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+                <img src="/icons/icon-192.png" alt="" width={18} height={18} className="rounded-full flex-shrink-0" />
                 Officium
               </h1>
             </div>
@@ -1210,12 +1212,28 @@ function GridView({ today, tradition, calendar, onSelectDay }) {
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const isCurrentMonth = year === today.getFullYear() && month === today.getMonth();
 
+  // Distinct seasons touched by this month, in the order they occur, so a
+  // month straddling a season boundary (e.g. Lent into Easter) can show both.
+  const monthSeasons = useMemo(() => {
+    const seen = [];
+    for (let d = 1; d <= daysInMonth; d++) {
+      const s = seasonAt(seasons, new Date(year, month, d));
+      if (!seen.some((x) => x.name === s.name)) seen.push(s);
+    }
+    return seen;
+  }, [seasons, year, month, daysInMonth]);
+
   return (
     <div className="pt-2 lg:max-w-3xl">
       <div className="flex items-center justify-between mb-3 lg:mb-5">
-        <h3 className="text-[18px] lg:text-[26px]" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
-          {viewMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
-        </h3>
+        <div>
+          <h3 className="text-[18px] lg:text-[26px]" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+            {viewMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+          </h3>
+          <p className="text-[11px] lg:text-[14px] mt-0.5" style={{ color: alpha(theme.text, 0.5) }}>
+            {monthSeasons.map((s) => s.name).join(" – ")}
+          </p>
+        </div>
         <div className="flex items-center gap-1.5 lg:gap-2.5">
           {!isCurrentMonth && (
             <button

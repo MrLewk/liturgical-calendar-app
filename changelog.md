@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.9.3] — Wordmark logo and Grid tab season subheading
+
+- **Added:** The gold cross app icon now sits to the left of the "Officium" wordmark in both the desktop sidebar header and the mobile header, matching the app icon used elsewhere (favicon, PWA icons, social share image).
+- **Added:** The Grid tab now shows a small subheading under the month/year title naming the liturgical season(s) touched by the month being viewed — e.g. "Lent" for a month entirely within one season, or "Lent – Easter" for a month that straddles a season boundary (computed per-day across the month rather than just checking the 1st).
+
 ## [0.9.2] — Fix missing feasts on the Grid tab
 
 - **Fixed:** Most fixed-date feasts (Catholic, Anglican, and Orthodox) were computed for the wrong calendar year, landing them a year too early and outside the liturgical year actually being displayed. A liturgical year spans two calendar years (e.g. Advent 2025 through November 2026), and feasts falling in the second half — Nativity of St. John the Baptist, Sts. Peter and Paul, Transfiguration, Assumption/Dormition, Exaltation/Elevation of the Holy Cross, All Saints/All Souls, Michaelmas, All Hallows' Eve, Nativity of the Theotokos, and (Catholic) Mary, Mother of God — were pinned to the year Advent began instead of the following year. Since the Grid tab computes each viewed month's feast list from scratch, this made feasts vanish from the grid for most of the year, only reappearing correctly from Christ the King (~Nov 22) onward, whose date is computed by relative offset rather than a literal year. The Today tab's "next feast" masked the bug because its lookup merges two consecutive liturgical-year computations, which happened to self-correct. Orthodox fixed feasts occurring within the Nativity Fast window itself (Presentation of the Theotokos, Nov 21; Nativity of Christ, Dec 25) were already correct and left unchanged.
