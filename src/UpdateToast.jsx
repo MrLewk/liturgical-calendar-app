@@ -52,7 +52,7 @@ export default function UpdateToast() {
 
         <div className="flex-1 min-w-0">
           <p className="text-[13.5px]" style={{ color: theme.text }}>
-            {needRefresh ? "A new version of Ordo is ready" : "Ordo is ready to work offline"}
+            {needRefresh ? "A new version of Officium is ready" : "Officium is ready to work offline"}
           </p>
           {needRefresh && (
             <p className="text-[11.5px] mt-0.5" style={{ color: alpha(theme.text, 0.53) }}>

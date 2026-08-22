@@ -8,10 +8,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "prompt",
-      includeAssets: ["favicon.svg", "apple-touch-icon.png"],
+      includeAssets: ["favicon.png", "favicon-32.png", "apple-touch-icon.png"],
       manifest: {
-        name: "Ordo — Liturgical Calendar",
-        short_name: "Ordo",
+        name: "Officium — Liturgical Calendar",
+        short_name: "Officium",
         description: "Track the liturgical year — seasons, feasts, prayers, and readings across Catholic, Anglican, and Orthodox traditions.",
         theme_color: "#211F1D",
         background_color: "#211F1D",

@@ -1,4 +1,4 @@
-# Ordo — Liturgical Calendar
+# Officium — Liturgical Calendar
 
 A mobile-first PWA for tracking the liturgical year — seasons, feast days, prayers, and scripture readings — across Catholic, Anglican, and Orthodox traditions.
 

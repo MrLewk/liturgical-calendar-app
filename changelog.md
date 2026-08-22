@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.5.0] — Rebrand to Officium, app icons, social share preview
+
+- **Changed:** App renamed from "Ordo" to "Officium" throughout — page title, PWA manifest `name`/`short_name`, sidebar and mobile header wordmark, `package.json` name, and README.
+- **Changed:** `localStorage` keys renamed to match (`ordo-theme-mode` → `officium-theme-mode`, `ordo-tradition` → `officium-tradition`, `ordo-calendar` → `officium-calendar`). Existing users' saved settings will reset once after this update since the old keys are no longer read.
+- **Changed:** Replaced the full icon set (favicon, apple-touch-icon, and all PWA manifest icons including the maskable variant) with the new gold cross-in-circle mark on an off-black background. Removed the old `favicon.svg`.
+- **Added:** Open Graph and Twitter Card meta tags in `index.html` — title, description, `og:image`/`twitter:image` pointing to a new 1200×630 social share banner (`/og-banner.jpg`), and site URL, so links shared on social media and messaging apps show a proper preview card.
+
 ## [0.4.2] — Persist tradition and calendar settings
 
 - **Fixed:** Tradition (Catholic/Anglican/Orthodox) and calendar (Gregorian/Julian) settings weren't written to `localStorage` at all — only the theme mode was, so both reset to their defaults on every reload. Added a small reusable `usePersistedState` hook and wired both settings through it.

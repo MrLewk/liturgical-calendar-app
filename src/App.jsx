@@ -268,11 +268,11 @@ function arcPath(cx, cy, r, startDeg, endDeg) {
 export default function App() {
   const theme = useTheme();
   const [tab, setTab] = useState("today");
-  const [tradition, setTradition] = usePersistedState("ordo-tradition", "Catholic");
+  const [tradition, setTradition] = usePersistedState("officium-tradition", "Catholic");
   const [showSettings, setShowSettings] = useState(false);
   const [selectedFeast, setSelectedFeast] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
-  const [calendar, setCalendar] = usePersistedState("ordo-calendar", "Gregorian"); // "Gregorian" (New Calendar) | "Julian" (Old Calendar) — only meaningful for Orthodox
+  const [calendar, setCalendar] = usePersistedState("officium-calendar", "Gregorian"); // "Gregorian" (New Calendar) | "Julian" (Old Calendar) — only meaningful for Orthodox
   const season = CURRENT;
   const accent = seasonAccent(season, theme.mode);
   const progressPct = Math.round((season.dayInSeason / season.seasonLength) * 100);
@@ -316,7 +316,7 @@ export default function App() {
             {tradition}
           </p>
           <h1 className="text-[26px] tracking-wide" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
-            Ordo
+            Officium
           </h1>
         </div>
 
@@ -366,7 +366,7 @@ export default function App() {
                 {tradition}
               </p>
               <h1 className="text-[15px] tracking-wide" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
-                Ordo
+                Officium
               </h1>
             </div>
             <div className="flex items-center gap-2">

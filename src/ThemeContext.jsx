@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { palettes } from "./theme";
 
-const STORAGE_KEY = "ordo-theme-mode";
+const STORAGE_KEY = "officium-theme-mode";
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
