@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, Download, BookOpen, Sun, Moon, SunMoon } from "lucide-react";
+import React, { useState, useEffect, useMemo } from "react";
+import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon } from "lucide-react";
 import { useTheme } from "./ThemeContext";
 import { alpha, seasonAccent } from "./theme";
 import UpdateToast from "./UpdateToast";
@@ -7,104 +7,34 @@ import CookieConsent from "./CookieConsent";
 import { usePersistedState } from "./usePersistedState";
 import { loadGoogleAnalytics, disableGoogleAnalytics } from "./analytics";
 import { CHANGELOG } from "./changelogData";
-import { liturgicalYearData } from "./lib/feasts";
+import { liturgicalYearData, seasonAt, feastOnDate, upcomingFeasts, withDisplay } from "./lib/feasts";
 import { buildIcs, downloadIcs } from "./lib/ics";
-
-// ---- Static demo data (real logic comes later) ----
-const SEASONS = {
-  ordinary1: { name: "Ordinary Time", latin: "Tempus per Annum", color: "#3F6B4F", accent: "#5C8C6C", weekLabel: "Week 21", dayInSeason: 55, seasonLength: 88 },
-  advent: { name: "Advent", latin: "Adventus", color: "#5B3B8C", accent: "#7C5BA8", weekLabel: "Week 2", dayInSeason: 9, seasonLength: 28 },
-  christmas: { name: "Christmastide", latin: "Tempus Nativitatis", color: "#C9A227", accent: "#E0BE4E", weekLabel: "Day 4", dayInSeason: 4, seasonLength: 14 },
-  lent: { name: "Lent", latin: "Quadragesima", color: "#5B3B8C", accent: "#7C5BA8", weekLabel: "Week 3", dayInSeason: 19, seasonLength: 46 },
-  triduum: { name: "Paschal Triduum", latin: "Triduum Sacrum", color: "#A32638", accent: "#C13B4F", weekLabel: "Day 2", dayInSeason: 2, seasonLength: 3 },
-  easter: { name: "Eastertide", latin: "Tempus Paschale", color: "#C9A227", accent: "#E0BE4E", weekLabel: "Week 5", dayInSeason: 33, seasonLength: 50 },
-};
-
-const CURRENT = SEASONS.ordinary1; // demo: today's season
-
-const FEASTS = [
-  {
-    date: "Aug 24",
-    name: "St. Bartholomew, Apostle",
-    color: "#A32638",
-    rank: "Feast",
-    bio: "One of the Twelve chosen by Jesus, often identified with Nathanael, whom Philip brought to meet him under the fig tree. Tradition holds he carried the Gospel as far as Armenia, where he was martyred by flaying.",
-    why: "Red marks the feasts of martyrs — those who bore witness to Christ with their own blood.",
-  },
-  {
-    date: "Aug 28",
-    name: "St. Augustine of Hippo",
-    color: "#EDE7DC",
-    rank: "Memorial",
-    bio: "A restless philosopher turned bishop, Augustine's Confessions trace his conversion from a life he later called wasted. His writing on grace and the will shaped Western Christian thought for over a thousand years.",
-    why: "White marks teachers and confessors of the faith — those who lived and taught it without dying for it.",
-  },
-  {
-    date: "Sep 8",
-    name: "Nativity of the Blessed Virgin Mary",
-    color: "#EDE7DC",
-    rank: "Feast",
-    bio: "Marks the birth of Mary, mother of Jesus, nine months after the Feast of the Immaculate Conception. One of the oldest Marian feasts, dating to at least the 6th century in the Eastern Church.",
-    why: "White marks joyful feasts of Mary and the saints who are not martyrs.",
-  },
-  {
-    date: "Sep 14",
-    name: "Exaltation of the Holy Cross",
-    color: "#A32638",
-    rank: "Feast",
-    bio: "Commemorates the finding of the True Cross by St. Helena in Jerusalem in 326, and its recovery from Persian capture in 629. The cross, an instrument of execution, is lifted up here as a sign of victory.",
-    why: "Red marks the Passion — the cross itself, and the suffering it represents.",
-  },
-];
-
-// Two wheels: Western (Catholic + Anglican share the Gregorian Paschalion)
-// and Orthodox (Julian-based Paschalion, so Pascha, Great Lent, Holy Week,
-// and Pentecost all land on different dates — sometimes weeks apart). Spans
-// are day-of-year for the 2026 demo date, computed from the real Easter/
-// Pascha dates that year (Western Apr 5, Orthodox Apr 12).
-const WHEEL_WESTERN = [
-  { key: "advent", label: "Advent", span: [335, 360], color: "#5B3B8C" },
-  { key: "christmas", label: "Christmas", span: [360, 378], color: "#C9A227" },
-  { key: "ordinary1", label: "Ordinary Time", span: [13, 49], color: "#3F6B4F" },
-  { key: "lent", label: "Lent", span: [49, 91], color: "#5B3B8C" },
-  { key: "triduum", label: "Triduum", span: [91, 95], color: "#A32638" },
-  { key: "easter", label: "Eastertide", span: [95, 144], color: "#C9A227" },
-  { key: "ordinary2", label: "Ordinary Time", span: [144, 335], color: "#3F6B4F" },
-];
-
-// Most Orthodox jurisdictions (Greek, Antiochian, Romanian, OCA...) use the
-// Gregorian calendar for fixed feasts but the Julian Paschalion for Pascha —
-// this is "WHEEL_ORTHODOX_NEW" below. Others (Russian, Serbian, Georgian,
-// Jerusalem) use the Julian calendar throughout, so fixed feasts run 13 days
-// later — this shifts Nativity Fast, Nativity, and Theophany, but leaves
-// Pascha and everything calculated from it (Great Lent, Holy Week, Pentecost)
-// unchanged, since those already use the Julian Paschalion either way.
-const WHEEL_ORTHODOX_NEW = [
-  { key: "nativity-fast", label: "Nativity Fast", span: [319, 358], color: "#5B3B8C" },
-  { key: "nativity", label: "Nativity & Theophany", span: [358, 378], color: "#C9A227" },
-  { key: "after-theophany", label: "Season after Theophany", span: [14, 54], color: "#3F6B4F" },
-  { key: "great-lent", label: "Great Lent", span: [54, 95], color: "#5B3B8C" },
-  { key: "holy-week", label: "Holy Week", span: [95, 102], color: "#A32638" },
-  { key: "paschaltide", label: "Paschaltide", span: [102, 151], color: "#C9A227" },
-  { key: "after-pentecost", label: "Season after Pentecost", span: [151, 319], color: "#3F6B4F" },
-];
-
-const WHEEL_ORTHODOX_OLD = [
-  { key: "nativity-fast", label: "Nativity Fast", span: [332, 372], color: "#5B3B8C" },
-  { key: "nativity", label: "Nativity & Theophany", span: [372, 384], color: "#C9A227" },
-  { key: "after-theophany", label: "Season after Theophany", span: [20, 54], color: "#3F6B4F" },
-  { key: "great-lent", label: "Great Lent", span: [54, 95], color: "#5B3B8C" },
-  { key: "holy-week", label: "Holy Week", span: [95, 102], color: "#A32638" },
-  { key: "paschaltide", label: "Paschaltide", span: [102, 151], color: "#C9A227" },
-  { key: "after-pentecost", label: "Season after Pentecost", span: [151, 332], color: "#3F6B4F" },
-];
-
-function wheelForTradition(tradition, calendar) {
-  if (tradition !== "Orthodox") return WHEEL_WESTERN;
-  return calendar === "Julian" ? WHEEL_ORTHODOX_OLD : WHEEL_ORTHODOX_NEW;
-}
+import { dateOnly, daysBetween } from "./lib/dates";
 
 const TRADITIONS = ["Catholic", "Anglican", "Orthodox"];
+
+/** "Aug 24" style short date, used throughout for feast/day labels. */
+function shortDate(date) {
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+/**
+ * Refreshes once a minute so the app notices a real day/date rollover
+ * without needing a full page reload — cheap, since it's just a Date
+ * comparison, and everything derived from it (season, feasts, wheel, grid)
+ * is memoized off this single value.
+ */
+function useToday() {
+  const [today, setToday] = useState(() => dateOnly(new Date()));
+  useEffect(() => {
+    const id = setInterval(() => {
+      const now = dateOnly(new Date());
+      setToday((prev) => (prev.getTime() === now.getTime() ? prev : now));
+    }, 60_000);
+    return () => clearInterval(id);
+  }, []);
+  return today;
+}
 
 // Demo readings and prayers, text in the public-domain King James Version /
 // 1662 Book of Common Prayer / ancient liturgical formulas, so the mockup can
@@ -282,7 +212,11 @@ export default function App() {
   const [cookieConsent, setCookieConsent] = usePersistedState("officium-cookie-consent", null); // null (undecided) | "accepted" | "rejected"
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showChangelog, setShowChangelog] = useState(false);
-  const season = CURRENT;
+
+  const today = useToday();
+  const { seasons, feasts } = useMemo(() => liturgicalYearData(tradition, calendar, today), [tradition, calendar, today]);
+  const season = useMemo(() => withDisplay(seasonAt(seasons, today), today, tradition, seasons), [seasons, today, tradition]);
+  const nextFeast = useMemo(() => upcomingFeasts(tradition, calendar, today, 1)[0] || null, [tradition, calendar, today]);
 
   // Google Analytics is only ever loaded here, gated on consent — never on
   // app start regardless of consent state. Covers both the initial decision
@@ -310,6 +244,8 @@ export default function App() {
       {tab === "today" && (
         <TodayView
           season={season}
+          today={today}
+          nextFeast={nextFeast}
           progressPct={progressPct}
           onSelectFeast={setSelectedFeast}
           onOpenReadings={() => setTab("readings")}
@@ -318,10 +254,14 @@ export default function App() {
           calendar={calendar}
         />
       )}
-      {tab === "grid" && <GridView season={season} onSelectDay={setSelectedDay} />}
-      {tab === "wheel" && <WheelView season={season} tradition={tradition} calendar={calendar} />}
+      {tab === "grid" && (
+        <GridView today={today} tradition={tradition} calendar={calendar} onSelectDay={setSelectedDay} />
+      )}
+      {tab === "wheel" && <WheelView season={season} seasons={seasons} today={today} tradition={tradition} calendar={calendar} />}
       {tab === "readings" && <ReadingsView tradition={tradition} season={season} />}
-      {tab === "feasts" && <FeastsView onSelectFeast={setSelectedFeast} />}
+      {tab === "feasts" && (
+        <FeastsView tradition={tradition} calendar={calendar} today={today} onSelectFeast={setSelectedFeast} />
+      )}
     </>
   );
 
@@ -373,8 +313,8 @@ export default function App() {
           position:fixed element is removed from normal document flow. */}
       <div className="flex-1 flex items-center justify-center lg:items-stretch lg:justify-stretch lg:ml-[280px]">
         <div
-          className="relative w-full max-w-[480px] lg:max-w-none flex flex-col sm:my-6 sm:rounded-[2rem] sm:shadow-2xl lg:my-0 lg:rounded-none lg:shadow-none overflow-hidden lg:overflow-visible"
-          style={{ minHeight: "100dvh", backgroundColor: theme.bg }}
+          className="relative w-full max-w-[480px] lg:max-w-none flex flex-col h-[100dvh] sm:h-[calc(100dvh-3rem)] lg:h-[100dvh] sm:my-6 sm:rounded-[2rem] sm:shadow-2xl lg:my-0 lg:rounded-none lg:shadow-none overflow-hidden lg:overflow-visible"
+          style={{ backgroundColor: theme.bg }}
         >
           {/* Mobile header — hidden on desktop, where the sidebar covers this role.
               Padded for the device status bar / notch via safe-area-inset. */}
@@ -470,8 +410,9 @@ export default function App() {
           {/* Day detail sheet — reachable by tapping any day on the Grid tab */}
           {selectedDay && !selectedFeast && (
             <DayDetailSheet
-              day={selectedDay}
+              date={selectedDay}
               tradition={tradition}
+              calendar={calendar}
               onClose={() => setSelectedDay(null)}
               onOpenFeast={(f) => {
                 setSelectedDay(null);
@@ -1008,7 +949,7 @@ function FeastModal({ feast, onClose }) {
           style={{ backgroundColor: feast.color, border: `1px solid ${alpha(theme.text, 0.2)}` }}
         />
         <p className="text-[11px] uppercase tracking-[0.2em]" style={{ color: alpha(theme.text, 0.4) }}>
-          {feast.date} · {feast.rank}
+          {shortDate(feast.date)} · {feast.rank}
         </p>
       </div>
       <h2 className="text-[24px] leading-tight mb-4" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
@@ -1029,26 +970,18 @@ function FeastModal({ feast, onClose }) {
   );
 }
 
-// Illustrative only: maps a demo day to a season and, if one exists, a feast —
-// the real build derives this from the computed calendar, not a lookup like this.
-function demoDaySeason(day) {
-  return day < 21 ? SEASONS.ordinary1 : SEASONS.advent;
-}
-function demoDayFeast(day) {
-  return FEASTS.find((f) => f.date === `Aug ${day}`) || null;
-}
-
-function DayDetailSheet({ day, tradition, onClose, onOpenFeast }) {
+function DayDetailSheet({ date, tradition, calendar, onClose, onOpenFeast }) {
   const theme = useTheme();
-  const season = demoDaySeason(day);
+  const { seasons, feasts } = useMemo(() => liturgicalYearData(tradition, calendar, date), [tradition, calendar, date]);
+  const season = useMemo(() => withDisplay(seasonAt(seasons, date), date, tradition, seasons), [seasons, date, tradition]);
   const accent = seasonAccent(season, theme.mode);
-  const feast = demoDayFeast(day);
+  const feast = feastOnDate(feasts, date);
   const readingRef = firstReadingRef(tradition);
 
   return (
     <SheetOverlay onClose={onClose}>
       <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: alpha(theme.text, 0.4) }}>
-        August {day}
+        {date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
       </p>
 
       <div
@@ -1116,10 +1049,20 @@ function TabButton({ icon: Icon, label, active, color, onClick }) {
   );
 }
 
-function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, onOpenExport, tradition, calendar }) {
+// Short description of what each liturgical color signifies, shown under
+// the color swatch on the Today tab.
+const COLOR_MEANING = {
+  "#3F6B4F": "Green — growth, ordinary discipleship",
+  "#5B3B8C": "Purple — penance and preparation",
+  "#A32638": "Red — the Passion, and the Holy Spirit's fire",
+  "#C9A227": "Gold — joy and celebration",
+  "#EDE7DC": "White — purity and joy",
+  "#C97BA0": "Rose — a brief turn toward joy amid a penitential season",
+};
+
+function TodayView({ season, today, nextFeast, progressPct, onSelectFeast, onOpenReadings, onOpenExport, tradition, calendar }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
-  const nextFeast = FEASTS[0];
   const readingRef = firstReadingRef(tradition);
   return (
     <div className="pt-2 lg:pt-0 lg:grid lg:grid-cols-[1fr_420px] lg:gap-10 lg:items-start">
@@ -1139,7 +1082,7 @@ function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, onOpenE
             {season.name}
           </h2>
           <p className="text-[13px] lg:text-[16px] mb-5 lg:mb-7" style={{ color: alpha(theme.text, 0.6) }}>
-            {season.weekLabel} · Saturday, August 22
+            {season.weekLabel} · {today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
           </p>
 
           {/* Candle progress bar */}
@@ -1166,7 +1109,7 @@ function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, onOpenE
               Liturgical color
             </p>
             <p className="text-[11px] lg:text-[14px]" style={{ color: alpha(theme.text, 0.4) }}>
-              Green — growth, ordinary discipleship
+              {COLOR_MEANING[season.color] || ""}
             </p>
           </div>
         </div>
@@ -1194,25 +1137,27 @@ function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, onOpenE
         </button>
 
         {/* Next feast teaser — clicks through to the same bio sheet as the Feasts tab */}
-        <button
-          onClick={() => onSelectFeast(nextFeast)}
-          className="w-full rounded-2xl p-4 lg:p-5 flex items-center justify-between text-left"
-          style={{ backgroundColor: theme.surface }}
-        >
-          <div>
-            <p className="text-[10px] lg:text-[12px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
-              Next feast
-            </p>
-            <p className="text-[14px] lg:text-[17px]" style={{ color: theme.text }}>
-              {nextFeast.name}
-            </p>
-            <p className="text-[11px] lg:text-[14px]" style={{ color: alpha(theme.text, 0.4) }}>
-              {nextFeast.date} · {nextFeast.rank}
-            </p>
-          </div>
-          <ChevronRight size={18} className="lg:hidden" color={alpha(theme.text, 0.33)} />
-          <ChevronRight size={22} className="hidden lg:block" color={alpha(theme.text, 0.33)} />
-        </button>
+        {nextFeast && (
+          <button
+            onClick={() => onSelectFeast(nextFeast)}
+            className="w-full rounded-2xl p-4 lg:p-5 flex items-center justify-between text-left"
+            style={{ backgroundColor: theme.surface }}
+          >
+            <div>
+              <p className="text-[10px] lg:text-[12px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
+                Next feast
+              </p>
+              <p className="text-[14px] lg:text-[17px]" style={{ color: theme.text }}>
+                {nextFeast.name}
+              </p>
+              <p className="text-[11px] lg:text-[14px]" style={{ color: alpha(theme.text, 0.4) }}>
+                {shortDate(nextFeast.date)} · {nextFeast.rank}
+              </p>
+            </div>
+            <ChevronRight size={18} className="lg:hidden" color={alpha(theme.text, 0.33)} />
+            <ChevronRight size={22} className="hidden lg:block" color={alpha(theme.text, 0.33)} />
+          </button>
+        )}
 
         {/* Sync button */}
         <button
@@ -1231,61 +1176,106 @@ function TodayView({ season, progressPct, onSelectFeast, onOpenReadings, onOpenE
         <p className="text-[13px] uppercase tracking-[0.2em] mb-2" style={{ color: alpha(theme.text, 0.4) }}>
           Year at a glance
         </p>
-        <WheelView season={season} tradition={tradition} calendar={calendar} variant="panel" />
+        <WheelView season={season} seasons={seasons} today={today} tradition={tradition} calendar={calendar} variant="panel" />
       </div>
     </div>
   );
 }
 
-// Illustrative only: shows Ordinary Time running into an early Advent
-// so the per-day season border is visible in a single demo month.
-// Real build derives this from the computed season ranges, not a fixed map.
-function demoDaySeasonColor(d) {
-  if (d < 21) return SEASONS.ordinary1.color;
-  return SEASONS.advent.color;
+function sameDay(a, b) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
 
-function GridView({ season, onSelectDay }) {
+function startOfMonth(date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+function GridView({ today, tradition, calendar, onSelectDay }) {
   const theme = useTheme();
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
-  const highlightDays = { 24: "#A32638", 28: theme.mode === "dark" ? "#EDE7DC" : "#2B2620" };
+  const [viewMonth, setViewMonth] = useState(() => startOfMonth(today));
+
+  // A month can straddle two different liturgical years' worth of computed
+  // data (e.g. December spans Advent/Christmas of one liturgical year), so
+  // compute seasons/feasts from a date inside the displayed month rather
+  // than from `today`.
+  const refDate = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 15);
+  const { seasons, feasts } = useMemo(() => liturgicalYearData(tradition, calendar, refDate), [tradition, calendar, viewMonth]);
+
+  const year = viewMonth.getFullYear();
+  const month = viewMonth.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstWeekday = new Date(year, month, 1).getDay();
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const isCurrentMonth = year === today.getFullYear() && month === today.getMonth();
+
   return (
     <div className="pt-2 lg:max-w-3xl">
-      <h3 className="text-[18px] lg:text-[26px] mb-3 lg:mb-5" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
-        August
-      </h3>
+      <div className="flex items-center justify-between mb-3 lg:mb-5">
+        <h3 className="text-[18px] lg:text-[26px]" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+          {viewMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+        </h3>
+        <div className="flex items-center gap-1.5 lg:gap-2.5">
+          {!isCurrentMonth && (
+            <button
+              onClick={() => setViewMonth(startOfMonth(today))}
+              className="text-[10px] lg:text-[13px] uppercase tracking-[0.15em] mr-1 lg:mr-2"
+              style={{ color: alpha(theme.text, 0.4) }}
+            >
+              Today
+            </button>
+          )}
+          <button
+            onClick={() => setViewMonth(new Date(year, month - 1, 1))}
+            className="w-8 h-8 lg:w-10 lg:h-10 rounded-full flex items-center justify-center"
+            style={{ backgroundColor: theme.surface }}
+            aria-label="Previous month"
+          >
+            <ChevronLeft size={16} color={alpha(theme.text, 0.6)} />
+          </button>
+          <button
+            onClick={() => setViewMonth(new Date(year, month + 1, 1))}
+            className="w-8 h-8 lg:w-10 lg:h-10 rounded-full flex items-center justify-center"
+            style={{ backgroundColor: theme.surface }}
+            aria-label="Next month"
+          >
+            <ChevronRight size={16} color={alpha(theme.text, 0.6)} />
+          </button>
+        </div>
+      </div>
       <div className="grid grid-cols-7 gap-1.5 lg:gap-2.5 mb-2">
         {dayNames.map((d, i) => (
           <div key={i} className="text-center text-[10px] lg:text-[13px] pb-1 lg:pb-2 font-medium" style={{ color: alpha(theme.text, 0.6) }}>
             {d}
           </div>
         ))}
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: firstWeekday }).map((_, i) => (
           <div key={`pad-${i}`} />
         ))}
         {days.map((d) => {
-          const isToday = d === 22;
-          const highlight = highlightDays[d];
-          const dayColor = demoDaySeasonColor(d);
+          const date = new Date(year, month, d);
+          const isToday = isCurrentMonth && d === today.getDate();
+          const daySeason = seasonAt(seasons, date);
+          const feast = feastOnDate(feasts, date);
+          const dayColor = daySeason.color;
           return (
             <button
               key={d}
-              onClick={() => onSelectDay(d)}
+              onClick={() => onSelectDay(date)}
               className="aspect-square rounded-lg lg:rounded-xl flex items-center justify-center text-[12px] lg:text-[16px] relative"
               style={{
-                backgroundColor: isToday ? season.color : highlight ? alpha(highlight, 0.13) : theme.surface,
+                backgroundColor: isToday ? daySeason.color : feast ? alpha(feast.color, 0.13) : theme.surface,
                 color: isToday ? "#FFFFFF" : alpha(theme.text, 0.8),
-                border: isToday ? `1px solid ${seasonAccent(season, theme.mode)}` : "1px solid transparent",
-                borderBottom: isToday ? `1px solid ${seasonAccent(season, theme.mode)}` : `3px solid ${dayColor}`,
+                border: isToday ? `1px solid ${seasonAccent(withDisplay(daySeason, date, tradition, seasons), theme.mode)}` : "1px solid transparent",
+                borderBottom: isToday ? `1px solid ${seasonAccent(withDisplay(daySeason, date, tradition, seasons), theme.mode)}` : `3px solid ${dayColor}`,
                 boxSizing: "border-box",
               }}
             >
               {d}
-              {highlight && (
+              {feast && (
                 <span
                   className="absolute top-1.5 right-1.5 lg:top-2.5 lg:right-2.5 w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full"
-                  style={{ backgroundColor: highlight, border: `1px solid ${alpha(theme.text, 0.15)}` }}
+                  style={{ backgroundColor: feast.color, border: `1px solid ${alpha(theme.text, 0.15)}` }}
                 />
               )}
             </button>
@@ -1299,15 +1289,7 @@ function GridView({ season, onSelectDay }) {
   );
 }
 
-const TODAY_DAY_OF_YEAR = 234; // Aug 22 demo
-
-// Formats a day-of-year (1–365, may overflow into the next year) as "Mon D".
-function doyLabel(doy) {
-  const d = new Date(2026, 0, doy);
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
-
-function WheelView({ season, tradition, calendar, variant = "standalone" }) {
+function WheelView({ season, seasons, today, tradition, calendar, variant = "standalone" }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   // Internal coordinate system stays fixed — the rendered pixel size scales
@@ -1318,10 +1300,26 @@ function WheelView({ season, tradition, calendar, variant = "standalone" }) {
   const [pinned, setPinned] = useState(null);
   const activeIdx = hovered ?? pinned;
 
-  const wheel = wheelForTradition(tradition, calendar);
-  const currentIdx = wheel.findIndex((seg) => TODAY_DAY_OF_YEAR >= seg.span[0] && TODAY_DAY_OF_YEAR <= seg.span[1]);
+  // The wheel plots the current liturgical year's own timeline end to end
+  // (its first season's start = angle 0, its last season's end = 360°),
+  // rather than a fixed Jan–Dec calendar year — this is what lets it be
+  // computed directly from live season data for any tradition/calendar,
+  // any year, with today's position always falling somewhere on the ring.
+  const yearStart = seasons[0].start;
+  const totalDays = daysBetween(yearStart, seasons[seasons.length - 1].end) + 1;
+  const wheel = seasons.map((s) => ({
+    key: s.key,
+    label: s.name,
+    color: s.color,
+    start: s.start,
+    end: s.end,
+    startAngle: (daysBetween(yearStart, s.start) / totalDays) * 360,
+    endAngle: ((daysBetween(yearStart, s.end) + 1) / totalDays) * 360,
+  }));
+  const currentIdx = seasons.findIndex((s) => s.key === season.key);
   const activeSeg = activeIdx !== null ? wheel[activeIdx] : null;
   const currentSeg = currentIdx !== -1 ? wheel[currentIdx] : null;
+  const todayAngle = (daysBetween(yearStart, today) / totalDays) * 360;
 
   // Reset any pinned/hovered wedge when the tradition or calendar changes
   // underneath us, since the wedge index may no longer correspond to the same season.
@@ -1336,15 +1334,13 @@ function WheelView({ season, tradition, calendar, variant = "standalone" }) {
     <div className="flex flex-col items-center pt-4 lg:pt-2">
       <svg viewBox="0 0 260 260" className={svgSizeClass}>
         {wheel.map((seg, i) => {
-          const startAngle = (seg.span[0] / 365) * 360;
-          const endAngle = (seg.span[1] / 365) * 360;
           const color = seg.color || "#3F6B4F";
           const isCurrent = i === currentIdx;
           const segRadius = isCurrent ? r + 10 : r;
           return (
             <path
               key={i}
-              d={arcPath(cx, cy, segRadius, startAngle, endAngle)}
+              d={arcPath(cx, cy, segRadius, seg.startAngle, seg.endAngle)}
               fill={color}
               opacity={isCurrent ? 1 : activeIdx === i ? 0.85 : 0.55}
               stroke={theme.bg}
@@ -1355,14 +1351,13 @@ function WheelView({ season, tradition, calendar, variant = "standalone" }) {
               onClick={() => setPinned((prev) => (prev === i ? null : i))}
             >
               <title>
-                {seg.label} · {doyLabel(seg.span[0])} – {doyLabel(seg.span[1])}
+                {seg.label} · {shortDate(seg.start)} – {shortDate(seg.end)}
               </title>
             </path>
           );
         })}
-        {/* Clock hand: today's position within the year */}
+        {/* Clock hand: today's position within the liturgical year */}
         {(() => {
-          const todayAngle = (TODAY_DAY_OF_YEAR / 365) * 360;
           const [hx, hy] = polarToXY(cx, cy, r + 14, todayAngle);
           return (
             <g>
@@ -1373,7 +1368,7 @@ function WheelView({ season, tradition, calendar, variant = "standalone" }) {
         })()}
         <circle cx={cx} cy={cy} r={48} fill={theme.bg} stroke={theme.surface} strokeWidth="1" />
         <text x={cx} y={cy - 4} textAnchor="middle" fill={theme.text} fontSize="12" fontFamily="'Fraunces', serif">
-          Aug 22
+          {shortDate(today)}
         </text>
         <text x={cx} y={cy + 14} textAnchor="middle" fill={alpha(theme.text, 0.6)} fontSize="8">
           {currentSeg?.label}
@@ -1393,7 +1388,7 @@ function WheelView({ season, tradition, calendar, variant = "standalone" }) {
             <span style={{ fontFamily: "'Fraunces', serif" }}>{activeSeg.label}</span>
             <span style={{ color: alpha(theme.text, 0.4) }}>
               {" "}
-              · {doyLabel(activeSeg.span[0])} – {doyLabel(activeSeg.span[1])}
+              · {shortDate(activeSeg.start)} – {shortDate(activeSeg.end)}
             </span>
           </p>
         ) : (
@@ -1544,23 +1539,23 @@ function ReadingsView({ tradition, season }) {
       </div>
 
       <p className="text-[10px] lg:text-[13px] mt-4 lg:mt-6 leading-relaxed" style={{ color: alpha(theme.text, 0.27) }}>
-        Prayers and readings shown here use public-domain or traditional wording (KJV, 1662 BCP,
-        ancient liturgical formulas) for mockup purposes. A shipped app would need to license each
-        tradition's current official translation, or fall back to a public-domain edition.
+        Prayers and readings shown here use the King James Version, the 1662 Book of Common Prayer, and ancient
+        liturgical formulas.
       </p>
     </div>
   );
 }
 
-function FeastsView({ onSelectFeast }) {
+function FeastsView({ tradition, calendar, today, onSelectFeast }) {
   const theme = useTheme();
+  const feasts = useMemo(() => upcomingFeasts(tradition, calendar, today, 20), [tradition, calendar, today]);
   return (
     <div className="pt-2 lg:pt-0 lg:max-w-3xl">
       <h3 className="text-[18px] lg:text-[28px] mb-3 lg:mb-6" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
         Upcoming feasts
       </h3>
       <div className="space-y-2 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
-        {FEASTS.map((f, i) => (
+        {feasts.map((f, i) => (
           <button
             key={i}
             onClick={() => onSelectFeast(f)}
@@ -1576,7 +1571,7 @@ function FeastsView({ onSelectFeast }) {
                 {f.name}
               </p>
               <p className="text-[11px] lg:text-[14px]" style={{ color: alpha(theme.text, 0.4) }}>
-                {f.date} · {f.rank}
+                {shortDate(f.date)} · {f.rank}
               </p>
             </div>
             <ChevronRight size={16} className="lg:hidden" color={alpha(theme.text, 0.33)} />

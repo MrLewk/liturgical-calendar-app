@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.9.0] — Grid and Wheel tabs wired to live dates
+
+- **Added:** `src/lib/feasts.js` gained `seasonAt()`, `feastOnDate()`, `upcomingFeasts()`, `weekLabel()`, and `withDisplay()` — general-purpose lookups (season/feast for an arbitrary date, sorted upcoming feasts merging the current and next liturgical year so the list never runs dry near a year boundary) plus a proper liturgical week/Sunday-numbering engine that the UI now uses everywhere instead of the old hand-picked demo data.
+- **Added:** Grid tab now renders the real current month — correct season color per day (bottom border) and a feast-day dot, sourced from the live date engine — with prev/next month navigation and a "Today" shortcut when you've navigated away. Tapping a day opens its real season and feast (if any), for whichever month is showing, not just August.
+- **Added:** Wheel tab (and the Today tab's desktop "year at a glance" panel) now draws the current liturgical year's actual season boundaries end-to-end, computed from live data for any tradition, Orthodox calendar setting, or year — not a fixed year-2026 layout. Today's clock-hand position is computed the same way and updates as the date changes.
+- **Added:** Every feast in the computed calendar (12–24 per tradition, ~58 total across Catholic, Anglican, and Orthodox) now has a short bio and a "why this color" note in its detail sheet — previously only 4 hand-picked demo feasts had this text.
+- **Added:** Real, tradition-specific week/Sunday numbering in place of the old generic "Week N" count, so it can be checked against a missal, ordo, or BCP:
+  - **Catholic:** the official 1–34 Ordinary Time numbering — counted forward from the Monday after the Baptism of the Lord to Ash Wednesday, then counted backward from the 34th/last week (the week of Christ the King) once Ordinary Time resumes on the Monday after Pentecost, matching how the actual numbering skips a range in between.
+  - **Anglican:** BCP-style "Epiphany N" and "Trinity N", counting Sundays after Epiphany and after Trinity Sunday.
+  - **Orthodox:** the traditional named Sundays — Publican & Pharisee, Prodigal Son, Meatfare, and Forgiveness Sunday before Great Lent; the five named Great Lent Sundays (Orthodoxy, St. Gregory Palamas, Veneration of the Cross, St. John Climacus, St. Mary of Egypt); Thomas Sunday through the Holy Fathers of Nicaea in Paschaltide; and "N Sunday after Pentecost" (starting with the Sunday of All Saints) afterward.
+  - All three traditions also get matching Advent Sundays (1st–4th), numbered Lent Sundays, and a "Holy Week" / Triduum callout instead of a numbered week where the real calendars use a name.
+- **Added:** A `useToday()` hook checks the real device date once a minute, so the Today tab's date, season progress bar, "next feast" teaser, liturgical-color caption, and the Grid/Wheel tabs all update live rather than being pinned to a fixed demo date.
+- **Changed:** "Next feast" (Today tab teaser and Feasts tab list) is now the real next upcoming feast from today's date, sorted chronologically, rather than a static 4-item list.
+- **Changed:** Prayer & Readings tab's footnote now simply states what's used (KJV, 1662 BCP, ancient liturgical formulas) instead of framing it as mockup/placeholder text needing a future licensing decision.
+- **Fixed:** The mobile app shell used `min-height: 100dvh` instead of a fixed `height`, so on longer content the whole page — including the header and bottom tab bar — scrolled together as one unit instead of just the middle content area. The shell is now height-bound per breakpoint (accounting for the card-style margin at tablet widths) so the header and tab bar stay fixed in place and only the content between them scrolls.
+
 ## [0.8.0] — Real date-calculation engine and .ics calendar export
 
 - **Added:** `src/lib/dates.js` — real liturgical date-calculation engine. Western Easter via the Meeus/Jones/Butcher algorithm; Orthodox Pascha via the classic Julian-calendar Easter algorithm, converted to a Gregorian date using the current Julian/Gregorian offset. Validated against known dates for 2024–2027 (e.g. 2026: Western Easter Apr 5, Orthodox Pascha Apr 12).

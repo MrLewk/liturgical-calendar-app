@@ -6,6 +6,19 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.9.0",
+    title: "Grid and Wheel tabs wired to live dates",
+    changes: [
+      { type: "Added", text: "The Grid tab now shows the real current month with correct season colors and feast-day markers, with prev/next navigation to browse other months and a \"Today\" shortcut to jump back." },
+      { type: "Added", text: "The Wheel tab (and the Today tab's desktop side panel) now draws the current liturgical year's real season boundaries, with today's position marked live — for any tradition, calendar setting, or year." },
+      { type: "Added", text: "Short bio and \"why this color\" text for every feast day in the computed calendar (previously only 4 demo feasts had this)." },
+      { type: "Added", text: "Real week/Sunday numbering matching each tradition's own books: Catholic gets the official 1–34 Ordinary Time count (forward from the Baptism of the Lord, backward from the 34th/Christ the King week after Pentecost); Anglican gets BCP-style \"Epiphany N\" / \"Trinity N\"; Orthodox gets the traditional named Sundays (Publican & Pharisee through St. Mary of Egypt, Thomas Sunday through the Holy Fathers of Nicaea, \"N Sunday after Pentecost\"). Advent, Lent, and Holy Week are labeled to match as well." },
+      { type: "Added", text: "The Today tab's date, season progress, \"next feast\", and liturgical-color caption are now all live and update automatically (checked once a minute) instead of being pinned to Aug 22, 2026." },
+      { type: "Changed", text: "Tapping a day on the Grid now opens its real computed season and feast, for whichever month is being viewed." },
+      { type: "Fixed", text: "The mobile app shell now has a proper fixed height per breakpoint, so the header and bottom tab bar stay in place while only the content between them scrolls." },
+    ],
+  },
+  {
     version: "0.8.0",
     title: "Real date-calculation engine and .ics calendar export",
     changes: [
