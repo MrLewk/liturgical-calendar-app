@@ -6,6 +6,13 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.12.1",
+    title: "Fix outdated scripture reference in Prayer & Readings tab",
+    changes: [
+      { type: "Fixed", text: "The Prayer & Readings tab's copyright notice incorrectly referred to the King James Version, even though the app now uses the World English Bible (WEB). Updated to accurately reflect that scripture readings use the WEB, while prayers come from the 1662 Book of Common Prayer, Anglican lectionaries, and ancient liturgical sources." },
+    ],
+  },
+  {
     version: "0.12.0",
     title: "Coffee donation section & copyright footer",
     changes: [

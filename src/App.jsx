@@ -2004,8 +2004,7 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
       </div>
 
       <p className="text-[10px] lg:text-[13px] mt-4 lg:mt-6 leading-relaxed" style={{ color: alpha(theme.text, 0.27) }}>
-        Prayers and readings shown here use the King James Version, the 1662 Book of Common Prayer, and ancient
-        liturgical formulas.
+        Scripture readings use the World English Bible (public domain). Prayers and traditions are from the 1662 Book of Common Prayer, Anglican lectionaries, and ancient liturgical sources.
       </p>
     </div>
   );

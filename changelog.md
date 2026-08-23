@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.12.1] — Fix outdated scripture reference in Prayer & Readings tab
+
+- **Fixed:** The Prayer & Readings tab's copyright notice incorrectly referred to the King James Version, even though the app now uses the World English Bible (WEB). Updated to: "Scripture readings use the World English Bible (public domain). Prayers and traditions are from the 1662 Book of Common Prayer, Anglican lectionaries, and ancient liturgical sources."
+
 ## [0.12.0] — Coffee donation section & copyright footer
 
 - **Added:** A new "Enjoying the app? A coffee keeps development going ☕" section with a Buy Me A Coffee button and copyright notice in the app footer.
