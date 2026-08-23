@@ -57,6 +57,29 @@ const EXPLICIT = {
   2044: { sundayYear: "B", delYear: 1 },
 };
 
+import table1Full from "./table1_full.json";
+
+/**
+ * The Office (Morning/Evening Prayer) column set to use for the Church
+ * Year beginning with Advent Sunday of `adventCalendarYear`: which of
+ * OT1/OT2a/OT2b (paired with NT1 or NT2) applies for Morning vs Evening
+ * Prayer, split further by whether the date falls in "Seasonal Time"
+ * (Advent, Christmas, Epiphany's early weeks, Lent, Easter) or "Ordinary
+ * Time" (the rest) - Table 1's own split, independent of DEL-week
+ * numbering. Follows a 12-year cycle (verified exactly against the
+ * source tables for 2005-2044), longer than the 6-year Sunday/DEL cycle
+ * because it additionally alternates OT2a vs OT2b in some years.
+ */
+export function officeColumnsFor(adventCalendarYear) {
+  const row = table1Full[String(adventCalendarYear)];
+  if (row) return row;
+  const CYCLE = 12;
+  const years = Object.keys(table1Full).map(Number).sort((a, b) => a - b);
+  const anchor = years[0];
+  const offset = (((adventCalendarYear - anchor) % CYCLE) + CYCLE) % CYCLE;
+  return table1Full[String(anchor + offset)] || null;
+}
+
 const CYCLE_YEARS = Object.keys(EXPLICIT).map(Number).sort((a, b) => a - b);
 const CYCLE_LENGTH = 6;
 

@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.13.0",
+    title: "Real Anglican Daily Office lectionary (Morning & Evening Prayer)",
+    changes: [
+      { type: "Added", text: "Morning and Evening Prayer readings are now computed from the real Common Worship Weekday Lectionary (Table 2), replacing the fixed demo citations, the same way the Eucharist reading was made real earlier." },
+      { type: "Added", text: "officeWeekLabel() and officeReadingFor() resolve any date to Table 2's own week-label convention and pick the correct OT/NT column pairing for Morning vs Evening Prayer using Table 1's per-year column assignment and the Ordinary Time / Seasonal Time split." },
+      { type: "Added", text: "Transcribed the full Table 2 (332 rows) directly from the PDF's word-position data for reliability, plus the complete Table 1 (2005-2044) including Morning/Evening Prayer column assignments, confirmed against a 12-year repeating cycle." },
+      { type: "Known gap", text: "The Christmas/Epiphany date-keyed block and the two days after Ash Wednesday aren't wired to specific dates yet. Psalms (Tables 3-5) haven't been transcribed. Catholic and Orthodox readings are still demo text." },
+    ],
+  },
+  {
     version: "0.12.1",
     title: "Fix outdated scripture reference in Prayer & Readings tab",
     changes: [

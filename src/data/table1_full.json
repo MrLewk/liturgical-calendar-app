@@ -1,0 +1,322 @@
+{
+ "2005": {
+  "sundayYear": "B",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2a/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2006": {
+  "sundayYear": "C",
+  "delYear": 1,
+  "mpOrdinary": "OT2a/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2007": {
+  "sundayYear": "A",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2b/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2008": {
+  "sundayYear": "B",
+  "delYear": 1,
+  "mpOrdinary": "OT2b/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2009": {
+  "sundayYear": "C",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2a/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2010": {
+  "sundayYear": "A",
+  "delYear": 1,
+  "mpOrdinary": "OT2a/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2011": {
+  "sundayYear": "B",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2b/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2012": {
+  "sundayYear": "C",
+  "delYear": 1,
+  "mpOrdinary": "OT2b/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2013": {
+  "sundayYear": "A",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2a/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2014": {
+  "sundayYear": "B",
+  "delYear": 1,
+  "mpOrdinary": "OT2a/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2015": {
+  "sundayYear": "C",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2b/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2016": {
+  "sundayYear": "A",
+  "delYear": 1,
+  "mpOrdinary": "OT2b/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2017": {
+  "sundayYear": "B",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2a/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2018": {
+  "sundayYear": "C",
+  "delYear": 1,
+  "mpOrdinary": "OT2a/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2019": {
+  "sundayYear": "A",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2b/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2020": {
+  "sundayYear": "B",
+  "delYear": 1,
+  "mpOrdinary": "OT2b/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2021": {
+  "sundayYear": "C",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2a/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2022": {
+  "sundayYear": "A",
+  "delYear": 1,
+  "mpOrdinary": "OT2a/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2023": {
+  "sundayYear": "B",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2b/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2024": {
+  "sundayYear": "C",
+  "delYear": 1,
+  "mpOrdinary": "OT2b/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2025": {
+  "sundayYear": "A",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2a/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2026": {
+  "sundayYear": "B",
+  "delYear": 1,
+  "mpOrdinary": "OT2a/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2027": {
+  "sundayYear": "C",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2b/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2028": {
+  "sundayYear": "A",
+  "delYear": 1,
+  "mpOrdinary": "OT2b/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2029": {
+  "sundayYear": "B",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2a/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2030": {
+  "sundayYear": "C",
+  "delYear": 1,
+  "mpOrdinary": "OT2a/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2031": {
+  "sundayYear": "A",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2b/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2032": {
+  "sundayYear": "B",
+  "delYear": 1,
+  "mpOrdinary": "OT2b/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2033": {
+  "sundayYear": "C",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2a/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2034": {
+  "sundayYear": "A",
+  "delYear": 1,
+  "mpOrdinary": "OT2a/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2035": {
+  "sundayYear": "B",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2b/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2036": {
+  "sundayYear": "C",
+  "delYear": 1,
+  "mpOrdinary": "OT2b/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2037": {
+  "sundayYear": "A",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2a/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2038": {
+  "sundayYear": "B",
+  "delYear": 1,
+  "mpOrdinary": "OT2a/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2039": {
+  "sundayYear": "C",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2b/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2040": {
+  "sundayYear": "A",
+  "delYear": 1,
+  "mpOrdinary": "OT2b/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2041": {
+  "sundayYear": "B",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2a/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2042": {
+  "sundayYear": "C",
+  "delYear": 1,
+  "mpOrdinary": "OT2a/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ },
+ "2043": {
+  "sundayYear": "A",
+  "delYear": 2,
+  "mpOrdinary": "OT1/NT1",
+  "mpSeasonal": "OT1/NT1",
+  "epOrdinary": "OT2b/NT2",
+  "epSeasonal": "OT2a/NT2"
+ },
+ "2044": {
+  "sundayYear": "B",
+  "delYear": 1,
+  "mpOrdinary": "OT2b/NT2",
+  "mpSeasonal": "OT2a/NT2",
+  "epOrdinary": "OT1/NT1",
+  "epSeasonal": "OT1/NT1"
+ }
+}

@@ -13,9 +13,9 @@ year, and everything from Ash Wednesday to the start of Advent shifts around it.
 that cycle right now, and lets you look ahead or back.
 
 - **Today** — your current season, its liturgical color, how far through it you are, and what's coming next
-- **Grid** — a familiar month-by-month calendar, with each day colored by its liturgical season and feast days marked
-- **Wheel** — a circular, at-a-glance view of the whole year — Advent, Christmas, Lent, Easter, and Ordinary Time laid out as a wheel instead of a list, so you can see the shape of the year rather than just the next date
-- **Prayer** — the Daily Office for your tradition: Morning/Evening/Sunday prayer (Anglican, Book of Common Prayer), Mass readings and key prayers (Catholic), and the daily cycle and key prayers (Orthodox) — all traditional or public-domain text
+- **Calendar** — a familiar month-by-month grid, with each day colored by its liturgical season and feast days marked
+- **Chart** — a circular, at-a-glance view of the whole year — Advent, Christmas, Lent, Easter, and Ordinary Time laid out as a wheel instead of a list, so you can see the shape of the year rather than just the next date
+- **Prayer** — the Daily Office for your tradition: Morning/Evening/Eucharist prayer (Anglican, Book of Common Prayer), Mass readings and key prayers (Catholic), and the daily cycle and key prayers (Orthodox) — all traditional or public-domain text
 - **Feasts** — a browsable list of upcoming feast days with short biographies of the saints and events behind them
 
 Switch tradition at any time (Catholic / Anglican / Orthodox), and Orthodox users can further choose between the
@@ -38,7 +38,7 @@ mind at any time from Settings. Full details are in the in-app Privacy Policy (S
 
 The core app is fully built: real season/feast-date calculations for any year (Western Easter and Orthodox Pascha
 algorithms, not lookup tables), full-text scripture readings from the public-domain World English Bible, and a
-working Grid/Wheel/Prayer/Feasts UI across all three traditions.
+working Calendar/Chart/Prayer/Feasts UI across all three traditions.
 
 **Lectionary accuracy varies by tradition and reading type right now:**
 

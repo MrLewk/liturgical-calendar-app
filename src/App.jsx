@@ -12,7 +12,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -261,6 +261,32 @@ function buildAnglicanEucharist(today) {
     label: `${result.label} · ${shortDate(today)}`,
     icon: "sun",
     sequence: [collect, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref }))],
+  };
+}
+
+/**
+ * Builds the real Anglican Office (Morning/Evening Prayer) reading for
+ * `date` from Table 2, keeping the fixed prayer/canticle/collect text as
+ * before and only replacing the two demo Scripture readings. Falls back
+ * to the static demo entry on any of officeReadingFor's known gaps.
+ */
+function buildAnglicanOffice(date, service) {
+  const fallback = READINGS.Anglican[service];
+  const confession = fallback.sequence[0];
+  const canticle = fallback.sequence[1];
+  const collect = fallback.sequence[fallback.sequence.length - 1];
+
+  const result = officeReadingFor(date, service);
+  if (!result || (!result.ot && !result.nt)) {
+    return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
+  }
+  const items = [];
+  if (result.ot) items.push({ type: "reading", role: "Old Testament", ref: displayRef(result.ot) });
+  if (result.nt) items.push({ type: "reading", role: "New Testament", ref: displayRef(result.nt) });
+  return {
+    label: `${fallback.label} · ${result.week}, ${WEEKDAY_NAME[date.getDay()]} · ${shortDate(date)}`,
+    icon: fallback.icon,
+    sequence: [confession, canticle, ...items, collect],
   };
 }
 
@@ -1870,10 +1896,12 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
   const effectiveDate = viewDate || today;
   const isViewingOtherDay = !!viewDate;
   const anglicanEucharist = useMemo(() => (tradition === "Anglican" ? buildAnglicanEucharist(effectiveDate) : null), [tradition, effectiveDate]);
+  const anglicanAm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "am") : null), [tradition, effectiveDate]);
+  const anglicanPm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "pm") : null), [tradition, effectiveDate]);
   const data = useMemo(() => {
     if (tradition !== "Anglican") return READINGS[tradition];
-    return { ...READINGS.Anglican, eucharist: anglicanEucharist };
-  }, [tradition, anglicanEucharist]);
+    return { ...READINGS.Anglican, am: anglicanAm, pm: anglicanPm, eucharist: anglicanEucharist };
+  }, [tradition, anglicanAm, anglicanPm, anglicanEucharist]);
   const defaultSegment = data.kind === "office" ? autoOfficeSegment(viewDate) : data.kind === "mass" ? "mass" : "daily";
   const [segment, setSegment] = useState(defaultSegment);
 

@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.13.0] — Real Anglican Daily Office lectionary (Morning & Evening Prayer)
+
+- **Added:** Morning and Evening Prayer readings on the Prayer & Readings tab are now computed from the real Common Worship Weekday Lectionary (Table 2 — Old/New Testament readings for the Office), replacing the fixed demo citations, the same way the Eucharist reading was made real in v0.11.0.
+- **Added:** `officeWeekLabel()` and `officeReadingFor()` in `src/lib/lectionary.js` — resolves any date to Table 2's own week-label convention (`Epiphany N` forward from the Baptism of Christ, a fixed backward count `5 before Lent` .. `1 before Lent`, `Lent N`, `Easter`/`Easter N`, `Trinity`/`Trinity N` forward, then a fixed backward count `4 before Advent` .. `1 before Advent`), then picks the correct OT/NT column pairing for Morning vs Evening Prayer using Table 1's per-year column assignment and the Ordinary Time / Seasonal Time split.
+- **Added:** `src/data/office_table2.json` — the transcribed Table 2 data (332 main rows covering OT1/OT2a/OT2b/NT1/NT2, plus the separate 8-row "Ascension to Pentecost" alternative sequence appendix), extracted directly from the PDF's word-position data rather than approximated text layout, for reliability across the table's two-column, facing-page structure.
+- **Added:** `src/data/table1_full.json` — the full Table 1 (2005-2044), including the Morning/Evening Prayer column assignments (Ordinary Time vs Seasonal Time) that the 2005 booklet's short-form table only partially specified; confirmed against a 12-year repeating cycle with zero mismatches.
+- **Known gap:** the Christmas/Epiphany date-keyed block (17 Dec - 12 Jan) and the two days immediately after Ash Wednesday aren't wired to specific dates yet — falls back to the demo entry rather than showing something wrong. Psalms (Tables 3-5) haven't been transcribed yet. Catholic and Orthodox readings are still demo text.
+
 ## [0.12.1] — Fix outdated scripture reference in Prayer & Readings tab
 
 - **Fixed:** The Prayer & Readings tab's copyright notice incorrectly referred to the King James Version, even though the app now uses the World English Bible (WEB). Updated to: "Scripture readings use the World English Bible (public domain). Prayers and traditions are from the 1662 Book of Common Prayer, Anglican lectionaries, and ancient liturgical sources."

@@ -1,0 +1,2470 @@
+{
+"main": {
+"Advent 1": {
+"M": {
+"ot1": "Isaiah 25.1–9",
+"ot2a": "Isaiah 42.18–end",
+"ot2b": null,
+"nt1": "Matthew 12.1–21",
+"nt2": "Revelation 19"
+},
+"T": {
+"ot1": "Isaiah 26.1–13",
+"ot2a": "Isaiah 43.1–13",
+"ot2b": null,
+"nt1": "Matthew 12.22–37",
+"nt2": "Revelation 20"
+},
+"W": {
+"ot1": "Isaiah 28.1–13",
+"ot2a": "Isaiah 43.14–end",
+"ot2b": null,
+"nt1": "Matthew 12.38–end",
+"nt2": "Revelation 21.1–8"
+},
+"Th": {
+"ot1": "Isaiah 28.14–end",
+"ot2a": "Isaiah 44.1–8",
+"ot2b": null,
+"nt1": "Matthew 13.1–23",
+"nt2": "Revelation 21.9–21"
+},
+"F": {
+"ot1": "Isaiah 29.1–14",
+"ot2a": "Isaiah 44.9–23",
+"ot2b": null,
+"nt1": "Matthew 13.24–43",
+"nt2": "Revelation 21.22–22.5"
+},
+"S": {
+"ot1": "Isaiah 29.15–end",
+"ot2a": "Isaiah 44.24–45.13",
+"ot2b": null,
+"nt1": "Matthew 13.44–end",
+"nt2": "Revelation 22.6–end"
+}
+},
+"Advent 2": {
+"M": {
+"ot1": "Isaiah 30.1–18",
+"ot2a": "Isaiah 45.14–end",
+"ot2b": null,
+"nt1": "Matthew 14.1–12",
+"nt2": "1 Thessalonians 1"
+},
+"T": {
+"ot1": "Isaiah 30.19–end",
+"ot2a": "Isaiah 46",
+"ot2b": null,
+"nt1": "Matthew 14.13–end",
+"nt2": "1 Thessalonians 2.1–12"
+},
+"W": {
+"ot1": "Isaiah 31",
+"ot2a": "Isaiah 47",
+"ot2b": null,
+"nt1": "Matthew 15.1–20",
+"nt2": "1 Thessalonians 2.13–end"
+},
+"Th": {
+"ot1": "Isaiah 32",
+"ot2a": "Isaiah 48.1–11",
+"ot2b": null,
+"nt1": "Matthew 15.21–28",
+"nt2": "1 Thessalonians 3"
+},
+"F": {
+"ot1": "Isaiah 33.1–22",
+"ot2a": "Isaiah 48.12–end",
+"ot2b": null,
+"nt1": "Matthew 15.29–end",
+"nt2": "1 Thessalonians 4.1–12"
+},
+"S": {
+"ot1": "Isaiah 35",
+"ot2a": "Isaiah 49.1–13",
+"ot2b": null,
+"nt1": "Matthew 16.1–12",
+"nt2": "1 Thessalonians 4.13–end"
+}
+},
+"Advent 3": {
+"M": {
+"ot1": "Isaiah 38. 1–8, 21–22",
+"ot2a": "Isaiah 49.14–25",
+"ot2b": null,
+"nt1": "Matthew 16.13–end",
+"nt2": "1 Thessalonians 5.1–11"
+},
+"T": {
+"ot1": "Isaiah 38. 9–20",
+"ot2a": "Isaiah 50",
+"ot2b": null,
+"nt1": "Matthew 17.1–13",
+"nt2": "1 Thessalonians 5.12–end"
+},
+"W": {
+"ot1": "Isaiah 39",
+"ot2a": "Isaiah 51.1–8",
+"ot2b": null,
+"nt1": "Matthew 17.14–21",
+"nt2": "2 Thessalonians 1"
+},
+"Th": {
+"ot1": "Zephaniah 1.1–2.3",
+"ot2a": "Isaiah 51.9–16",
+"ot2b": null,
+"nt1": "Matthew 17.22–end",
+"nt2": "2 Thessalonians 2"
+},
+"F": {
+"ot1": "Zephaniah 3.1–13",
+"ot2a": "Isaiah 51.17–end",
+"ot2b": null,
+"nt1": "Matthew 18.1–20",
+"nt2": "2 Thessalonians 3"
+},
+"S": {
+"ot1": "Zephaniah 3.14–end",
+"ot2a": "Isaiah 52.1–12",
+"ot2b": null,
+"nt1": "Matthew 18.21–end",
+"nt2": "Jude"
+}
+},
+"Advent 4": {
+"M": {
+"ot1": "Malachi 1.1, 6–end",
+"ot2a": "Isaiah 52.13–end of 53",
+"ot2b": null,
+"nt1": "Matthew 19.1–12",
+"nt2": "2 Peter 1.1–15"
+},
+"T": {
+"ot1": "Malachi 2.1–16",
+"ot2a": "Isaiah 54",
+"ot2b": null,
+"nt1": "Matthew 19.13–15",
+"nt2": "2 Peter 1.16–2.3"
+},
+"W": {
+"ot1": "Malachi 2.17–3.12",
+"ot2a": "Isaiah 55",
+"ot2b": null,
+"nt1": "Matthew 19.16–end",
+"nt2": "2 Peter 2.4–end"
+},
+"Th": {
+"ot1": "Malachi 3.13–end of 4",
+"ot2a": "Isaiah 56.1–8",
+"ot2b": null,
+"nt1": "Matthew 23.1–12",
+"nt2": "2 Peter 3"
+},
+"F": {
+"ot1": "Nahum 1",
+"ot2a": "Isaiah 63.1–6",
+"ot2b": null,
+"nt1": "Matthew 23.13–28",
+"nt2": "2 John"
+},
+"S": {
+"ot1": "Obadiah",
+"ot2a": "Isaiah 58",
+"ot2b": null,
+"nt1": "Matthew 23.29–end",
+"nt2": "3 John"
+}
+},
+"Dec 29–31": {
+"29": {
+"ot1": "Jonah 1",
+"ot2a": "Isaiah 57.15–end",
+"ot2b": null,
+"nt1": "Colossians 1.1–14",
+"nt2": "John 1.1–18"
+},
+"30": {
+"ot1": "Jonah 2",
+"ot2a": "Isaiah 59.1–15a",
+"ot2b": null,
+"nt1": "Colossians 1.15–23",
+"nt2": "John 1.19–28"
+},
+"31": {
+"ot1": "Jonah 3–4",
+"ot2a": "Isaiah 59.15b–end",
+"ot2b": null,
+"nt1": "Colossians 1.24–2.7",
+"nt2": "John 1.29–34"
+}
+},
+"Naming and Circumcision": {
+"1": {
+"ot1": null,
+"ot2a": null,
+"ot2b": null,
+"nt1": "Colossians 2.8–end",
+"nt2": "John 1.35–42"
+}
+},
+"Jan 2–5": {
+"2": {
+"ot1": "Ruth 1",
+"ot2a": "Isaiah 60.1–12",
+"ot2b": null,
+"nt1": "Colossians 3.1–11",
+"nt2": "John 1.43–end"
+},
+"3": {
+"ot1": "Ruth 2",
+"ot2a": "Isaiah 60.13–end",
+"ot2b": null,
+"nt1": "Colossians 3.12–4.1",
+"nt2": "John 2.1–12"
+},
+"4": {
+"ot1": "Ruth 3",
+"ot2a": "Isaiah 61",
+"ot2b": null,
+"nt1": "Colossians 4.2–end",
+"nt2": "John 2.13–end"
+},
+"5": {
+"ot1": "Ruth 4.1–17",
+"ot2a": "Isaiah 62",
+"ot2b": null,
+"nt1": "Matthew 20.1–16",
+"nt2": "1 John 3"
+}
+},
+"Jan 7–12": {
+"7": {
+"ot1": "Baruch 1.15–2.10 or Jer 23.1–8",
+"ot2a": "Isaiah 63.7–end",
+"ot2b": null,
+"nt1": "Matthew 20.17–28",
+"nt2": "1 John 4.7–end"
+},
+"8": {
+"ot1": "Baruch 2.11–end or Jer 30.1–17",
+"ot2a": "Isaiah 64",
+"ot2b": null,
+"nt1": "Matthew 20.29–end",
+"nt2": "1 John 5.1–12"
+},
+"9": {
+"ot1": "Baruch 3.1–8 or Jer 30.18–31.9",
+"ot2a": "Isaiah 65.1–16",
+"ot2b": null,
+"nt1": "Matthew 23.1–12",
+"nt2": "1 John 5.13–end"
+},
+"10": {
+"ot1": "Baruch 3.9–4.4 or Jer 31.10–17",
+"ot2a": "Isaiah 65.17–end",
+"ot2b": null,
+"nt1": "Matthew 23.13–28",
+"nt2": "2 John"
+},
+"11": {
+"ot1": "Baruch 4.21–30 or Jer 33.14–end",
+"ot2a": "Isaiah 66.1–11",
+"ot2b": null,
+"nt1": "Matthew 23.29–end",
+"nt2": "3 John"
+},
+"12": {
+"ot1": "Baruch 4.36–end of 5 or Mic 5.2–end",
+"ot2a": "Isaiah 66.12–23",
+"ot2b": null,
+"nt1": "Matthew 21.1–17",
+"nt2": "1 Corinthians 1.1–17"
+}
+},
+"Epiphany 1": {
+"M": {
+"ot1": "Genesis 1.1–19",
+"ot2a": "Amos 1",
+"ot2b": null,
+"nt1": "Matthew 21.18–32",
+"nt2": "1 Corinthians 1.18–end"
+},
+"T": {
+"ot1": "Genesis 1.20–2.3",
+"ot2a": "Amos 2",
+"ot2b": null,
+"nt1": "Matthew 21.33–end",
+"nt2": "1 Corinthians 2"
+},
+"W": {
+"ot1": "Genesis 2.4–end",
+"ot2a": "Amos 3",
+"ot2b": null,
+"nt1": "Matthew 22.1–14",
+"nt2": "1 Corinthians 3"
+},
+"Th": {
+"ot1": "Genesis 3",
+"ot2a": "Amos 4",
+"ot2b": null,
+"nt1": "Matthew 22.15–33",
+"nt2": "1 Corinthians 4"
+},
+"F": {
+"ot1": "Genesis 4.1–16, 25–26",
+"ot2a": "Amos 5.1–17",
+"ot2b": null,
+"nt1": "Matthew 22.34–end",
+"nt2": "1 Corinthians 5"
+},
+"S": {
+"ot1": "Genesis 6.1–10",
+"ot2a": "Amos 5.18–end",
+"ot2b": null,
+"nt1": "Matthew 24.1–14",
+"nt2": "1 Corinthians 6.1–11"
+}
+},
+"Epiphany 2": {
+"M": {
+"ot1": "Genesis 6.11–7.10",
+"ot2a": "Amos 6",
+"ot2b": null,
+"nt1": "Matthew 24.15–28",
+"nt2": "1 Corinthians 6.12–end"
+},
+"T": {
+"ot1": "Genesis 7.11–end",
+"ot2a": "Amos 7",
+"ot2b": null,
+"nt1": "Matthew 24.29–end",
+"nt2": "1 Corinthians 7.1–24"
+},
+"W": {
+"ot1": "Genesis 8.1–14",
+"ot2a": "Amos 8",
+"ot2b": null,
+"nt1": "Matthew 25.1–13",
+"nt2": "1 Corinthians 7.25–end"
+},
+"Th": {
+"ot1": "Genesis 8.15–9.7",
+"ot2a": "Amos 9",
+"ot2b": null,
+"nt1": "Matthew 25.14–30",
+"nt2": "1 Corinthians 8"
+},
+"F": {
+"ot1": "Genesis 9.8–19",
+"ot2a": "Hosea 1.1–2.1",
+"ot2b": null,
+"nt1": "Matthew 25.31–end",
+"nt2": "1 Corinthians 9.1–14"
+},
+"S": {
+"ot1": "Genesis 11.1–9",
+"ot2a": "Hosea 2.2–17",
+"ot2b": null,
+"nt1": "Matthew 26.1–16",
+"nt2": "1 Corinthians 9.15–end"
+}
+},
+"Epiphany 3": {
+"M": {
+"ot1": "Genesis 11.27–12.9",
+"ot2a": "Hosea 2.18–end of 3",
+"ot2b": null,
+"nt1": "Matthew 26.17–35",
+"nt2": "1 Corinthians 10.1–13"
+},
+"T": {
+"ot1": "Genesis 13.2–end",
+"ot2a": "Hosea 4.1–16",
+"ot2b": null,
+"nt1": "Matthew 26.36–46",
+"nt2": "1 Corinthians 10.14–11.1"
+},
+"W": {
+"ot1": "Genesis 14",
+"ot2a": "Hosea 5.1–7",
+"ot2b": null,
+"nt1": "Matthew 26.47–56",
+"nt2": "1 Corinthians 11.2–16"
+},
+"Th": {
+"ot1": "Genesis 15",
+"ot2a": "Hosea 5.8–6.6",
+"ot2b": null,
+"nt1": "Matthew 26.57–end",
+"nt2": "1 Corinthians 11.17–end"
+},
+"F": {
+"ot1": "Genesis 16",
+"ot2a": "Hosea 6.7–7.2",
+"ot2b": null,
+"nt1": "Matthew 27.1–10",
+"nt2": "1 Corinthians 12.1–11"
+},
+"S": {
+"ot1": "Genesis 17.1–22",
+"ot2a": "Hosea 8",
+"ot2b": null,
+"nt1": "Matthew 27.11–26",
+"nt2": "1 Corinthians 12.12–end"
+}
+},
+"Epiphany 4": {
+"M": {
+"ot1": "Genesis 18.1–15",
+"ot2a": "Hosea 9",
+"ot2b": null,
+"nt1": "Matthew 27.27–44",
+"nt2": "1 Corinthians 13"
+},
+"T": {
+"ot1": "Genesis 18.16–end",
+"ot2a": "Hosea 10",
+"ot2b": null,
+"nt1": "Matthew 27.45–56",
+"nt2": "1 Corinthians 14.1–19"
+},
+"W": {
+"ot1": "Genesis 19.1–3, 12–29",
+"ot2a": "Hosea 11.1–11",
+"ot2b": null,
+"nt1": "Matthew 27.57–end",
+"nt2": "1 Corinthians 14.20–end"
+},
+"Th": {
+"ot1": "Genesis 21.1–21",
+"ot2a": "Hosea 11.12–end of 12",
+"ot2b": null,
+"nt1": "Matthew 28.1–15",
+"nt2": "1 Corinthians 16.1–9"
+},
+"F": {
+"ot1": "Genesis 22.1–19",
+"ot2a": "Hosea 13.1–14",
+"ot2b": null,
+"nt1": "Matthew 28.16–end",
+"nt2": "1 Corinthians 16. 10–end"
+},
+"S": {
+"ot1": "Genesis 23",
+"ot2a": "Hosea 14",
+"ot2b": "Azariah and Song 1–27 or Mal. 1.1, 6–end",
+"nt1": "Philippians 1.1–11",
+"nt2": "John 13.1–11"
+}
+},
+"5 before Lent": {
+"M": {
+"ot1": "Exodus 22.21–27, 23.1–17",
+"ot2a": "1 Chr. 10.1–11.9",
+"ot2b": "Song 28–end or Mal. 2.1–16",
+"nt1": "Philippians 1.12–end",
+"nt2": "John 13.12–20"
+},
+"T": {
+"ot1": "Exodus 29.38–30.16",
+"ot2a": "1 Chr. 13",
+"ot2b": "Susannah 1–27 or Mal. 2.17–3.12",
+"nt1": "Philippians 2.1–13",
+"nt2": "John 13.21–30"
+},
+"W": {
+"ot1": "Leviticus 8",
+"ot2a": "1 Chr. 15.1–16.3",
+"ot2b": "Susannah 28–end or Mal. 3.13–end of 4",
+"nt1": "Philippians 2.14–end",
+"nt2": "John 13.31–end"
+},
+"Th": {
+"ot1": "Leviticus 9",
+"ot2a": "1 Chr. 17",
+"ot2b": "Bel & Dragon or Nahum 1",
+"nt1": "Philippians 3.1–4.1",
+"nt2": "John 14.1–14"
+},
+"F": {
+"ot1": "Leviticus 16.2–24",
+"ot2a": "1 Chr. 21.1–22.1",
+"ot2b": "Prayer of Manasseh or Obadiah",
+"nt1": "Philippians 4.2–end",
+"nt2": "John 14.15–end"
+},
+"S": {
+"ot1": "Leviticus 17",
+"ot2a": "1 Chr. 22.2–end",
+"ot2b": "Joel 1.1–14",
+"nt1": "1 Timothy 1.1–17",
+"nt2": "John 15.1–11"
+}
+},
+"4 before Lent": {
+"M": {
+"ot1": "Leviticus 19.1–18, 30–end",
+"ot2a": "1 Chr. 28.1–10",
+"ot2b": "Joel 1.15–end",
+"nt1": "1 Timothy 1.18–end of 2",
+"nt2": "John 15.12–17"
+},
+"T": {
+"ot1": "Leviticus 23.1–22",
+"ot2a": "1 Chr. 28.11–end",
+"ot2b": "Joel 2.1–17",
+"nt1": "1 Timothy 3",
+"nt2": "John 15.18–end"
+},
+"W": {
+"ot1": "Leviticus 23.23–end",
+"ot2a": "1 Chr. 29.1–9",
+"ot2b": "Joel 2.18–27",
+"nt1": "1 Timothy 4",
+"nt2": "John 16.1–15"
+},
+"Th": {
+"ot1": "Leviticus 24.1–9",
+"ot2a": "1 Chr. 29.10–20",
+"ot2b": "Joel 2.28–end",
+"nt1": "1 Timothy 5.1–16",
+"nt2": "John 16.16–22"
+},
+"F": {
+"ot1": "Leviticus 25.1–24",
+"ot2a": "1 Chr. 29.21–end",
+"ot2b": "Joel 3.1–3, 9–end",
+"nt1": "1 Timothy 5.17–end",
+"nt2": "John 16.23–end"
+},
+"S": {
+"ot1": "Numbers 6.1–5, 21–end",
+"ot2a": "2 Chr. 1.1–13",
+"ot2b": "Ecclesiastes 1",
+"nt1": "1 Timothy 6.1–10",
+"nt2": "John 17.1–5"
+}
+},
+"3 before Lent": {
+"M": {
+"ot1": "Genesis 24.1–28",
+"ot2a": "2 Chr. 2.1–16",
+"ot2b": "Ecclesiastes 2",
+"nt1": "1 Timothy 6.11–end",
+"nt2": "John 17.6–19"
+},
+"T": {
+"ot1": "Genesis 24.29–end",
+"ot2a": "2 Chr. 3",
+"ot2b": "Ecclesiastes 3.1–15",
+"nt1": "2 Timothy 1.1–14",
+"nt2": "John 17.20–end"
+},
+"W": {
+"ot1": "Genesis 25.7–11, 19–end",
+"ot2a": "2 Chr. 5",
+"ot2b": "Ecclesiastes 3.16–end of 4",
+"nt1": "2 Timothy 1.15–2.13",
+"nt2": "John 18.1–11"
+},
+"Th": {
+"ot1": "Genesis 26.34–27.40",
+"ot2a": "2 Chr. 6.1–21",
+"ot2b": "Ecclesiastes 5",
+"nt1": "2 Timothy 2.14–end",
+"nt2": "John 18.12–27"
+},
+"F": {
+"ot1": "Genesis 27.41–end of 28",
+"ot2a": "2 Chr. 6.22–end",
+"ot2b": "Ecclesiastes 6",
+"nt1": "2 Timothy 3",
+"nt2": "John 18.28–end"
+},
+"S": {
+"ot1": "Genesis 29.1–30",
+"ot2a": "2 Chr. 7",
+"ot2b": "Ecclesiastes 7.1–14",
+"nt1": "2 Timothy 4.1–8",
+"nt2": "John 19.1–16"
+}
+},
+"2 before Lent": {
+"M": {
+"ot1": "Genesis 29.31–30.24",
+"ot2a": "2 Chr. 9.1–12",
+"ot2b": "Ecclesiastes 7.15–end",
+"nt1": "2 Timothy 4.9–end",
+"nt2": "John 19.17–30"
+},
+"T": {
+"ot1": "Genesis 31.1–24",
+"ot2a": "2 Chr. 10.1–11.4",
+"ot2b": "Ecclesiastes 8",
+"nt1": "Titus 1",
+"nt2": "John 19.31–end"
+},
+"W": {
+"ot1": "Genesis 31.25–32.2",
+"ot2a": "2 Chr. 12",
+"ot2b": "Ecclesiastes 9",
+"nt1": "Titus 2",
+"nt2": "John 20.1–10"
+},
+"Th": {
+"ot1": "Genesis 32.3–30",
+"ot2a": "2 Chr. 13.1–14.1",
+"ot2b": "Ecclesiastes 11.1–8",
+"nt1": "Titus 3",
+"nt2": "John 20.11–18"
+},
+"F": {
+"ot1": "Genesis 33.1–17",
+"ot2a": "2 Chr. 14.2–end",
+"ot2b": "Ecclesiastes 11.9–end of 12",
+"nt1": "Philemon",
+"nt2": "John 20.19–end"
+},
+"S": {
+"ot1": "Genesis 35",
+"ot2a": "2 Chr. 15.1–15",
+"ot2b": null,
+"nt1": "Galatians 1",
+"nt2": "John 3.1–21"
+}
+},
+"1 before Lent": {
+"M": {
+"ot1": "Genesis 37.1–11",
+"ot2a": "Jeremiah 1",
+"ot2b": null,
+"nt1": "Galatians 1",
+"nt2": "John 3.1–21"
+},
+"T": {
+"ot1": "Genesis 37.12–end",
+"ot2a": "Jeremiah 2.1–13",
+"ot2b": null,
+"nt1": "Galatians 2.1–10",
+"nt2": "John 3.22–end"
+},
+"W": {
+"ot1": "ASH WEDNESDAY",
+"ot2a": "ASH WEDNESDAY",
+"ot2b": null,
+"nt1": "ASH WEDNESDAY",
+"nt2": "ASH WEDNESDAY"
+},
+"Th": {
+"ot1": "Genesis 39",
+"ot2a": "Jeremiah 2.14–32",
+"ot2b": null,
+"nt1": "Galatians 2.11–end",
+"nt2": "John 4.1–26"
+},
+"F": {
+"ot1": "Genesis 40",
+"ot2a": "Jeremiah 3.6–22",
+"ot2b": null,
+"nt1": "Galatians 3.1–14",
+"nt2": "John 4.27–42"
+},
+"S": {
+"ot1": "Genesis 41.1–24",
+"ot2a": "Jeremiah 4.1–18",
+"ot2b": null,
+"nt1": "Galatians 3.15–22",
+"nt2": "John 4.43–end"
+}
+},
+"Lent 1": {
+"M": {
+"ot1": "Genesis 41.25–45",
+"ot2a": "Jeremiah 4.19–end",
+"ot2b": null,
+"nt1": "Galatians 4.8–20",
+"nt2": "John 5.19–29"
+},
+"T": {
+"ot1": "Genesis 41.46–42.5",
+"ot2a": "Jeremiah 5.1–19",
+"ot2b": null,
+"nt1": "Galatians 4.21–5.1",
+"nt2": "John 5.30–end"
+},
+"W": {
+"ot1": "Genesis 42.6–17",
+"ot2a": "Jeremiah 5.20–end",
+"ot2b": null,
+"nt1": "Galatians 5.2–15",
+"nt2": "John 6.1–15"
+},
+"Th": {
+"ot1": "Genesis 42.18–28",
+"ot2a": "Jeremiah 6.9–21",
+"ot2b": null,
+"nt1": "Galatians 5.16–end",
+"nt2": "John 6.16–27"
+},
+"F": {
+"ot1": "Genesis 42.29–end",
+"ot2a": "Jeremiah 6.22–end",
+"ot2b": null,
+"nt1": "Galatians 6",
+"nt2": "John 6.27–40"
+},
+"S": {
+"ot1": "Genesis 43.1–15",
+"ot2a": "Jeremiah 7.1–20",
+"ot2b": null,
+"nt1": "Hebrews 1",
+"nt2": "John 6.41–51"
+}
+},
+"Lent 2": {
+"M": {
+"ot1": "Genesis 43.16–end",
+"ot2a": "Jeremiah 7.21–end",
+"ot2b": null,
+"nt1": "Hebrews 2.1–9",
+"nt2": "John 6.52–59"
+},
+"T": {
+"ot1": "Genesis 44.1–17",
+"ot2a": "Jeremiah 8.1–15",
+"ot2b": null,
+"nt1": "Hebrews 2.10–end",
+"nt2": "John 6.60–end"
+},
+"W": {
+"ot1": "Genesis 44.18–end",
+"ot2a": "Jeremiah 8.18–9.11",
+"ot2b": null,
+"nt1": "Hebrews 3.1–6",
+"nt2": "John 7.1–13"
+},
+"Th": {
+"ot1": "Genesis 45.1–15",
+"ot2a": "Jeremiah 9.12–24",
+"ot2b": null,
+"nt1": "Hebrews 3.7–end",
+"nt2": "John 7.14–24"
+},
+"F": {
+"ot1": "Genesis 45.16–end",
+"ot2a": "Jeremiah 10.1–16",
+"ot2b": null,
+"nt1": "Hebrews 4.1–13",
+"nt2": "John 7.25–36"
+},
+"S": {
+"ot1": "Genesis 46.1–7, 28–end",
+"ot2a": "Jeremiah 10.17–24",
+"ot2b": null,
+"nt1": "Hebrews 4.14–5.10",
+"nt2": "John 7.37–52"
+}
+},
+"Lent 3": {
+"M": {
+"ot1": "Genesis 47.1–27",
+"ot2a": "Jeremiah 11.1–17",
+"ot2b": null,
+"nt1": "Hebrews 5.11–6.12",
+"nt2": "John 7.53–8.11"
+},
+"T": {
+"ot1": "Genesis 47.28–end of 48",
+"ot2a": "Jeremiah 11.18–12.6",
+"ot2b": null,
+"nt1": "Hebrews 6.13–end",
+"nt2": "John 8.12–30"
+},
+"W": {
+"ot1": "Genesis 49.1–32",
+"ot2a": "Jeremiah 13.1–11",
+"ot2b": null,
+"nt1": "Hebrews 7.1–10",
+"nt2": "John 8.31–47"
+},
+"Th": {
+"ot1": "Genesis 49.33–end of 50",
+"ot2a": "Jeremiah 14",
+"ot2b": null,
+"nt1": "Hebrews 7.11–end",
+"nt2": "John 8.48–end"
+},
+"F": {
+"ot1": "Exodus 1.1–14",
+"ot2a": "Jeremiah 15.10–end",
+"ot2b": null,
+"nt1": "Hebrews 8",
+"nt2": "John 9.1–17"
+},
+"S": {
+"ot1": "Exodus 1.22–2.10",
+"ot2a": "Jeremiah 16.10–17.4",
+"ot2b": null,
+"nt1": "Hebrews 9.1–14",
+"nt2": "John 9.18–end"
+}
+},
+"Lent 4": {
+"M": {
+"ot1": "Exodus 2.11–22",
+"ot2a": "Jeremiah 17.5–18",
+"ot2b": null,
+"nt1": "Hebrews 9.15–end",
+"nt2": "John 10.1–10"
+},
+"T": {
+"ot1": "Exodus 2.23–3.20",
+"ot2a": "Jeremiah 18.1–12",
+"ot2b": null,
+"nt1": "Hebrews 10.1–18",
+"nt2": "John 10.11–21"
+},
+"W": {
+"ot1": "Exodus 4.1–23",
+"ot2a": "Jeremiah 18.13–end",
+"ot2b": null,
+"nt1": "Hebrews 10.19–25",
+"nt2": "John 10.22–end"
+},
+"Th": {
+"ot1": "Exodus 4.27–6.1",
+"ot2a": "Jeremiah 19.1–13",
+"ot2b": null,
+"nt1": "Hebrews 10.26–end",
+"nt2": "John 11.1–16"
+},
+"F": {
+"ot1": "Exodus 6.2–13",
+"ot2a": "Jeremiah 19.14–20.6",
+"ot2b": null,
+"nt1": "Hebrews 11.1–16",
+"nt2": "John 11.17–27"
+},
+"S": {
+"ot1": "Exodus 7.8–end",
+"ot2a": "Jeremiah 20.7–end",
+"ot2b": null,
+"nt1": "Hebrews 11.17–31",
+"nt2": "John 11.28–44"
+}
+},
+"Lent 5": {
+"M": {
+"ot1": "Exodus 8.1–19",
+"ot2a": "Jeremiah 21.1–10",
+"ot2b": null,
+"nt1": "Hebrews 11.32–12.2",
+"nt2": "John 11.45–end"
+},
+"T": {
+"ot1": "Exodus 8.20–end",
+"ot2a": "Jeremiah 22.1–5, 13–19",
+"ot2b": null,
+"nt1": "Hebrews 12.3–13",
+"nt2": "John 12.1–11"
+},
+"W": {
+"ot1": "Exodus 9.1–12",
+"ot2a": "Jeremiah 22.20–23.8",
+"ot2b": null,
+"nt1": "Hebrews 12.14–end",
+"nt2": "John 12.12–19"
+},
+"Th": {
+"ot1": "Exodus 9.13–end",
+"ot2a": "Jeremiah 23.9–32",
+"ot2b": null,
+"nt1": "Hebrews 13.1–16",
+"nt2": "John 12.20–36a"
+},
+"F": {
+"ot1": "Exodus 10",
+"ot2a": "Jeremiah 24",
+"ot2b": null,
+"nt1": "Hebrews 13.17–end",
+"nt2": "John 12.36b–end"
+},
+"S": {
+"ot1": "Exodus 11",
+"ot2a": "Jeremiah 25.1–14",
+"ot2b": null,
+"nt1": "1 Corinthians15.1–11",
+"nt2": "Mark 16.1–8"
+}
+},
+"Easter": {
+"M": {
+"ot1": "Exodus 12.1–14",
+"ot2a": "Song of Solomon 1.9–2.7",
+"ot2b": null,
+"nt1": "1 Corinthians 15.12–19",
+"nt2": "Luke 24.1–12"
+},
+"T": {
+"ot1": "Exodus 12.14–36",
+"ot2a": "Song of Solomon 2.8–end",
+"ot2b": null,
+"nt1": "1 Corinthians 15.20–28",
+"nt2": "Matthew 28.16–end"
+},
+"W": {
+"ot1": "Exodus 12.37–end",
+"ot2a": "Song of Solomon 3",
+"ot2b": null,
+"nt1": "1 Corinthians 15.29–34",
+"nt2": "Luke 7.11–17"
+},
+"Th": {
+"ot1": "Exodus 13.1–16",
+"ot2a": "Song of Solomon 5.2–6.3",
+"ot2b": null,
+"nt1": "1 Corinthians 15.35–50",
+"nt2": "Luke 8.41–end"
+},
+"F": {
+"ot1": "Exodus 13.17–14.14",
+"ot2a": "Song of Solomon 7.10–8.4",
+"ot2b": null,
+"nt1": "1 Corinthians 15.51–end",
+"nt2": "John 11.17–44"
+},
+"S": {
+"ot1": "Exodus 14.15–end",
+"ot2a": "Song of Solomon 8.5–7",
+"ot2b": null,
+"nt1": "Colossians 1.1–14",
+"nt2": "John 20.1–10"
+}
+},
+"Easter 2": {
+"M": {
+"ot1": "Exodus 15.1–21",
+"ot2a": "Deuteronomy 1.3–18",
+"ot2b": null,
+"nt1": "Colossians 1.15–end",
+"nt2": "John 20.11–18"
+},
+"T": {
+"ot1": "Exodus 15.22–16.10",
+"ot2a": "Deuteronomy 1.19–40",
+"ot2b": null,
+"nt1": "Colossians 2.1–15",
+"nt2": "John 20.19–end"
+},
+"W": {
+"ot1": "Exodus 16.11–end",
+"ot2a": "Deuteronomy 3.18–end",
+"ot2b": null,
+"nt1": "Colossians 2.16–3.11",
+"nt2": "John 21.1–14"
+},
+"Th": {
+"ot1": "Exodus 17",
+"ot2a": "Deuteronomy 4.1–14",
+"ot2b": null,
+"nt1": "Colossians 3.12–4.1",
+"nt2": "John 21.15–19"
+},
+"F": {
+"ot1": "Exodus 18.1–12",
+"ot2a": "Deuteronomy 4.15–31",
+"ot2b": null,
+"nt1": "Colossians 4.2–end",
+"nt2": "John 21.20–end"
+},
+"S": {
+"ot1": "Exodus 18.13–end",
+"ot2a": "Deuteronomy 4.32–40",
+"ot2b": null,
+"nt1": "Luke 1.1–25",
+"nt2": "Ephesians 1.1–14"
+}
+},
+"Easter 3": {
+"M": {
+"ot1": "Exodus 19",
+"ot2a": "Deuteronomy 5.1–22",
+"ot2b": null,
+"nt1": "Luke 1.26–38",
+"nt2": "Ephesians 1.15–end"
+},
+"T": {
+"ot1": "Exodus 20.1–21",
+"ot2a": "Deuteronomy 5.22–end",
+"ot2b": null,
+"nt1": "Luke 1.39–56",
+"nt2": "Ephesians 2.1–10"
+},
+"W": {
+"ot1": "Exodus 24",
+"ot2a": "Deuteronomy 6",
+"ot2b": null,
+"nt1": "Luke 1.57–end",
+"nt2": "Ephesians 2.11–end"
+},
+"Th": {
+"ot1": "Exodus 25.1–22",
+"ot2a": "Deuteronomy 7.1–11",
+"ot2b": null,
+"nt1": "Luke 2.1–20",
+"nt2": "Ephesians 3.1–13"
+},
+"F": {
+"ot1": "Exodus 28.1–4a, 29–38",
+"ot2a": "Deuteronomy 7.12–end",
+"ot2b": null,
+"nt1": "Luke 2.21–40",
+"nt2": "Ephesians 3.14–end"
+},
+"S": {
+"ot1": "Exodus 29.1–9",
+"ot2a": "Deuteronomy 8",
+"ot2b": null,
+"nt1": "Luke 2.41–end",
+"nt2": "Ephesians 4.1–16"
+}
+},
+"Easter 4": {
+"M": {
+"ot1": "Exodus 32.1–14",
+"ot2a": "Deuteronomy 9.1–21",
+"ot2b": null,
+"nt1": "Luke 3.1–14",
+"nt2": "Ephesians 4.17–end"
+},
+"T": {
+"ot1": "Exodus 32.15–34",
+"ot2a": "Deuteronomy 9.23–10.5",
+"ot2b": null,
+"nt1": "Luke 3.15–22",
+"nt2": "Ephesians 5.1–14"
+},
+"W": {
+"ot1": "Exodus 33",
+"ot2a": "Deuteronomy 10.12–end",
+"ot2b": null,
+"nt1": "Luke 4.1–13",
+"nt2": "Ephesians 5.15–end"
+},
+"Th": {
+"ot1": "Exodus 34.1–10, 27–end",
+"ot2a": "Deuteronomy 11.8–end",
+"ot2b": null,
+"nt1": "Luke 4.14–30",
+"nt2": "Ephesians 6.1–9"
+},
+"F": {
+"ot1": "Exodus 35.20–36.7",
+"ot2a": "Deuteronomy 12.1–14",
+"ot2b": null,
+"nt1": "Luke 4.31–37",
+"nt2": "Ephesians 6.10–end"
+},
+"S": {
+"ot1": "Exodus 40.17–end",
+"ot2a": "Deuteronomy 15.1–18",
+"ot2b": null,
+"nt1": "Luke 4.38–end",
+"nt2": "1 Peter 1.1–12"
+}
+},
+"Easter 5": {
+"M": {
+"ot1": "Numbers 9.15–end;10.33–end",
+"ot2a": "Deuteronomy 16.1–20",
+"ot2b": null,
+"nt1": "Luke 5.1–11",
+"nt2": "1 Peter 1.13–end"
+},
+"T": {
+"ot1": "Numbers 11.1–33",
+"ot2a": "Deuteronomy 17.8–end",
+"ot2b": null,
+"nt1": "Luke 5.12–26",
+"nt2": "1 Peter 2.1–10"
+},
+"W": {
+"ot1": "Numbers 12",
+"ot2a": "Deuteronomy 18.9–end",
+"ot2b": null,
+"nt1": "Luke 5.27–end",
+"nt2": "1 Peter 2.11–end"
+},
+"Th": {
+"ot1": "Numbers 13.1–3, 17–end",
+"ot2a": "Deuteronomy 19",
+"ot2b": null,
+"nt1": "Luke 6.1–11",
+"nt2": "1 Peter 3.1–12"
+},
+"F": {
+"ot1": "Numbers 14.1–25",
+"ot2a": "Deuteronomy 21.22–22.8",
+"ot2b": null,
+"nt1": "Luke 6.12–26",
+"nt2": "1 Peter 3.13–end"
+},
+"S": {
+"ot1": "Numbers 14.26–end",
+"ot2a": "Deuteronomy 24.5–end",
+"ot2b": null,
+"nt1": "Luke 6.27–38",
+"nt2": "1 Peter 4.1–11"
+}
+},
+"Easter 6": {
+"M": {
+"ot1": "Numbers 16.1–35",
+"ot2a": "Deuteronomy 26",
+"ot2b": null,
+"nt1": "Luke 6.27–38",
+"nt2": "1 Peter 4.1–11"
+},
+"T": {
+"ot1": "Numbers 16.36–end",
+"ot2a": "Deuteronomy 28.1–14",
+"ot2b": null,
+"nt1": "Luke 6.39–end",
+"nt2": "1 Peter 4.12–end"
+},
+"W": {
+"ot1": "Numbers 17.1–11",
+"ot2a": "Deuteronomy 28.58–end",
+"ot2b": null,
+"nt1": "Luke 7.1–10",
+"nt2": "1 Peter 5"
+},
+"Th": {
+"ot1": "ASCENSION DAY",
+"ot2a": "ASCENSION DAY",
+"ot2b": null,
+"nt1": "ASCENSION DAY",
+"nt2": "ASCENSION DAY"
+},
+"F": {
+"ot1": "Numbers 20.1–13",
+"ot2a": "Deuteronomy 29.2–15",
+"ot2b": null,
+"nt1": "Luke 7.11–17",
+"nt2": "1 John 1.1–2.6"
+},
+"S": {
+"ot1": "Numbers 21.4–9",
+"ot2a": "Deuteronomy 30",
+"ot2b": null,
+"nt1": "Luke 7.18–35",
+"nt2": "1 John 2.7–17"
+}
+},
+"Easter 7": {
+"M": {
+"ot1": "Numbers 22.1–35",
+"ot2a": "Deuteronomy 31.1–13",
+"ot2b": null,
+"nt1": "Luke 7.36–end",
+"nt2": "1 John 2.18–end"
+},
+"T": {
+"ot1": "Numbers 22.36–23.12",
+"ot2a": "Deuteronomy 31.14–29",
+"ot2b": null,
+"nt1": "Luke 8.1–15",
+"nt2": "1 John 3.1–10"
+},
+"W": {
+"ot1": "Numbers 23.13–end",
+"ot2a": "Deuteronomy 31.30–32.14",
+"ot2b": null,
+"nt1": "Luke 8.16–25",
+"nt2": "1 John 3.11–end"
+},
+"Th": {
+"ot1": "Numbers 24",
+"ot2a": "Deuteronomy 32.15–47",
+"ot2b": null,
+"nt1": "Luke 8.26–39",
+"nt2": "1 John 4.1–6"
+},
+"F": {
+"ot1": "Numbers 27.12–end",
+"ot2a": "Deuteronomy 33",
+"ot2b": null,
+"nt1": "Luke 8.40–end",
+"nt2": "1 John 4.7–end"
+},
+"S": {
+"ot1": "Numbers 32.1–27",
+"ot2a": "Deuteronomy 32.48–end, 34",
+"ot2b": null,
+"nt1": "Luke 9.1–17",
+"nt2": "1 John 5"
+}
+},
+"Pentecost": {
+"M": {
+"ot1": "Joshua 1",
+"ot2a": "2 Chr. 17.1–12",
+"ot2b": "Job 1",
+"nt1": "Luke 9.18–27",
+"nt2": "Romans 1.1–17"
+},
+"T": {
+"ot1": "Joshua 2",
+"ot2a": "2 Chr. 18.1–27",
+"ot2b": "Job 2",
+"nt1": "Luke 9.28–36",
+"nt2": "Romans 1.18–end"
+},
+"W": {
+"ot1": "Joshua 3",
+"ot2a": "2 Chr. 18.28–end of 19",
+"ot2b": "Job 3",
+"nt1": "Luke 9.37–50",
+"nt2": "Romans 2.1–16"
+},
+"Th": {
+"ot1": "Joshua 4.1–5.1",
+"ot2a": "2 Chr. 20.1–23",
+"ot2b": "Job 4",
+"nt1": "Luke 9.51–end",
+"nt2": "Romans 2.17–end"
+},
+"F": {
+"ot1": "Joshua 5.2–end",
+"ot2a": "2 Chr. 22.10–end of 23",
+"ot2b": "Job 5",
+"nt1": "Luke 10.1–16",
+"nt2": "Romans 3.1–20"
+},
+"S": {
+"ot1": "Joshua 6.1–20",
+"ot2a": "2 Chr. 24.1–22",
+"ot2b": "Job 6",
+"nt1": "Luke 10.17–24",
+"nt2": "Romans 3.21–end"
+}
+},
+"Trinity": {
+"M": {
+"ot1": "Joshua 7.1–15",
+"ot2a": "2 Chr. 26.1–21",
+"ot2b": "Job 7",
+"nt1": "Luke 10.25–37",
+"nt2": "Romans 4.1–12"
+},
+"T": {
+"ot1": "Joshua 7.16–end",
+"ot2a": "2 Chr. 28",
+"ot2b": "Job 8",
+"nt1": "Luke 10.38–end",
+"nt2": "Romans 4.13–end"
+},
+"W": {
+"ot1": "Joshua 8.1–29",
+"ot2a": "2 Chr. 29.1–19",
+"ot2b": "Job 9",
+"nt1": "Luke 11.1–13",
+"nt2": "Romans 5.1–11"
+},
+"Th": {
+"ot1": "Joshua 8.30–end",
+"ot2a": "2 Chr. 29.20–end",
+"ot2b": "Job 10",
+"nt1": "Luke 11.14–28",
+"nt2": "Romans 5.12–end"
+},
+"F": {
+"ot1": "Joshua 9.3–26",
+"ot2a": "2 Chr. 30",
+"ot2b": "Job 11",
+"nt1": "Luke 11.29–36",
+"nt2": "Romans 6.1–14"
+},
+"S": {
+"ot1": "Joshua 10.1–15",
+"ot2a": "2 Chr. 32.1–22",
+"ot2b": "Job 12",
+"nt1": "Luke 11.37–end",
+"nt2": "Romans 6.15–end"
+}
+},
+"Trinity 1": {
+"M": {
+"ot1": "Joshua 14",
+"ot2a": "2 Chr. 33.1–13",
+"ot2b": "Job 13",
+"nt1": "Luke 12.1–12",
+"nt2": "Romans 7.1–6"
+},
+"T": {
+"ot1": "Joshua 21.43–22.8",
+"ot2a": "2 Chr. 34.1–18",
+"ot2b": "Job 14",
+"nt1": "Luke 12.13–21",
+"nt2": "Romans 7.7–end"
+},
+"W": {
+"ot1": "Joshua 22.9–end",
+"ot2a": "2 Chr. 34.19–end",
+"ot2b": "Job 15",
+"nt1": "Luke 12.22–31",
+"nt2": "Romans 8.1–11"
+},
+"Th": {
+"ot1": "Joshua 23",
+"ot2a": "2 Chr. 35.1–19",
+"ot2b": "Job 16.1–17.2",
+"nt1": "Luke 12.32–40",
+"nt2": "Romans 8.12–17"
+},
+"F": {
+"ot1": "Joshua 24.1–28",
+"ot2a": "2 Chr. 35.20–36.10",
+"ot2b": "Job 17.3–end",
+"nt1": "Luke 12.41–48",
+"nt2": "Romans 8.18–30"
+},
+"S": {
+"ot1": "Joshua 24.29–end",
+"ot2a": "2 Chr. 36.11–end",
+"ot2b": "Job 18",
+"nt1": "Luke 12.49–end",
+"nt2": "Romans 8.31–end"
+}
+},
+"Trinity 2": {
+"M": {
+"ot1": "Judges 2",
+"ot2a": "Ezra 1",
+"ot2b": "Job 19",
+"nt1": "Luke 13.1–9",
+"nt2": "Romans 9.1–18"
+},
+"T": {
+"ot1": "Judges 4.1–23",
+"ot2a": "Ezra 3",
+"ot2b": "Job 21",
+"nt1": "Luke 13.10–21",
+"nt2": "Romans 9.19–end"
+},
+"W": {
+"ot1": "Judges 5",
+"ot2a": "Ezra 4.1–5",
+"ot2b": "Job 22",
+"nt1": "Luke 13.22–end",
+"nt2": "Romans 10.1–10"
+},
+"Th": {
+"ot1": "Judges 6.1–24",
+"ot2a": "Ezra 4.7–end",
+"ot2b": "Job 23",
+"nt1": "Luke 14.1–11",
+"nt2": "Romans 10.11–end"
+},
+"F": {
+"ot1": "Judges 6.25–end",
+"ot2a": "Ezra 5",
+"ot2b": "Job 24",
+"nt1": "Luke 14.12–24",
+"nt2": "Romans 11.1–12"
+},
+"S": {
+"ot1": "Judges 7",
+"ot2a": "Ezra 6",
+"ot2b": "Job 25–26",
+"nt1": "Luke 14.25–end",
+"nt2": "Romans 11.13–24"
+}
+},
+"Trinity 3": {
+"M": {
+"ot1": "Judges 8.22–end",
+"ot2a": "Ezra 7",
+"ot2b": "Job 27",
+"nt1": "Luke 15.1–10",
+"nt2": "Romans 11.25–end"
+},
+"T": {
+"ot1": "Judges 9.1–21",
+"ot2a": "Ezra 8.15–end",
+"ot2b": "Job 28",
+"nt1": "Luke 15.11–end",
+"nt2": "Romans 12.1–8"
+},
+"W": {
+"ot1": "Judges 9.22–end",
+"ot2a": "Ezra 9",
+"ot2b": "Job 29",
+"nt1": "Luke 16.1–18",
+"nt2": "Romans 12.9–end"
+},
+"Th": {
+"ot1": "Judges 11.1–11",
+"ot2a": "Ezra 10.1–17",
+"ot2b": "Job 30",
+"nt1": "Luke 16.19–end",
+"nt2": "Romans 13.1–7"
+},
+"F": {
+"ot1": "Judges 11.29–end",
+"ot2a": "Nehemiah 1",
+"ot2b": "Job 31",
+"nt1": "Luke 17.1–10",
+"nt2": "Romans 13.8–end"
+},
+"S": {
+"ot1": "Judges 12.1–7",
+"ot2a": "Nehemiah 2",
+"ot2b": "Job 32",
+"nt1": "Luke 17.11–19",
+"nt2": "Romans 14.1–12"
+}
+},
+"Trinity 4": {
+"M": {
+"ot1": "Judges 13.1–24",
+"ot2a": "Nehemiah 4",
+"ot2b": "Job 33",
+"nt1": "Luke 17.20–end",
+"nt2": "Romans 14.13–end"
+},
+"T": {
+"ot1": "Judges 14",
+"ot2a": "Nehemiah 5",
+"ot2b": "Job 38",
+"nt1": "Luke 18.1–14",
+"nt2": "Romans 15.1–13"
+},
+"W": {
+"ot1": "Judges 15.1–16.3",
+"ot2a": "Nehemiah 6.1–7.4",
+"ot2b": "Job 39",
+"nt1": "Luke 18.15–30",
+"nt2": "Romans 15.14–21"
+},
+"Th": {
+"ot1": "Judges 16.4–end",
+"ot2a": "Nehemiah 7.73b–end of 8",
+"ot2b": "Job 40",
+"nt1": "Luke 18.31–end",
+"nt2": "Romans 15.22–end"
+},
+"F": {
+"ot1": "Judges 17",
+"ot2a": "Nehemiah 9.1–23",
+"ot2b": "Job 41",
+"nt1": "Luke 19.1–10",
+"nt2": "Romans 16.1–16"
+},
+"S": {
+"ot1": "Judges 18.1–20, 27–end",
+"ot2a": "Nehemiah 9.24–end",
+"ot2b": "Job 42",
+"nt1": "Luke 19.11–27",
+"nt2": "Romans 16.17–end"
+}
+},
+"Trinity 5": {
+"M": {
+"ot1": "1 Samuel 1.1–20",
+"ot2a": "Nehemiah 12.27–47",
+"ot2b": "Ezekiel 1.1–14",
+"nt1": "Luke 19.28–40",
+"nt2": "2 Corinthians 1.1–14"
+},
+"T": {
+"ot1": "1 Samuel 1.21–2.11",
+"ot2a": "Nehemiah 13.1–14",
+"ot2b": "Ezekiel 1.15–2.2",
+"nt1": "Luke 19.41–end",
+"nt2": "2 Corinthians 1.15–2.4"
+},
+"W": {
+"ot1": "1 Samuel 2.12–26",
+"ot2a": "Nehemiah 13.15–end",
+"ot2b": "Ezekiel 2.3–3.11",
+"nt1": "Luke 20.1–8",
+"nt2": "2 Corinthians 2.5–end"
+},
+"Th": {
+"ot1": "1 Samuel 2.27–end",
+"ot2a": "Esther 1",
+"ot2b": "Ezekiel 3.12–end",
+"nt1": "Luke 20.9–19",
+"nt2": "2 Corinthians 3"
+},
+"F": {
+"ot1": "1 Samuel 3.1–4.1a",
+"ot2a": "Esther 2",
+"ot2b": "Ezekiel 8",
+"nt1": "Luke 20.20–26",
+"nt2": "2 Corinthians 4"
+},
+"S": {
+"ot1": "1 Samuel 4.1b–end",
+"ot2a": "Esther 3",
+"ot2b": "Ezekiel 9",
+"nt1": "Luke 20.27–40",
+"nt2": "2 Corinthians 5"
+}
+},
+"Trinity 6": {
+"M": {
+"ot1": "1 Samuel 5",
+"ot2a": "Esther 4",
+"ot2b": "Ezekiel 10.1–19",
+"nt1": "Luke 20.41–21.4",
+"nt2": "2 Corinthians 6.1–7.1"
+},
+"T": {
+"ot1": "1 Samuel 6.1–16",
+"ot2a": "Esther 5",
+"ot2b": "Ezekiel 11.14–end",
+"nt1": "Luke 21.5–19",
+"nt2": "2 Corinthians 7.2–end"
+},
+"W": {
+"ot1": "1 Samuel 7",
+"ot2a": "Esther 6.1–13",
+"ot2b": "Ezekiel 12.1–16",
+"nt1": "Luke 21.20–28",
+"nt2": "2 Corinthians 8.1–15"
+},
+"Th": {
+"ot1": "1 Samuel 8",
+"ot2a": "Esther 6.14–end of 7",
+"ot2b": "Ezekiel 12.17–end",
+"nt1": "Luke 21.29–end",
+"nt2": "2 Corinthians 8.16–9.5"
+},
+"F": {
+"ot1": "1 Samuel 9.1–14",
+"ot2a": "Esther 8",
+"ot2b": "Ezekiel 13.1–16",
+"nt1": "Luke 22.1–13",
+"nt2": "2 Corinthians 9.6–end"
+},
+"S": {
+"ot1": "1 Samuel 9.15–10.1",
+"ot2a": "Esther 9.20–28",
+"ot2b": "Ezekiel 14.1–11",
+"nt1": "Luke 22.14–23",
+"nt2": "2 Corinthians 10"
+}
+},
+"Trinity 7": {
+"M": {
+"ot1": "1 Samuel 10.1–16",
+"ot2a": "Jeremiah 26",
+"ot2b": "Ezekiel 14.12–end",
+"nt1": "Luke 22.24–30",
+"nt2": "2 Corinthians 11.1–15"
+},
+"T": {
+"ot1": "1 Samuel 10.17–end",
+"ot2a": "Jeremiah 28",
+"ot2b": "Ezekiel 18.1–20",
+"nt1": "Luke 22.31–38",
+"nt2": "2 Corinthians 11.16–end"
+},
+"W": {
+"ot1": "1 Samuel 11",
+"ot2a": "Jeremiah 29.1–14",
+"ot2b": "Ezekiel 18.21–32",
+"nt1": "Luke 22.39–46",
+"nt2": "2 Corinthians 12"
+},
+"Th": {
+"ot1": "1 Samuel 12",
+"ot2a": "Jeremiah 30.1–11",
+"ot2b": "Ezekiel 20.1–20",
+"nt1": "Luke 22.47–62",
+"nt2": "2 Corinthians 13"
+},
+"F": {
+"ot1": "1 Samuel 13.5–18",
+"ot2a": "Jeremiah 30.12–22",
+"ot2b": "Ezekiel 20.21–38",
+"nt1": "Luke 22.63–end",
+"nt2": "James 1.1–11"
+},
+"S": {
+"ot1": "1 Samuel 13.19–14.15",
+"ot2a": "Jeremiah 31.1–22",
+"ot2b": "Ezekiel 24.15–end",
+"nt1": "Luke 23.1–12",
+"nt2": "James 1.12–end"
+}
+},
+"Trinity 8": {
+"M": {
+"ot1": "1 Samuel 14.24–46",
+"ot2a": "Jeremiah 31.23–25, 27–37",
+"ot2b": "Ezekiel 28.1–19",
+"nt1": "Luke 23.13–25",
+"nt2": "James 2.1–13"
+},
+"T": {
+"ot1": "1 Samuel 15.1–23",
+"ot2a": "Jeremiah 32.1–15",
+"ot2b": "Ezekiel 33.1–20",
+"nt1": "Luke 23.26–43",
+"nt2": "James 2.14–end"
+},
+"W": {
+"ot1": "1 Samuel 16",
+"ot2a": "Jeremiah 33.1–13",
+"ot2b": "Ezekiel 33.21–end",
+"nt1": "Luke 23.44–56a",
+"nt2": "James 3"
+},
+"Th": {
+"ot1": "1 Samuel 17.1–30",
+"ot2a": "Jeremiah 33.14–end",
+"ot2b": "Ezekiel 34.1–16",
+"nt1": "Luke 23.56b–24.12",
+"nt2": "James 4.1–12"
+},
+"F": {
+"ot1": "1 Samuel 17.31–54",
+"ot2a": "Jeremiah 35",
+"ot2b": "Ezekiel 34.17–end",
+"nt1": "Luke 24.13–35",
+"nt2": "James 4.13–5.6"
+},
+"S": {
+"ot1": "1 Samuel 17.55–18.16",
+"ot2a": "Jeremiah 36.1–18",
+"ot2b": "Ezekiel 36.16–36",
+"nt1": "Luke 24.36–end",
+"nt2": "James 5.7–end"
+}
+},
+"Trinity 9": {
+"M": {
+"ot1": "1 Samuel 19.1–18",
+"ot2a": "Jeremiah 36.19–end",
+"ot2b": "Ezekiel 37.1–14",
+"nt1": "Acts 1.1–14",
+"nt2": "Mark 1.1–13"
+},
+"T": {
+"ot1": "1 Samuel 20.1–17",
+"ot2a": "Jeremiah 37",
+"ot2b": "Ezekiel 37. 15–end",
+"nt1": "Acts 1.15–end",
+"nt2": "Mark 1.14–20"
+},
+"W": {
+"ot1": "1 Samuel 20.18–end",
+"ot2a": "Jeremiah 38.1–13",
+"ot2b": "Ezekiel 39.21–end",
+"nt1": "Acts 2.1–21",
+"nt2": "Mark 1.21–28"
+},
+"Th": {
+"ot1": "1 Samuel 21.1–22.5",
+"ot2a": "Jeremiah 38.14–end",
+"ot2b": "Ezekiel 43.1–12",
+"nt1": "Acts 2.22–36",
+"nt2": "Mark 1.29–end"
+},
+"F": {
+"ot1": "1 Samuel 22.6–end",
+"ot2a": "Jeremiah 39",
+"ot2b": "Ezekiel 44.4–16",
+"nt1": "Acts 2.37–end",
+"nt2": "Mark 2.1–12"
+},
+"S": {
+"ot1": "1 Samuel 23",
+"ot2a": "Jeremiah 40",
+"ot2b": "Ezekiel 47.1–12",
+"nt1": "Acts 3.1–10",
+"nt2": "Mark 2.13–22"
+}
+},
+"Trinity 10": {
+"M": {
+"ot1": "1 Samuel 24",
+"ot2a": "Jeremiah 41",
+"ot2b": "Proverbs 1.1–19",
+"nt1": "Acts 3.11–end",
+"nt2": "Mark 2.23–3.6"
+},
+"T": {
+"ot1": "1 Samuel 26",
+"ot2a": "Jeremiah 42",
+"ot2b": "Proverbs 1.20–end",
+"nt1": "Acts 4.1–12",
+"nt2": "Mark 3.7–19a"
+},
+"W": {
+"ot1": "1 Samuel 28.3–end",
+"ot2a": "Jeremiah 43",
+"ot2b": "Proverbs 2",
+"nt1": "Acts 4.13–31",
+"nt2": "Mark 3.19b–end"
+},
+"Th": {
+"ot1": "1 Samuel 31",
+"ot2a": "Jeremiah 44.1–14",
+"ot2b": "Proverbs 3.1–26",
+"nt1": "Acts 4.32–5.11",
+"nt2": "Mark 4.1–20"
+},
+"F": {
+"ot1": "2 Samuel 1",
+"ot2a": "Jeremiah 44.15–end",
+"ot2b": "Proverbs 3.27–4.19",
+"nt1": "Acts 5.12–26",
+"nt2": "Mark 4.21–34"
+},
+"S": {
+"ot1": "2 Samuel 2.1–11",
+"ot2a": "Jeremiah 45",
+"ot2b": "Proverbs 6.1–19",
+"nt1": "Acts 5.27–end",
+"nt2": "Mark 4.35–end"
+}
+},
+"Trinity 11": {
+"M": {
+"ot1": "2 Samuel 3.12–end",
+"ot2a": "Micah 1.1–9",
+"ot2b": "Proverbs 8.1–21",
+"nt1": "Acts 6",
+"nt2": "Mark 5.1–20"
+},
+"T": {
+"ot1": "2 Samuel 5.1–12",
+"ot2a": "Micah 2",
+"ot2b": "Proverbs 8.22–end",
+"nt1": "Acts 7.1–16",
+"nt2": "Mark 5.21–34"
+},
+"W": {
+"ot1": "2 Samuel 6.1–19",
+"ot2a": "Micah 3",
+"ot2b": "Proverbs 9",
+"nt1": "Acts 7.17–43",
+"nt2": "Mark 5.35–end"
+},
+"Th": {
+"ot1": "2 Samuel 7.1–17",
+"ot2a": "Micah 4.1–5.1",
+"ot2b": "Proverbs 10.1–12",
+"nt1": "Acts 7.44–53",
+"nt2": "Mark 6.1–13"
+},
+"F": {
+"ot1": "2 Samuel 7.18–end",
+"ot2a": "Micah 5.2–end",
+"ot2b": "Proverbs 11.1–12",
+"nt1": "Acts 7.54–8.3",
+"nt2": "Mark 6.14–29"
+},
+"S": {
+"ot1": "2 Samuel 9",
+"ot2a": "Micah 6",
+"ot2b": "Proverbs 12.10–end",
+"nt1": "Acts 8.4–25",
+"nt2": "Mark 6.30–44"
+}
+},
+"Trinity 12": {
+"M": {
+"ot1": "2 Samuel 11",
+"ot2a": "Micah 7.1–7",
+"ot2b": "Proverbs 14.31–15.17",
+"nt1": "Acts 8.26–end",
+"nt2": "Mark 6.45–end"
+},
+"T": {
+"ot1": "2 Samuel 12.1–25",
+"ot2a": "Micah 7.8–end",
+"ot2b": "Proverbs 15.18–end",
+"nt1": "Acts 9.1–19a",
+"nt2": "Mark 7.1–13"
+},
+"W": {
+"ot1": "2 Samuel 15.1–12",
+"ot2a": "Habakkuk 1.1–11",
+"ot2b": "Proverbs 18.10–end",
+"nt1": "Acts 9.19b–31",
+"nt2": "Mark 7.14–23"
+},
+"Th": {
+"ot1": "2 Samuel 15.13–end",
+"ot2a": "Habakkuk 1.12–2.5",
+"ot2b": "Proverbs 20.1–22",
+"nt1": "Acts 9.32–end",
+"nt2": "Mark 7.24–30"
+},
+"F": {
+"ot1": "2 Samuel 16.1–14",
+"ot2a": "Habakkuk 2.6–end",
+"ot2b": "Proverbs 22.1–16",
+"nt1": "Acts 10.1–16",
+"nt2": "Mark 7.31–end"
+},
+"S": {
+"ot1": "2 Samuel 17.1–23",
+"ot2a": "Habakkuk 3.2–19a",
+"ot2b": "Proverbs 24.23–end",
+"nt1": "Acts 10.17–33",
+"nt2": "Mark 8.1–10"
+}
+},
+"Trinity 13": {
+"M": {
+"ot1": "2 Samuel 18.1–18",
+"ot2a": "Haggai 1.1–11",
+"ot2b": "Proverbs 25.1–14",
+"nt1": "Acts 10.34–end",
+"nt2": "Mark 8.11–21"
+},
+"T": {
+"ot1": "2 Samuel 18.19–19.8a",
+"ot2a": "Haggai 1.12–2.9",
+"ot2b": "Proverbs 25.15–end",
+"nt1": "Acts 11.1–18",
+"nt2": "Mark 8.22–26"
+},
+"W": {
+"ot1": "2 Samuel 19.8b–23",
+"ot2a": "Haggai 2.10–end",
+"ot2b": "Proverbs 26.12–end",
+"nt1": "Acts 11.19–end",
+"nt2": "Mark 8.27–9.1"
+},
+"Th": {
+"ot1": "2 Samuel 19.24–end",
+"ot2a": "Zechariah 1.1–17",
+"ot2b": "Proverbs 27.1–22",
+"nt1": "Acts 12.1–17",
+"nt2": "Mark 9.2–13"
+},
+"F": {
+"ot1": "2 Samuel 23.1–7",
+"ot2a": "Zechariah 1.18–end of 2",
+"ot2b": "Proverbs 30.1–9, 24–31",
+"nt1": "Acts 12.18–end",
+"nt2": "Mark 9.14–29"
+},
+"S": {
+"ot1": "2 Samuel 24",
+"ot2a": "Zechariah 3",
+"ot2b": "Proverbs 31.10–end",
+"nt1": "Acts 13.1–12",
+"nt2": "Mark 9.30–37"
+}
+},
+"Trinity 14": {
+"M": {
+"ot1": "1 Kings 1.5–31",
+"ot2a": "Zechariah 4",
+"ot2b": "Wisdom 1 or 1 Chr. 10.1–11.9",
+"nt1": "Acts 13.13–43",
+"nt2": "Mark 9.38–end"
+},
+"T": {
+"ot1": "1 Kings 1.32–2.4;2.10–12",
+"ot2a": "Zechariah 6.9–end",
+"ot2b": "Wisdom 2 or 1 Chr. 13",
+"nt1": "Acts 13.44–14.7",
+"nt2": "Mark 10.1–16"
+},
+"W": {
+"ot1": "1 Kings 3",
+"ot2a": "Zechariah 7",
+"ot2b": "Wisdom 3.1–9 or 1 Chr. 15.1–16.3",
+"nt1": "Acts 14.8–end",
+"nt2": "Mark 10.17–31"
+},
+"Th": {
+"ot1": "1 Kings 4.29–5.12",
+"ot2a": "Zechariah 8.1–8",
+"ot2b": "Wisdom 4.7–end or 1 Chr. 17",
+"nt1": "Acts 15.1–21",
+"nt2": "Mark 10.32–34"
+},
+"F": {
+"ot1": "1 Kings 6.1, 11–28",
+"ot2a": "Zechariah 8.9–end",
+"ot2b": "Wisdom 5.1–16 or 1 Chr. 21.1–22.1",
+"nt1": "Acts 15.22–35",
+"nt2": "Mark 10.35–45"
+},
+"S": {
+"ot1": "1 Kings 8.1–30",
+"ot2a": "Zechariah 9.1–12",
+"ot2b": "Wisdom 5.17–6.11 or 1 Chr. 22.2–end",
+"nt1": "Acts 15.36–16.5",
+"nt2": "Mark 10.46–end"
+}
+},
+"Trinity 15": {
+"M": {
+"ot1": "1 Kings 8.31–62",
+"ot2a": "Zechariah 10",
+"ot2b": "Wisdom 6.12–23 or 1 Chr. 28. 1–10",
+"nt1": "Acts 16.6–24",
+"nt2": "Mark 11.1–11"
+},
+"T": {
+"ot1": "1 Kings 8.63–9.9",
+"ot2a": "Zechariah 11.4–end",
+"ot2b": "Wisdom 7.1–14 or 1 Chr. 28.11–end",
+"nt1": "Acts 16.25–end",
+"nt2": "Mark 11.12–26"
+},
+"W": {
+"ot1": "1 Kings 10.1–25",
+"ot2a": "Zechariah 12.1–10",
+"ot2b": "Wisdom 7.15–8.4 or 1 Chr. 29.1–9",
+"nt1": "Acts 17.1–15",
+"nt2": "Mark 11.27–end"
+},
+"Th": {
+"ot1": "1 Kings 11.1–13",
+"ot2a": "Zechariah 13",
+"ot2b": "Wisdom 8.5–18 or 1 Chr. 29.10–20",
+"nt1": "Acts 17.16–end",
+"nt2": "Mark 12.1–12"
+},
+"F": {
+"ot1": "1 Kings 11.26–end",
+"ot2a": "Zechariah 14.1–11",
+"ot2b": "Wisdom 8.21–end of 9 or 1 Chr. 29.21–end",
+"nt1": "Acts 18.1–21",
+"nt2": "Mark 12.13–17"
+},
+"S": {
+"ot1": "1 Kings 12.1–24",
+"ot2a": "Zechariah 14.12–end",
+"ot2b": "Wisdom 10.15–11.10 or 2 Chr. 1.1–13",
+"nt1": "Acts 18.22–19.7",
+"nt2": "Mark 12.18–27"
+}
+},
+"Trinity 16": {
+"M": {
+"ot1": "1 Kings 12.25–13.10",
+"ot2a": "Ecclus 1.1–10 or Ez. 1.1–14",
+"ot2b": "Wisdom 11.21–12.2 or 2 Chr. 2.1–16",
+"nt1": "Acts 19.8–20",
+"nt2": "Mark 12.28–34"
+},
+"T": {
+"ot1": "1 Kings 13.11–end",
+"ot2a": "Ecclus 1.11–end or Ez. 1.15–2.2",
+"ot2b": "Wisdom 12.12–21 or 2 Chr. 3",
+"nt1": "Acts 19.21–end",
+"nt2": "Mark 12.35–end"
+},
+"W": {
+"ot1": "1 Kings 17",
+"ot2a": "Ecclus 2 or Ez. 2.3–3.11",
+"ot2b": "Wisdom 13.1–9 or 2 Chr. 5",
+"nt1": "Acts 20.1–16",
+"nt2": "Mark 13.1–13"
+},
+"Th": {
+"ot1": "1 Kings 18.1–20",
+"ot2a": "Ecclus 3.17–29 or Ez. 3.12–end",
+"ot2b": "Wisdom 16.15–17.1 or 2 Chr. 6.1–21",
+"nt1": "Acts 20.17–end",
+"nt2": "Mark 13.14–23"
+},
+"F": {
+"ot1": "1 Kings 18.21–end",
+"ot2a": "Ecclus 4.11–28 or Ez. 8",
+"ot2b": "Wisdom 18.6–19 or 2 Chr. 6.22–end",
+"nt1": "Acts 21.1–16",
+"nt2": "Mark.13–24–31"
+},
+"S": {
+"ot1": "1 Kings 19",
+"ot2a": "Ecclus 4.29–6.1 or Ez. 9",
+"ot2b": "Wisdom 19 or 2 Chr. 7",
+"nt1": "Acts 21.17–36",
+"nt2": "Mark 13.32–end"
+}
+},
+"Trinity 17": {
+"M": {
+"ot1": "1 Kings 21",
+"ot2a": "Ecclus 6.14–end or Ez. 10.1–19",
+"ot2b": "1 Macc 1.1–19or 2 Chr. 9.1–12",
+"nt1": "Acts 21.37–22.21",
+"nt2": "Mark 14.1–11"
+},
+"T": {
+"ot1": "1 Kings 22.1–28",
+"ot2a": "Ecclus 7.27–end or Ez. 11.14–end",
+"ot2b": "1 Macc 1.20–40 or 2 Chr. 10.1–11.4",
+"nt1": "Acts 22.22–23.11",
+"nt2": "Mark 14.12–25"
+},
+"W": {
+"ot1": "1 Kings 22.29–45",
+"ot2a": "Ecclus 10.6–8, 12–24 or Ez. 12.1–",
+"ot2b": "1 Macc 1.41–end or 2 Chr. 12",
+"nt1": "Acts 23.12–end",
+"nt2": "Mark 14.26–42"
+},
+"Th": {
+"ot1": "2 Kings 1.2–17",
+"ot2a": "Ecclus 11.7–28 or Ez. 12.17–end",
+"ot2b": "1 Macc 2.1–28 or 2 Chr. 13.1–14.1",
+"nt1": "Acts 24.1–23",
+"nt2": "Mark 14.43–52"
+},
+"F": {
+"ot1": "2 Kings 2.1–18",
+"ot2a": "Ecclus 14.20–15.10 or Ez. 13.1–16",
+"ot2b": "1 Macc 2.29–48 or 2 Chr. 14.2–end",
+"nt1": "Acts 24.24–25.12",
+"nt2": "Mark 14.53–65"
+},
+"S": {
+"ot1": "2Kings 4.1–37",
+"ot2a": "Ecclus 15.11–end or Ez. 14.1–11",
+"ot2b": "1 Macc 2.49–end or 2 Chr. 15.1–15",
+"nt1": "Acts 25.13–end",
+"nt2": "Mark 14.66–end"
+}
+},
+"Trinity 18": {
+"M": {
+"ot1": "2 Kings 5",
+"ot2a": "Ecclus 16.17–end or Ez. 14.12–end",
+"ot2b": "1 Macc 3.1–26 or 2 Chr. 17.1–12",
+"nt1": "Acts 26.1–23",
+"nt2": "Mark 15.1–15"
+},
+"T": {
+"ot1": "2 Kings 6.1–23",
+"ot2a": "Ecclus 17.1–24 or Ez 18.1–20",
+"ot2b": "1 Macc 3.27–41 or 2 Chr. 18.1–27",
+"nt1": "Acts 26.24–end",
+"nt2": "Mark 15.16–32"
+},
+"W": {
+"ot1": "2 Kings 9.1–16",
+"ot2a": "Ecclus 18.1–14 or Ez. 18.21–32",
+"ot2b": "1 Macc 3.42–end or 2 Chr. 18.28–end of 19",
+"nt1": "Acts 27.1–26",
+"nt2": "Mark 15.33–41"
+},
+"Th": {
+"ot1": "2 Kings 9.17–end",
+"ot2a": "Ecclus 19.4–17 or Ez. 20.1–20",
+"ot2b": "1 Macc 4.1–25 or 2 Chr. 20.1–23",
+"nt1": "Acts 27.27–end",
+"nt2": "Mark 15.42–end"
+},
+"F": {
+"ot1": "2 Kings 12.1–19",
+"ot2a": "Ecclus 19.20–end or Ez. 20.21–38",
+"ot2b": "1 Macc 4.26–35 or 2 Chr. 22.10–end of 23",
+"nt1": "Acts 28.1–16",
+"nt2": "Mark 16.1–8"
+},
+"S": {
+"ot1": "2 Kings 17.1–23",
+"ot2a": "Ecclus 21.1–17 or Ez. 24.15–end",
+"ot2b": "1 Macc 4.36–end or 2 Chr. 24.1–22",
+"nt1": "Acts 28.17–end",
+"nt2": "Mark 16.9–end"
+}
+},
+"Trinity 19": {
+"M": {
+"ot1": "2 Kings 17.24–end",
+"ot2a": "Ecclus 22.6–22 or Ez. 28.1–19",
+"ot2b": "1 Macc 6.1–17 or 2 Chr. 26.1–21",
+"nt1": "Philippians 1.1–11",
+"nt2": "John 13.1–11"
+},
+"T": {
+"ot1": "2 Kings 18.1–12",
+"ot2a": "Ecclus 22.27–23.15 or Ez. 33.1–20",
+"ot2b": "1 Macc 6.18–47 or 2 Chr. 28",
+"nt1": "Philippians 1.12–end",
+"nt2": "John 13.12–20"
+},
+"W": {
+"ot1": "2 Kings 18.13–end",
+"ot2a": "Ecclus 24.1–22 or Ez. 33.21–end",
+"ot2b": "1 Macc 7.1–20 or 2 Chr. 29.1–19",
+"nt1": "Philippians 2.1–13",
+"nt2": "John 13.21–30"
+},
+"Th": {
+"ot1": "2 Kings 19.1–19",
+"ot2a": "Ecclus 24.23–end or Ez 34.1–16",
+"ot2b": "1 Macc 7.21–end or 2 Chr. 29.20–end",
+"nt1": "Philippians 2.14–end",
+"nt2": "John 13.31–end"
+},
+"F": {
+"ot1": "2 Kings 19.20–36",
+"ot2a": "Ecclus 27.30–28.9 or Ez. 34.17–end",
+"ot2b": "1 Macc 9.1–22 or 2 Chr. 30",
+"nt1": "Philippians 3.1–4.1",
+"nt2": "John 14.1–14"
+},
+"S": {
+"ot1": "2 Kings 20",
+"ot2a": "Ecclus 28.14–end or Ez. 36.16–36",
+"ot2b": "1 Macc 13.41–end, 14.4–15 or 2 Chr. 32.1–22",
+"nt1": "Philippians 4.2–end",
+"nt2": "John 14.15–end"
+}
+},
+"Trinity 20": {
+"M": {
+"ot1": "2 Kings 21.1–18",
+"ot2a": "Ecclus 31.1–11 or Ez. 37.1–14",
+"ot2b": "2 Macc 4.7–17 or 2 Chr. 33.1–13",
+"nt1": "1 Timothy 1.1–17",
+"nt2": "John 15.1–11"
+},
+"T": {
+"ot1": "2 Kings 22.1–23.3",
+"ot2a": "Ecclus 34.9–end or Ez. 37.15–end",
+"ot2b": "2 Macc 6.12–end or 2 Chr. 34.1–18",
+"nt1": "1 Timothy 1.18–end of 2",
+"nt2": "John 15.12–17"
+},
+"W": {
+"ot1": "2 Kings 23.4–25",
+"ot2a": "Ecclus 35 or Ez. 39.21–end",
+"ot2b": "2 Macc 7.1–19 or 2 Chr. 34.19–end",
+"nt1": "1 Timothy 3",
+"nt2": "John 15.18–end"
+},
+"Th": {
+"ot1": "2 Kings 23.36–24.17",
+"ot2a": "Ecclus 37.7–24 or Ez. 43.1–12",
+"ot2b": "2 Macc 7.20–41 or 2 Chr. 35.1–19",
+"nt1": "1 Timothy 4",
+"nt2": "John 16.1–15"
+},
+"F": {
+"ot1": "2 Kings 24.18–25.12",
+"ot2a": "Ecclus 38.1–14 or Ez. 44.4–16",
+"ot2b": "Tobit 1 or 2 Chr. 35.20–36.10",
+"nt1": "1 Timothy 5.1–16",
+"nt2": "John 16.16–22"
+},
+"S": {
+"ot1": "2 Kings 25.22–end",
+"ot2a": "Ecclus 38.24–end or Ez. 47.1–12",
+"ot2b": "Tobit 2 or 2 Chr. 36.11–end",
+"nt1": "1 Timothy 5.17–end",
+"nt2": "John 16.23–end"
+}
+},
+"Trinity 21": {
+"M": {
+"ot1": "Judith 4 or Ex. 22.21–27, 23.1–17",
+"ot2a": "Ecclus 39.1–11 or Eccl. 1",
+"ot2b": "Tobit 3 or Micah 1.1–9",
+"nt1": "1 Timothy 6.1–10",
+"nt2": "John 17.1–5"
+},
+"T": {
+"ot1": "Judith 5.1–6.4 or Ex. 29.38–30.16",
+"ot2a": "Ecclus 39.13–end or Eccl. 2",
+"ot2b": "Tobit 4 or Micah 2",
+"nt1": "1 Timothy 6.11–end",
+"nt2": "John 17.6–19"
+},
+"W": {
+"ot1": "Judith 6.10–7.7 or Lev 8",
+"ot2a": "Ecclus 42.15–end or Eccl. 3.1–15",
+"ot2b": "Tobit 5.1–6.1a or Micah 3",
+"nt1": "2 Timothy 1.1–14",
+"nt2": "John 17.20–end"
+},
+"Th": {
+"ot1": "Judith 7.19–end or Lev. 9",
+"ot2a": "Ecclus 43.1–12 or Eccl. 3.16–end of 4",
+"ot2b": "Tobit 6.1b–end or Micah 4.1–5.1",
+"nt1": "2 Timothy 1.15–2.13",
+"nt2": "John 18.1–11"
+},
+"F": {
+"ot1": "Judith 8.9–end or Lev. 16.2–24",
+"ot2a": "Ecclus 43.13–end or Eccl. 5",
+"ot2b": "Tobit 7 or Micah 5.2–end",
+"nt1": "2 Timothy 2.14–end",
+"nt2": "John 18.12–27"
+},
+"S": {
+"ot1": "Judith 9 or Lev. 17",
+"ot2a": "Ecclus 44.1–15 or Eccl. 6",
+"ot2b": "Tobit 8 or Micah 6",
+"nt1": "2 Timothy 3",
+"nt2": "John 18.28–end"
+}
+},
+"Trinity 22": {
+"M": {
+"ot1": "Judith 10 or Lev. 19.1–18, 30– end",
+"ot2a": "Ecclus 44.19–45.5 or Eccl. 7.1–14",
+"ot2b": "Tobit 9 or Micah 7.1–7",
+"nt1": "2 Timothy 4.1–8",
+"nt2": "John 19.1–16"
+},
+"T": {
+"ot1": "Judith 11 or Lev. 23.1–22",
+"ot2a": "Ecclus 45.6–17 or Eccl. 7.15–end",
+"ot2b": "Tobit 10 or Micah 7.8–end",
+"nt1": "2 Timothy 4.9–end",
+"nt2": "John 19.17–30"
+},
+"W": {
+"ot1": "Judith 12 or Lev. 23.23–end",
+"ot2a": "Ecclus 46.1–10 or Eccl. 8",
+"ot2b": "Tobit 11 or Hab 1.1–11",
+"nt1": "Titus 1",
+"nt2": "John 19.31–end"
+},
+"Th": {
+"ot1": "Judith 13 or Lev. 24.1–9",
+"ot2a": "Ecclus 50.1–24 or Eccl. 9",
+"ot2b": "Tobit 12 or Hab 1.12–2.5",
+"nt1": "Titus 2",
+"nt2": "John 20.1–10"
+},
+"F": {
+"ot1": "Judith 15.1–13 or Lev. 25.1–24",
+"ot2a": "Ecclus 51.1–12 or Eccl. 11.1–8",
+"ot2b": "Tobit 13.1–14.1 or Hab 2.6–end",
+"nt1": "Titus 3",
+"nt2": "John 20.11–18"
+},
+"S": {
+"ot1": "Judith 15.14–end of 16 or Num. 6.1–5, 21–end",
+"ot2a": "Ecclus 51.13–end or Eccl. 11.9–end of 12",
+"ot2b": "Tobit 14.2–end or Hab 3.2–19a",
+"nt1": "Philemon",
+"nt2": "John 20.19–end"
+}
+},
+"4 before Advent": {
+"M": {
+"ot1": "Daniel 1",
+"ot2a": "Isaiah 1.1–20",
+"ot2b": null,
+"nt1": "Revelation 1",
+"nt2": "Matthew 1.18–end"
+},
+"T": {
+"ot1": "Daniel 2.1–24",
+"ot2a": "Isaiah 1.21–end",
+"ot2b": null,
+"nt1": "Revelation 2.1–11",
+"nt2": "Matthew 2.1–15"
+},
+"W": {
+"ot1": "Daniel 2.25–end",
+"ot2a": "Isaiah 2.1–11",
+"ot2b": null,
+"nt1": "Revelation 2.12–end",
+"nt2": "Matthew 2.16–end"
+},
+"Th": {
+"ot1": "Daniel 3.1–18",
+"ot2a": "Isaiah 2.12–end",
+"ot2b": null,
+"nt1": "Revelation 3.1–13",
+"nt2": "Matthew 3"
+},
+"F": {
+"ot1": "Daniel 3.19–end",
+"ot2a": "Isaiah 3.1–15",
+"ot2b": null,
+"nt1": "Revelation 3.14–end",
+"nt2": "Matthew 4.1–11"
+},
+"S": {
+"ot1": "Daniel 4.1–18",
+"ot2a": "Isaiah 4.2–5.7",
+"ot2b": null,
+"nt1": "Revelation 4",
+"nt2": "Matthew 4.12–22"
+}
+},
+"3 before Advent": {
+"M": {
+"ot1": "Daniel 4.19–end",
+"ot2a": "Isaiah 5.8–24",
+"ot2b": null,
+"nt1": "Revelation 5",
+"nt2": "Matthew 4.23–5.12"
+},
+"T": {
+"ot1": "Daniel 5.1–12",
+"ot2a": "Isaiah 5.25–end",
+"ot2b": null,
+"nt1": "Revelation 6",
+"nt2": "Matthew 5.13–20"
+},
+"W": {
+"ot1": "Daniel 5.13–end",
+"ot2a": "Isaiah 6",
+"ot2b": null,
+"nt1": "Revelation 7.1–4, 9–end",
+"nt2": "Matthew 5.21–37"
+},
+"Th": {
+"ot1": "Daniel 6",
+"ot2a": "Isaiah 7.1–17",
+"ot2b": null,
+"nt1": "Revelation 8",
+"nt2": "Matthew 5.38–end"
+},
+"F": {
+"ot1": "Daniel 7.1–14",
+"ot2a": "Isaiah 8.1–15",
+"ot2b": null,
+"nt1": "Revelation 9.1–12",
+"nt2": "Matthew 6.1–18"
+},
+"S": {
+"ot1": "Daniel 7.15–end",
+"ot2a": "Isaiah 8.16–9.7",
+"ot2b": null,
+"nt1": "Revelation 9.13–end",
+"nt2": "Matthew 6.19–end"
+}
+},
+"2 before Advent": {
+"M": {
+"ot1": "Daniel 8.1–14",
+"ot2a": "Isaiah 9.8–10.4",
+"ot2b": null,
+"nt1": "Revelation 10",
+"nt2": "Matthew 7.1–12"
+},
+"T": {
+"ot1": "Daniel 8.15–end",
+"ot2a": "Isaiah 10.5–19",
+"ot2b": null,
+"nt1": "Revelation 11.1–14",
+"nt2": "Matthew 7.13–end"
+},
+"W": {
+"ot1": "Daniel 9.1–19",
+"ot2a": "Isaiah 10.20–32",
+"ot2b": null,
+"nt1": "Revelation 11.15–end",
+"nt2": "Matthew 8.1–13"
+},
+"Th": {
+"ot1": "Daniel 9.20–end",
+"ot2a": "Isaiah 10.33–11.9",
+"ot2b": null,
+"nt1": "Revelation 12",
+"nt2": "Matthew 8.14–22"
+},
+"F": {
+"ot1": "Daniel 10.1–11.1",
+"ot2a": "Isaiah 11.10–end of 12",
+"ot2b": null,
+"nt1": "Revelation 13.1–10",
+"nt2": "Matthew 8.23–end"
+},
+"S": {
+"ot1": "Daniel 12",
+"ot2a": "Isaiah 13.1–13",
+"ot2b": null,
+"nt1": "Revelation 13.11–end",
+"nt2": "Matthew 9.1–17"
+}
+},
+"1 before Advent": {
+"M": {
+"ot1": "Isaiah 40.1–11",
+"ot2a": "Isaiah 14.3–20",
+"ot2b": null,
+"nt1": "Revelation 14.1–13",
+"nt2": "Matthew 9.18–34"
+},
+"T": {
+"ot1": "Isaiah 40.12–26",
+"ot2a": "Isaiah 17",
+"ot2b": null,
+"nt1": "Revelation 14.14–end of 15",
+"nt2": "Matthew 9.35–10.15"
+},
+"W": {
+"ot1": "Isaiah 40.27–41.7",
+"ot2a": "Isaiah 19",
+"ot2b": null,
+"nt1": "Revelation 16.1–11",
+"nt2": "Matthew 10.16–33"
+},
+"Th": {
+"ot1": "Isaiah 41.8–20",
+"ot2a": "Isaiah 21.1–12",
+"ot2b": null,
+"nt1": "Revelation 16.12–end",
+"nt2": "Matthew 10.34–11.1"
+},
+"F": {
+"ot1": "Isaiah 41.21–42.9",
+"ot2a": "Isaiah 22.1–14",
+"ot2b": null,
+"nt1": "Revelation 17",
+"nt2": "Matthew 11.2–19"
+},
+"S": {
+"ot1": "Isaiah 42.10–17",
+"ot2a": "Isaiah 24",
+"ot2b": null,
+"nt1": "Revelation 18",
+"nt2": "Matthew 11.20–end"
+}
+}
+},
+"ascensionToPentecost": {
+"Ascension to Pentecost": {
+"F": {
+"ot1": "Ezekiel 36.22–28",
+"ot2a": "Matthew 12.22–32"
+},
+"S": {
+"ot1": "Micah 3.1–8",
+"ot2a": "Ephesians 6.10–20"
+},
+"M": {
+"ot1": "Numbers 27.15–end",
+"ot2a": "1 Corinthians 3"
+},
+"T": {
+"ot1": "1 Samuel 10.1–10",
+"ot2a": "1 Corinthians 12.1–13"
+},
+"W": {
+"ot1": "1 Kings 19.1–18",
+"ot2a": "Matthew 3.13–end"
+},
+"Th": {
+"ot1": "Ezekiel 11.14–20",
+"ot2a": "Matthew 9.35–10.20"
+}
+}
+}
+}

@@ -11,8 +11,10 @@
 // different data table to look up into — see TODOs below.
 
 import { addDays, adventSunday, westernEaster, dateOnly, daysBetween, sundayOnOrBefore } from "./dates";
-import { lectionaryYearsFor } from "../data/lectionaryYears";
+import { lectionaryYearsFor, officeColumnsFor } from "../data/lectionaryYears";
 import delTable6 from "../data/del_table6.json";
+import rclSundays from "../data/rcl_sundays.json";
+import officeTable2 from "../data/office_table2.json";
 
 function nextSunday(date) {
   const d = dateOnly(date);
@@ -123,8 +125,6 @@ export function delWeekLabel(date) {
   return { week: `DEL Week ${n}`, day };
 }
 
-import rclSundays from "../data/rcl_sundays.json";
-
 const ORDINAL = [
   null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh",
   "Eighth", "Ninth", "Tenth",
@@ -202,6 +202,125 @@ export function sundayReadingFor(date) {
   if (!title) return { sundayYear, title: null, readings: null };
   const entry = years.find((e) => e.title === title);
   return { sundayYear, title, readings: entry ? entry.readings : null };
+}
+
+
+/**
+ * Resolves `date` to Table 2's own week-label convention, which differs
+ * from DEL's: "Epiphany N" forward from the Baptism of Christ, then a
+ * fixed backward count "5 before Lent" .. "1 before Lent" for the final
+ * five weeks before Ash Wednesday; "Lent N", "Easter"/"Easter N" as
+ * before; then "Trinity" (the week of Trinity Sunday itself) and
+ * "Trinity N" forward, switching to a fixed backward count "4 before
+ * Advent" .. "1 before Advent" for the final four weeks before Advent.
+ *
+ * KNOWN GAPS: the Christmas/Epiphany date-keyed block (Dec 17 - Jan 12)
+ * isn't wired to specific dates yet, nor is the short "Ascension to
+ * Pentecost" alternative 9-day sequence (data is transcribed, just not
+ * date-resolved) - both fall back to null, same as delWeekLabel's gaps.
+ */
+export function officeWeekLabel(date) {
+  if (!isValidDate(date)) return null;
+  const d = dateOnly(date);
+  const day = WEEKDAY_CODE[d.getDay()];
+  const officeDay = day === "Sat" ? "S" : day; // Table 2 uses bare "S" for Saturday
+  const { advent1, advent1Next, easter } = churchYearContext(d);
+
+  const ashWednesday = addDays(easter, -46);
+  const easterWeekEnd = addDays(easter, 6);
+  const pentecost = addDays(easter, 49);
+  const trinity = addDays(pentecost, 7);
+  const baptismSunday = nextSunday(new Date(easter.getFullYear() - (d >= advent1 ? 0 : 1), 0, 6));
+
+  if (d >= advent1 && d < new Date(advent1.getFullYear(), 11, 17)) {
+    const n = Math.floor(daysBetween(advent1, d) / 7) + 1;
+    return { week: `Advent ${Math.min(n, 4)}`, day: officeDay };
+  }
+  if (d >= addDays(easter, -7) && d < easter) return { week: "HOLY WEEK", day: officeDay };
+  if (d >= easter && d <= easterWeekEnd) return { week: "Easter", day: officeDay };
+  if (d > easterWeekEnd && d <= pentecost) {
+    const sundayAnchor = sundayOnOrBefore(d);
+    const n = Math.round(daysBetween(easter, sundayAnchor) / 7) + 1;
+    return { week: `Easter ${n}`, day: officeDay };
+  }
+  if (d >= ashWednesday && d < addDays(easter, -7)) {
+    const firstSunday = addDays(easter, -42);
+    if (d < firstSunday) return null; // Ash Wed + 2 days - not wired (matches DEL's gap)
+    const sundayAnchor = sundayOnOrBefore(d);
+    const n = 7 - Math.round(daysBetween(sundayAnchor, easter) / 7);
+    return { week: `Lent ${n}`, day: officeDay };
+  }
+
+  if (d < ashWednesday) {
+    // Epiphany N forward, switching to "N before Lent" for the final 5
+    // weeks before Ash Wednesday (a fixed-length backward count, same
+    // mechanism as DEL's forward/backward split).
+    const epiphany1Monday = addDays(baptismSunday, 1);
+    const ashWedMonday = addDays(sundayOnOrBefore(ashWednesday), 1);
+    const totalWeeks = Math.round(daysBetween(epiphany1Monday, ashWedMonday) / 7);
+    const weeksFromStart = Math.floor(daysBetween(epiphany1Monday, d) / 7);
+    const weeksRemaining = totalWeeks - weeksFromStart;
+    if (weeksRemaining <= 5) {
+      return { week: `${weeksRemaining} before Lent`, day: officeDay };
+    }
+    return { week: `Epiphany ${weeksFromStart + 1}`, day: officeDay };
+  }
+
+  // Trinity through the week before Advent: forward "Trinity N", switching
+  // to "N before Advent" for the last 4 weeks.
+  const lastSundayBeforeAdvent = addDays(advent1Next, -7);
+  const fourBeforeAdventMonday = addDays(lastSundayBeforeAdvent, -3 * 7 + 1);
+  if (d.getTime() === trinity.getTime()) return { week: "Trinity", day: officeDay };
+  if (d >= fourBeforeAdventMonday) {
+    const sundayAnchor = sundayOnOrBefore(d);
+    const weeksBack = Math.round(daysBetween(sundayAnchor, lastSundayBeforeAdvent) / 7);
+    const n = 4 - weeksBack;
+    if (n >= 1 && n <= 4) return { week: `${n} before Advent`, day: officeDay };
+  }
+  if (d > trinity) {
+    const sundayAnchor = sundayOnOrBefore(d);
+    const n = Math.round(daysBetween(trinity, sundayAnchor) / 7);
+    return { week: `Trinity ${n}`, day: officeDay };
+  }
+  return null;
+}
+
+function isOrdinaryTime(date, easter) {
+  const d = dateOnly(date);
+  const presentation = new Date(easter.getFullYear(), 1, 2); // Feb 2, same calendar year as Easter
+  const ashWednesday = addDays(easter, -46);
+  const pentecost = addDays(easter, 49);
+  return (d >= presentation && d < ashWednesday) || d > pentecost;
+}
+
+/**
+ * The real Office (Morning/Evening Prayer) OT + NT reading for `date` and
+ * `service` ("am" or "pm"), using Table 2's transcribed data and the
+ * Table-1-assigned column set for the church year and Ordinary/Seasonal
+ * split. Returns null on any of the known gaps (see officeWeekLabel) or
+ * if the resolved week/day isn't in the transcribed table.
+ */
+export function officeReadingFor(date, service) {
+  if (!isValidDate(date)) return null;
+  const d = dateOnly(date);
+  const label = officeWeekLabel(d);
+  if (!label) return null;
+  const row = officeTable2.main[label.week]?.[label.day];
+  if (!row) return null;
+
+  const { advent1, easter } = churchYearContext(d);
+  const adventYear = advent1.getFullYear();
+  const cols = officeColumnsFor(adventYear);
+  if (!cols) return null;
+  const ordinary = isOrdinaryTime(d, easter);
+  const colSet = service === "am"
+    ? (ordinary ? cols.mpOrdinary : cols.mpSeasonal)
+    : (ordinary ? cols.epOrdinary : cols.epSeasonal);
+  const [otCol, ntCol] = colSet.split("/"); // e.g. "OT2a" / "NT2"
+  const ot = row[otCol.toLowerCase()];
+  const nt = row[ntCol.toLowerCase()];
+  if (!ot && !nt) return null;
+  return { week: label.week, day: label.day, ot, nt, colSet };
 }
 
 /**
