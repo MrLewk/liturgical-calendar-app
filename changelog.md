@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.13.3] — Fix five Office week-numbering bugs found during Ash Wednesday gap-filling
+
+While filling the Ash Wednesday +2 days gap, a full 2-year sweep of every possible date turned up several real bugs in the Office (Morning/Evening Prayer) week-label resolver — these affected real, populated weeks, not just edge cases:
+
+- **Fixed:** The Ash Wednesday + 2 days gap now shows the real reading instead of falling back to demo text (both DEL and Office).
+- **Fixed:** The "N before Advent" backward count was completely reversed — the week right before Advent was labeled "4 before Advent" instead of "1 before Advent", and vice versa for the earliest of the four weeks. Affected all four pre-Advent weeks, every year.
+- **Fixed:** The entire "Pentecost" week (the week between Pentecost Sunday and Trinity Sunday) was returning nothing at all despite having real transcribed data - a whole week, every year, silently falling back to demo text.
+- **Fixed:** "Trinity" (the week immediately after Trinity Sunday) only matched Trinity Sunday itself; the six days following it were mislabeled "Trinity 0" instead of being grouped into the same week.
+- **Fixed:** Office's Dec 17-24 window wasn't extending "Advent 4" correctly (Table 2, unlike DEL, has no separate date-keyed block for these dates) - was incorrectly falling into a nonsensical negative "Epiphany" week number.
+- **Fixed:** Jan 1 (Naming and Circumcision) and Jan 6 (the Epiphany itself), on both DEL and Office, were producing nonsensical negative week labels instead of a clean, intentional gap signal - functionally harmless (both already fell back to demo text either way) but cleaned up for clarity.
+
 ## [0.13.2] — Wire up the Christmas/Epiphany date-keyed weekday block
 
 - **Added:** Weekday Eucharist (DEL) and Office readings for 17-24 Dec, 29-31 Dec, 2-5 Jan, and 7-12 Jan now resolve to their real, date-specific citations instead of falling back to demo text or (in DEL's case) miscalculating into a nonsensical negative week number.

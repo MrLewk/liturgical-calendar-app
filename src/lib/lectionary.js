@@ -97,8 +97,17 @@ export function delWeekLabel(date) {
   if (d >= new Date(christmasYear, 11, 29) && d <= new Date(christmasYear, 11, 31)) {
     return { week: `Dec ${d.getDate()}`, day: "fixed" };
   }
+  if (d >= new Date(christmasYear, 11, 25) && d <= new Date(christmasYear, 11, 28)) {
+    return null; // Christmas Day, Stephen, John, Holy Innocents - Principal Feasts, own propers elsewhere
+  }
+  if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() === 1) {
+    return null; // Naming and Circumcision - a Principal Feast with its own propers elsewhere, not in this table
+  }
   if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() >= 2 && d.getDate() <= 5) {
     return { week: `Jan ${d.getDate()}`, day: "fixed" };
+  }
+  if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() === 6) {
+    return null; // The Epiphany itself - a Principal Feast with its own propers elsewhere, not in this table
   }
   if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() >= 7 && d.getDate() <= 12) {
     // Only correct "if 6 January is not a Sunday" and up to the Saturday
@@ -271,27 +280,33 @@ export function officeWeekLabel(date) {
   const pentecost = addDays(easter, 49);
   const trinity = addDays(pentecost, 7);
   const baptismSunday = nextSunday(new Date(easter.getFullYear() - (d >= advent1 ? 0 : 1), 0, 6));
+  const christmasYear = advent1.getFullYear();
+  const nextYear = christmasYear + 1;
 
-  if (d >= advent1 && d < new Date(advent1.getFullYear(), 11, 17)) {
+  if (d >= advent1 && d < new Date(christmasYear, 11, 25)) {
+    // No separate Dec 17-24 date-keyed block exists in Table 2 (unlike
+    // DEL/Table 6) - Advent 4 continues generically all the way to Dec 24.
     const n = Math.floor(daysBetween(advent1, d) / 7) + 1;
     return { week: `Advent ${Math.min(n, 4)}`, day: officeDay };
   }
 
   // Dec 29-31, Jan 1 (Naming/Circumcision), Jan 2-5, Jan 7-12: date-keyed
   // entries with their own range-style week labels (matching Table 2's own
-  // grouping) rather than the usual weekly M-S blocks. Dec 17-24 has no
-  // separate date-keyed block in Table 2 (unlike DEL/Table 6) - "Advent 4"
-  // continues generically through Dec 24.
-  const christmasYear = advent1.getFullYear();
-  const nextYear = christmasYear + 1;
+  // grouping) rather than the usual weekly M-S blocks.
   if (d >= new Date(christmasYear, 11, 29) && d <= new Date(christmasYear, 11, 31)) {
     return { week: "Dec 29–31", day: String(d.getDate()) };
+  }
+  if (d >= new Date(christmasYear, 11, 25) && d <= new Date(christmasYear, 11, 28)) {
+    return null; // Christmas Day, Stephen, John, Holy Innocents - Principal Feasts, own propers elsewhere
   }
   if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() === 1) {
     return { week: "Naming and Circumcision", day: "1" };
   }
   if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() >= 2 && d.getDate() <= 5) {
     return { week: "Jan 2–5", day: String(d.getDate()) };
+  }
+  if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() === 6) {
+    return null; // The Epiphany itself - a Principal Feast with its own propers elsewhere, not in this table
   }
   if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() >= 7 && d.getDate() <= 12) {
     // Only correct "if 6 January is not a Sunday"; the Sunday-shift variant
@@ -301,31 +316,41 @@ export function officeWeekLabel(date) {
 
   if (d >= addDays(easter, -7) && d < easter) return { week: "HOLY WEEK", day: officeDay };
   if (d >= easter && d <= easterWeekEnd) return { week: "Easter", day: officeDay };
-  if (d > easterWeekEnd && d <= pentecost) {
+  if (d > easterWeekEnd && d < pentecost) {
     const sundayAnchor = sundayOnOrBefore(d);
     const n = Math.round(daysBetween(easter, sundayAnchor) / 7) + 1;
     return { week: `Easter ${n}`, day: officeDay };
   }
-  if (d >= ashWednesday && d < addDays(easter, -7)) {
-    const firstSunday = addDays(easter, -42);
-    if (d < firstSunday) return null; // Ash Wed + 2 days - not wired (matches DEL's gap)
+  const pentecostWeekEnd = addDays(pentecost, 6); // the Saturday after Pentecost Sunday
+  if (d >= pentecost && d <= pentecostWeekEnd) {
+    return { week: "Pentecost", day: officeDay }; // Pentecost Sunday through Whit Saturday, before Trinity
+  }
+  if (d >= addDays(easter, -42) && d < addDays(easter, -7)) {
+    // Lent 1-5 (starts the Sunday 6 weeks before Easter; the "N before
+    // Lent" backward-count zone below owns everything up to that Sunday,
+    // including Ash Wednesday itself and the Th/F/Sat right after it,
+    // since Table 2 groups those into the same M-Sat "1 before Lent" week
+    // rather than splitting them out separately the way DEL does).
     const sundayAnchor = sundayOnOrBefore(d);
     const n = 7 - Math.round(daysBetween(sundayAnchor, easter) / 7);
     return { week: `Lent ${n}`, day: officeDay };
   }
 
-  if (d < ashWednesday) {
+  if (d < addDays(easter, -42)) {
     // Epiphany N forward, switching to "N before Lent" for the final 5
     // weeks before Ash Wednesday (a fixed-length backward count, same
-    // mechanism as DEL's forward/backward split).
+    // mechanism as DEL's forward/backward split). This zone owns all of
+    // Ash Wednesday's week (Table 2 has no separate Ash-Wed-onwards block
+    // the way DEL/Table 6 does), so it correctly runs right up to Lent 1
+    // Sunday rather than stopping at Ash Wednesday itself.
     const epiphany1Monday = addDays(baptismSunday, 1);
     const ashWedMonday = addDays(sundayOnOrBefore(ashWednesday), 1);
-    const totalWeeks = Math.round(daysBetween(epiphany1Monday, ashWedMonday) / 7);
-    const weeksFromStart = Math.floor(daysBetween(epiphany1Monday, d) / 7);
-    const weeksRemaining = totalWeeks - weeksFromStart;
-    if (weeksRemaining <= 5) {
-      return { week: `${weeksRemaining} before Lent`, day: officeDay };
+    const mondayAnchor = addDays(sundayOnOrBefore(d), 1);
+    const weeksBack = Math.round(daysBetween(mondayAnchor, ashWedMonday) / 7);
+    if (weeksBack < 5) {
+      return { week: `${weeksBack + 1} before Lent`, day: officeDay };
     }
+    const weeksFromStart = Math.floor(daysBetween(epiphany1Monday, d) / 7);
     return { week: `Epiphany ${weeksFromStart + 1}`, day: officeDay };
   }
 
@@ -333,14 +358,15 @@ export function officeWeekLabel(date) {
   // to "N before Advent" for the last 4 weeks.
   const lastSundayBeforeAdvent = addDays(advent1Next, -7);
   const fourBeforeAdventMonday = addDays(lastSundayBeforeAdvent, -3 * 7 + 1);
-  if (d.getTime() === trinity.getTime()) return { week: "Trinity", day: officeDay };
+  const trinityWeekEnd = addDays(trinity, 6); // the Saturday right after Trinity Sunday
+  if (d >= trinity && d <= trinityWeekEnd) return { week: "Trinity", day: officeDay };
   if (d >= fourBeforeAdventMonday) {
     const sundayAnchor = sundayOnOrBefore(d);
     const weeksBack = Math.round(daysBetween(sundayAnchor, lastSundayBeforeAdvent) / 7);
-    const n = 4 - weeksBack;
+    const n = weeksBack + 1;
     if (n >= 1 && n <= 4) return { week: `${n} before Advent`, day: officeDay };
   }
-  if (d > trinity) {
+  if (d > trinityWeekEnd) {
     const sundayAnchor = sundayOnOrBefore(d);
     const n = Math.round(daysBetween(trinity, sundayAnchor) / 7);
     return { week: `Trinity ${n}`, day: officeDay };

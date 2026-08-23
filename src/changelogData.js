@@ -6,6 +6,17 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.13.3",
+    title: "Fix five Office week-numbering bugs found during Ash Wednesday gap-filling",
+    changes: [
+      { type: "Fixed", text: "The Ash Wednesday + 2 days gap now shows the real reading instead of demo text (both DEL and Office)." },
+      { type: "Fixed", text: "The \"N before Advent\" backward count was completely reversed - affected all four pre-Advent weeks, every year." },
+      { type: "Fixed", text: "The entire \"Pentecost\" week (between Pentecost Sunday and Trinity Sunday) was returning nothing despite having real data - a whole week, every year." },
+      { type: "Fixed", text: "\"Trinity\" week only matched Trinity Sunday itself; the six days after it were mislabeled \"Trinity 0\"." },
+      { type: "Fixed", text: "Office's Dec 17-24 window wasn't extending \"Advent 4\" correctly, and Jan 1/6 were producing nonsensical negative week labels instead of a clean gap signal." },
+    ],
+  },
+  {
     version: "0.13.2",
     title: "Wire up the Christmas/Epiphany date-keyed weekday block",
     changes: [
