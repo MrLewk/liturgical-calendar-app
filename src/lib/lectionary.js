@@ -166,26 +166,46 @@ export function sundayReadingFor(date) {
     const n = Math.floor(daysSinceAdvent / 7) + 1;
     title = `${ORDINAL[n]} Sunday of Advent`;
   } else if (d < ashWednesday) {
-    // Christmas -> Epiphany season: ordinal Sundays after the Epiphany.
-    const epiphanyBaptism = nextSunday(new Date(easter.getFullYear(), 0, 6));
-    if (d <= epiphanyBaptism) {
-      title = null; // Christmas 1/2, Epiphany, Baptism - fixed dates, not wired
-    } else {
-      const n = Math.round(daysBetween(epiphanyBaptism, d) / 7) + 1;
-      title = `${ORDINAL[n]} Sunday after the Epiphany`;
+    // Christmas -> Epiphany season. Epiphany itself (Jan 6) only replaces a
+    // Sunday's principal service if it actually falls on a Sunday - in that
+    // case Baptism of Christ shifts to the following Sunday (13 Jan).
+    const christmasYear = easter.getFullYear() - 1;
+    const jan6 = new Date(easter.getFullYear(), 0, 6);
+    const epiphanyIsSunday = jan6.getDay() === 0;
+    const firstSundayAfterChristmas = nextSunday(new Date(christmasYear, 11, 25));
+    const baptismSunday = epiphanyIsSunday ? addDays(jan6, 7) : nextSunday(jan6);
+
+    if (d.getTime() === firstSundayAfterChristmas.getTime()) {
+      title = "First Sunday after Christmas Day";
+    } else if (d > firstSundayAfterChristmas && d < jan6) {
+      title = findByTitle(/^Second Sunday after Christmas/)?.title;
+    } else if (epiphanyIsSunday && d.getTime() === jan6.getTime()) {
+      title = "Epiphany of the Lord";
+    } else if (d.getTime() === baptismSunday.getTime()) {
+      title = "Baptism of the Lord";
+    } else if (d.getTime() === sundayOnOrBefore(ashWednesday).getTime()) {
+      title = "Transfiguration Sunday"; // the last Sunday before Ash Wed, still chronologically pre-Lent
+    } else if (d > baptismSunday) {
+      const n = Math.round(daysBetween(baptismSunday, d) / 7) + 1;
+      title = findByTitle(new RegExp(`^${ORDINAL[n]} Sunday after the Epiphany$`))?.title;
     }
   } else if (d < easter) {
     const firstSunday = addDays(ashWednesday, 4);
-    if (d < firstSunday) title = null; // Transfiguration - fixed, not wired
-    else {
+    const palmSunday = addDays(easter, -7);
+    if (d.getTime() === palmSunday.getTime()) {
+      title = "Liturgy of the Passion"; // the fuller 4-reading set; "Liturgy of the Palms" is just the procession Gospel
+    } else if (d >= firstSunday && d < palmSunday) {
       const n = Math.round(daysBetween(firstSunday, d) / 7) + 1;
-      title = n <= 5 ? `${ORDINAL[n]} Sunday in Lent` : null; // Palm Sunday - not wired
+      title = n <= 5 ? `${ORDINAL[n]} Sunday in Lent` : null;
     }
+  } else if (d.getTime() === easter.getTime()) {
+    title = "Resurrection of the Lord";
   } else if (d <= pentecost) {
-    if (d.getTime() === easter.getTime()) title = null; // Resurrection of the Lord - not wired
-    else {
+    if (d.getTime() === pentecost.getTime()) {
+      title = "Day of Pentecost";
+    } else {
       const n = Math.round(daysBetween(easter, d) / 7) + 1;
-      title = n <= 7 ? `${ORDINAL[n]} Sunday of Easter` : null; // Pentecost - not wired
+      title = n <= 7 ? `${ORDINAL[n]} Sunday of Easter` : null;
     }
   } else if (d.getTime() === trinity.getTime()) {
     title = "Trinity Sunday";

@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.13.1] — Wire up fixed-date Sundays (Christmas, Epiphany, Easter, Pentecost, etc.)
+
+- **Added:** Sundays that fall on fixed dates now resolve to their real RCL reading instead of falling back to demo text: First/Second Sunday after Christmas Day, Epiphany of the Lord (in years it lands on a Sunday, with Baptism of Christ correctly shifting to the following Sunday), Baptism of the Lord, Transfiguration Sunday, the Sunday of the Passion/Palm Sunday, **Resurrection of the Lord (Easter Day)**, and Day of Pentecost.
+- **Added:** Easter Day's readings (Acts 10:34-43 or Jeremiah 31:1-6; Psalm 118; Colossians 3:1-4 or Acts 10:34-43; John 20:1-18 or Matthew 28:1-10) to the transcribed RCL data — these are identical across Years A/B/C and had been missed in the original transcription, meaning Easter Sunday itself was falling back to demo text until now.
+- **Fixed:** Transfiguration Sunday was being evaluated against the wrong season boundary (it falls chronologically before Ash Wednesday, so needed to be checked in the Epiphany-season branch, not the Lent one) — caught and fixed during testing before this shipped.
+
 ## [0.13.0] — Real Anglican Daily Office lectionary (Morning & Evening Prayer)
 
 - **Added:** Morning and Evening Prayer readings on the Prayer & Readings tab are now computed from the real Common Worship Weekday Lectionary (Table 2 — Old/New Testament readings for the Office), replacing the fixed demo citations, the same way the Eucharist reading was made real in v0.11.0.

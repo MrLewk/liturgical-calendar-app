@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.13.1",
+    title: "Wire up fixed-date Sundays (Christmas, Epiphany, Easter, Pentecost, etc.)",
+    changes: [
+      { type: "Added", text: "Sundays that fall on fixed dates now resolve to their real RCL reading instead of demo text: First/Second Sunday after Christmas Day, Epiphany of the Lord, Baptism of the Lord, Transfiguration Sunday, Palm/Passion Sunday, Resurrection of the Lord (Easter Day), and Day of Pentecost." },
+      { type: "Added", text: "Easter Day's readings were missing from the original RCL transcription entirely (identical across Years A/B/C) - added, so Easter Sunday itself now shows the real reading." },
+      { type: "Fixed", text: "Transfiguration Sunday was landing in the wrong season-boundary check during development; caught in testing before shipping." },
+    ],
+  },
+  {
     version: "0.13.0",
     title: "Real Anglican Daily Office lectionary (Morning & Evening Prayer)",
     changes: [
