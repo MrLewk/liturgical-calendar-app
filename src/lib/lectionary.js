@@ -419,6 +419,133 @@ export function officeReadingFor(date, service) {
  * yet (see KNOWN GAPS above) — callers should fall back to demo text in
  * that case rather than show nothing.
  */
+import table3Seasonal from "../data/table3_seasonal.json";
+import table4Ordinary from "../data/table4_ordinary.json";
+
+const PSALM_DAY = { Sun: "Sun", M: "M", T: "T", W: "W", Th: "Th", F: "F", Sat: "Sat" };
+
+/**
+ * Resolves `date` to where its psalm(s) come from: Table 3 (season-
+ * specific weeks - Advent, Christmas/Epiphany date-keyed block, Epiphany
+ * 1-4, Lent, Easter, the 4 weeks before Advent) or Table 4 (the rolling
+ * 7-week "Ordinary Time" cycle used everywhere else, per the source's own
+ * Note 3: Week 1 begins the first Monday of Advent, resumes at Week 4 on
+ * the Monday between 2-8 January, and begins again at Week 1 the day
+ * after the Second Sunday of Easter - independent of which specific
+ * calendar dates it's actually consulted on).
+ */
+export function psalmWeekLabel(date) {
+  if (!isValidDate(date)) return null;
+  const d = dateOnly(date);
+  const day = WEEKDAY_CODE[d.getDay()];
+  const psalmDay = day === "Sat" ? "Sat" : day;
+  const { advent1, advent1Next, easter } = churchYearContext(d);
+
+  const ashWednesday = addDays(easter, -46);
+  const easterWeekEnd = addDays(easter, 6);
+  const easter2Sunday = addDays(easter, 7);
+  const pentecost = addDays(easter, 49);
+  const presentation = new Date(easter.getFullYear(), 1, 2);
+  const baptismSunday = nextSunday(new Date(easter.getFullYear() - (d >= advent1 ? 0 : 1), 0, 6));
+  const christmasYear = advent1.getFullYear();
+  const nextYear = christmasYear + 1;
+
+  if (d >= advent1 && d < new Date(christmasYear, 11, 19)) {
+    const n = Math.floor(daysBetween(advent1, d) / 7) + 1;
+    return { source: "table3", week: `Advent ${Math.min(n, 3)}`, day: psalmDay };
+  }
+  if (d >= new Date(christmasYear, 11, 19) && d <= new Date(christmasYear, 11, 31)) {
+    return { source: "table3", week: "Dec fixed", day: String(d.getDate()) };
+  }
+  if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() <= 12) {
+    return { source: "table3", week: "Jan fixed", day: String(d.getDate()) };
+  }
+
+  if (d >= addDays(easter, -7) && d < easter) return null; // Holy Week - no psalm entry in Table 3
+  if (d >= easter && d <= easterWeekEnd) return { source: "table3", week: "Easter", day: psalmDay };
+  if (d > easterWeekEnd && d < pentecost) {
+    const sundayAnchor = sundayOnOrBefore(d);
+    const n = Math.round(daysBetween(easter, sundayAnchor) / 7) + 1;
+    if (n <= 7) return { source: "table3", week: `Easter ${n}`, day: psalmDay };
+  }
+
+  if (d.getTime() === ashWednesday.getTime()) return { source: "table3", week: "Ash Wednesday", day: "W" };
+  if (d > ashWednesday && d <= addDays(ashWednesday, 3)) {
+    return { source: "table3", week: "Days after", day: psalmDay };
+  }
+  if (d >= addDays(easter, -42) && d < addDays(easter, -7)) {
+    const sundayAnchor = sundayOnOrBefore(d);
+    const n = 7 - Math.round(daysBetween(sundayAnchor, easter) / 7);
+    return { source: "table3", week: `Lent ${n}`, day: psalmDay };
+  }
+
+  if (d.getTime() === presentation.getTime()) {
+    return { source: "table3", week: "Presentation", day: "fixed" };
+  }
+
+  const epiphany1Monday = addDays(baptismSunday, 1);
+  if (d >= epiphany1Monday && d < presentation) {
+    const weeksFromStart = Math.floor(daysBetween(epiphany1Monday, d) / 7);
+    if (weeksFromStart < 4) {
+      return { source: "table3", week: `Epiphany ${weeksFromStart + 1}`, day: psalmDay };
+    }
+    // else falls through to the Table 4 cycle below - Table 3 only provides
+    // 4 explicit Epiphany weeks; a longer Epiphany season (late Easter)
+    // continues on whatever week Table 4's independent counter has reached.
+  }
+
+  const lastSundayBeforeAdvent = addDays(advent1Next, -7);
+  const fourBeforeAdventMonday = addDays(lastSundayBeforeAdvent, -3 * 7 + 1);
+  if (d >= fourBeforeAdventMonday && d < advent1Next) {
+    const sundayAnchor = sundayOnOrBefore(d);
+    const weeksBack = Math.round(daysBetween(sundayAnchor, lastSundayBeforeAdvent) / 7);
+    const n = weeksBack + 1;
+    if (n >= 1 && n <= 4) return { source: "table3", week: `${n} before Advent`, day: psalmDay };
+  }
+
+  // Everything else (Presentation+1 .. Ash Wed eve; Epiphany weeks past the
+  // 4 Table 3 provides; Pentecost+1 .. the Saturday before "4 before
+  // Advent") uses Table 4's rolling 7-week cycle.
+  const janMonday = (() => {
+    for (let dom = 2; dom <= 8; dom++) {
+      const cand = new Date(nextYear, 0, dom);
+      if (cand.getDay() === 1) return cand;
+    }
+    return new Date(nextYear, 0, 2);
+  })();
+  const mondayOfD = addDays(sundayOnOrBefore(d), 1);
+  let anchor, anchorWeek;
+  if (d < easter2Sunday) {
+    anchor = janMonday;
+    anchorWeek = 4;
+  } else {
+    anchor = addDays(easter2Sunday, 1);
+    anchorWeek = 1;
+  }
+  const weeksElapsed = Math.round(daysBetween(anchor, mondayOfD) / 7);
+  const week = (((anchorWeek - 1 + weeksElapsed) % 7) + 7) % 7 + 1;
+  return { source: "table4", week: String(week), day: psalmDay };
+}
+
+/**
+ * The real psalm citation for `date` and `service` ("am"/"pm"), from
+ * whichever of Table 3 or Table 4 applies. Returns null on Holy Week,
+ * Ascension Day, and the Ash Wednesday + 2 days gap (all genuine gaps in
+ * the source table itself, not transcription gaps), or if the resolved
+ * week/day isn't in the transcribed data.
+ */
+export function psalmFor(date, service) {
+  if (!isValidDate(date)) return null;
+  const label = psalmWeekLabel(date);
+  if (!label) return null;
+  const table = label.source === "table3" ? table3Seasonal : table4Ordinary;
+  const row = table[label.week]?.[label.day] || table[label.week]?.fixed;
+  if (!row) return null;
+  const citation = service === "am" ? row.m : row.e;
+  if (!citation) return null;
+  return { source: label.source, week: label.week, day: label.day, citation };
+}
+
 export function eucharistReadingFor(date) {
   if (!isValidDate(date)) return null;
   const d = dateOnly(date);

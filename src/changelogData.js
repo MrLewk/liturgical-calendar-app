@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.14.0",
+    title: "Real psalms for Morning & Evening Prayer",
+    changes: [
+      { type: "Added", text: "Morning and Evening Prayer now show the real appointed psalm(s), transcribed from Table 3 (Psalms for Seasons) and Table 4 (Psalms for Ordinary Time, the rolling 7-week cycle used everywhere else)." },
+      { type: "Added", text: "Multi-psalm citations (e.g. \"50, 54\") are split into individual, independently tappable readings instead of one unparseable block." },
+      { type: "Known gap", text: "Sundays aren't covered by either psalm table (by design). Holy Week and Ascension Day have no listed psalm in the source table itself." },
+    ],
+  },
+  {
     version: "0.13.3",
     title: "Fix five Office week-numbering bugs found during Ash Wednesday gap-filling",
     changes: [

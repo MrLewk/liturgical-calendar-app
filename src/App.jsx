@@ -12,7 +12,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -270,6 +270,29 @@ function buildAnglicanEucharist(today) {
  * before and only replacing the two demo Scripture readings. Falls back
  * to the static demo entry on any of officeReadingFor's known gaps.
  */
+/** Splits a raw Table 3/4 psalm citation into individual "Psalm N[:V-V]"
+ * references, each independently tappable via the passage-lookup modal.
+ * "50, 54" -> two refs; "119.1-32" -> one ranged ref; "51 or 102" -> only
+ * the first alternative (an "or" means pick one, not read both);
+ * "18.31-end" -> drops the unresolvable "-end" and reads from that verse
+ * to the end of the chapter isn't representable, so falls back to the
+ * verse it starts at; bracketed optional psalms like "(10)" are still
+ * included, just with the brackets stripped for display. */
+function splitPsalmCitation(raw) {
+  if (!raw) return [];
+  const first = raw.split(/\s+or\s+/i)[0];
+  const segments = first.split(",").map((s) => s.trim()).filter(Boolean);
+  return segments
+    .map((seg) => {
+      let clean = seg.replace(/[()]/g, "").trim();
+      if (!clean) return null;
+      clean = clean.replace(/\./g, ":");
+      clean = clean.replace(/:(\d+)-end\b/i, ":$1");
+      return `Psalm ${clean}`;
+    })
+    .filter(Boolean);
+}
+
 function buildAnglicanOffice(date, service) {
   const fallback = READINGS.Anglican[service];
   const confession = fallback.sequence[0];
@@ -277,14 +300,20 @@ function buildAnglicanOffice(date, service) {
   const collect = fallback.sequence[fallback.sequence.length - 1];
 
   const result = officeReadingFor(date, service);
-  if (!result || (!result.ot && !result.nt)) {
+  const psalmResult = psalmFor(date, service);
+  if (!result && !psalmResult) {
     return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
   }
   const items = [];
-  if (result.ot) items.push({ type: "reading", role: "Old Testament", ref: displayRef(result.ot) });
-  if (result.nt) items.push({ type: "reading", role: "New Testament", ref: displayRef(result.nt) });
+  const psalmRefs = psalmResult ? splitPsalmCitation(psalmResult.citation) : [];
+  psalmRefs.forEach((ref, i) => {
+    items.push({ type: "reading", role: i === 0 ? "Psalm" : null, ref: displayRef(ref) });
+  });
+  if (result?.ot) items.push({ type: "reading", role: "Old Testament", ref: displayRef(result.ot) });
+  if (result?.nt) items.push({ type: "reading", role: "New Testament", ref: displayRef(result.nt) });
+  const labelWeek = result?.week || psalmResult?.week || "";
   return {
-    label: `${fallback.label} · ${result.week}, ${WEEKDAY_NAME[date.getDay()]} · ${shortDate(date)}`,
+    label: `${fallback.label} · ${labelWeek}, ${WEEKDAY_NAME[date.getDay()]} · ${shortDate(date)}`,
     icon: fallback.icon,
     sequence: [confession, canticle, ...items, collect],
   };

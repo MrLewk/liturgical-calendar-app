@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.14.0] — Real psalms for Morning & Evening Prayer
+
+- **Added:** Morning and Evening Prayer now show the real appointed psalm(s) for the day, transcribed from Table 3 (Psalms for Seasons — Advent, the Christmas/Epiphany date-keyed block, Epiphany 1-4, Lent, Easter, and the 4 weeks before Advent) and Table 4 (Psalms for Ordinary Time — the rolling 7-week cycle used everywhere else, correctly reset at all 3 of its documented anchor points: the first Monday of Advent, the Monday between 2-8 January, and the day after the Second Sunday of Easter).
+- **Added:** `psalmWeekLabel()`/`psalmFor()` in `src/lib/lectionary.js`, plus `src/data/table3_seasonal.json` and `src/data/table4_ordinary.json`, extracted directly from the source PDF's word positions.
+- **Added:** Multi-psalm citations (e.g. "50, 54" or "128, 129, 130, 131") are split into individual, independently tappable readings rather than one unparseable block — every generated reference was verified to actually resolve through the passage lookup.
+- **Known gap:** Sundays aren't covered (no data in either psalm table, by design — Sunday uses a different provision). Holy Week and Ascension Day have no listed psalm in the source table itself, not a transcription gap.
+
 ## [0.13.3] — Fix five Office week-numbering bugs found during Ash Wednesday gap-filling
 
 While filling the Ash Wednesday +2 days gap, a full 2-year sweep of every possible date turned up several real bugs in the Office (Morning/Evening Prayer) week-label resolver — these affected real, populated weeks, not just edge cases:
