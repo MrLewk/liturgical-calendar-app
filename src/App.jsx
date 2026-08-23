@@ -421,6 +421,11 @@ export default function App() {
 
         <div className="flex-1" />
 
+        {/* Coffee donation section */}
+        <div className="px-2 mb-5 pb-5 border-t" style={{ borderColor: theme.border }}>
+          <CoffeeSection />
+        </div>
+
         <div className="flex items-center gap-2 px-2">
           <ThemeToggleButton />
           <button
@@ -1223,6 +1228,36 @@ function exportTradition(t, orthodoxCalendar) {
   downloadIcs(filename, ics);
 }
 
+// Coffee donation section
+function CoffeeSection() {
+  const theme = useTheme();
+  const currentYear = new Date().getFullYear();
+  
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <p className="text-center text-[12px] lg:text-[13px]" style={{ color: alpha(theme.text, 0.7) }}>
+        Enjoying the app? A coffee keeps development going ☕
+      </p>
+      <a
+        href="https://buymeacoffee.com/mrlewk"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full flex justify-center"
+      >
+        <img
+          src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+          alt="Buy Me A Coffee"
+          height={40}
+          className="h-10"
+        />
+      </a>
+      <p className="text-center text-[11px] lg:text-[12px]" style={{ color: alpha(theme.text, 0.5) }}>
+        © {currentYear} Luke Wilson. Designed by Luke Wilson.
+      </p>
+    </div>
+  );
+}
+
 function ExportSheet({ tradition, calendar, onClose, season }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
@@ -1539,6 +1574,11 @@ function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFea
           <Download size={15} />
           Sync to calendar
         </button>
+
+        {/* Coffee donation section — mobile only */}
+        <div className="lg:hidden mt-6 pt-6 border-t" style={{ borderColor: theme.border }}>
+          <CoffeeSection />
+        </div>
       </div>
 
       {/* Desktop-only: year-at-a-glance wheel alongside Today, so the two most

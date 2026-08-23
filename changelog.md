@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.12.0] — Coffee donation section & copyright footer
+
+- **Added:** A new "Enjoying the app? A coffee keeps development going ☕" section with a Buy Me A Coffee button and copyright notice in the app footer.
+- **Added:** On desktop, the coffee section appears in the sidebar above the Settings button, separated by a divider.
+- **Added:** On mobile, the coffee section appears at the bottom of the Today tab below the Sync button, with centered layout.
+- **Added:** The copyright year is dynamic and updates annually (© [year] Luke Wilson. Designed by Luke Wilson.).
+- **Added:** The Buy Me A Coffee button uses the official brand button image from https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png, linking to https://buymeacoffee.com/mrlewk.
+
 ## [0.11.1] — Fix day-detail sheet showing the wrong Anglican reading; make it clickable
 
 - **Fixed:** The day-detail sheet (opened from the Grid/Wheel tabs) and the Today tab's reading teaser always showed the fixed Morning Prayer demo reading regardless of tradition, date, or day of week — including on Sundays, which should show the Sunday Eucharist reading, not a weekday one. Both now use the same real Anglican lectionary engine as the Prayer & Readings tab (`src/lib/lectionary.js`), correctly switching between the Sunday (RCL) and weekday (DEL) reading for the actual selected date.

@@ -6,6 +6,17 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.12.0",
+    title: "Coffee donation section & copyright footer",
+    changes: [
+      { type: "Added", text: "A new \"Enjoying the app? A coffee keeps development going ☕\" section with a Buy Me A Coffee button and copyright notice in the app footer." },
+      { type: "Added", text: "On desktop, the coffee section appears in the sidebar above the Settings button, separated by a divider." },
+      { type: "Added", text: "On mobile, the coffee section appears at the bottom of the Today tab below the Sync button, with centered layout." },
+      { type: "Added", text: "The copyright year is dynamic and updates annually." },
+      { type: "Added", text: "The Buy Me A Coffee button uses the official brand button image, linking to https://buymeacoffee.com/mrlewk." },
+    ],
+  },
+  {
     version: "0.11.1",
     title: "Fix day-detail sheet showing the wrong Anglican reading; make it clickable",
     changes: [
