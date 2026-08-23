@@ -6,6 +6,18 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.11.0",
+    title: "Real Anglican Eucharist lectionary (weekday + Sunday)",
+    changes: [
+      { type: "Added", text: "The Anglican Eucharist reading on the Prayer & Readings tab is now computed from the real Common Worship lectionary for today's actual date, replacing the fixed demo citation. Weekdays use the Daily Eucharistic Lectionary (Table 6, transcribed from the CofE's 2005 Weekday Lectionary booklet); Sundays use the Principal Service (Revised Common Lectionary) track, sourced from Vanderbilt Divinity Library's RCL citations for Years A, B, and C." },
+      { type: "Added", text: "`src/lib/lectionary.js` — resolves any date to its Common Worship week label (Advent 1-3, Lent 1-5, Easter 2-7, DEL Week 1-34, or a Proper number) and looks up the matching reading citation, reusing the same forward/backward 34-week Ordinary Time counting the Catholic calendar already used." },
+      { type: "Added", text: "`src/lib/citationNormalize.js` — converts the lectionary's raw citation formats (dotted chapter.verse, semicolon-joined multi-readings, \"or\" alternatives, verse-letter suffixes, \"-end\" markers) into clean references the existing scripture lookup can resolve, so tapping a reading opens the real WEB Bible text exactly as before." },
+      { type: "Added", text: "`src/data/del_table6.json`, `src/data/rcl_sundays.json`, `src/data/lectionaryYears.js` — the transcribed reading data and the Sunday-Year (A/B/C) / DEL-Year (1/2) lookup table for 2005-2044." },
+      { type: "Known gap", text: "Morning and Evening Prayer readings are still the fixed demo text — the Office lectionary (Table 2) and psalm tables (Tables 3-5) haven't been transcribed yet. Catholic and Orthodox readings are also still demo text." },
+      { type: "Known gap", text: "A few narrow date ranges aren't wired up yet: the 3 days immediately after Ash Wednesday, the Christmas/Epiphany date-keyed block (17-24 Dec, 2-12 Jan) for weekdays, and Sundays that fall on fixed dates (Christmas, Epiphany, Transfiguration, Palm Sunday, Ascension, Pentecost) rather than an ordinary Sunday count. These fall back to the demo entry rather than showing something wrong." },
+    ],
+  },
+  {
     version: "0.10.2",
     title: "Fix feast tiles blending into the background",
     changes: [

@@ -12,6 +12,10 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
+import { eucharistReadingFor, sundayReadingFor } from "./lib/lectionary";
+import { splitCitation } from "./lib/citationNormalize";
+import { parseReference, formatReference } from "./lib/bibleRef";
+import { bookDisplayName } from "./data/bibleBooks";
 
 const TRADITIONS = ["Catholic", "Anglican", "Orthodox"];
 
@@ -182,6 +186,67 @@ const READINGS = {
   },
 };
 
+const WEEKDAY_NAME = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+/** A cleaner "Book Chapter:Verse" display string for a citation ref,
+ * falling back to the raw ref if it doesn't parse (still safe to hand to
+ * the passage modal either way — this is display-only). */
+function displayRef(ref) {
+  const parsed = parseReference(ref);
+  if (!parsed) return ref;
+  return formatReference(parsed, bookDisplayName(parsed.code));
+}
+
+/**
+ * Builds today's REAL Anglican Eucharist readings — the Sunday Principal
+ * Service (RCL) lectionary on Sundays, the Common Worship Daily
+ * Eucharistic Lectionary (Table 6) on weekdays — replacing the fixed demo
+ * citation. Falls back to the static demo entry when today's date falls
+ * in one of the lectionary engine's known gaps (see lib/lectionary.js).
+ */
+function buildAnglicanEucharist(today) {
+  const fallback = READINGS.Anglican.eucharist;
+  const isSunday = today.getDay() === 0;
+  const collect = fallback.sequence[0]; // keep the Collect for Purity as-is
+
+  if (isSunday) {
+    const result = sundayReadingFor(today);
+    if (!result || !result.readings) return { ...fallback, label: `${shortDate(today)} · demo text (Sunday reading not covered yet)` };
+    const { title, readings } = result;
+    const isProper = readings.length === 4 && (readings[0].includes(" and ") || readings[1].includes(" and "));
+    let refs;
+    if (isProper) {
+      const track1 = splitCitation(readings[0]);
+      refs = [
+        { role: "First Reading", ref: track1[0] },
+        { role: "Psalm", ref: track1[1] },
+        { role: "Second Reading", ref: readings[2] },
+        { role: "Gospel", ref: readings[3] },
+      ];
+    } else {
+      const roles = ["First Reading", "Psalm", "Second Reading", "Gospel"];
+      refs = readings.map((r, i) => ({ role: roles[i] || "Reading", ref: splitCitation(r)[0] || r }));
+    }
+    return {
+      label: `${title} · ${shortDate(today)}`,
+      icon: "sun",
+      sequence: [collect, ...refs.filter((r) => r.ref).map((r) => ({ type: "reading", role: r.role, ref: displayRef(r.ref) }))],
+    };
+  }
+
+  const result = eucharistReadingFor(today);
+  if (!result || !result.citation) return { ...fallback, label: `${shortDate(today)} · demo text (weekday reading not covered yet)` };
+  const parts = splitCitation(result.citation);
+  const roles = parts.map((p) => (/^Ps(alm)?\b/i.test(p) ? "Psalm" : null));
+  roles[0] = roles[0] || "First Reading";
+  roles[roles.length - 1] = roles[roles.length - 1] === "Psalm" ? "Gospel" : roles[roles.length - 1] || "Gospel";
+  return {
+    label: `${result.week}, ${WEEKDAY_NAME[today.getDay()]} · ${shortDate(today)}`,
+    icon: "sun",
+    sequence: [collect, ...parts.map((p, i) => ({ type: "reading", role: roles[i], ref: displayRef(p) }))],
+  };
+}
+
 // Returns the first scripture reading (skipping opening prayers) so the
 // Today teaser and day-detail sheet show a citation, not a prayer title.
 function firstReadingRef(tradition) {
@@ -269,7 +334,7 @@ export default function App() {
       )}
       {tab === "wheel" && <WheelView season={season} seasons={seasons} today={today} tradition={tradition} calendar={calendar} />}
       {tab === "readings" && (
-        <ReadingsView tradition={tradition} season={season} onOpenPassage={setScriptureRef} />
+        <ReadingsView tradition={tradition} season={season} today={today} onOpenPassage={setScriptureRef} />
       )}
       {tab === "feasts" && (
         <FeastsView tradition={tradition} calendar={calendar} today={today} onSelectFeast={setSelectedFeast} />
@@ -1687,10 +1752,14 @@ function autoOfficeSegment() {
   return now.getHours() < 17 ? "am" : "pm";
 }
 
-function ReadingsView({ tradition, season, onOpenPassage }) {
+function ReadingsView({ tradition, season, today, onOpenPassage }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
-  const data = READINGS[tradition];
+  const anglicanEucharist = useMemo(() => (tradition === "Anglican" ? buildAnglicanEucharist(today) : null), [tradition, today]);
+  const data = useMemo(() => {
+    if (tradition !== "Anglican") return READINGS[tradition];
+    return { ...READINGS.Anglican, eucharist: anglicanEucharist };
+  }, [tradition, anglicanEucharist]);
   const defaultSegment = data.kind === "office" ? autoOfficeSegment() : data.kind === "mass" ? "mass" : "daily";
   const [segment, setSegment] = useState(defaultSegment);
 

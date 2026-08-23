@@ -36,9 +36,22 @@ mind at any time from Settings. Full details are in the in-app Privacy Policy (S
 
 ## Status
 
-🚧 Early development. The UI is fully built but still running on static demo data (pinned to Aug 22, 2026). The
-real date-calculation engine — computing actual season boundaries and feast dates for any given year — is the
-next major piece of work; see [Roadmap](#roadmap) below.
+The core app is fully built: real season/feast-date calculations for any year (Western Easter and Orthodox Pascha
+algorithms, not lookup tables), full-text scripture readings from the public-domain World English Bible, and a
+working Grid/Wheel/Prayer/Feasts UI across all three traditions.
+
+**Lectionary accuracy varies by tradition and reading type right now:**
+
+| | Weekday | Sunday |
+|---|---|---|
+| Anglican Eucharist | ✅ Real (Common Worship Daily Eucharistic Lectionary) | ✅ Real (Revised Common Lectionary, Years A/B/C) |
+| Anglican Morning/Evening Prayer | 🚧 Demo text | 🚧 Demo text |
+| Catholic Mass | 🚧 Demo text | 🚧 Demo text |
+| Orthodox daily cycle | 🚧 Demo text | 🚧 Demo text |
+
+The Anglican Eucharist reading shown for today's date is the actual citation from the Common Worship lectionary —
+tap it to read the real passage. Everything still marked "demo text" above shows a fixed placeholder reading
+regardless of the date; see [Roadmap](#roadmap).
 
 ## Tech stack
 
@@ -61,18 +74,21 @@ npm run preview  # serve the production build locally
 
 ## Roadmap
 
-1. **Real date-calculation engine** — Western Easter algorithm, Orthodox Paschalion, and every season boundary and
-   feast date derived from them for any year, replacing the current static demo data
-2. **Full feast/reading/prayer data** per tradition and date, not just the current demo entries
-3. **Calendar export** — `.ics` download and Google Calendar sync, so feast days and season changes show up
+1. **Anglican Daily Office** — Morning/Evening Prayer Old/New Testament readings (Common Worship Table 2) and the
+   psalm tables (Tables 3-5), replacing the current demo text the same way the Eucharist reading was
+2. **Catholic Mass readings** — the Roman Lectionary's Sunday (Years A/B/C) and weekday (Years I/II) cycles
+3. **Orthodox daily cycle** — the Byzantine lectionary, which follows Pascha rather than the Western calendar and
+   needs its own engine (structurally unrelated to the Western tables above)
+4. **Calendar export** — `.ics` download and Google Calendar sync, so feast days and season changes show up
    alongside your other events
-4. Licensing review for prayer/reading translations (currently public-domain/traditional text only)
+5. Licensing review for prayer/reading translations (currently public-domain/traditional text only)
 
 ## Contributing
 
 This is a solo, early-stage project — issues and suggestions are welcome via the
 [GitHub issue tracker](https://github.com/MrLewk/liturgical-calendar-app/issues). Pull requests are welcome too,
-though given the app is still on demo data, it's worth opening an issue first to check a change fits the roadmap.
+though given large parts of the lectionary data are still demo text (see [Status](#status)), it's worth opening an
+issue first to check a change fits the roadmap.
 
 ## License
 

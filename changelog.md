@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.11.0] — Real Anglican Eucharist lectionary (weekday + Sunday)
+
+- **Added:** The Anglican Eucharist reading on the Prayer & Readings tab is now computed from the real Common Worship lectionary for today's actual date, replacing the fixed demo citation. Weekdays use the Daily Eucharistic Lectionary (Table 6, transcribed from the CofE's 2005 Weekday Lectionary booklet, amended 2010); Sundays use the Principal Service (Revised Common Lectionary) track, sourced from Vanderbilt Divinity Library's published RCL citations for Years A, B, and C.
+- **Added:** `src/lib/lectionary.js` — resolves any date to its Common Worship week label (Advent 1-3, Lent 1-5, Easter 2-7, DEL Week 1-34, or a Proper number) and looks up the matching reading citation. The DEL Week 1-34 / Proper-number counting reuses the same forward/backward 34-week Ordinary Time logic already used for the Catholic calendar.
+- **Added:** `src/lib/citationNormalize.js` — converts the lectionary's raw citation formats (dotted chapter.verse, semicolon-joined multi-readings, "or" alternatives, verse-letter suffixes like "9a", "-end" markers) into clean references the existing scripture lookup (`getPassage`) can resolve, so tapping a reading still opens the real WEB Bible text exactly as before.
+- **Added:** `src/data/del_table6.json`, `src/data/rcl_sundays.json`, `src/data/lectionaryYears.js` — the transcribed reading data and the Sunday-Year (A/B/C) / DEL-Year (1/2) lookup table for 2005-2044 (projected on a 6-year cycle beyond that).
+- **Known gap:** Morning and Evening Prayer readings are still the fixed demo text — the Office lectionary (Table 2, Old/New Testament readings) and psalm tables (Tables 3-5) haven't been transcribed yet. Catholic and Orthodox readings are also still demo text.
+- **Known gap:** A few narrow date ranges aren't wired up yet and fall back to the demo entry rather than showing something wrong: the 3 days immediately after Ash Wednesday, the Christmas/Epiphany date-keyed block (17-24 Dec, 2-12 Jan) for weekdays, and Sundays that fall on fixed dates (Christmas, Epiphany, Transfiguration, Palm Sunday, Ascension, Pentecost) rather than an ordinary Sunday count.
+
 ## [0.10.2] — Fix feast tiles blending into the background
 
 - **Fixed:** Feast-day tiles on the Grid tab used a tinted background (feast color at low opacity) to stand out, but for light liturgical colors (white, gold) this tint landed almost exactly on the page's cream background, making the whole tile look washed-out and blend in rather than stand out. Feast tiles now keep the same white card background as every other day, with the feast indicated by the corner dot and a colored ring around the tile instead.
