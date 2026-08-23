@@ -198,20 +198,19 @@ function displayRef(ref) {
 }
 
 /**
- * Builds today's REAL Anglican Eucharist readings — the Sunday Principal
- * Service (RCL) lectionary on Sundays, the Common Worship Daily
- * Eucharistic Lectionary (Table 6) on weekdays — replacing the fixed demo
- * citation. Falls back to the static demo entry when today's date falls
+ * The real Anglican reading list for `date` — Sunday Principal Service
+ * (RCL) on Sundays, Common Worship Daily Eucharistic Lectionary on
+ * weekdays — as an array of { role, ref } items, or null if `date` falls
  * in one of the lectionary engine's known gaps (see lib/lectionary.js).
+ * Shared by the full Readings tab, the Today teaser, and the day-detail
+ * sheet so all three agree on the same real citations for a given day.
  */
-function buildAnglicanEucharist(today) {
-  const fallback = READINGS.Anglican.eucharist;
-  const isSunday = today.getDay() === 0;
-  const collect = fallback.sequence[0]; // keep the Collect for Purity as-is
+function anglicanReadingItems(date) {
+  const isSunday = date.getDay() === 0;
 
   if (isSunday) {
-    const result = sundayReadingFor(today);
-    if (!result || !result.readings) return { ...fallback, label: `${shortDate(today)} · demo text (Sunday reading not covered yet)` };
+    const result = sundayReadingFor(date);
+    if (!result || !result.readings) return null;
     const { title, readings } = result;
     const isProper = readings.length === 4 && (readings[0].includes(" and ") || readings[1].includes(" and "));
     let refs;
@@ -227,23 +226,41 @@ function buildAnglicanEucharist(today) {
       const roles = ["First Reading", "Psalm", "Second Reading", "Gospel"];
       refs = readings.map((r, i) => ({ role: roles[i] || "Reading", ref: splitCitation(r)[0] || r }));
     }
-    return {
-      label: `${title} · ${shortDate(today)}`,
-      icon: "sun",
-      sequence: [collect, ...refs.filter((r) => r.ref).map((r) => ({ type: "reading", role: r.role, ref: displayRef(r.ref) }))],
-    };
+    const items = refs.filter((r) => r.ref).map((r) => ({ role: r.role, ref: displayRef(r.ref) }));
+    return { label: title, items };
   }
 
-  const result = eucharistReadingFor(today);
-  if (!result || !result.citation) return { ...fallback, label: `${shortDate(today)} · demo text (weekday reading not covered yet)` };
+  const result = eucharistReadingFor(date);
+  if (!result || !result.citation) return null;
   const parts = splitCitation(result.citation);
   const roles = parts.map((p) => (/^Ps(alm)?\b/i.test(p) ? "Psalm" : null));
   roles[0] = roles[0] || "First Reading";
   roles[roles.length - 1] = roles[roles.length - 1] === "Psalm" ? "Gospel" : roles[roles.length - 1] || "Gospel";
+  const items = parts.map((p, i) => ({ role: roles[i], ref: displayRef(p) }));
+  return { label: `${result.week}, ${WEEKDAY_NAME[date.getDay()]}`, items };
+}
+
+/**
+ * Builds today's REAL Anglican Eucharist readings — the Sunday Principal
+ * Service (RCL) lectionary on Sundays, the Common Worship Daily
+ * Eucharistic Lectionary (Table 6) on weekdays — replacing the fixed demo
+ * citation. Falls back to the static demo entry when today's date falls
+ * in one of the lectionary engine's known gaps (see lib/lectionary.js).
+ */
+function buildAnglicanEucharist(today) {
+  const fallback = READINGS.Anglican.eucharist;
+  const collect = fallback.sequence[0]; // keep the Collect for Purity as-is
+  const isSunday = today.getDay() === 0;
+
+  const result = anglicanReadingItems(today);
+  if (!result) {
+    const gapNote = isSunday ? "Sunday reading not covered yet" : "weekday reading not covered yet";
+    return { ...fallback, label: `${shortDate(today)} · demo text (${gapNote})` };
+  }
   return {
-    label: `${result.week}, ${WEEKDAY_NAME[today.getDay()]} · ${shortDate(today)}`,
+    label: `${result.label} · ${shortDate(today)}`,
     icon: "sun",
-    sequence: [collect, ...parts.map((p, i) => ({ type: "reading", role: roles[i], ref: displayRef(p) }))],
+    sequence: [collect, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref }))],
   };
 }
 
@@ -254,6 +271,22 @@ function firstReadingRef(tradition) {
   const sequence = data.kind === "office" ? data.am.sequence : data.kind === "mass" ? data.mass.sequence : data.daily.sequence;
   const reading = sequence.find((item) => item.type === "reading");
   return reading ? reading.ref : sequence[0].ref;
+}
+
+/**
+ * The reading citation(s) to show for `date` in compact contexts (the
+ * Today teaser, the day-detail sheet from Grid/Wheel): real Sunday RCL or
+ * weekday DEL readings for Anglican (all of them, correctly split by
+ * day-of-week), falling back to the single fixed demo citation for
+ * Catholic/Orthodox (not wired to a real per-date lectionary yet) or for
+ * any Anglican date that falls in a known gap.
+ */
+function dayReadingItems(tradition, date) {
+  if (tradition === "Anglican") {
+    const result = anglicanReadingItems(date);
+    if (result) return result.items;
+  }
+  return [{ role: null, ref: firstReadingRef(tradition) }];
 }
 
 function polarToXY(cx, cy, r, angleDeg) {
@@ -275,6 +308,10 @@ export default function App() {
   const [showExport, setShowExport] = useState(false);
   const [selectedFeast, setSelectedFeast] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
+  // The date the Prayer & Readings tab is showing. null = today (the live
+  // clock); set to a specific date when opened from a day-detail sheet so
+  // that day's actual readings show, not today's.
+  const [readingsViewDate, setReadingsViewDate] = useState(null);
   const [calendar, setCalendar] = usePersistedState("officium-calendar", "Gregorian"); // "Gregorian" (New Calendar) | "Julian" (Old Calendar) — only meaningful for Orthodox
   const [cookieConsent, setCookieConsent] = usePersistedState("officium-cookie-consent", null); // null (undecided) | "accepted" | "rejected"
   const [showPrivacy, setShowPrivacy] = useState(false);
@@ -323,7 +360,10 @@ export default function App() {
           nextFeast={nextFeast}
           progressPct={progressPct}
           onSelectFeast={setSelectedFeast}
-          onOpenReadings={() => setTab("readings")}
+          onOpenReadings={() => {
+            setReadingsViewDate(null);
+            setTab("readings");
+          }}
           onOpenExport={() => setShowExport(true)}
           tradition={tradition}
           calendar={calendar}
@@ -334,7 +374,14 @@ export default function App() {
       )}
       {tab === "wheel" && <WheelView season={season} seasons={seasons} today={today} tradition={tradition} calendar={calendar} />}
       {tab === "readings" && (
-        <ReadingsView tradition={tradition} season={season} today={today} onOpenPassage={setScriptureRef} />
+        <ReadingsView
+          tradition={tradition}
+          season={season}
+          today={today}
+          viewDate={readingsViewDate}
+          onBackToToday={() => setReadingsViewDate(null)}
+          onOpenPassage={setScriptureRef}
+        />
       )}
       {tab === "feasts" && (
         <FeastsView tradition={tradition} calendar={calendar} today={today} onSelectFeast={setSelectedFeast} />
@@ -367,7 +414,7 @@ export default function App() {
               label={item.label}
               active={tab === item.key}
               color={accent}
-              onClick={() => setTab(item.key)}
+              onClick={() => { setTab(item.key); if (item.key === "readings") setReadingsViewDate(null); }}
             />
           ))}
         </nav>
@@ -444,7 +491,7 @@ export default function App() {
                 label={item.label}
                 active={tab === item.key}
                 color={accent}
-                onClick={() => setTab(item.key)}
+                onClick={() => { setTab(item.key); if (item.key === "readings") setReadingsViewDate(null); }}
               />
             ))}
           </div>
@@ -512,6 +559,11 @@ export default function App() {
               onOpenFeast={(f) => {
                 setSelectedDay(null);
                 setSelectedFeast(f);
+              }}
+              onOpenReadingsForDay={(d) => {
+                setReadingsViewDate(d);
+                setTab("readings");
+                setSelectedDay(null);
               }}
             />
           )}
@@ -1273,13 +1325,13 @@ function FeastModal({ feast, onClose }) {
   );
 }
 
-function DayDetailSheet({ date, tradition, calendar, onClose, onOpenFeast }) {
+function DayDetailSheet({ date, tradition, calendar, onClose, onOpenFeast, onOpenReadingsForDay }) {
   const theme = useTheme();
   const { seasons, feasts } = useMemo(() => liturgicalYearData(tradition, calendar, date), [tradition, calendar, date]);
   const season = useMemo(() => withDisplay(seasonAt(seasons, date), date, tradition, seasons), [seasons, date, tradition]);
   const accent = seasonAccent(season, theme.mode);
   const feast = feastOnDate(feasts, date);
-  const readingRef = firstReadingRef(tradition);
+  const readingItems = dayReadingItems(tradition, date);
 
   return (
     <SheetOverlay onClose={onClose}>
@@ -1299,17 +1351,33 @@ function DayDetailSheet({ date, tradition, calendar, onClose, onOpenFeast }) {
         </h2>
       </div>
 
-      <div className="rounded-2xl p-4 mb-3 flex items-center gap-3" style={{ backgroundColor: theme.surface }}>
-        <BookOpen size={18} color={accent} />
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
-            Reading
+      <button
+        onClick={() => onOpenReadingsForDay(date)}
+        className="w-full text-left rounded-2xl p-4 mb-3"
+        style={{ backgroundColor: theme.surface }}
+      >
+        <div className="flex items-center gap-3 mb-1">
+          <BookOpen size={18} color={accent} />
+          <p className="text-[10px] uppercase tracking-[0.2em] flex-1" style={{ color: alpha(theme.text, 0.4) }}>
+            {readingItems.length > 1 ? "Readings" : "Reading"}
           </p>
-          <p className="text-[13px]" style={{ color: theme.text }}>
-            {readingRef}
-          </p>
+          <ChevronRight size={16} color={alpha(theme.text, 0.33)} />
         </div>
-      </div>
+        <div className={readingItems.length > 1 ? "pl-8 space-y-1.5 mt-1.5" : "pl-8"}>
+          {readingItems.map((item, i) => (
+            <div key={i}>
+              {item.role && (
+                <span className="text-[9.5px] uppercase tracking-[0.15em] mr-1.5" style={{ color: alpha(theme.text, 0.4) }}>
+                  {item.role}
+                </span>
+              )}
+              <span className="text-[13px]" style={{ color: theme.text }}>
+                {item.ref}
+              </span>
+            </div>
+          ))}
+        </div>
+      </button>
 
       {feast ? (
         <button
@@ -1366,7 +1434,7 @@ const COLOR_MEANING = {
 function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFeast, onOpenReadings, onOpenExport, tradition, calendar }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
-  const readingRef = firstReadingRef(tradition);
+  const readingRef = dayReadingItems(tradition, today)[0]?.ref;
   return (
     <div className="pt-2 lg:pt-0 lg:grid lg:grid-cols-[1fr_420px] lg:gap-10 lg:items-start">
       <div>
@@ -1746,27 +1814,33 @@ function WheelView({ season, seasons, today, tradition, calendar, variant = "sta
 // otherwise Morning Prayer through the afternoon and Evening Prayer once
 // evening actually starts (5pm) — not at noon, which is too early for most
 // people's day. The person can still switch manually.
-function autoOfficeSegment() {
-  const now = new Date();
-  if (now.getDay() === 0) return "eucharist";
-  return now.getHours() < 17 ? "am" : "pm";
+function autoOfficeSegment(date) {
+  const d = date || new Date();
+  if (d.getDay() === 0) return "eucharist";
+  // Only use the live clock's hour when actually looking at today —
+  // there's no meaningful "time of day" for a date picked from the past.
+  const isLiveToday = !date || dateOnly(date).getTime() === dateOnly(new Date()).getTime();
+  if (!isLiveToday) return "am";
+  return d.getHours() < 17 ? "am" : "pm";
 }
 
-function ReadingsView({ tradition, season, today, onOpenPassage }) {
+function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
-  const anglicanEucharist = useMemo(() => (tradition === "Anglican" ? buildAnglicanEucharist(today) : null), [tradition, today]);
+  const effectiveDate = viewDate || today;
+  const isViewingOtherDay = !!viewDate;
+  const anglicanEucharist = useMemo(() => (tradition === "Anglican" ? buildAnglicanEucharist(effectiveDate) : null), [tradition, effectiveDate]);
   const data = useMemo(() => {
     if (tradition !== "Anglican") return READINGS[tradition];
     return { ...READINGS.Anglican, eucharist: anglicanEucharist };
   }, [tradition, anglicanEucharist]);
-  const defaultSegment = data.kind === "office" ? autoOfficeSegment() : data.kind === "mass" ? "mass" : "daily";
+  const defaultSegment = data.kind === "office" ? autoOfficeSegment(viewDate) : data.kind === "mass" ? "mass" : "daily";
   const [segment, setSegment] = useState(defaultSegment);
 
   useEffect(() => {
     setSegment(defaultSegment);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tradition]);
+  }, [tradition, viewDate]);
 
   // Guard against a stale segment from the previous tradition being used
   // on the render that happens before the effect above has run.
@@ -1778,7 +1852,7 @@ function ReadingsView({ tradition, season, today, onOpenPassage }) {
       ? [
           { key: "am", label: "Morning", icon: Sun },
           { key: "pm", label: "Evening", icon: Moon },
-          { key: "eucharist", label: "Sunday", icon: BookOpen },
+          { key: "eucharist", label: "Eucharist", icon: BookOpen },
         ]
       : null;
   const activeData = data.kind === "office" ? data[validSegment] : data.kind === "mass" ? data.mass : data.daily;
@@ -1793,6 +1867,21 @@ function ReadingsView({ tradition, season, today, onOpenPassage }) {
           {tradition}
         </span>
       </div>
+
+      {isViewingOtherDay && (
+        <button
+          onClick={onBackToToday}
+          className="w-full flex items-center justify-between rounded-xl px-3.5 py-2 mt-3 mb-1 text-left"
+          style={{ backgroundColor: alpha(accent, 0.13) }}
+        >
+          <span className="text-[11.5px] lg:text-[13px]" style={{ color: theme.text }}>
+            Showing {effectiveDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+          </span>
+          <span className="text-[11px] lg:text-[12.5px] underline decoration-dotted" style={{ color: accent }}>
+            Back to today
+          </span>
+        </button>
+      )}
 
       {segments && (
         <div className="flex gap-1.5 lg:gap-2.5 mb-4 lg:mb-6 mt-3 lg:mt-5">

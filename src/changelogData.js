@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.11.1",
+    title: "Fix day-detail sheet showing the wrong Anglican reading; make it clickable",
+    changes: [
+      { type: "Fixed", text: "The day-detail sheet (opened from the Grid/Wheel tabs) and the Today tab's reading teaser always showed the fixed Morning Prayer demo reading regardless of tradition, date, or day of week — including on Sundays, which should show the Sunday Eucharist reading, not a weekday one. Both now use the same real Anglican lectionary engine as the Prayer & Readings tab, correctly switching between the Sunday (RCL) and weekday (DEL) reading for the actual selected date." },
+      { type: "Changed", text: "The day-detail sheet now lists every reading for the day (e.g. First Reading, Psalm, Second Reading, Gospel) instead of only the first one." },
+      { type: "Added", text: "The reading section on the day-detail sheet is now tappable — it opens the full Prayer & Readings tab scoped to that specific date (today or any other date browsed to via Grid/Wheel), with a \"Showing [date] · Back to today\" banner. Navigating the tab bar/sidebar to Prayer & Readings directly always shows today." },
+      { type: "Fixed", text: "The Eucharist segment on the Prayer & Readings tab was still labeled \"Sunday\" even though it now shows the real weekday reading too on non-Sundays; relabeled to \"Eucharist\"." },
+    ],
+  },
+  {
     version: "0.11.0",
     title: "Real Anglican Eucharist lectionary (weekday + Sunday)",
     changes: [

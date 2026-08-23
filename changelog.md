@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.11.1] — Fix day-detail sheet showing the wrong Anglican reading; make it clickable
+
+- **Fixed:** The day-detail sheet (opened from the Grid/Wheel tabs) and the Today tab's reading teaser always showed the fixed Morning Prayer demo reading regardless of tradition, date, or day of week — including on Sundays, which should show the Sunday Eucharist reading, not a weekday one. Both now use the same real Anglican lectionary engine as the Prayer & Readings tab (`src/lib/lectionary.js`), correctly switching between the Sunday (RCL) and weekday (DEL) reading for the actual selected date.
+- **Changed:** The day-detail sheet now lists every reading for the day (First Reading, Psalm, Second Reading, Gospel as applicable) instead of only the first one.
+- **Added:** The reading section on the day-detail sheet is now tappable — it opens the full Prayer & Readings tab scoped to that specific date (today or any other date browsed to via Grid/Wheel), with a "Showing [date] · Back to today" banner so it's clear you're not looking at today. Navigating the tab bar/sidebar to Prayer & Readings directly always shows today, as before.
+- **Fixed:** The Eucharist segment on the Prayer & Readings tab was still labeled "Sunday" even though it now shows the real weekday reading too on non-Sundays; relabeled to "Eucharist".
+
 ## [0.11.0] — Real Anglican Eucharist lectionary (weekday + Sunday)
 
 - **Added:** The Anglican Eucharist reading on the Prayer & Readings tab is now computed from the real Common Worship lectionary for today's actual date, replacing the fixed demo citation. Weekdays use the Daily Eucharistic Lectionary (Table 6, transcribed from the CofE's 2005 Weekday Lectionary booklet, amended 2010); Sundays use the Principal Service (Revised Common Lectionary) track, sourced from Vanderbilt Divinity Library's published RCL citations for Years A, B, and C.
