@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.13.2] — Wire up the Christmas/Epiphany date-keyed weekday block
+
+- **Added:** Weekday Eucharist (DEL) and Office readings for 17-24 Dec, 29-31 Dec, 2-5 Jan, and 7-12 Jan now resolve to their real, date-specific citations instead of falling back to demo text or (in DEL's case) miscalculating into a nonsensical negative week number.
+- **Added:** Extracted the 21 missing Dec 17-24 / Dec 29-31 / Jan 2-5 / Jan 7-12 rows for the weekday Eucharist lectionary (Table 6) directly from the source PDF - these had never been captured in the original transcription.
+- **Known limitation:** Both the weekday Eucharist and Office versions of this block only model the common case ("if 6 January is not a Sunday"); the alternate reading sequence used in years when Epiphany is pastorally moved to a Sunday isn't modeled. Dec 25-28 (Christmas Day itself, Stephen, John, Holy Innocents) and Jan 1/6 (Naming and Circumcision, the Epiphany) are Principal Feasts with their own propers in a different table, not this weekday one - still a gap.
+
 ## [0.13.1] — Wire up fixed-date Sundays (Christmas, Epiphany, Easter, Pentecost, etc.)
 
 - **Added:** Sundays that fall on fixed dates now resolve to their real RCL reading instead of falling back to demo text: First/Second Sunday after Christmas Day, Epiphany of the Lord (in years it lands on a Sunday, with Baptism of Christ correctly shifting to the following Sunday), Baptism of the Lord, Transfiguration Sunday, the Sunday of the Passion/Palm Sunday, **Resurrection of the Lord (Easter Day)**, and Day of Pentecost.

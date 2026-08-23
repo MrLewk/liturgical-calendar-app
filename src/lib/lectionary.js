@@ -79,12 +79,32 @@ export function delWeekLabel(date) {
   // ^ Baptism of Christ: Sunday after the Epiphany octave. Uses the same
   // church year as `easter` since both fall in the calendar year after
   // Advent1's year.
+  const christmasYear = advent1.getFullYear();
+  const nextYear = christmasYear + 1;
 
-  if (d >= advent1 && d < new Date(advent1.getFullYear(), 11, 17)) {
-    // Advent 1-3 (Dec 17 onward switches to date-keyed December entries,
-    // not yet wired — see KNOWN GAPS).
+  // Dec 17-24: date-keyed "Advent" readings (the "O Antiphons" run-up to
+  // Christmas), replacing the generic Advent-week count for these dates.
+  if (d >= new Date(christmasYear, 11, 17) && d <= new Date(christmasYear, 11, 24)) {
+    return { week: `Dec ${d.getDate()}`, day: "fixed" };
+  }
+  if (d >= advent1 && d < new Date(christmasYear, 11, 17)) {
     const n = Math.floor(daysBetween(advent1, d) / 7) + 1;
     return { week: `Advent ${Math.min(n, 3)}`, day };
+  }
+  // Dec 25-28 (Christmas Day + the days of Stephen/John/Holy Innocents) and
+  // Jan 1/6 (Naming and Circumcision, Epiphany) are Principal Feasts with
+  // their own propers elsewhere, not in this weekday table - known gap.
+  if (d >= new Date(christmasYear, 11, 29) && d <= new Date(christmasYear, 11, 31)) {
+    return { week: `Dec ${d.getDate()}`, day: "fixed" };
+  }
+  if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() >= 2 && d.getDate() <= 5) {
+    return { week: `Jan ${d.getDate()}`, day: "fixed" };
+  }
+  if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() >= 7 && d.getDate() <= 12) {
+    // Only correct "if 6 January is not a Sunday" and up to the Saturday
+    // after; the Sunday-shift variant isn't modeled - a rare, documented
+    // approximation for this narrow week.
+    return { week: `Jan ${d.getDate()}`, day: "fixed" };
   }
 
   if (d >= addDays(easter, -7) && d < easter) {
@@ -256,6 +276,29 @@ export function officeWeekLabel(date) {
     const n = Math.floor(daysBetween(advent1, d) / 7) + 1;
     return { week: `Advent ${Math.min(n, 4)}`, day: officeDay };
   }
+
+  // Dec 29-31, Jan 1 (Naming/Circumcision), Jan 2-5, Jan 7-12: date-keyed
+  // entries with their own range-style week labels (matching Table 2's own
+  // grouping) rather than the usual weekly M-S blocks. Dec 17-24 has no
+  // separate date-keyed block in Table 2 (unlike DEL/Table 6) - "Advent 4"
+  // continues generically through Dec 24.
+  const christmasYear = advent1.getFullYear();
+  const nextYear = christmasYear + 1;
+  if (d >= new Date(christmasYear, 11, 29) && d <= new Date(christmasYear, 11, 31)) {
+    return { week: "Dec 29–31", day: String(d.getDate()) };
+  }
+  if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() === 1) {
+    return { week: "Naming and Circumcision", day: "1" };
+  }
+  if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() >= 2 && d.getDate() <= 5) {
+    return { week: "Jan 2–5", day: String(d.getDate()) };
+  }
+  if (d.getFullYear() === nextYear && d.getMonth() === 0 && d.getDate() >= 7 && d.getDate() <= 12) {
+    // Only correct "if 6 January is not a Sunday"; the Sunday-shift variant
+    // isn't modeled - same documented approximation as the DEL side.
+    return { week: "Jan 7–12", day: String(d.getDate()) };
+  }
+
   if (d >= addDays(easter, -7) && d < easter) return { week: "HOLY WEEK", day: officeDay };
   if (d >= easter && d <= easterWeekEnd) return { week: "Easter", day: officeDay };
   if (d > easterWeekEnd && d <= pentecost) {

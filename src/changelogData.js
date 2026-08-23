@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.13.2",
+    title: "Wire up the Christmas/Epiphany date-keyed weekday block",
+    changes: [
+      { type: "Added", text: "Weekday Eucharist (DEL) and Office readings for 17-24 Dec, 29-31 Dec, 2-5 Jan, and 7-12 Jan now resolve to their real, date-specific citations instead of falling back to demo text or miscalculating entirely." },
+      { type: "Added", text: "Extracted the 21 missing Dec/Jan rows for the weekday Eucharist lectionary directly from the source PDF - these had never been captured in the original transcription." },
+      { type: "Known gap", text: "Only the common case is modeled (6 January not a Sunday); the Sunday-shift variant isn't. Dec 25-28 and Jan 1/6 are Principal Feasts with their own propers elsewhere - still demo text." },
+    ],
+  },
+  {
     version: "0.13.1",
     title: "Wire up fixed-date Sundays (Christmas, Epiphany, Easter, Pentecost, etc.)",
     changes: [
