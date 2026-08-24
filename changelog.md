@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.17.0] — Common Worship Collect toggle
+
+- **Added:** A "Collect of the Day" source toggle in Settings (visible when the Anglican tradition is selected) — choose between the 1662 Book of Common Prayer (traditional language) and Common Worship (contemporary language). Persisted per-device via `officium-collect-source`.
+- **Added:** All 98 Common Worship Collects (contemporary language) transcribed from the justus.anglican.org Common Worship mirror, covering the full Sunday/season cycle (Advent through Christ the King) and all Principal Feasts/Festivals — full parity with the existing 1662 BCP set. © The Archbishops' Council 2000, published by Church House Publishing; used and attributed per their site's reproduction terms (non-commercial, hyperlinked back to churchofengland.org).
+- **Added:** `collectCWLabel()`/`collectCWFor()` in `src/lib/lectionary.js` and `src/data/collects_cw_raw.json`, mirroring the 1662 resolver's fixed-feast + Sunday-carry-forward-chain pattern. Verified via an automated 100-year date sweep (2024–2124): zero duplicate/out-of-order anchors, zero null-resolution days, and every referenced label confirmed to resolve to real collect text.
+- **Fixed (during development):** two real date-boundary bugs in the CW resolver where early-Easter years could compute a "before Lent" Sunday anchor that collided with Epiphany season's own Sunday anchors on the same date — both caught by the automated sweep before reaching the app.
+- **Not included this pass:** Common Worship's Post Communion prayers (only the Collect is shown, matching the BCP display) and the Traditional Language register of Common Worship.
+
 ## [0.16.0] — The 1662 Collect of the Day
 
 - **Added:** Both the Eucharist and Morning/Evening Prayer views now include a real "Collect of the Day" from the 1662 Book of Common Prayer, correctly resolved for any date - the actual Sunday-or-named-day whose Collect is currently in force, following the BCP's own "said continually" carry-forward rule (a Sunday's, or a fixed feast's, Collect governs every day after it until the next one takes over).

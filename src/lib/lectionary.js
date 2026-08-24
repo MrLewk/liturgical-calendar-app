@@ -713,3 +713,195 @@ export function eucharistReadingFor(date) {
   const citation = delYear === 1 ? row.yr1 : row.yr2;
   return { week, day, delYear, citation };
 }
+
+// ---- Common Worship Collects (contemporary language) ----
+//
+// Mirrors the 1662 BCP collect resolver above: a table of exact single-day
+// fixed feasts checked first, then a Sunday/named-weekday chain that
+// governs every day after it (carry-forward) until the next anchor.
+
+import collectsCW from "../data/collects_cw_raw.json";
+
+const ORDINAL_CW = [
+  null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth",
+  "Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth", "Eighteenth",
+  "Nineteenth", "Twentieth", "Twenty-first",
+];
+
+const FIXED_FEAST_DATES_CW = [
+  // [month (0-based), day, label] - matches collects_cw_raw.json keys.
+  [0, 1, "The Naming and Circumcision of Jesus"],
+  [0, 25, "The Conversion of Paul"],
+  [1, 2, "The Presentation of Christ in the Temple"],
+  [2, 19, "Joseph of Nazareth"],
+  [2, 25, "The Annunciation of Our Lord"],
+  [3, 23, "George"],
+  [3, 25, "Mark"],
+  [4, 1, "Philip and James"],
+  [4, 14, "Matthias"],
+  [4, 31, "The Visit of the Blessed Virgin Mary to Elizabeth"],
+  [5, 11, "Barnabas"],
+  [5, 24, "The Birth of John the Baptist"],
+  [5, 29, "Peter and Paul"],
+  [6, 3, "Thomas"],
+  [6, 22, "Mary Magdalene"],
+  [6, 25, "James"],
+  [7, 6, "The Transfiguration of Our Lord"],
+  [7, 15, "The Blessed Virgin Mary"],
+  [7, 24, "Bartholomew"],
+  [8, 14, "Holy Cross Day"],
+  [8, 21, "Matthew"],
+  [8, 29, "Michael and All Angels"],
+  [9, 18, "Luke"],
+  [9, 28, "Simon and Jude"],
+  [10, 1, "All Saints' Day"],
+  [10, 30, "Andrew"],
+  [11, 24, "Christmas Eve"],
+  [11, 25, "Christmas Day"],
+  [11, 26, "Stephen"],
+  [11, 27, "John"],
+  [11, 28, "The Holy Innocents"],
+];
+
+/**
+ * Builds the ordered chain of Sunday/named-weekday collect anchors for the
+ * Common Worship church year containing `date`, following the same
+ * carry-forward logic as buildCollect1662Chain: each anchor's Collect
+ * governs every day after it until the next anchor takes over.
+ *
+ * KNOWN APPROXIMATIONS: Mothering Sunday is always used in preference to
+ * the plain "Fourth Sunday of Lent" provision (CW permits either). Corpus
+ * Christi (Thursday after Trinity) is a local-option observance and isn't
+ * modelled as a governing anchor, so that Thursday keeps the ambient
+ * Ordinary Time collect. The rare edge case of 23 Sundays after Trinity
+ * (which BCP-era rubrics handle with a special substitution) isn't
+ * modelled; years with more than 21 falls back to "The Last Sunday after
+ * Trinity" for the overflow Sundays.
+ */
+function buildCollectCWChain(date) {
+  const d = dateOnly(date);
+  const { advent1, advent1Next, easter } = churchYearContext(d);
+  const ashWednesday = addDays(easter, -46);
+  const pentecost = addDays(easter, 49);
+  const trinity = addDays(pentecost, 7);
+  const ascension = addDays(easter, 39);
+  const presentation = new Date(advent1.getFullYear() + 1, 1, 2);
+
+  const chain = [{ date: advent1, label: "The First Sunday of Advent" }];
+  for (let n = 2; n <= 4; n++) {
+    chain.push({ date: addDays(advent1, (n - 1) * 7), label: `The ${ORDINAL_CW[n]} Sunday of Advent` });
+  }
+
+  const christmasDay = new Date(advent1.getFullYear(), 11, 25);
+  const firstSundayOfChristmas = nextSunday(christmasDay);
+  const epiphany = new Date(advent1.getFullYear() + 1, 0, 6);
+  if (firstSundayOfChristmas < epiphany) {
+    chain.push({ date: firstSundayOfChristmas, label: "The First Sunday of Christmas" });
+    const secondSundayOfChristmas = addDays(firstSundayOfChristmas, 7);
+    if (secondSundayOfChristmas < epiphany) {
+      chain.push({ date: secondSundayOfChristmas, label: "The Second Sunday of Christmas" });
+    }
+  }
+
+  chain.push({ date: epiphany, label: "The Epiphany" });
+  const baptismSunday = nextSunday(epiphany);
+  chain.push({ date: baptismSunday, label: "The Baptism of Christ" });
+  for (let n = 2; n <= 4; n++) {
+    chain.push({ date: addDays(baptismSunday, (n - 1) * 7), label: `The ${ORDINAL_CW[n]} Sunday of Epiphany` });
+  }
+  const fourthEpiphanySunday = addDays(baptismSunday, 3 * 7);
+
+  const sundayNextBeforeLent = addDays(ashWednesday, -3);
+  const secondBeforeLent = addDays(ashWednesday, -10);
+  const thirdBeforeLent = addDays(ashWednesday, -17);
+  const fourthBeforeLent = addDays(ashWednesday, -24);
+  const fifthBeforeLentStart = addDays(presentation, 1);
+  // None of these "before Lent" anchors are valid before the day after
+  // Presentation (2 Feb) or before Epiphany's own 4-Sunday numbering has
+  // finished - in early-Easter years the arithmetic above can otherwise
+  // compute a date that collides with Epiphany season's own anchors.
+  const epiphanyEnd = addDays(fourthEpiphanySunday, 1);
+  const earliestBeforeLent = epiphanyEnd > fifthBeforeLentStart ? epiphanyEnd : fifthBeforeLentStart;
+  if (fifthBeforeLentStart < fourthBeforeLent && fifthBeforeLentStart >= earliestBeforeLent) {
+    chain.push({ date: fifthBeforeLentStart, label: "The Fifth Sunday before Lent" });
+  }
+  if (fourthBeforeLent >= earliestBeforeLent) {
+    chain.push({ date: fourthBeforeLent, label: "The Fourth Sunday before Lent" });
+  }
+  if (thirdBeforeLent >= earliestBeforeLent) {
+    chain.push({ date: thirdBeforeLent, label: "The Third Sunday before Lent" });
+  }
+  if (secondBeforeLent >= earliestBeforeLent) {
+    chain.push({ date: secondBeforeLent, label: "The Second Sunday before Lent" });
+  }
+  chain.push({ date: sundayNextBeforeLent, label: "The Sunday next before Lent" });
+
+  chain.push({ date: ashWednesday, label: "Ash Wednesday" });
+  for (let n = 1; n <= 3; n++) {
+    chain.push({ date: addDays(ashWednesday, 4 + (n - 1) * 7), label: `The ${ORDINAL_CW[n]} Sunday of Lent` });
+  }
+  chain.push({ date: addDays(ashWednesday, 25), label: "Mothering Sunday" }); // 4th Sunday of Lent
+  chain.push({ date: addDays(ashWednesday, 32), label: "The Fifth Sunday of Lent" });
+  chain.push({ date: addDays(easter, -7), label: "Palm Sunday" });
+  chain.push({ date: addDays(easter, -3), label: "Maundy Thursday" });
+  chain.push({ date: addDays(easter, -2), label: "Good Friday" });
+  chain.push({ date: addDays(easter, -1), label: "Easter Eve" });
+
+  chain.push({ date: easter, label: "Easter Day" });
+  for (let n = 2; n <= 7; n++) {
+    chain.push({ date: addDays(easter, (n - 1) * 7), label: `The ${ORDINAL_CW[n]} Sunday of Easter` });
+  }
+  chain.push({ date: ascension, label: "Ascension Day" });
+  // The 7th Sunday of Easter anchor above (easter+42) already coincides
+  // with the Sunday after Ascension Day, so no separate anchor is needed.
+
+  chain.push({ date: pentecost, label: "Day of Pentecost" });
+  chain.push({ date: trinity, label: "Trinity Sunday" });
+
+  const beforeAdventCutoff = addDays(advent1Next, -4 * 7);
+  let n = 1;
+  for (let sunday = addDays(trinity, 7); sunday < beforeAdventCutoff; sunday = addDays(sunday, 7)) {
+    const label = n <= 21 ? `The ${ORDINAL_CW[n]} Sunday after Trinity` : "The Last Sunday after Trinity";
+    chain.push({ date: sunday, label });
+    n++;
+  }
+  chain.push({ date: addDays(advent1Next, -28), label: "The Fourth Sunday before Advent" });
+  chain.push({ date: addDays(advent1Next, -21), label: "The Third Sunday before Advent" });
+  chain.push({ date: addDays(advent1Next, -14), label: "The Second Sunday before Advent" });
+  chain.push({ date: addDays(advent1Next, -7), label: "Christ the King" });
+
+  return chain.sort((a, b) => a.date - b.date);
+}
+
+/**
+ * Resolves `date` to the Common Worship Collect that governs it - an exact
+ * fixed feast if `date` falls on one, else whichever Sunday's (or named
+ * weekday's) Collect is currently "in force" per the carry-forward chain.
+ * Mirrors collect1662Label's approach.
+ */
+export function collectCWLabel(date) {
+  if (!isValidDate(date)) return null;
+  const d = dateOnly(date);
+
+  for (const [month, day, label] of FIXED_FEAST_DATES_CW) {
+    if (d.getMonth() === month && d.getDate() === day) return label;
+  }
+
+  const chain = buildCollectCWChain(d);
+  let governing = null;
+  for (const anchor of chain) {
+    if (anchor.date <= d) governing = anchor;
+    else break;
+  }
+  return governing ? governing.label : null;
+}
+
+/** The Common Worship Collect text for `date`, or null if collectCWLabel
+ * doesn't resolve to a transcribed entry. */
+export function collectCWFor(date) {
+  const label = collectCWLabel(date);
+  if (!label) return null;
+  const text = collectsCW[label];
+  if (!text) return null;
+  return { label, text };
+}

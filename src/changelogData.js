@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.17.0",
+    title: "Common Worship Collect toggle",
+    changes: [
+      { type: "Added", text: "A \"Collect of the Day\" source toggle in Settings (Anglican tradition) — choose between the 1662 Book of Common Prayer (traditional language) and Common Worship (contemporary language)." },
+      { type: "Added", text: "All 98 Common Worship Collects (contemporary language), covering the full Sunday/season cycle and all Principal Feasts/Festivals — full parity with the existing 1662 BCP set. © The Archbishops' Council 2000, published by Church House Publishing." },
+      { type: "Added", text: "collectCWLabel()/collectCWFor() resolver, verified via an automated 100-year date sweep with zero gaps or collisions." },
+      { type: "Not included", text: "Common Worship's Post Communion prayers and its Traditional Language register." },
+    ],
+  },
+  {
     version: "0.16.0",
     title: "The 1662 Collect of the Day",
     changes: [

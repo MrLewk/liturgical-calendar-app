@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -250,14 +250,14 @@ function anglicanReadingItems(date) {
  * citation. Falls back to the static demo entry when today's date falls
  * in one of the lectionary engine's known gaps (see lib/lectionary.js).
  */
-function buildAnglicanEucharist(today) {
+function buildAnglicanEucharist(today, collectSource) {
   const fallback = READINGS.Anglican.eucharist;
   const collect = fallback.sequence[0]; // keep the Collect for Purity as-is
   const isSunday = today.getDay() === 0;
 
-  const collectOfDay = collect1662For(today);
+  const collectOfDay = collectSource === "CW" ? collectCWFor(today) : collect1662For(today);
   const collectItems = collectOfDay
-    ? [{ type: "prayer", role: "Collect of the Day · 1662", ref: collectOfDay.label, text: collectOfDay.text }]
+    ? [{ type: "prayer", role: `Collect of the Day · ${collectSource === "CW" ? "CW" : "1662"}`, ref: collectOfDay.label, text: collectOfDay.text }]
     : [];
 
   const result = anglicanReadingItems(today);
@@ -308,15 +308,15 @@ function splitPsalmCitation(raw) {
     .filter(Boolean);
 }
 
-function buildAnglicanOffice(date, service) {
+function buildAnglicanOffice(date, service, collectSource) {
   const fallback = READINGS.Anglican[service];
   const confession = fallback.sequence[0];
   const canticle = fallback.sequence[1];
   const collect = fallback.sequence[fallback.sequence.length - 1];
 
-  const collectOfDay = collect1662For(date);
+  const collectOfDay = collectSource === "CW" ? collectCWFor(date) : collect1662For(date);
   const collectOfDayItems = collectOfDay
-    ? [{ type: "prayer", role: "Collect of the Day · 1662", ref: collectOfDay.label, text: collectOfDay.text }]
+    ? [{ type: "prayer", role: `Collect of the Day · ${collectSource === "CW" ? "CW" : "1662"}`, ref: collectOfDay.label, text: collectOfDay.text }]
     : [];
 
   const result = officeReadingFor(date, service);
@@ -465,6 +465,7 @@ export default function App() {
   const theme = useTheme();
   const [tab, setTab] = useState("today");
   const [tradition, setTradition] = usePersistedState("officium-tradition", "Catholic");
+  const [collectSource, setCollectSource] = usePersistedState("officium-collect-source", "1662");
   const [showSettings, setShowSettings] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [selectedFeast, setSelectedFeast] = useState(null);
@@ -542,6 +543,7 @@ export default function App() {
           viewDate={readingsViewDate}
           onBackToToday={() => setReadingsViewDate(null)}
           onOpenPassage={setScriptureRef}
+          collectSource={collectSource}
         />
       )}
       {tab === "feasts" && (
@@ -681,6 +683,8 @@ export default function App() {
               onChangeWebBibleVersion={setWebBibleVersion}
               bibleGatewayVersion={bibleGatewayVersion}
               onChangeBibleGatewayVersion={setBibleGatewayVersion}
+              collectSource={collectSource}
+              onChangeCollectSource={setCollectSource}
             />
           )}
 
@@ -844,6 +848,8 @@ function SettingsSheet({
   onChangeWebBibleVersion,
   bibleGatewayVersion,
   onChangeBibleGatewayVersion,
+  collectSource,
+  onChangeCollectSource,
 }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
@@ -925,6 +931,43 @@ function SettingsSheet({
       <p className="text-[11px] mt-4 mb-5" style={{ color: alpha(theme.text, 0.33) }}>
         Calendar dates and feast days adjust to match.
       </p>
+
+      {draft === "Anglican" && (
+        <>
+          <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: alpha(theme.text, 0.4) }}>
+            Collect of the Day
+          </p>
+          <div className="space-y-2 mb-2">
+            {[
+              { key: "1662", label: "1662 Book of Common Prayer", sub: "Traditional language" },
+              { key: "CW", label: "Common Worship", sub: "Contemporary language" },
+            ].map((o) => (
+              <button
+                key={o.key}
+                onClick={() => onChangeCollectSource(o.key)}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-left"
+                style={{
+                  backgroundColor: collectSource === o.key ? alpha(season.color, 0.2) : theme.bg,
+                  border: collectSource === o.key ? `1px solid ${accent}` : "1px solid transparent",
+                }}
+              >
+                <div>
+                  <p className="text-[13.5px]" style={{ color: theme.text }}>
+                    {o.label}
+                  </p>
+                  <p className="text-[10.5px] mt-0.5" style={{ color: alpha(theme.text, 0.4) }}>
+                    {o.sub}
+                  </p>
+                </div>
+                {collectSource === o.key && <span style={{ color: accent }}>●</span>}
+              </button>
+            ))}
+          </div>
+          <p className="text-[11px] mb-5" style={{ color: alpha(theme.text, 0.33) }}>
+            Common Worship text © The Archbishops' Council 2000, published by Church House Publishing.
+          </p>
+        </>
+      )}
 
       <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: alpha(theme.text, 0.4) }}>
         Appearance
@@ -2028,14 +2071,14 @@ function WheelView({ season, seasons, today, tradition, calendar, variant = "sta
   );
 }
 
-function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage }) {
+function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage, collectSource }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   const effectiveDate = viewDate || today;
   const isViewingOtherDay = !!viewDate;
-  const anglicanEucharist = useMemo(() => (tradition === "Anglican" ? buildAnglicanEucharist(effectiveDate) : null), [tradition, effectiveDate]);
-  const anglicanAm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "am") : null), [tradition, effectiveDate]);
-  const anglicanPm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "pm") : null), [tradition, effectiveDate]);
+  const anglicanEucharist = useMemo(() => (tradition === "Anglican" ? buildAnglicanEucharist(effectiveDate, collectSource) : null), [tradition, effectiveDate, collectSource]);
+  const anglicanAm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "am", collectSource) : null), [tradition, effectiveDate, collectSource]);
+  const anglicanPm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "pm", collectSource) : null), [tradition, effectiveDate, collectSource]);
   const data = useMemo(() => {
     if (tradition !== "Anglican") return READINGS[tradition];
     return { ...READINGS.Anglican, am: anglicanAm, pm: anglicanPm, eucharist: anglicanEucharist };
