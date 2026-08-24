@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon, X } from "lucide-react";
+import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon, Monitor, X } from "lucide-react";
 import { useTheme } from "./ThemeContext";
 import { alpha, seasonAccent } from "./theme";
 import UpdateToast from "./UpdateToast";
+import InstallToast from "./InstallToast";
 import CookieConsent from "./CookieConsent";
 import { usePersistedState } from "./usePersistedState";
 import { loadGoogleAnalytics, disableGoogleAnalytics } from "./analytics";
@@ -274,10 +275,11 @@ function buildAnglicanEucharist(today) {
  * references, each independently tappable via the passage-lookup modal.
  * "50, 54" -> two refs; "119.1-32" -> one ranged ref; "51 or 102" -> only
  * the first alternative (an "or" means pick one, not read both);
- * "18.31-end" -> drops the unresolvable "-end" and reads from that verse
- * to the end of the chapter isn't representable, so falls back to the
- * verse it starts at; bracketed optional psalms like "(10)" are still
- * included, just with the brackets stripped for display. */
+ * "18.31-end" -> kept as "18:31-end", which parseReference/getPassage now
+ * resolve against the real psalm text, reading from verse 31 through
+ * whatever its actual last verse turns out to be; bracketed optional
+ * psalms like "(10)" are still included, just with the brackets stripped
+ * for display. */
 function splitPsalmCitation(raw) {
   if (!raw) return [];
   const first = raw.split(/\s+or\s+/i)[0];
@@ -287,7 +289,6 @@ function splitPsalmCitation(raw) {
       let clean = seg.replace(/[()]/g, "").trim();
       if (!clean) return null;
       clean = clean.replace(/\./g, ":");
-      clean = clean.replace(/:(\d+)-end\b/i, ":$1");
       return `Psalm ${clean}`;
     })
     .filter(Boolean);
@@ -309,8 +310,8 @@ function buildAnglicanOffice(date, service) {
   psalmRefs.forEach((ref, i) => {
     items.push({ type: "reading", role: i === 0 ? "Psalm" : null, ref: displayRef(ref) });
   });
-  if (result?.ot) items.push({ type: "reading", role: "Old Testament", ref: displayRef(result.ot) });
-  if (result?.nt) items.push({ type: "reading", role: "New Testament", ref: displayRef(result.nt) });
+  if (result?.ot) items.push({ type: "reading", role: "Old Testament", ref: displayRef(splitCitation(result.ot)[0] || result.ot) });
+  if (result?.nt) items.push({ type: "reading", role: "New Testament", ref: displayRef(splitCitation(result.nt)[0] || result.nt) });
   const labelWeek = result?.week || psalmResult?.week || "";
   return {
     label: `${fallback.label} · ${labelWeek}, ${WEEKDAY_NAME[date.getDay()]} · ${shortDate(date)}`,
@@ -640,6 +641,7 @@ export default function App() {
         />
       )}
 
+      <InstallToast active={cookieConsent !== null} />
       <UpdateToast />
     </div>
   );
@@ -820,6 +822,31 @@ function SettingsSheet({
       </p>
 
       <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: alpha(theme.text, 0.4) }}>
+        Appearance
+      </p>
+      <div className="flex gap-2 mb-5">
+        {[
+          { key: "system", label: "System", icon: Monitor },
+          { key: "light", label: "Light", icon: Sun },
+          { key: "dark", label: "Dark", icon: Moon },
+        ].map((o) => (
+          <button
+            key={o.key}
+            onClick={() => theme.setMode(o.key)}
+            className="flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl text-[12px]"
+            style={{
+              backgroundColor: theme.mode === o.key ? alpha(season.color, 0.2) : theme.bg,
+              color: theme.text,
+              border: theme.mode === o.key ? `1px solid ${accent}` : "1px solid transparent",
+            }}
+          >
+            <o.icon size={16} color={theme.mode === o.key ? accent : alpha(theme.text, 0.6)} />
+            {o.label}
+          </button>
+        ))}
+      </div>
+
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: alpha(theme.text, 0.4) }}>
         Bible text
       </p>
       <div className="space-y-2 mb-2">
@@ -880,16 +907,6 @@ function SettingsSheet({
         Preselected when you tap "Open on BibleGateway" for a different translation than the WEB — you can still
         change it per-passage.
       </p>
-
-      {theme.mode !== "system" && (
-        <button
-          onClick={theme.useSystem}
-          className="text-[11px] underline decoration-dotted mb-3 block"
-          style={{ color: alpha(theme.text, 0.4) }}
-        >
-          Reset appearance to match system
-        </button>
-      )}
 
       <button
         onClick={() => {

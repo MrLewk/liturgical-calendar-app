@@ -16,7 +16,11 @@ function normalizeDashes(s) {
  *
  * Shape: { code, bookName, startChapter, startVerse, endChapter, endVerse }
  * startVerse/endVerse are null when the reference is a whole chapter (or
- * whole chapter range).
+ * whole chapter range). A literal "end" on the end side (e.g. "8:26-end",
+ * lectionary shorthand for "verse 26 through however many verses this
+ * chapter has") parses to endVerse: null with startVerse still set — the
+ * caller resolves that against real chapter data (see getPassage in
+ * scripture.js) rather than the parser guessing a verse count.
  */
 export function parseReference(raw) {
   if (!raw) return null;
@@ -24,8 +28,9 @@ export function parseReference(raw) {
 
   // Split off the book name from the leading numeral/chapter:verse part.
   // Book names can themselves start with a digit (1 Corinthians), so match
-  // the LAST run of "<chapter>[:<verse>][-...]" as the locator.
-  const m = text.match(/^(.*?)\s+(\d+(?::\d+)?(?:\s*-\s*\d+(?::\d+)?)?)\s*$/);
+  // the LAST run of "<chapter>[:<verse>][-...]" as the locator. The end
+  // side of the range may also be the literal word "end".
+  const m = text.match(/^(.*?)\s+(\d+(?::\d+)?(?:\s*-\s*(?:\d+(?::\d+)?|end))?)\s*$/i);
   if (!m) return null;
   const [, bookRaw, locator] = m;
   const code = resolveBookCode(bookRaw);
@@ -36,15 +41,22 @@ export function parseReference(raw) {
   let endChapter = startChapter;
   let endVerse = startVerse;
   if (parts[1]) {
-    const [ec, ev] = splitChapterVerse(parts[1]);
-    if (ev !== null) {
-      // "1:26-2:7" style — explicit chapter:verse on both ends
-      endChapter = ec;
-      endVerse = ev;
-    } else {
-      // "26:1-9" style — second number is just a verse in the same chapter
+    if (/^end$/i.test(parts[1])) {
+      // "26-end" — same chapter, run to whatever its last verse turns out
+      // to be once the actual text is loaded.
       endChapter = startChapter;
-      endVerse = ec;
+      endVerse = null;
+    } else {
+      const [ec, ev] = splitChapterVerse(parts[1]);
+      if (ev !== null) {
+        // "1:26-2:7" style — explicit chapter:verse on both ends
+        endChapter = ec;
+        endVerse = ev;
+      } else {
+        // "26:1-9" style — second number is just a verse in the same chapter
+        endChapter = startChapter;
+        endVerse = ec;
+      }
     }
   }
 
@@ -63,7 +75,10 @@ function splitChapterVerse(part) {
   return [parseInt(c, 10), v !== undefined ? parseInt(v, 10) : null];
 }
 
-/** Formats a parsed reference back into a display string, e.g. for headings. */
+/** Formats a parsed reference back into a display string, e.g. for headings.
+ * When endVerse is null but startVerse isn't (the "26-end" case), displays
+ * the literal "-end" rather than a guessed number — getPassage resolves it
+ * to the real last verse once the chapter text is actually loaded. */
 export function formatReference(ref, bookName) {
   if (!ref) return "";
   const name = bookName || ref.bookName;
@@ -73,9 +88,10 @@ export function formatReference(ref, bookName) {
       : `${name} ${ref.startChapter}-${ref.endChapter}`;
   }
   if (ref.startChapter === ref.endChapter) {
-    return ref.startVerse === ref.endVerse
-      ? `${name} ${ref.startChapter}:${ref.startVerse}`
-      : `${name} ${ref.startChapter}:${ref.startVerse}-${ref.endVerse}`;
+    if (ref.startVerse === ref.endVerse) return `${name} ${ref.startChapter}:${ref.startVerse}`;
+    const end = ref.endVerse === null ? "end" : ref.endVerse;
+    return `${name} ${ref.startChapter}:${ref.startVerse}-${end}`;
   }
-  return `${name} ${ref.startChapter}:${ref.startVerse}-${ref.endChapter}:${ref.endVerse}`;
+  const end = ref.endVerse === null ? "end" : ref.endVerse;
+  return `${name} ${ref.startChapter}:${ref.startVerse}-${ref.endChapter}:${end}`;
 }

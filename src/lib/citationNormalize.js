@@ -33,11 +33,12 @@ function stripVerseLetterSuffixes(s) {
   return s.replace(/(\d)[a-z]\b/g, "$1");
 }
 
-function dropEndMarker(s) {
-  if (/-end\b/i.test(s)) {
-    return s.replace(/(\d+):\d+-end\b/i, "$1");
-  }
-  return s;
+function normalizeEndMarker(s) {
+  // Just tidies spacing/casing around a literal "end" — parseReference
+  // (bibleRef.js) now understands "8:26-end" natively and resolves it to
+  // the chapter's real last verse once the text is loaded, so this no
+  // longer needs to guess or collapse the range down to a bare chapter.
+  return s.replace(/-\s*end\b/i, "-end");
 }
 
 function dropExtraCommaRanges(s) {
@@ -51,7 +52,7 @@ function cleanOne(raw) {
   s = firstAlternative(s);
   s = dotsToColons(s);
   s = stripVerseLetterSuffixes(s);
-  s = dropEndMarker(s);
+  s = normalizeEndMarker(s);
   s = dropExtraCommaRanges(s);
   return s.trim();
 }

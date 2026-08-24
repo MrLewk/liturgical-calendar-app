@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.15.0] — PWA install prompt, appearance picker, and accurate scripture end-of-chapter ranges
+
+- **Added:** A dismissible install prompt now appears on Android/Chrome (with a one-tap Install button via `beforeinstallprompt`) and iOS Safari (with manual "Add the Share icon, then Add to Home Screen" instructions, since iOS can't trigger an install programmatically). Dismissing it — or completing the install — sets a flag so it never shows again on that device. New `src/InstallToast.jsx`, modeled on the existing `UpdateToast` pattern.
+- **Fixed:** Some Morning/Evening Prayer scripture readings (e.g. citations like "Acts 8.26–end") were throwing "Could not understand reference" when tapped. The real cause: `buildAnglicanOffice` in `App.jsx` was reading the raw Table 2 citation directly instead of running it through `splitCitation()` first, the way every other reading path already did.
+- **Improved:** While fixing that, found the citation normalizer's handling of "N-end" citations was itself lossy — it collapsed "8:26-end" down to just "Acts 8" (the bare chapter), silently dropping the starting verse. `parseReference` (`src/lib/bibleRef.js`) now understands a literal "end" natively, resolving it against the real chapter text once loaded (in `getPassage`, `src/lib/scripture.js`) rather than guessing — so "Acts 8:26-end" now correctly opens as "Acts 8:26-40", reading from the right starting verse through the chapter's real last verse. The same fix was applied to the psalm citation splitter, which had the identical issue.
+- **Changed:** Replaced the easy-to-miss "reset appearance to match system" text link (buried in Settings) with a proper System / Light / Dark picker, styled to match the Tradition picker. The header's sun/moon icon still works as a quick toggle, but the way back to following the device's system setting is now much more discoverable.
+
 ## [0.14.0] — Real psalms for Morning & Evening Prayer
 
 - **Added:** Morning and Evening Prayer now show the real appointed psalm(s) for the day, transcribed from Table 3 (Psalms for Seasons — Advent, the Christmas/Epiphany date-keyed block, Epiphany 1-4, Lent, Easter, and the 4 weeks before Advent) and Table 4 (Psalms for Ordinary Time — the rolling 7-week cycle used everywhere else, correctly reset at all 3 of its documented anchor points: the first Monday of Advent, the Monday between 2-8 January, and the day after the Second Sunday of Easter).

@@ -78,8 +78,16 @@ export async function getPassage(refString, version) {
     }
   }
 
+  // Resolve an open-ended "26-end" range to the real last verse number now
+  // that the chapter text is actually loaded, so the displayed reference
+  // reads "Acts 8:26-39" rather than leaving the literal word "end" in it.
+  let displayParsed = parsed;
+  if (parsed.endVerse === null && parsed.startVerse !== null && verses.length > 0) {
+    displayParsed = { ...parsed, endVerse: verses[verses.length - 1].verse };
+  }
+
   return {
-    reference: formatReference(parsed, book.name || bookDisplayName(parsed.code)),
+    reference: formatReference(displayParsed, book.name || bookDisplayName(parsed.code)),
     bookName: book.name || bookDisplayName(parsed.code),
     version,
     verses,

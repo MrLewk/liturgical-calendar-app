@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.15.0",
+    title: "PWA install prompt, appearance picker, and accurate scripture end-of-chapter ranges",
+    changes: [
+      { type: "Added", text: "A dismissible install prompt now appears on Android/Chrome (with a one-tap Install button) and iOS Safari (with \"Add to Home Screen\" instructions, since iOS can't trigger an install programmatically). Dismissing it — or installing — hides it for good on that device." },
+      { type: "Fixed", text: "Some Morning/Evening Prayer scripture readings (e.g. \"Acts 8:26-end\") were throwing \"Could not understand reference\" when tapped. The Office reading path was skipping the citation normalizer every other reading already used." },
+      { type: "Improved", text: "That fix went further: an \"N-end\" citation used to collapse down to just the bare chapter, silently dropping the starting verse. The reference parser now understands \"end\" natively and resolves it against the real chapter text once loaded, so \"Acts 8:26-end\" now correctly opens as \"Acts 8:26-40\" — starting at the right verse and ending at the chapter's real last verse. Applied to both scripture and psalm citations." },
+      { type: "Changed", text: "Replaced the easy-to-miss \"reset appearance to match system\" text link with a proper System / Light / Dark picker in Settings, matching the Tradition picker's style. The header's sun/moon icon still works as a quick toggle, but the way back to following the system setting is now much more visible." },
+    ],
+  },
+  {
     version: "0.14.0",
     title: "Real psalms for Morning & Evening Prayer",
     changes: [
