@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.18.0] — Real 1662 BCP canticles, two-canticle office structure
+
+- **Added:** All 10 canticles from the 1662 Book of Common Prayer, transcribed and verse-verified (Venite, The Easter Anthems, Te Deum Laudamus, Benedicite, Benedictus, Jubilate Deo, Magnificat, Cantate Domino, Nunc Dimittis, Deus Misereatur — 148 verses total). Public domain. Stored in `src/data/canticles_1662_raw.json`.
+- **Added:** A second canticle slot in both Morning and Evening Prayer, matching the actual historical BCP office structure rather than the previous single static canticle. Morning Prayer now runs Venite (or the Easter Anthems) → Psalms → Old Testament → **Te Deum** → New Testament → **Benedictus**; Evening Prayer runs Psalms → Old Testament → **Magnificat** → New Testament → **Nunc Dimittis**. All four now resolve to real date-appropriate 1662 text instead of fixed demo text.
+- **Added:** The Easter Anthems automatically replace Venite for all eight days of Easter Week (Easter Day through the following Saturday), per the 1662 rubric — reverts to Venite on Low Sunday. See `isEasterWeek()`/`morningFirstCanticleKey()` in `lectionary.js`.
+- **Added:** Canticles now open in a full-text modal exactly like scripture readings do (`CanticleModal`), for any canticle whose preview text is truncated — handles both the verse-paired format (e.g. Venite) and Te Deum's continuous-prose format.
+- **Fixed:** the Collect for Peace, previously missing from both Morning and Evening Prayer's fixed daily collects (each office was only showing one of its two traditional closing collects). Correct distinct 1662 wording added for AM and PM.
+- **Fixed (during development):** three real bugs caught while building the canticle extraction pipeline — the Gloria Patri's text bleeding into the preceding verse, multi-line verse-halves splitting incorrectly, and a bracketed optional-verse marker (Venite v.8–11) being mis-parsed as body text.
+- **Not included this pass:** Common Worship canticles (the four additional source pages covering CW's opening/seasonal/Gospel canticles) — a separate, larger follow-up given CW's Old/New Testament canticle set is genuinely date-driven rather than fixed.
+
 ## [0.17.0] — Common Worship Collect toggle
 
 - **Added:** A "Collect of the Day" source toggle in Settings (visible when the Anglican tradition is selected) — choose between the 1662 Book of Common Prayer (traditional language) and Common Worship (contemporary language). Persisted per-device via `officium-collect-source`.

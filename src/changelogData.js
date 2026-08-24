@@ -6,6 +6,18 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.18.0",
+    title: "Real 1662 BCP canticles, two-canticle office structure",
+    changes: [
+      { type: "Added", text: "All 10 canticles from the 1662 Book of Common Prayer, verse-verified (Venite, Easter Anthems, Te Deum, Benedicite, Benedictus, Jubilate, Magnificat, Cantate Domino, Nunc Dimittis, Deus Misereatur). Public domain." },
+      { type: "Added", text: "A second canticle slot in Morning and Evening Prayer, matching the historical BCP office structure: Morning now runs Venite/Easter Anthems → Psalms → OT → Te Deum → NT → Benedictus; Evening runs Psalms → OT → Magnificat → NT → Nunc Dimittis." },
+      { type: "Added", text: "The Easter Anthems automatically replace Venite for all eight days of Easter Week, reverting on Low Sunday." },
+      { type: "Added", text: "Canticles now open in a full-text modal, just like scripture readings." },
+      { type: "Fixed", text: "The Collect for Peace, previously missing from both Morning and Evening Prayer's fixed daily collects." },
+      { type: "Not included", text: "Common Worship canticles — a separate, larger follow-up." },
+    ],
+  },
+  {
     version: "0.17.0",
     title: "Common Worship Collect toggle",
     changes: [

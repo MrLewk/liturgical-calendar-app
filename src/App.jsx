@@ -13,10 +13,11 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
+import canticles1662Raw from "./data/canticles_1662_raw.json";
 
 const TRADITIONS = ["Catholic", "Anglican", "Orthodox"];
 
@@ -66,12 +67,34 @@ const READINGS = {
           type: "prayer",
           role: "Canticle",
           ref: "Venite, Psalm 95",
-          scriptureRef: "Psalm 95:1-7",
+          canticleKey: "venite",
           text: "O come, let us sing unto the Lord: let us heartily rejoice in the strength of our salvation. Let us come before his presence with thanksgiving: and shew ourselves glad in him with psalms. For the Lord is a great God: and a great King above all gods.",
           truncated: true,
         },
         { type: "reading", ref: "Isaiah 26:1–9", text: "In that day shall this song be sung in the land of Judah; We have a strong city; salvation will God appoint for walls and bulwarks. Open ye the gates, that the righteous nation which keepeth the truth may enter in.", truncated: true },
+        {
+          type: "prayer",
+          role: "Canticle",
+          ref: "Te Deum Laudamus",
+          canticleKey: "te_deum",
+          text: "We praise thee, O God; we acknowledge thee to be the Lord. All the earth doth worship thee, the Father everlasting. To thee all angels cry aloud, the heavens and all the powers therein.",
+          truncated: true,
+        },
         { type: "reading", ref: "Galatians 5:16–25", text: "This I say then, Walk in the Spirit, and ye shall not fulfil the lust of the flesh. For the flesh lusteth against the Spirit, and the Spirit against the flesh: and these are contrary the one to the other.", truncated: true },
+        {
+          type: "prayer",
+          role: "Canticle",
+          ref: "Benedictus",
+          canticleKey: "benedictus",
+          text: "Blessed be the Lord God of Israel: for he hath visited, and redeemed his people; And hath raised up a mighty salvation for us: in the house of his servant David.",
+          truncated: true,
+        },
+        {
+          type: "prayer",
+          role: "Collect",
+          ref: "Collect for Peace",
+          text: "O God, who art the author of peace and lover of concord, in knowledge of whom standeth our eternal life, whose service is perfect freedom; Defend us thy humble servants in all assaults of our enemies; that we, surely trusting in thy defence, may not fear the power of any adversaries, through the might of Jesus Christ our Lord. Amen.",
+        },
         {
           type: "prayer",
           role: "Collect",
@@ -91,16 +114,30 @@ const READINGS = {
           text: "Almighty and most merciful Father, we have erred and strayed from thy ways like lost sheep. We have followed too much the devices and desires of our own hearts. But thou, O Lord, have mercy upon us, miserable offenders.",
           truncated: true,
         },
+        { type: "reading", ref: "Job 1:1–22", text: "There was a man in the land of Uz, whose name was Job; and that man was perfect and upright, and one that feared God, and eschewed evil.", truncated: true },
         {
           type: "prayer",
           role: "Canticle",
-          ref: "Magnificat, Luke 1",
-          scriptureRef: "Luke 1:46-55",
+          ref: "Magnificat",
+          canticleKey: "magnificat",
           text: "My soul doth magnify the Lord: and my spirit hath rejoiced in God my Saviour. For he hath regarded: the lowliness of his handmaiden. For behold, from henceforth: all generations shall call me blessed.",
           truncated: true,
         },
-        { type: "reading", ref: "Job 1:1–22", text: "There was a man in the land of Uz, whose name was Job; and that man was perfect and upright, and one that feared God, and eschewed evil.", truncated: true },
         { type: "reading", ref: "Luke 12:22–31", text: "And he said unto his disciples, Therefore I say unto you, Take no thought for your life, what ye shall eat; neither for the body, what ye shall put on.", truncated: true },
+        {
+          type: "prayer",
+          role: "Canticle",
+          ref: "Nunc dimittis",
+          canticleKey: "nunc_dimittis",
+          text: "Lord, now lettest thou thy servant depart in peace: according to thy word. For mine eyes have seen: thy salvation; Which thou hast prepared: before the face of all people.",
+          truncated: true,
+        },
+        {
+          type: "prayer",
+          role: "Collect",
+          ref: "Collect for Peace",
+          text: "O God, from whom all holy desires, all good counsels, and all just works do proceed; Give unto thy servants that peace which the world cannot give; that both our hearts may be set to obey thy commandments, and also that by thee we, being defended from the fear of our enemies, may pass our time in rest and quietness, through the merits of Jesus Christ our Saviour. Amen.",
+        },
         {
           type: "prayer",
           role: "Collect",
@@ -310,36 +347,81 @@ function splitPsalmCitation(raw) {
 
 function buildAnglicanOffice(date, service, collectSource) {
   const fallback = READINGS.Anglican[service];
+  const byRole = (role, ref) => fallback.sequence.find((i) => i.role === role && (!ref || i.ref === ref));
   const confession = fallback.sequence[0];
-  const canticle = fallback.sequence[1];
-  const collect = fallback.sequence[fallback.sequence.length - 1];
+  const peaceCollect = byRole("Collect", "Collect for Peace");
+  const finalCollect = fallback.sequence[fallback.sequence.length - 1];
+
+  // AM: Venite (or the Easter Anthems in Easter Week) before the readings,
+  // Te Deum after the OT lesson, Benedictus after the NT lesson.
+  // PM: Magnificat after the OT lesson, Nunc Dimittis after the NT lesson.
+  const firstCanticleKey = service === "am" ? morningFirstCanticleKey(date) : null;
+  const secondCanticleKey = service === "am" ? "te_deum" : "magnificat";
+  const thirdCanticleKey = service === "am" ? "benedictus" : "nunc_dimittis";
+
+  function canticleItem(key, fallbackItem) {
+    const preview = canticlePreview(key);
+    if (!preview) return fallbackItem;
+    const label = key === "easter_anthems" ? "The Easter Anthems" : fallbackItem?.ref || key;
+    return { type: "prayer", role: "Canticle", ref: label, canticleKey: key, text: preview, truncated: true };
+  }
 
   const collectOfDay = collectSource === "CW" ? collectCWFor(date) : collect1662For(date);
   const collectOfDayItems = collectOfDay
     ? [{ type: "prayer", role: `Collect of the Day · ${collectSource === "CW" ? "CW" : "1662"}`, ref: collectOfDay.label, text: collectOfDay.text }]
     : [];
+  const peaceCollectItems = peaceCollect ? [peaceCollect] : [];
 
   const result = officeReadingFor(date, service);
   const psalmResult = psalmFor(date, service);
+  const fallbackReadings = fallback.sequence.filter((i) => i.type === "reading");
+
   if (!result && !psalmResult) {
+    const opening = firstCanticleKey ? [canticleItem(firstCanticleKey, byRole("Canticle"))] : [];
+    const afterOT = [canticleItem(secondCanticleKey, byRole("Canticle", service === "am" ? "Te Deum Laudamus" : "Magnificat"))];
+    const afterNT = [canticleItem(thirdCanticleKey, byRole("Canticle", service === "am" ? "Benedictus" : "Nunc dimittis"))];
     return {
       ...fallback,
       label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)`,
-      sequence: [confession, canticle, ...collectOfDayItems, ...fallback.sequence.slice(2)],
+      sequence: [
+        confession,
+        ...opening,
+        ...(fallbackReadings[0] ? [fallbackReadings[0]] : []),
+        ...afterOT,
+        ...(fallbackReadings[1] ? [fallbackReadings[1]] : []),
+        ...afterNT,
+        ...collectOfDayItems,
+        ...peaceCollectItems,
+        finalCollect,
+      ],
     };
   }
-  const items = [];
+
   const psalmRefs = psalmResult ? splitPsalmCitation(psalmResult.citation) : [];
-  psalmRefs.forEach((ref, i) => {
-    items.push({ type: "reading", role: i === 0 ? "Psalm" : null, ref: displayRef(ref) });
-  });
-  if (result?.ot) items.push({ type: "reading", role: "Old Testament", ref: displayRef(splitCitation(result.ot)[0] || result.ot) });
-  if (result?.nt) items.push({ type: "reading", role: "New Testament", ref: displayRef(splitCitation(result.nt)[0] || result.nt) });
+  const psalmItems = psalmRefs.map((ref, i) => ({ type: "reading", role: i === 0 ? "Psalm" : null, ref: displayRef(ref) }));
+  const otItem = result?.ot ? { type: "reading", role: "Old Testament", ref: displayRef(splitCitation(result.ot)[0] || result.ot) } : null;
+  const ntItem = result?.nt ? { type: "reading", role: "New Testament", ref: displayRef(splitCitation(result.nt)[0] || result.nt) } : null;
+
+  const opening = firstCanticleKey ? [canticleItem(firstCanticleKey, byRole("Canticle"))] : [];
+  const afterOT = [canticleItem(secondCanticleKey, byRole("Canticle", service === "am" ? "Te Deum Laudamus" : "Magnificat"))];
+  const afterNT = [canticleItem(thirdCanticleKey, byRole("Canticle", service === "am" ? "Benedictus" : "Nunc dimittis"))];
+
   const labelWeek = result?.week || psalmResult?.week || "";
   return {
     label: `${fallback.label} · ${labelWeek}, ${WEEKDAY_NAME[date.getDay()]} · ${shortDate(date)}`,
     icon: fallback.icon,
-    sequence: [confession, canticle, ...items, ...collectOfDayItems, collect],
+    sequence: [
+      confession,
+      ...opening,
+      ...psalmItems,
+      ...(otItem ? [otItem] : []),
+      ...afterOT,
+      ...(ntItem ? [ntItem] : []),
+      ...afterNT,
+      ...collectOfDayItems,
+      ...peaceCollectItems,
+      finalCollect,
+    ],
   };
 }
 
@@ -484,6 +566,7 @@ export default function App() {
   // BibleGateway.com version code preselected on the "Open on BibleGateway" link.
   const [bibleGatewayVersion, setBibleGatewayVersion] = usePersistedState("officium-biblegateway-version", "NRSVA");
   const [scriptureRef, setScriptureRef] = useState(null); // reference string, or null when the modal is closed
+  const [openCanticle, setOpenCanticle] = useState(null); // canticle key, or null when the modal is closed
   const resolvedWebVersion = webBibleVersion === "auto" ? DEFAULT_WEB_VERSION[tradition] || "engwebu" : webBibleVersion;
 
   const today = useToday();
@@ -543,6 +626,7 @@ export default function App() {
           viewDate={readingsViewDate}
           onBackToToday={() => setReadingsViewDate(null)}
           onOpenPassage={setScriptureRef}
+          onOpenCanticle={setOpenCanticle}
           collectSource={collectSource}
         />
       )}
@@ -704,6 +788,11 @@ export default function App() {
               season={season}
               onClose={() => setScriptureRef(null)}
             />
+          )}
+
+          {/* 1662 canticle sheet — reachable from any canticle in the Anglican office */}
+          {openCanticle && (
+            <CanticleModal key={openCanticle} canticleKey={openCanticle} season={season} onClose={() => setOpenCanticle(null)} />
           )}
 
           {/* Export / sync-to-calendar sheet */}
@@ -1442,6 +1531,72 @@ function ScripturePassageModal({ reference, webVersion, bibleGatewayVersion, sea
   );
 }
 
+const CANTICLE_DISPLAY_NAMES = {
+  venite: "Venite, exultemus Domino",
+  easter_anthems: "The Easter Anthems",
+  te_deum: "Te Deum Laudamus",
+  benedicite: "Benedicite, omnia opera",
+  benedictus: "Benedictus",
+  jubilate: "Jubilate Deo",
+  magnificat: "Magnificat",
+  cantate_domino: "Cantate Domino",
+  nunc_dimittis: "Nunc dimittis",
+  deus_misereatur: "Deus misereatur",
+};
+
+function CanticleModal({ canticleKey, season, onClose }) {
+  const theme = useTheme();
+  const accent = seasonAccent(season, theme.mode);
+  const canticle = canticles1662Raw[canticleKey];
+
+  return (
+    <SheetOverlay onClose={onClose}>
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-1.5" style={{ color: alpha(theme.text, 0.4) }}>
+        Canticle · 1662 Book of Common Prayer
+      </p>
+      <h2 className="text-[19px] lg:text-[24px] mb-4" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
+        {CANTICLE_DISPLAY_NAMES[canticleKey] || canticleKey}
+      </h2>
+
+      {!canticle && (
+        <p className="text-[13px] mb-4" style={{ color: alpha(theme.text, 0.5) }}>
+          That canticle's full text isn't available yet.
+        </p>
+      )}
+      {canticle && (
+        <>
+          <div className="text-[14px] lg:text-[16.5px] leading-relaxed mb-1.5" style={{ color: alpha(theme.text, 0.85) }}>
+            {canticle.verses.map((v, i) => (
+              <p key={i} className="mb-2.5">
+                {v.number && (
+                  <sup className="mr-1" style={{ color: accent }}>
+                    {v.number}
+                  </sup>
+                )}
+                {v.a}
+                {v.b ? <> {v.b}</> : null}
+              </p>
+            ))}
+          </div>
+          {canticle.citation && (
+            <p className="text-[10.5px] mb-5" style={{ color: alpha(theme.text, 0.33) }}>
+              {canticle.citation} · Book of Common Prayer (1662), public domain.
+            </p>
+          )}
+        </>
+      )}
+
+      <button
+        onClick={onClose}
+        className="w-full rounded-2xl py-3 text-[14px]"
+        style={{ backgroundColor: theme.surface, color: theme.text, border: `1px solid ${theme.border}` }}
+      >
+        Close
+      </button>
+    </SheetOverlay>
+  );
+}
+
 // Builds real season + feast data for a tradition and triggers an .ics
 // download for it — a separate file per selected tradition, since a single
 // combined calendar can't cleanly represent three different season
@@ -2071,7 +2226,7 @@ function WheelView({ season, seasons, today, tradition, calendar, variant = "sta
   );
 }
 
-function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage, collectSource }) {
+function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage, onOpenCanticle, collectSource }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   const effectiveDate = viewDate || today;
@@ -2206,6 +2361,15 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
             {item.type === "prayer" && item.truncated && item.scriptureRef && (
               <button
                 onClick={() => onOpenPassage(item.scriptureRef)}
+                className="text-[11px] lg:text-[14px] mt-2 lg:mt-3 underline decoration-dotted"
+                style={{ color: accent }}
+              >
+                Read full text
+              </button>
+            )}
+            {item.type === "prayer" && item.truncated && item.canticleKey && (
+              <button
+                onClick={() => onOpenCanticle(item.canticleKey)}
                 className="text-[11px] lg:text-[14px] mt-2 lg:mt-3 underline decoration-dotted"
                 style={{ color: accent }}
               >

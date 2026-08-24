@@ -905,3 +905,44 @@ export function collectCWFor(date) {
   if (!text) return null;
   return { label, text };
 }
+
+// ---- 1662 BCP Canticles ----
+
+import canticles1662 from "../data/canticles_1662_raw.json";
+
+/** Flattens a canticle's verse list into a single readable string, e.g.
+ * "O come, let us sing unto the Lord: let us heartily rejoice ...". */
+export function canticleText(key) {
+  const canticle = canticles1662[key];
+  if (!canticle) return null;
+  return canticle.verses
+    .map((v) => (v.b ? `${v.a} ${v.b}` : v.a))
+    .join(" ");
+}
+
+/** A short preview of a canticle's opening verse(s), truncated to roughly
+ * `maxChars`, for use in the collapsed prayer-sequence card. */
+export function canticlePreview(key, maxChars = 220) {
+  const full = canticleText(key);
+  if (!full) return null;
+  if (full.length <= maxChars) return full;
+  const cut = full.slice(0, maxChars);
+  const lastStop = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("; "), cut.lastIndexOf(": "));
+  return lastStop > maxChars * 0.4 ? cut.slice(0, lastStop + 1) : cut.trimEnd() + "…";
+}
+
+/** True for the eight days of Easter Week (Easter Day through the following
+ * Saturday), when the 1662 rubric replaces Venite with the Easter Anthems
+ * at Morning Prayer. */
+export function isEasterWeek(date) {
+  if (!isValidDate(date)) return false;
+  const d = dateOnly(date);
+  const { easter } = churchYearContext(d);
+  return d >= easter && d <= addDays(easter, 6);
+}
+
+/** The 1662 canticle key that governs Morning Prayer's first canticle slot
+ * (normally Venite, replaced by the Easter Anthems during Easter Week). */
+export function morningFirstCanticleKey(date) {
+  return isEasterWeek(date) ? "easter_anthems" : "venite";
+}
