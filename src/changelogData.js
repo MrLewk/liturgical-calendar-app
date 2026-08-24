@@ -6,6 +6,13 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.15.3",
+    title: "Calendar day-detail preview now matches time of day too",
+    changes: [
+      { type: "Fixed", text: "The day-detail sheet (tap a date on the Calendar/Chart tabs) always showed the Eucharist reading, even on weekdays when tapping through actually opens Morning or Evening Prayer instead — the same mismatch just fixed for the Today tab. It now shows the real Psalm/Old Testament/New Testament Office reading list on weekdays, matching whichever service ReadingsView would actually open to for that date. Sundays are unchanged and still show the Eucharist reading list." },
+    ],
+  },
+  {
     version: "0.15.2",
     title: "Today tab reading preview now matches time of day",
     changes: [

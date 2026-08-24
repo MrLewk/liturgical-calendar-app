@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.15.3] — Calendar day-detail preview now matches time of day too
+
+- **Fixed:** The day-detail sheet (tap a date on the Calendar/Chart tabs) always showed the Eucharist reading list, even on weekdays when tapping through actually opens Morning or Evening Prayer instead — the same mismatch just fixed for the Today tab (v0.15.2). `dayReadingItems()` now picks its service the same way — via `autoOfficeSegment(date)` — and new `anglicanOfficeItems()` builds the real Psalm/Old Testament/New Testament role-labeled list for whichever service that resolves to on weekdays, falling back to the Eucharist reading on any of the Office engine's known gaps. Sundays are unchanged and still show the Eucharist reading list.
+
 ## [0.15.2] — Today tab reading preview now matches time of day
 
 - **Fixed:** The Today tab's reading preview always showed the Eucharist reading (`buildAnglicanEucharist` / `anglicanReadingItems`), even on weekdays when tapping through actually opens Morning or Evening Prayer instead — so the preview and the full reading often disagreed. New `todayReadingRef()` in `App.jsx` now shows the real Morning Prayer Old Testament (or New Testament) reading before 5pm and Evening Prayer's after, reusing `autoOfficeSegment()` — the same clock-based logic `ReadingsView` (the Prayer tab) already uses to pick its default segment — so the preview and tapping through never disagree. Sundays are unchanged and still show the Eucharist reading.

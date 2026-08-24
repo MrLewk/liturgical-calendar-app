@@ -363,6 +363,33 @@ function anglicanOfficeScriptureRef(date, service) {
 }
 
 /**
+ * The real Psalm/Old Testament/New Testament reading list for the Anglican
+ * Daily Office (Morning or Evening Prayer) on `date`, as { role, ref }
+ * items — the same shape anglicanReadingItems returns for the Eucharist, so
+ * dayReadingItems can show whichever service is actually being previewed
+ * without the day-detail sheet needing to know the difference. Returns
+ * null on any of the Office engine's known gaps (see lib/lectionary.js).
+ */
+function anglicanOfficeItems(date, service) {
+  const result = officeReadingFor(date, service);
+  const psalmResult = psalmFor(date, service);
+  if (!result && !psalmResult) return null;
+
+  const items = [];
+  const psalmRefs = psalmResult ? splitPsalmCitation(psalmResult.citation) : [];
+  psalmRefs.forEach((ref, i) => {
+    items.push({ role: i === 0 ? "Psalm" : null, ref: displayRef(ref) });
+  });
+  if (result?.ot) items.push({ role: "Old Testament", ref: displayRef(splitCitation(result.ot)[0] || result.ot) });
+  if (result?.nt) items.push({ role: "New Testament", ref: displayRef(splitCitation(result.nt)[0] || result.nt) });
+  if (!items.length) return null;
+
+  const labelWeek = result?.week || psalmResult?.week || "";
+  const serviceLabel = service === "am" ? "Morning Prayer" : "Evening Prayer";
+  return { label: `${serviceLabel} · ${labelWeek}, ${WEEKDAY_NAME[date.getDay()]}`, items };
+}
+
+/**
  * The single reading citation to preview on the Today tab: the Sunday
  * Eucharist reading on Sundays (as before), but the real Morning or Evening
  * Prayer Office reading on weekdays — matching whichever segment
@@ -383,15 +410,24 @@ function todayReadingRef(tradition, today) {
 }
 
 /**
- * The reading citation(s) to show for `date` in compact contexts (the
- * Today teaser, the day-detail sheet from Grid/Wheel): real Sunday RCL or
- * weekday DEL readings for Anglican (all of them, correctly split by
- * day-of-week), falling back to the single fixed demo citation for
- * Catholic/Orthodox (not wired to a real per-date lectionary yet) or for
- * any Anglican date that falls in a known gap.
+ * The reading list to show for `date` in compact contexts (the day-detail
+ * sheet from Grid/Wheel): the real Sunday RCL or weekday DEL Eucharist
+ * readings on Sundays, but the real Morning or Evening Prayer Office
+ * reading list on weekdays — matching whichever segment ReadingsView's own
+ * autoOfficeSegment would open to for that date, so this preview never
+ * shows a different service than the Prayer tab would for the same day.
+ * Falls back to the Eucharist reading on any of the Office engine's known
+ * gaps, and to the single fixed demo citation for Catholic/Orthodox (not
+ * wired to a real per-date lectionary yet) or for any Anglican date that
+ * falls in a known gap for both services.
  */
 function dayReadingItems(tradition, date) {
   if (tradition === "Anglican") {
+    const segment = autoOfficeSegment(date);
+    if (segment !== "eucharist") {
+      const office = anglicanOfficeItems(date, segment);
+      if (office) return office.items;
+    }
     const result = anglicanReadingItems(date);
     if (result) return result.items;
   }
