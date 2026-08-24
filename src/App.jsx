@@ -558,6 +558,10 @@ export default function App() {
   const [readingsViewDate, setReadingsViewDate] = useState(null);
   const [calendar, setCalendar] = usePersistedState("officium-calendar", "Gregorian"); // "Gregorian" (New Calendar) | "Julian" (Old Calendar) — only meaningful for Orthodox
   const [cookieConsent, setCookieConsent] = usePersistedState("officium-cookie-consent", null); // null (undecided) | "accepted" | "rejected"
+  // One-time first-run tradition prompt. Shown once consent is resolved (so
+  // it never stacks with the consent banner in the same overlay layer), then
+  // never again regardless of what's picked — including "skip".
+  const [onboardingSeen, setOnboardingSeen] = usePersistedState("officium-onboarding-seen", false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showChangelog, setShowChangelog] = useState(false);
   // "auto" follows the tradition -> WEB edition mapping in DEFAULT_WEB_VERSION;
@@ -839,7 +843,19 @@ export default function App() {
         />
       )}
 
-      <InstallToast active={cookieConsent !== null} />
+      {/* First-run tradition prompt — only after consent is resolved, only once ever. */}
+      {cookieConsent !== null && !onboardingSeen && (
+        <TraditionWelcome
+          season={season}
+          onPick={(t) => {
+            setTradition(t);
+            setOnboardingSeen(true);
+          }}
+          onSkip={() => setOnboardingSeen(true)}
+        />
+      )}
+
+      <InstallToast active={cookieConsent !== null && onboardingSeen} />
       <UpdateToast />
     </div>
   );
@@ -903,6 +919,50 @@ function SheetOverlay({ onClose, children }) {
         {children}
       </div>
     </div>
+  );
+}
+
+// One-time first-run prompt: just the tradition choice, nothing else from
+// Settings. Deliberately lighter than SettingsSheet — someone's very first
+// screen shouldn't be the full options panel. "Skip" (or tapping outside,
+// or the X) leaves the Catholic default in place but still marks it seen,
+// since re-showing this on every visit would be worse than a wrong default.
+function TraditionWelcome({ season, onPick, onSkip }) {
+  const theme = useTheme();
+  const accent = seasonAccent(season, theme.mode);
+  return (
+    <SheetOverlay onClose={onSkip}>
+      <p className="text-[17px] font-serif mb-1 text-center" style={{ color: theme.text }}>
+        Welcome to Officium
+      </p>
+      <p className="text-[13px] mb-5 text-center" style={{ color: alpha(theme.text, 0.6) }}>
+        Which tradition would you like to follow? You can change this anytime in Settings.
+      </p>
+      <div className="space-y-2">
+        {TRADITIONS.map((t) => (
+          <button
+            key={t}
+            onClick={() => onPick(t)}
+            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-[14px]"
+            style={{
+              backgroundColor: theme.bg,
+              color: theme.text,
+              border: `1px solid ${theme.border}`,
+            }}
+          >
+            {t}
+            <span style={{ color: accent }}>→</span>
+          </button>
+        ))}
+      </div>
+      <button
+        onClick={onSkip}
+        className="w-full text-center text-[12.5px] mt-4"
+        style={{ color: alpha(theme.text, 0.45) }}
+      >
+        I'll choose later
+      </button>
+    </SheetOverlay>
   );
 }
 
@@ -1188,6 +1248,18 @@ function SettingsSheet({
       <button onClick={onOpenChangelog} className="text-[11px] underline decoration-dotted" style={{ color: alpha(theme.text, 0.4) }}>
         What's new (v{CHANGELOG[0].version})
       </button>
+      <span className="text-[11px] mx-2" style={{ color: alpha(theme.text, 0.25) }}>
+        ·
+      </span>
+      <a
+        href="https://github.com/MrLewk/liturgical-calendar-app/issues"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[11px] underline decoration-dotted"
+        style={{ color: alpha(theme.text, 0.4) }}
+      >
+        Report a bug
+      </a>
     </SheetOverlay>
   );
 }

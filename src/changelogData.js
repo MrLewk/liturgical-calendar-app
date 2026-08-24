@@ -6,6 +6,14 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.19.0",
+    title: "First-run tradition prompt, \"Report a bug\" link",
+    changes: [
+      { type: "Added", text: "A one-time, lightweight prompt on first visit asking which tradition (Catholic/Anglican/Orthodox) to follow, shown once the cookie consent banner is resolved. Picking a tradition applies it immediately; \"I'll choose later\" keeps the Catholic default. Never shown again either way." },
+      { type: "Added", text: "A \"Report a bug\" link in Settings, next to \"What's new\", linking to the GitHub issue tracker." },
+    ],
+  },
+  {
     version: "0.18.0",
     title: "Real 1662 BCP canticles, two-canticle office structure",
     changes: [

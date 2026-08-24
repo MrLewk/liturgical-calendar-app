@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.19.0] — First-run tradition prompt, "Report a bug" link
+
+- **Added:** A one-time, lightweight prompt on first visit asking which tradition (Catholic/Anglican/Orthodox) to follow, so new users aren't stuck looking at the wrong calendar until they find Settings. Shown only after the cookie consent banner is resolved, so the two never stack in the same overlay slot; picking a tradition applies it immediately, and "I'll choose later" (or closing it) leaves the Catholic default in place — either way it's marked seen and never shown again (`officium-onboarding-seen`). Deliberately just the tradition choice, not the full Settings sheet. New `TraditionWelcome` component, reusing the existing `SheetOverlay` and tradition-button styling. The install-to-home-screen toast now waits for this prompt to resolve too, for the same reason.
+- **Added:** A "Report a bug" link in Settings, next to "What's new", pointing to the GitHub issue tracker (opens in a new tab).
+
 ## [0.18.0] — Real 1662 BCP canticles, two-canticle office structure
 
 - **Added:** All 10 canticles from the 1662 Book of Common Prayer, transcribed and verse-verified (Venite, The Easter Anthems, Te Deum Laudamus, Benedicite, Benedictus, Jubilate Deo, Magnificat, Cantate Domino, Nunc Dimittis, Deus Misereatur — 148 verses total). Public domain. Stored in `src/data/canticles_1662_raw.json`.
