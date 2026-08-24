@@ -6,6 +6,13 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.15.2",
+    title: "Today tab reading preview now matches time of day",
+    changes: [
+      { type: "Fixed", text: "The Today tab's reading preview always showed the Eucharist reading, even on weekdays when tapping through actually opens Morning or Evening Prayer instead — so the preview and the full reading often disagreed. It now shows the real Morning Prayer reading before 5pm and Evening Prayer's after, reusing the same clock-based logic the Prayer tab already uses to pick its default segment. Sundays are unchanged and still show the Eucharist reading." },
+    ],
+  },
+  {
     version: "0.15.1",
     title: "Fix comma-separated scripture citations losing their second half",
     changes: [

@@ -336,6 +336,52 @@ function firstReadingRef(tradition) {
   return reading ? reading.ref : sequence[0].ref;
 }
 
+// Picks Morning Prayer through the afternoon, Evening Prayer once evening
+// actually starts (5pm), or the Eucharistic lectionary on Sundays regardless
+// of time — the same rule ReadingsView (the Prayer tab) uses to choose its
+// default segment, reused here so the Today teaser previews whichever
+// reading tapping through will actually land on.
+function autoOfficeSegment(date) {
+  const d = date || new Date();
+  if (d.getDay() === 0) return "eucharist";
+  const isLiveToday = !date || dateOnly(date).getTime() === dateOnly(new Date()).getTime();
+  if (!isLiveToday) return "am";
+  return d.getHours() < 17 ? "am" : "pm";
+}
+
+// The real Old/New Testament Office citation for `date` (Old Testament
+// preferred, New Testament as a fallback) — the same cleaning
+// (splitCitation + displayRef) buildAnglicanOffice applies to its own
+// items, factored out so the Today teaser can show a single representative
+// reading without needing the whole prayer/canticle/collect sequence.
+function anglicanOfficeScriptureRef(date, service) {
+  const result = officeReadingFor(date, service);
+  if (!result) return null;
+  const ot = result.ot ? displayRef(splitCitation(result.ot)[0] || result.ot) : null;
+  const nt = result.nt ? displayRef(splitCitation(result.nt)[0] || result.nt) : null;
+  return ot || nt || null;
+}
+
+/**
+ * The single reading citation to preview on the Today tab: the Sunday
+ * Eucharist reading on Sundays (as before), but the real Morning or Evening
+ * Prayer Office reading on weekdays — matching whichever segment
+ * ReadingsView's own autoOfficeSegment will actually open to, so the
+ * preview never shows a different reading than tapping through reveals.
+ * Falls back to the Eucharist/demo reading on any of the Office engine's
+ * known gaps, or for traditions without a real per-date lectionary yet.
+ */
+function todayReadingRef(tradition, today) {
+  if (tradition === "Anglican") {
+    const segment = autoOfficeSegment(today);
+    if (segment !== "eucharist") {
+      const ref = anglicanOfficeScriptureRef(today, segment);
+      if (ref) return ref;
+    }
+  }
+  return dayReadingItems(tradition, today)[0]?.ref;
+}
+
 /**
  * The reading citation(s) to show for `date` in compact contexts (the
  * Today teaser, the day-detail sheet from Grid/Wheel): real Sunday RCL or
@@ -1554,7 +1600,7 @@ const COLOR_MEANING = {
 function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFeast, onOpenReadings, onOpenExport, tradition, calendar }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
-  const readingRef = dayReadingItems(tradition, today)[0]?.ref;
+  const readingRef = todayReadingRef(tradition, today);
   return (
     <div className="pt-2 lg:pt-0 lg:grid lg:grid-cols-[1fr_420px] lg:gap-10 lg:items-start">
       <div>
@@ -1928,25 +1974,6 @@ function WheelView({ season, seasons, today, tradition, calendar, variant = "sta
       )}
     </div>
   );
-}
-
-// Picks a sensible default Daily Office segment from the person's real
-// local clock: Sunday gets the Eucharistic lectionary regardless of time,
-// otherwise Morning Prayer before noon and Evening Prayer after. The person
-// can still switch manually — this only decides the initial selection.
-// Picks a sensible default Daily Office segment from the person's real
-// local clock: Sunday gets the Eucharistic lectionary regardless of time,
-// otherwise Morning Prayer through the afternoon and Evening Prayer once
-// evening actually starts (5pm) — not at noon, which is too early for most
-// people's day. The person can still switch manually.
-function autoOfficeSegment(date) {
-  const d = date || new Date();
-  if (d.getDay() === 0) return "eucharist";
-  // Only use the live clock's hour when actually looking at today —
-  // there's no meaningful "time of day" for a date picked from the past.
-  const isLiveToday = !date || dateOnly(date).getTime() === dateOnly(new Date()).getTime();
-  if (!isLiveToday) return "am";
-  return d.getHours() < 17 ? "am" : "pm";
 }
 
 function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage }) {

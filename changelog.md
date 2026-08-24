@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.15.2] — Today tab reading preview now matches time of day
+
+- **Fixed:** The Today tab's reading preview always showed the Eucharist reading (`buildAnglicanEucharist` / `anglicanReadingItems`), even on weekdays when tapping through actually opens Morning or Evening Prayer instead — so the preview and the full reading often disagreed. New `todayReadingRef()` in `App.jsx` now shows the real Morning Prayer Old Testament (or New Testament) reading before 5pm and Evening Prayer's after, reusing `autoOfficeSegment()` — the same clock-based logic `ReadingsView` (the Prayer tab) already uses to pick its default segment — so the preview and tapping through never disagree. Sundays are unchanged and still show the Eucharist reading.
+- **Fixed:** Removed a leftover duplicate `autoOfficeSegment()` definition (two copies with slightly different comments had accumulated in `App.jsx`); there's now a single shared one.
+
 ## [0.15.1] — Fix comma-separated scripture citations losing their second half
 
 - **Fixed:** Citations like "2 Thessalonians 2:1-3, 14-end" or "Exodus 22:21-27, 23:1-17" were silently losing everything after the first comma — `dropExtraCommaRanges` in `src/lib/citationNormalize.js`, meant to tidy stray trailing numbers, was actually deleting real, intentional multi-range selections. Confirmed against the actual data this affected dozens of real citations across `office_table2.json`, `del_table6.json`, and `rcl_sundays.json` — anywhere a lectionary reading skips a section mid-passage, not just the Epistle examples that surfaced it.
