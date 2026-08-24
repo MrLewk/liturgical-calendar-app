@@ -546,6 +546,161 @@ export function psalmFor(date, service) {
   return { source: label.source, week: label.week, day: label.day, citation };
 }
 
+import collects1662 from "../data/collects_1662_raw.json";
+
+const ORDINAL_LOWER = [
+  null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth",
+  "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth",
+  "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth",
+];
+
+/**
+ * Builds the ordered chain of "collect anchor points" for the 1662 Book of
+ * Common Prayer's church year containing `date` - each a { date, label }
+ * pair marking a day whose own Collect takes over and governs every day
+ * after it until the next anchor, per the BCP's own rule ("the Collect
+ * appointed for every Sunday... shall be said at the Evening Service next
+ * before" implies, and BCP practice confirms, that a Sunday's - or a
+ * named weekday's - Collect is used right through the following week
+ * until superseded). Fixed saints'-days are handled separately as
+ * single-day overrides, not part of this carry-forward chain.
+ */
+function buildCollect1662Chain(date) {
+  const d = dateOnly(date);
+  const { advent1, advent1Next, easter } = churchYearContext(d);
+  const christmasYear = advent1.getFullYear();
+  const nextYear = christmasYear + 1;
+  const ashWednesday = addDays(easter, -46);
+  const palmSunday = addDays(easter, -7);
+  const pentecost = addDays(easter, 49);
+  const trinity = addDays(pentecost, 7);
+  const ascension = addDays(easter, 39);
+  const ascensionSunday = nextSunday(ascension);
+  const baptismEraSunday = nextSunday(new Date(nextYear, 0, 6));
+  // ^ not used for 1662 (no "Baptism of Christ" feast) - Epiphany season
+  // Sundays are counted from Epiphany (Jan 6) itself, not a Sunday after.
+
+  const chain = [{ date: advent1, label: "The first Sunday in Advent" }];
+  for (let n = 2; n <= 4; n++) {
+    chain.push({ date: addDays(advent1, (n - 1) * 7), label: `The ${ORDINAL_LOWER[n]} Sunday in Advent` });
+  }
+  // Christmas -> Epiphany: fixed-date feasts are handled as overrides
+  // elsewhere; the Sunday after Christmas Day (if one exists) and the
+  // Epiphany Sundays are this chain's own anchors.
+  const firstSundayAfterChristmas = nextSunday(new Date(christmasYear, 11, 25));
+  if (firstSundayAfterChristmas <= new Date(nextYear, 0, 5)) {
+    chain.push({ date: firstSundayAfterChristmas, label: "The Sunday after Christmas-Day" });
+  }
+  const epiphany = new Date(nextYear, 0, 6);
+  chain.push({ date: epiphany, label: "The Epiphany" });
+  const epiphany1 = nextSunday(epiphany);
+  const quinquagesima = addDays(ashWednesday, -3); // the Sunday right before Ash Wed
+  const sexagesima = addDays(quinquagesima, -7);
+  const septuagesima = addDays(quinquagesima, -14);
+  let epiN = 1;
+  for (let s = epiphany1; s < septuagesima; s = addDays(s, 7)) {
+    if (epiN > 6) break; // 1662 only provides 6 Epiphany-season Sundays
+    chain.push({ date: s, label: `The ${ORDINAL_LOWER[epiN]} Sunday after the Epiphany` });
+    epiN++;
+  }
+  chain.push({ date: septuagesima, label: "Septuagesima (3rd before Lent)" });
+  chain.push({ date: sexagesima, label: "Sexagesima (2nd before Lent)" });
+  chain.push({ date: quinquagesima, label: "Quinquagesima (next before Lent)" });
+  chain.push({ date: ashWednesday, label: "Ash Wednesday" });
+  for (let n = 1; n <= 5; n++) {
+    chain.push({ date: addDays(ashWednesday, 4 + (n - 1) * 7), label: `The ${ORDINAL_LOWER[n]} Sunday in Lent` });
+  }
+  chain.push({ date: palmSunday, label: "The Sunday next before Easter" });
+  chain.push({ date: addDays(easter, -2), label: "Good Friday" });
+  chain.push({ date: addDays(easter, -1), label: "Easter Even" });
+  chain.push({ date: easter, label: "Easter Day" });
+  chain.push({ date: addDays(easter, 1), label: "Monday in Easter Week" });
+  chain.push({ date: addDays(easter, 2), label: "Tuesday in Easter Week" });
+  for (let n = 1; n <= 5; n++) {
+    chain.push({ date: addDays(easter, 7 + (n - 1) * 7), label: `The ${ORDINAL_LOWER[n]} Sunday after Easter` });
+  }
+  chain.push({ date: ascension, label: "The Ascension-day" });
+  chain.push({ date: ascensionSunday, label: "Sunday after Ascension-Day" });
+  chain.push({ date: pentecost, label: "WHIT-SUNDAY" });
+  chain.push({ date: addDays(pentecost, 1), label: "Monday in Whitsun-week" });
+  chain.push({ date: addDays(pentecost, 2), label: "Tuesday in Whitsun Week" });
+  chain.push({ date: trinity, label: "TRINITY-SUNDAY" });
+  for (let n = 1; n <= 25; n++) {
+    const sunday = addDays(trinity, n * 7);
+    if (sunday >= advent1Next) break; // however many Trinity Sundays actually fit that year
+    const label = n === 25 ? "The Twenty-Fifth Sunday after Trinity" : `The ${ORDINAL_LOWER[n]} Sunday after Trinity`;
+    chain.push({ date: sunday, label });
+  }
+
+  return chain.sort((a, b) => a.date - b.date);
+}
+
+const FIXED_FEAST_DATES = [
+  // [month (0-based), day, label] - a fixed calendar date, any year.
+  [10, 30, "St. Andrew’s Day"],
+  [11, 21, "St. Thomas the Apostle"],
+  [11, 25, "Christmas Day"],
+  [11, 26, "Saint Stephen's Day"],
+  [11, 27, "Saint John the Evangelist’s Day"],
+  [11, 28, "The Innocents Day"],
+  [0, 1, "The Circumcision of Christ"],
+  [0, 25, "The Conversion of St. Paul"],
+  [1, 2, "The Purification of the Virgin Mary"],
+  [1, 24, "St. Matthias’s Day"],
+  [2, 25, "The Annunciation of the Virgin Mary"],
+  [3, 25, "St. Mark’s Day"],
+  [4, 1, "St. Philip and St. James’s Day"],
+  [5, 11, "St. Barnabas the Apostle"],
+  [5, 24, "St. John Baptist’s Day"],
+  [5, 29, "St. Peter’s Day"],
+  [6, 25, "St. James the Apostle"],
+  [7, 24, "St. Bartholomew the Apostle"],
+  [8, 21, "St. Matthew the Apostle"],
+  [8, 29, "St. Michael and All Angels"],
+  [9, 18, "St. Luke the Evangelist"],
+  [9, 28, "St. Simon and St. Jude, Apostles"],
+  [10, 1, "All Saints Day"],
+];
+
+/**
+ * Resolves `date` to the 1662 Book of Common Prayer Collect that governs
+ * it - a fixed saint's/feast day if `date` falls exactly on one, else
+ * whichever Sunday's (or named weekday's) Collect is currently "in force"
+ * per the BCP's carry-forward rule.
+ *
+ * KNOWN APPROXIMATIONS: fixed feast days are treated as always taking
+ * precedence on their exact date (the historical rules for transferring a
+ * feast that collides with a Sunday aren't modelled). Movable pre-Lent/
+ * Advent-adjacent edge cases in unusually early/late-Easter years aren't
+ * exhaustively tested.
+ */
+export function collect1662Label(date) {
+  if (!isValidDate(date)) return null;
+  const d = dateOnly(date);
+
+  for (const [month, day, label] of FIXED_FEAST_DATES) {
+    if (d.getMonth() === month && d.getDate() === day) return label;
+  }
+
+  const chain = buildCollect1662Chain(d);
+  let governing = null;
+  for (const anchor of chain) {
+    if (anchor.date <= d) governing = anchor;
+    else break;
+  }
+  return governing ? governing.label : null;
+}
+
+/** The 1662 Collect text for `date`, or null if collect1662Label doesn't
+ * resolve to a transcribed entry. */
+export function collect1662For(date) {
+  const label = collect1662Label(date);
+  if (!label) return null;
+  const text = collects1662[label];
+  if (!text) return null;
+  return { label, text };
+}
+
 export function eucharistReadingFor(date) {
   if (!isValidDate(date)) return null;
   const d = dateOnly(date);

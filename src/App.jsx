@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -66,6 +66,7 @@ const READINGS = {
           type: "prayer",
           role: "Canticle",
           ref: "Venite, Psalm 95",
+          scriptureRef: "Psalm 95:1-7",
           text: "O come, let us sing unto the Lord: let us heartily rejoice in the strength of our salvation. Let us come before his presence with thanksgiving: and shew ourselves glad in him with psalms. For the Lord is a great God: and a great King above all gods.",
           truncated: true,
         },
@@ -94,6 +95,7 @@ const READINGS = {
           type: "prayer",
           role: "Canticle",
           ref: "Magnificat, Luke 1",
+          scriptureRef: "Luke 1:46-55",
           text: "My soul doth magnify the Lord: and my spirit hath rejoiced in God my Saviour. For he hath regarded: the lowliness of his handmaiden. For behold, from henceforth: all generations shall call me blessed.",
           truncated: true,
         },
@@ -253,15 +255,20 @@ function buildAnglicanEucharist(today) {
   const collect = fallback.sequence[0]; // keep the Collect for Purity as-is
   const isSunday = today.getDay() === 0;
 
+  const collectOfDay = collect1662For(today);
+  const collectItems = collectOfDay
+    ? [{ type: "prayer", role: "Collect of the Day · 1662", ref: collectOfDay.label, text: collectOfDay.text }]
+    : [];
+
   const result = anglicanReadingItems(today);
   if (!result) {
     const gapNote = isSunday ? "Sunday reading not covered yet" : "weekday reading not covered yet";
-    return { ...fallback, label: `${shortDate(today)} · demo text (${gapNote})` };
+    return { ...fallback, label: `${shortDate(today)} · demo text (${gapNote})`, sequence: [collect, ...collectItems, ...fallback.sequence.slice(1)] };
   }
   return {
     label: `${result.label} · ${shortDate(today)}`,
     icon: "sun",
-    sequence: [collect, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref }))],
+    sequence: [collect, ...collectItems, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref }))],
   };
 }
 
@@ -307,10 +314,19 @@ function buildAnglicanOffice(date, service) {
   const canticle = fallback.sequence[1];
   const collect = fallback.sequence[fallback.sequence.length - 1];
 
+  const collectOfDay = collect1662For(date);
+  const collectOfDayItems = collectOfDay
+    ? [{ type: "prayer", role: "Collect of the Day · 1662", ref: collectOfDay.label, text: collectOfDay.text }]
+    : [];
+
   const result = officeReadingFor(date, service);
   const psalmResult = psalmFor(date, service);
   if (!result && !psalmResult) {
-    return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
+    return {
+      ...fallback,
+      label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)`,
+      sequence: [confession, canticle, ...collectOfDayItems, ...fallback.sequence.slice(2)],
+    };
   }
   const items = [];
   const psalmRefs = psalmResult ? splitPsalmCitation(psalmResult.citation) : [];
@@ -323,7 +339,7 @@ function buildAnglicanOffice(date, service) {
   return {
     label: `${fallback.label} · ${labelWeek}, ${WEEKDAY_NAME[date.getDay()]} · ${shortDate(date)}`,
     icon: fallback.icon,
-    sequence: [confession, canticle, ...items, collect],
+    sequence: [confession, canticle, ...items, ...collectOfDayItems, collect],
   };
 }
 
@@ -2144,8 +2160,12 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
                 Read full passage
               </button>
             )}
-            {item.type === "prayer" && item.truncated && (
-              <button className="text-[11px] lg:text-[14px] mt-2 lg:mt-3 underline decoration-dotted" style={{ color: accent }}>
+            {item.type === "prayer" && item.truncated && item.scriptureRef && (
+              <button
+                onClick={() => onOpenPassage(item.scriptureRef)}
+                className="text-[11px] lg:text-[14px] mt-2 lg:mt-3 underline decoration-dotted"
+                style={{ color: accent }}
+              >
                 Read full text
               </button>
             )}

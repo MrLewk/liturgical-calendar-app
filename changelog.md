@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.16.0] — The 1662 Collect of the Day
+
+- **Added:** Both the Eucharist and Morning/Evening Prayer views now include a real "Collect of the Day" from the 1662 Book of Common Prayer, correctly resolved for any date - the actual Sunday-or-named-day whose Collect is currently in force, following the BCP's own "said continually" carry-forward rule (a Sunday's, or a fixed feast's, Collect governs every day after it until the next one takes over).
+- **Added:** All 86 Collects (85 regular + Good Friday's traditional three-in-one) transcribed from the 1662 BCP, with only spelling/OCR artifacts modernized - long-s and historical ligature glyphs resolved via dictionary matching, drop caps reattached, running-header bleed and line-wrap hyphenation fixed. Archaic thee/thou/thy language and older British spellings (favour, honour, stedfastly, etc.) are preserved intentionally.
+- **Added:** `collect1662Label()`/`collect1662For()` in `src/lib/lectionary.js` and `src/data/collects_1662_raw.json`. Verified via a full 2-year date sweep with zero gaps and zero missing text.
+- **Not included:** Common Worship's own Collects. Unlike the public-domain 1662 text, CW material is © The Archbishops' Council and still in copyright - a CW toggle isn't being built until that's sourced under a proper license.
+- **Known limitation:** fixed feast days are treated as always taking precedence on their exact date; the historical rules for transferring a feast that collides with a Sunday aren't modelled.
+
 ## [0.15.3] — Calendar day-detail preview now matches time of day too
 
 - **Fixed:** The day-detail sheet (tap a date on the Calendar/Chart tabs) always showed the Eucharist reading list, even on weekdays when tapping through actually opens Morning or Evening Prayer instead — the same mismatch just fixed for the Today tab (v0.15.2). `dayReadingItems()` now picks its service the same way — via `autoOfficeSegment(date)` — and new `anglicanOfficeItems()` builds the real Psalm/Old Testament/New Testament role-labeled list for whichever service that resolves to on weekdays, falling back to the Eucharist reading on any of the Office engine's known gaps. Sundays are unchanged and still show the Eucharist reading list.

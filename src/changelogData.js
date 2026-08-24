@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.16.0",
+    title: "The 1662 Collect of the Day",
+    changes: [
+      { type: "Added", text: "Both the Eucharist and Morning/Evening Prayer views now include a real \"Collect of the Day\" from the 1662 Book of Common Prayer, resolved via the BCP's own carry-forward rule (a Sunday's or fixed feast's Collect governs every day after it until the next one takes over)." },
+      { type: "Added", text: "All 86 Collects transcribed from the 1662 BCP, with only spelling/OCR artifacts modernized - thee/thou/thy and older British spellings preserved intentionally." },
+      { type: "Not included", text: "Common Worship's own Collects - still in copyright (© The Archbishops' Council), so a CW toggle isn't being built until that's sourced under a proper license." },
+    ],
+  },
+  {
     version: "0.15.3",
     title: "Calendar day-detail preview now matches time of day too",
     changes: [
