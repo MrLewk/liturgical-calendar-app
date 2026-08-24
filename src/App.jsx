@@ -274,19 +274,26 @@ function buildAnglicanEucharist(today) {
 /** Splits a raw Table 3/4 psalm citation into individual "Psalm N[:V-V]"
  * references, each independently tappable via the passage-lookup modal.
  * "50, 54" -> two refs; "119.1-32" -> one ranged ref; "51 or 102" -> only
- * the first alternative (an "or" means pick one, not read both);
- * "18.31-end" -> kept as "18:31-end", which parseReference/getPassage now
- * resolve against the real psalm text, reading from verse 31 through
- * whatever its actual last verse turns out to be; bracketed optional
- * psalms like "(10)" are still included, just with the brackets stripped
- * for display. */
+ * the first alternative (an "or" means pick one, not read both), whether
+ * that "or" sits at the top level or inside a bracketed note like
+ * "105* (or 103)"; "18.31-end" -> kept as "18:31-end", which
+ * parseReference/getPassage now resolve against the real psalm text,
+ * reading from verse 31 through whatever its actual last verse turns out
+ * to be; a trailing "*" (Common Worship's "may be read in a shortened
+ * form" marker) is stripped, as it isn't part of the reference itself;
+ * bracketed optional psalms like "(63*)" are still included, just with
+ * the brackets and asterisk stripped for display. */
 function splitPsalmCitation(raw) {
   if (!raw) return [];
-  const first = raw.split(/\s+or\s+/i)[0];
-  const segments = first.split(",").map((s) => s.trim()).filter(Boolean);
+  // Split on commas first — each comma-separated piece is its own psalm
+  // reference, and may independently carry a bracketed/bare "or" or an
+  // asterisk, so those need handling per piece rather than once up front.
+  const segments = raw.split(",").map((s) => s.trim()).filter(Boolean);
   return segments
     .map((seg) => {
-      let clean = seg.replace(/[()]/g, "").trim();
+      let clean = seg.replace(/\(\s*or\s+[^)]*\)/gi, "").trim(); // "(or 103)"
+      clean = clean.split(/\s+or\s+/i)[0]; // bare "51 or 102"
+      clean = clean.replace(/[()*]/g, "").trim();
       if (!clean) return null;
       clean = clean.replace(/\./g, ":");
       return `Psalm ${clean}`;
@@ -1231,14 +1238,20 @@ function ScripturePassageModal({ reference, webVersion, bibleGatewayVersion, sea
       {state.status === "ready" && (
         <>
           <div className="text-[14px] lg:text-[16.5px] leading-relaxed mb-1.5" style={{ color: alpha(theme.text, 0.85) }}>
-            {state.passage.verses.map((v) => (
-              <span key={`${v.chapter}-${v.verse}`}>
-                <sup className="mr-0.5" style={{ color: alpha(theme.text, 0.4) }}>
-                  {v.verse}
-                </sup>
-                {v.text}{" "}
-              </span>
-            ))}
+            {state.passage.verses.map((v, i) =>
+              v.gap ? (
+                <span key={`gap-${i}`} className="mx-1.5" style={{ color: alpha(theme.text, 0.33) }}>
+                  · · ·
+                </span>
+              ) : (
+                <span key={`${v.chapter}-${v.verse}`}>
+                  <sup className="mr-0.5" style={{ color: alpha(theme.text, 0.4) }}>
+                    {v.verse}
+                  </sup>
+                  {v.text}{" "}
+                </span>
+              )
+            )}
           </div>
           <p className="text-[10.5px] mb-5" style={{ color: alpha(theme.text, 0.33) }}>
             World English Bible — {WEB_VERSION_LABELS[webVersion]}. Public domain.

@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.15.1",
+    title: "Fix comma-separated scripture citations losing their second half",
+    changes: [
+      { type: "Fixed", text: "Citations like \"2 Thessalonians 2:1-3, 14-end\" or \"Exodus 22:21-27, 23:1-17\" were silently losing everything after the first comma — a citation-cleaning step meant to tidy stray trailing numbers was actually deleting real, intentional multi-range selections. Affected dozens of real readings across the Office, DEL, and RCL data, not just Epistles — anywhere a lectionary reading skips a section mid-passage." },
+      { type: "Added", text: "The reference parser now understands comma-separated citations natively, resolving each piece (including \"-end\" pieces) against the real chapter text. The passage view shows a small \"· · ·\" divider between non-contiguous ranges so it's clear verses were intentionally skipped." },
+      { type: "Fixed", text: "A trailing \"*\" on some psalm citations (Common Worship's \"may be read in a shortened form\" marker, e.g. \"Psalm 107*\") was being sent straight to the Bible lookup and failing. Now stripped before lookup, including when it appears inside a bracketed \"or\" alternative like \"105* (or 103)\"." },
+      { type: "Fixed", text: "A stray space in the source data after a chapter's dot (e.g. \"Isaiah 38. 1-8\") was breaking the chapter:verse parser." },
+    ],
+  },
+  {
     version: "0.15.0",
     title: "PWA install prompt, appearance picker, and accurate scripture end-of-chapter ranges",
     changes: [

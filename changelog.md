@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.15.1] — Fix comma-separated scripture citations losing their second half
+
+- **Fixed:** Citations like "2 Thessalonians 2:1-3, 14-end" or "Exodus 22:21-27, 23:1-17" were silently losing everything after the first comma — `dropExtraCommaRanges` in `src/lib/citationNormalize.js`, meant to tidy stray trailing numbers, was actually deleting real, intentional multi-range selections. Confirmed against the actual data this affected dozens of real citations across `office_table2.json`, `del_table6.json`, and `rcl_sundays.json` — anywhere a lectionary reading skips a section mid-passage, not just the Epistle examples that surfaced it.
+- **Added:** `parseReference` (`src/lib/bibleRef.js`) now natively understands comma-separated multi-piece citations, carrying the chapter forward across bare-number pieces (`"14-end"` after `"2:1-3"` means chapter 2 verse 14 onward) the same way real lectionaries write them. `getPassage` (`src/lib/scripture.js`) resolves each piece's "-end" against the real chapter text independently. The passage modal now shows a small "· · ·" divider between non-contiguous pieces so skipped verses are visually obvious rather than silently invisible.
+- **Fixed:** A trailing "*" on some psalm citations — Common Worship's "may be read in a shortened form" marker, e.g. "Psalm 107*" — was being passed straight to the Bible text lookup and failing to parse. Now stripped before lookup, including inside a bracketed "or" alternative like "105* (or 103)".
+- **Fixed:** A stray space in the source transcription after a chapter's dot (e.g. "Isaiah 38. 1-8") was breaking the chapter:verse parser; `dotsToColons` now tolerates it.
+
 ## [0.15.0] — PWA install prompt, appearance picker, and accurate scripture end-of-chapter ranges
 
 - **Added:** A dismissible install prompt now appears on Android/Chrome (with a one-tap Install button via `beforeinstallprompt`) and iOS Safari (with manual "Add the Share icon, then Add to Home Screen" instructions, since iOS can't trigger an install programmatically). Dismissing it — or completing the install — sets a flag so it never shows again on that device. New `src/InstallToast.jsx`, modeled on the existing `UpdateToast` pattern.

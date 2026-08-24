@@ -62,29 +62,44 @@ export async function getPassage(refString, version) {
     book = await fetchBook(version, fallbackCode);
   }
 
+  const ranges = parsed.ranges && parsed.ranges.length ? parsed.ranges : [parsed];
   const verses = [];
-  for (let ch = parsed.startChapter; ch <= parsed.endChapter; ch++) {
-    const chapterVerses = book.chapters[String(ch)];
-    if (!chapterVerses) continue;
-    const verseNums = Object.keys(chapterVerses)
-      .map(Number)
-      .sort((a, b) => a - b);
-    for (const v of verseNums) {
-      const afterStart = ch > parsed.startChapter || parsed.startVerse === null || v >= parsed.startVerse;
-      const beforeEnd = ch < parsed.endChapter || parsed.endVerse === null || v <= parsed.endVerse;
-      if (afterStart && beforeEnd) {
-        verses.push({ chapter: ch, verse: v, text: chapterVerses[String(v)] });
+  const resolvedRanges = [];
+  for (const range of ranges) {
+    const rangeVerses = [];
+    for (let ch = range.startChapter; ch <= range.endChapter; ch++) {
+      const chapterVerses = book.chapters[String(ch)];
+      if (!chapterVerses) continue;
+      const verseNums = Object.keys(chapterVerses)
+        .map(Number)
+        .sort((a, b) => a - b);
+      for (const v of verseNums) {
+        const afterStart = ch > range.startChapter || range.startVerse === null || v >= range.startVerse;
+        const beforeEnd = ch < range.endChapter || range.endVerse === null || v <= range.endVerse;
+        if (afterStart && beforeEnd) {
+          rangeVerses.push({ chapter: ch, verse: v, text: chapterVerses[String(v)] });
+        }
       }
     }
+    // A range that skips ahead of the previous one (a comma-joined
+    // selection like "2:1-3, 14-end") gets a gap marker between them so
+    // the reader can see verses were intentionally skipped, not lost.
+    if (verses.length > 0 && rangeVerses.length > 0) {
+      verses.push({ gap: true, chapter: null, verse: null, text: null });
+    }
+    verses.push(...rangeVerses);
+
+    // Resolve an open-ended "26-end" piece to its real last verse now that
+    // the chapter text is actually loaded, so the displayed reference reads
+    // "Acts 8:26-39" rather than leaving the literal word "end" in it.
+    let resolvedEndVerse = range.endVerse;
+    if (resolvedEndVerse === null && range.startVerse !== null && rangeVerses.length > 0) {
+      resolvedEndVerse = rangeVerses[rangeVerses.length - 1].verse;
+    }
+    resolvedRanges.push({ ...range, endVerse: resolvedEndVerse });
   }
 
-  // Resolve an open-ended "26-end" range to the real last verse number now
-  // that the chapter text is actually loaded, so the displayed reference
-  // reads "Acts 8:26-39" rather than leaving the literal word "end" in it.
-  let displayParsed = parsed;
-  if (parsed.endVerse === null && parsed.startVerse !== null && verses.length > 0) {
-    displayParsed = { ...parsed, endVerse: verses[verses.length - 1].verse };
-  }
+  const displayParsed = { ...parsed, ranges: resolvedRanges };
 
   return {
     reference: formatReference(displayParsed, book.name || bookDisplayName(parsed.code)),

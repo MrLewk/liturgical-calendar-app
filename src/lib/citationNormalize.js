@@ -1,9 +1,12 @@
 // Turns a raw lectionary citation string — which may bundle several
 // readings together, use "or" alternatives, dot notation, verse-letter
-// suffixes, comma verse-lists, or an "end" placeholder for the last verse
-// — into one or more clean reference strings that `parseReference` /
-// `getPassage` can actually resolve. Best-effort: prefers showing a
-// slightly wider/narrower real passage over failing to resolve at all.
+// suffixes, comma verse-lists, footnote asterisks, or an "end" placeholder
+// for the last verse — into one or more clean reference strings that
+// `parseReference` / `getPassage` can actually resolve. Comma verse-lists
+// within a single reading (e.g. "2:1-3, 14-end") are passed through intact
+// rather than truncated — parseReference itself understands them as
+// multiple pieces of one reading. Best-effort: prefers showing a slightly
+// wider/narrower real passage over failing to resolve at all.
 
 function normalizeDashes(s) {
   return s.replace(/[\u2012\u2013\u2014\u2015]/g, "-");
@@ -21,7 +24,7 @@ function stripOptionalBrackets(s) {
 }
 
 function dotsToColons(s) {
-  return s.replace(/(\d)\.(\d)/g, "$1:$2");
+  return s.replace(/(\d)\.\s*(\d)/g, "$1:$2");
 }
 
 function firstAlternative(s) {
@@ -41,9 +44,10 @@ function normalizeEndMarker(s) {
   return s.replace(/-\s*end\b/i, "-end");
 }
 
-function dropExtraCommaRanges(s) {
-  const m = s.match(/^(.*?\d)(?:,\s*\d+(?:-\d+)?)+$/);
-  return m ? m[1] : s;
+function stripFootnoteAsterisk(s) {
+  // Common Worship marks some psalms with a trailing "*" (may be read in a
+  // shortened form) — not part of the reference itself.
+  return s.replace(/\*/g, "").trim();
 }
 
 function cleanOne(raw) {
@@ -53,7 +57,7 @@ function cleanOne(raw) {
   s = dotsToColons(s);
   s = stripVerseLetterSuffixes(s);
   s = normalizeEndMarker(s);
-  s = dropExtraCommaRanges(s);
+  s = stripFootnoteAsterisk(s);
   return s.trim();
 }
 
