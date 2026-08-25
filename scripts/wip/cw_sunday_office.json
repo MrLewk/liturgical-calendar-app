@@ -575,6 +575,42 @@
         "ot": "Isaiah 49.13-23",
         "nt": "Luke 12.1-12"
       }
+    },
+    "Proper 23 (28)": {
+      "second": {
+        "psalm": "Psalm 139.1-18",
+        "ot": "Proverbs 3.1-18",
+        "nt": "1 John 3.1-15"
+      },
+      "third": {
+        "psalm": "Psalm 138,141",
+        "ot": "Isaiah 50.4-10",
+        "nt": "Luke 13.22-30"
+      }
+    },
+    "Proper 24 (29)": {
+      "second": {
+        "psalm": "Psalm 142,143.1-11",
+        "ot": "Proverbs 4.1-18",
+        "nt": "1 John 3.16-4.6"
+      },
+      "third": {
+        "psalm": "Psalm 145,149",
+        "ot": "Isaiah 54.1-14",
+        "nt": "Luke 13.31-35"
+      }
+    },
+    "Proper 25 (30)": {
+      "second": {
+        "psalm": "Psalm 119.89-104",
+        "ot": "Ecclesiastes 11,12",
+        "nt": "2 Timothy 2.1-7"
+      },
+      "third": {
+        "psalm": "Psalm 119.137-152",
+        "ot": "Isaiah 59.9-20",
+        "nt": "Luke 14.1-14"
+      }
     }
   },
   "B": {
@@ -1153,6 +1189,42 @@
         "ot": "Isaiah 49.13-23",
         "nt": "Luke 12.1-12"
       }
+    },
+    "Proper 23 (28)": {
+      "second": {
+        "psalm": "Psalm 127,128",
+        "ot": "Joshua 5.13-6.20",
+        "nt": "Matthew 11.20-30"
+      },
+      "third": {
+        "psalm": "Psalm 129,130",
+        "ot": "Isaiah 50.4-10",
+        "nt": "Luke 13.22-30"
+      }
+    },
+    "Proper 24 (29)": {
+      "second": {
+        "psalm": "Psalm 141",
+        "ot": "Joshua 14.6-14",
+        "nt": "Matthew 12.1-21"
+      },
+      "third": {
+        "psalm": "Psalm 133,134,137.1-6",
+        "ot": "Isaiah 54.1-14",
+        "nt": "Luke 13.31-35"
+      }
+    },
+    "Proper 25 (30)": {
+      "second": {
+        "psalm": "Psalm 119.121-136",
+        "ot": "Ecclesiastes 11,12",
+        "nt": "2 Timothy 2.1-7"
+      },
+      "third": {
+        "psalm": "Psalm 119.89-104",
+        "ot": "Isaiah 59.9-20",
+        "nt": "Luke 14.1-14"
+      }
     }
   },
   "C": {
@@ -1730,6 +1802,42 @@
         "psalm": "Psalm 141",
         "ot": "Isaiah 49.13-23",
         "nt": "Luke 12.1-12"
+      }
+    },
+    "Proper 23 (28)": {
+      "second": {
+        "psalm": "Psalm 144",
+        "ot": "Nehemiah 6.1-16",
+        "nt": "John 15.12-27"
+      },
+      "third": {
+        "psalm": "Psalm 143",
+        "ot": "Isaiah 50.4-10",
+        "nt": "Luke 13.22-30"
+      }
+    },
+    "Proper 24 (29)": {
+      "second": {
+        "psalm": "Psalm 146,149",
+        "ot": "Nehemiah 8.9-18",
+        "nt": "John 16.1-11"
+      },
+      "third": {
+        "psalm": "Psalm 147",
+        "ot": "Isaiah 54.1-14",
+        "nt": "Luke 13.31-35"
+      }
+    },
+    "Proper 25 (30)": {
+      "second": {
+        "psalm": "Psalm 119.1-16",
+        "ot": "Ecclesiastes 11,12",
+        "nt": "2 Timothy 2.1-7"
+      },
+      "third": {
+        "psalm": "Psalm 119.105-128",
+        "ot": "Isaiah 59.9-20",
+        "nt": "Luke 14.1-14"
       }
     }
   }
