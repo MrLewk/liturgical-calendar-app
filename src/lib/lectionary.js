@@ -1057,3 +1057,35 @@ export function secondThirdServiceFor(date, service) {
   if (!entry) return null;
   return { title, ot: entry.ot, nt: entry.nt, psalm: entry.psalm };
 }
+
+// ---- 1662 BCP Sunday First Lessons ----
+
+import bcpSundayFirstLessons from "../data/bcp_sunday_first_lessons.json";
+
+/**
+ * The 1662 BCP's Sunday First Lesson (Old Testament) for `date`, from the
+ * 1922 Revised Table of Lessons - the table actually used in living BCP
+ * practice for the last century, rather than the original 1561/1662
+ * table (long superseded, and only available today via a copyrighted
+ * modern reprint). Only the First Lesson is Sunday-specific in the BCP
+ * system; the Second (New Testament) Lesson on Sundays is just whatever
+ * the ordinary continuous weekday reading happens to be that day, so
+ * this deliberately doesn't attempt to replace that - see KNOWN GAPS.
+ *
+ * Reuses collect1662Label so this always agrees with the Collect of the
+ * Day on which Sunday governs `date`, including its fixed-feast-first
+ * priority (this returns null on a Sunday that coincides with a fixed
+ * feast day, since those aren't covered by this table).
+ */
+export function bcpSundayFirstLessonFor(date, service) {
+  if (!isValidDate(date)) return null;
+  const d = dateOnly(date);
+  if (d.getDay() !== 0) return null;
+  const label = collect1662Label(d);
+  if (!label) return null;
+  const entry = bcpSundayFirstLessons[label];
+  if (!entry) return null;
+  const ot = service === "am" ? entry.am : entry.pm;
+  if (!ot) return null;
+  return { title: label, ot };
+}

@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -389,11 +389,19 @@ function buildAnglicanOffice(date, service, collectSource) {
   const isSunday = date.getDay() === 0;
   const cwSunday = source === "CW" && isSunday ? secondThirdServiceFor(date, service) : null;
 
-  const result = cwSunday || officeReadingFor(date, service);
+  let result = cwSunday || officeReadingFor(date, service);
   const psalmResult = cwSunday ? { citation: cwSunday.psalm, week: cwSunday.title } : psalmFor(date, service);
+  // 1662 BCP Sundays have their own First (Old Testament) Lesson, distinct
+  // from the weekday table this office otherwise borrows for 1662 - only
+  // the First Lesson is Sunday-specific in the BCP system, so this
+  // replaces just the OT reading, leaving the NT reading/psalm as-is.
+  if (source === "1662" && isSunday) {
+    const bcpSunday = bcpSundayFirstLessonFor(date, service);
+    if (bcpSunday) result = { ...result, ot: bcpSunday.ot, week: bcpSunday.title };
+  }
   const fallbackReadings = fallback.sequence.filter((i) => i.type === "reading");
 
-  if (!result && !psalmResult) {
+  if (!result?.ot && !result?.nt && !psalmResult) {
     const opening = firstCanticleKey ? [canticleItem(firstCanticleKey, byRole("Canticle"))] : [];
     const afterOT = [canticleItem(secondCanticleKey, byRole("Canticle", service === "am" ? "Te Deum Laudamus" : "Magnificat"))];
     const afterNT = [canticleItem(thirdCanticleKey, byRole("Canticle", service === "am" ? "Benedictus" : "Nunc dimittis"))];

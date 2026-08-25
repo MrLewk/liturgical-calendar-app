@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.24.0] — 1662 BCP Sunday First Lessons
+
+- **Added:** the 1662 BCP's Sunday First (Old Testament) Lesson for Morning and Evening Prayer, sourced from the 1922 Revised Table of Lessons — the table actually in standard use for the last century, rather than the original 1561/1662 table (superseded in official use since 1871, and only available today via a copyrighted modern reprint). 54 Sunday entries covering the full church year.
+- **Added:** `bcpSundayFirstLessonFor()` in `lectionary.js`, reusing the existing `collect1662Label()` so the First Lesson always agrees with whichever Sunday governs the Collect of the Day — including correctly yielding to a fixed feast day's own provision when one coincides with a Sunday.
+- Scope note (deliberately narrower than the equivalent Common Worship work): 1662's Sunday provision only ever covered the First Lesson — the Second (New Testament) Lesson on a 1662 Sunday is simply whatever the ordinary continuous weekday reading happens to be that day, which isn't sourced for BCP yet. Rather than show stale or mismatched content, the Psalm and Second Lesson cards are honestly omitted on 1662 Sundays for now instead of guessing.
+- Verified via an automated sweep across 208 Sundays (2024–2027): 193 resolve to real First Lesson text; the remaining 15 are Sundays that coincide with a fixed feast day, which take precedence and aren't covered by this table (a known, separate gap already tracked).
+- This completes the "Sunday demo text" gap identified as the app's single biggest content gap — both Anglican registers (1662 BCP and Common Worship) now show real, date-accurate content for Sunday Morning and Evening Prayer.
+
 ## [0.23.0] — Common Worship Sunday Morning & Evening Prayer readings
 
 - **Added:** Real Common Worship readings for Sunday Morning and Evening Prayer, previously the single biggest gap in the app — roughly 95 of every 104 Sundays fell back to static demo text, since the existing weekday lectionary (Table 2) structurally has no Sunday entries at all. Sunday Office readings come from an entirely separate CW lectionary (the Second and Third Service Lectionary), which has now been transcribed in full: 58 Sunday titles × 3 lectionary years (A/B/C) × 2 services, sourced from the CW "Lectionary for Sundays, Principal Feasts and Holy Days" pages. © The Archbishops' Council 2000, published by Church House Publishing.

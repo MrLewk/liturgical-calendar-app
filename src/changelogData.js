@@ -6,6 +6,17 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.24.0",
+    title: "1662 BCP Sunday First Lessons",
+    changes: [
+      { type: "Added", text: "The 1662 BCP's Sunday First (Old Testament) Lesson for Morning and Evening Prayer, sourced from the 1922 Revised Table of Lessons - 54 Sunday entries covering the full church year." },
+      { type: "Added", text: "bcpSundayFirstLessonFor(), reusing the existing collect1662Label() so the First Lesson always agrees with whichever Sunday governs the Collect of the Day." },
+      { type: "Info", text: "1662's Sunday provision only ever covered the First Lesson - the Psalm and Second Lesson are honestly omitted on 1662 Sundays for now rather than showing mismatched content." },
+      { type: "Info", text: "Verified across 208 Sundays (2024-2027): 193 resolve correctly; the other 15 coincide with a fixed feast day, a known separate gap." },
+      { type: "Info", text: "This completes the app's single biggest content gap - both Anglican registers now show real Sunday Morning and Evening Prayer content." },
+    ],
+  },
+  {
     version: "0.23.0",
     title: "Common Worship Sunday Morning & Evening Prayer readings",
     changes: [

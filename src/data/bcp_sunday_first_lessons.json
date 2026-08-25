@@ -1,0 +1,218 @@
+{
+  "The first Sunday in Advent": {
+    "am": "Isaiah 1:1-20",
+    "pm": "Isaiah 2"
+  },
+  "The second Sunday in Advent": {
+    "am": "Isaiah 5",
+    "pm": "Isaiah 10:33-11:9"
+  },
+  "The third Sunday in Advent": {
+    "am": "Isaiah 25:1-9",
+    "pm": "Isaiah 26"
+  },
+  "The fourth Sunday in Advent": {
+    "am": "Isaiah 32:1-18",
+    "pm": "Isaiah 33:2-22"
+  },
+  "The Sunday after Christmas-Day": {
+    "am": "Isaiah 40:1-11",
+    "pm": "Isaiah 40:12-end"
+  },
+  "The first Sunday after the Epiphany": {
+    "am": "Isaiah 44:6-end",
+    "pm": "Isaiah 45"
+  },
+  "The second Sunday after the Epiphany": {
+    "am": "Isaiah 49:1-13",
+    "pm": "Isaiah 49:14-end"
+  },
+  "The third Sunday after the Epiphany": {
+    "am": "Hosea 11:1-12:6",
+    "pm": "Hosea 14"
+  },
+  "The fourth Sunday after the Epiphany": {
+    "am": "Amos 3",
+    "pm": "Amos 4:4-end"
+  },
+  "The fifth Sunday after the Epiphany": {
+    "am": "Amos 7",
+    "pm": "Amos 8"
+  },
+  "The sixth Sunday after the Epiphany": {
+    "am": "Micah 2",
+    "pm": "Micah 3"
+  },
+  "Septuagesima (3rd before Lent)": {
+    "am": "Genesis 1:1-2:3",
+    "pm": "Genesis 2:4-end"
+  },
+  "Sexagesima (2nd before Lent)": {
+    "am": "Genesis 3",
+    "pm": "Genesis 6:5-end"
+  },
+  "Quinquagesima (next before Lent)": {
+    "am": "Genesis 12:1-8",
+    "pm": "Genesis 13"
+  },
+  "The first Sunday in Lent": {
+    "am": "Genesis 18",
+    "pm": "Genesis 21:1-21"
+  },
+  "The second Sunday in Lent": {
+    "am": "Genesis 27:1-40",
+    "pm": "Genesis 28:10-end"
+  },
+  "The third Sunday in Lent": {
+    "am": "Genesis 37",
+    "pm": "Genesis 39"
+  },
+  "The fourth Sunday in Lent": {
+    "am": "Genesis 43",
+    "pm": "Genesis 44:1-45:8"
+  },
+  "The fifth Sunday in Lent": {
+    "am": "Exodus 2:23-3:end",
+    "pm": "Exodus 4:1-23"
+  },
+  "The Sunday next before Easter": {
+    "am": "Isaiah 52:13-53:end",
+    "pm": "Exodus 10:21-11:end"
+  },
+  "Easter Day": {
+    "am": "Exodus 12:1-14",
+    "pm": "Isaiah 51:1-16"
+  },
+  "The first Sunday after Easter": {
+    "am": "Isaiah 52:1-12",
+    "pm": "Isaiah 54"
+  },
+  "The second Sunday after Easter": {
+    "am": "Exodus 16:2-15",
+    "pm": "Exodus 32"
+  },
+  "The third Sunday after Easter": {
+    "am": "Numbers 22:1-35",
+    "pm": "Numbers 22:36-23:26"
+  },
+  "The fourth Sunday after Easter": {
+    "am": "Deuteronomy 4:1-24",
+    "pm": "Deuteronomy 4:25-40"
+  },
+  "The fifth Sunday after Easter": {
+    "am": "Deuteronomy 6",
+    "pm": "Deuteronomy 8"
+  },
+  "Sunday after Ascension-Day": {
+    "am": "Deuteronomy 26",
+    "pm": "Deuteronomy 30"
+  },
+  "TRINITY-SUNDAY": {
+    "am": "Isaiah 6:1-8",
+    "pm": "Exodus 34:1-10"
+  },
+  "The first Sunday after Trinity": {
+    "am": "Joshua 1",
+    "pm": "Joshua 5:12-6:20"
+  },
+  "The second Sunday after Trinity": {
+    "am": "Judges 4",
+    "pm": "Judges 6:33-7:23"
+  },
+  "The third Sunday after Trinity": {
+    "am": "1 Samuel 1",
+    "pm": "1 Samuel 2:1-21"
+  },
+  "The fourth Sunday after Trinity": {
+    "am": "1 Samuel 12",
+    "pm": "1 Samuel 15:1-31"
+  },
+  "The fifth Sunday after Trinity": {
+    "am": "1 Samuel 17:1-54",
+    "pm": "1 Samuel 20:1-17"
+  },
+  "The sixth Sunday after Trinity": {
+    "am": "2 Samuel 1",
+    "pm": "2 Samuel 7"
+  },
+  "The seventh Sunday after Trinity": {
+    "am": "2 Samuel 18",
+    "pm": "1 Kings 3"
+  },
+  "The eighth Sunday after Trinity": {
+    "am": "1 Kings 10:1-13",
+    "pm": "1 Kings 12"
+  },
+  "The ninth Sunday after Trinity": {
+    "am": "1 Kings 17:8-end",
+    "pm": "1 Kings 18"
+  },
+  "The tenth Sunday after Trinity": {
+    "am": "1 Kings 21",
+    "pm": "1 Kings 22:1-40"
+  },
+  "The eleventh Sunday after Trinity": {
+    "am": "2 Kings 5",
+    "pm": "2 Kings 6:8-23"
+  },
+  "The twelfth Sunday after Trinity": {
+    "am": "2 Kings 18:13-end",
+    "pm": "2 Kings 19"
+  },
+  "The thirteenth Sunday after Trinity": {
+    "am": "2 Kings 22",
+    "pm": "2 Kings 23:1-30"
+  },
+  "The fourteenth Sunday after Trinity": {
+    "am": "Ezra 1:1-8 & 3",
+    "pm": "Nehemiah 1:1-2:8"
+  },
+  "The fifteenth Sunday after Trinity": {
+    "am": "Daniel 3",
+    "pm": "Daniel 5"
+  },
+  "The sixteenth Sunday after Trinity": {
+    "am": "Jeremiah 5:1-19",
+    "pm": "Jeremiah 5:20-end"
+  },
+  "The seventeenth Sunday after Trinity": {
+    "am": "Jeremiah 17:5-14",
+    "pm": "Jeremiah 18:1-17"
+  },
+  "The eighteenth Sunday after Trinity": {
+    "am": "Jeremiah 26",
+    "pm": "Jeremiah 30:1-3 & 30:10-22"
+  },
+  "The nineteenth Sunday after Trinity": {
+    "am": "Jeremiah 31:23-37",
+    "pm": "Jeremiah 35"
+  },
+  "The twentieth Sunday after Trinity": {
+    "am": "Ezekiel 2",
+    "pm": "Ezekiel 3:4-21"
+  },
+  "The twenty-first Sunday after Trinity": {
+    "am": "Ezekiel 14",
+    "pm": "Ezekiel 18:1-4 & 18:19-end"
+  },
+  "The twenty-second Sunday after Trinity": {
+    "am": "Ezekiel 34:1-16",
+    "pm": "Ezekiel 34:17-end"
+  },
+  "The twenty-third Sunday after Trinity": {
+    "am": "Proverbs 1:20-end",
+    "pm": "Proverbs 2"
+  },
+  "The twenty-fourth Sunday after Trinity": {
+    "am": "Proverbs 8:1-21",
+    "pm": "Proverbs 8:1 & 8:22-end"
+  },
+  "The Twenty-Fifth Sunday after Trinity": {
+    "am": "Proverbs 13",
+    "pm": "Proverbs 14:31-15:17"
+  },
+  "WHIT-SUNDAY": {
+    "am": "Joel 2:28-end",
+    "pm": "Isaiah 11:1-9"
+  }
+}
