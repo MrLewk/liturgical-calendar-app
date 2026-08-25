@@ -539,6 +539,42 @@
         "ot": "Isaiah 44.24-45.8",
         "nt": "Revelation 12.1-12"
       }
+    },
+    "Proper 20 (25)": {
+      "second": {
+        "psalm": "Psalm 119.113-136",
+        "ot": "Ezekiel 33.23,30-34.10",
+        "nt": "Acts 26.1,9-25"
+      },
+      "third": {
+        "psalm": "Psalm 119.153-176",
+        "ot": "Isaiah 45.9-22",
+        "nt": "Revelation 14.1-5"
+      }
+    },
+    "Proper 21 (26)": {
+      "second": {
+        "psalm": "Psalm 120,123,124",
+        "ot": "Ezekiel 37.15-28",
+        "nt": "1 John 2.22-29"
+      },
+      "third": {
+        "psalm": "Psalm 125,126,127",
+        "ot": "Isaiah 48.12-21",
+        "nt": "Luke 11.37-54"
+      }
+    },
+    "Proper 22 (27)": {
+      "second": {
+        "psalm": "Psalm 136",
+        "ot": "Proverbs 2.1-11",
+        "nt": "1 John 2.1-17"
+      },
+      "third": {
+        "psalm": "Psalm 128,129,134",
+        "ot": "Isaiah 49.13-23",
+        "nt": "Luke 12.1-12"
+      }
     }
   },
   "B": {
@@ -1081,6 +1117,42 @@
         "ot": "Isaiah 44.24-45.8",
         "nt": "Revelation 12.1-12"
       }
+    },
+    "Proper 20 (25)": {
+      "second": {
+        "psalm": "Psalm 119.137-152",
+        "ot": "Exodus 19.10-25",
+        "nt": "Matthew 8.23-34"
+      },
+      "third": {
+        "psalm": "Psalm 119.153-176",
+        "ot": "Isaiah 45.9-22",
+        "nt": "Revelation 14.1-5"
+      }
+    },
+    "Proper 21 (26)": {
+      "second": {
+        "psalm": "Psalm 120,121",
+        "ot": "Exodus 24",
+        "nt": "Matthew 9.1-8"
+      },
+      "third": {
+        "psalm": "Psalm 122",
+        "ot": "Isaiah 48.12-22",
+        "nt": "Luke 11.37-54"
+      }
+    },
+    "Proper 22 (27)": {
+      "second": {
+        "psalm": "Psalm 125,126",
+        "ot": "Joshua 3.7-17",
+        "nt": "Matthew 10.1-22"
+      },
+      "third": {
+        "psalm": "Psalm 123,124",
+        "ot": "Isaiah 49.13-23",
+        "nt": "Luke 12.1-12"
+      }
     }
   },
   "C": {
@@ -1622,6 +1694,42 @@
         "psalm": "Psalm 126,127",
         "ot": "Isaiah 44.24-45.8",
         "nt": "Revelation 12.1-12"
+      }
+    },
+    "Proper 20 (25)": {
+      "second": {
+        "psalm": "Psalm 128,129",
+        "ot": "Ezra 1",
+        "nt": "John 7.14-36"
+      },
+      "third": {
+        "psalm": "Psalm 130,131",
+        "ot": "Isaiah 45.9-22",
+        "nt": "Revelation 14.1-5"
+      }
+    },
+    "Proper 21 (26)": {
+      "second": {
+        "psalm": "Psalm 134,135",
+        "ot": "Nehemiah 2",
+        "nt": "John 8.31-38,48-59"
+      },
+      "third": {
+        "psalm": "Psalm 132",
+        "ot": "Isaiah 48.12-22",
+        "nt": "Luke 11.37-54"
+      }
+    },
+    "Proper 22 (27)": {
+      "second": {
+        "psalm": "Psalm 142",
+        "ot": "Nehemiah 5.1-13",
+        "nt": "John 9"
+      },
+      "third": {
+        "psalm": "Psalm 141",
+        "ot": "Isaiah 49.13-23",
+        "nt": "Luke 12.1-12"
       }
     }
   }
