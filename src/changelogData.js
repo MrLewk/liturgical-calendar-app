@@ -6,6 +6,14 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.28.0",
+    title: "Fixed intermittent missing calendar day borders",
+    changes: [
+      { type: "Fixed", text: "Some days on the Calendar grid — e.g. a given Sunday in one month but not another — could silently lose their bottom season-color border after navigating between months. Root cause: the day cell's inline style mixed the `border` shorthand with a `borderBottom` override, a combination React itself warns can drop the longhand value when a grid cell's DOM node is reused for a different date on rerender." },
+      { type: "Fixed", text: "Rewrote the day cell's border styling to use only explicit longhand properties (top/right/left/bottom width, style, and color individually) so there's no shorthand/longhand conflict for React to mishandle. Verified by navigating across 6 consecutive months in an automated browser check with no missing borders and no React style warnings." },
+    ],
+  },
+  {
     version: "0.27.0",
     title: "Register-aware Eucharist liturgy text; Anglican tradition complete",
     changes: [

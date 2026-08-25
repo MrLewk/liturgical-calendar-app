@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.28.0] — Fixed intermittent missing calendar day borders
+
+- **Fixed:** a bug reported from the Calendar grid where some days — e.g. a Sunday in September but not in November — could silently lose their bottom season-color border. It was inconsistent across months and unrelated to the underlying season/liturgical data, which was confirmed correct for every affected date.
+- **Root cause:** the day cell's inline style mixed the CSS `border` shorthand (for the 1px top/left/right border) with a `borderBottom` longhand override (for the 3px season-color bottom border). React explicitly warns against this exact combination in dev mode — mixing shorthand and longhand style properties for the same value can cause the longhand to be silently dropped when a grid cell's DOM node is reused for a different date across a rerender (e.g. clicking to the next/previous month), since React diffs style objects property-by-property rather than resetting them wholesale.
+- **Fixed:** rewrote the day cell's `style` object in `App.jsx` to use only explicit longhand border properties (`borderTopWidth`/`Style`/`Color`, `borderRightWidth`/`Style`/`Color`, etc.) with no shorthand at all, eliminating the conflict.
+- **Verified:** via an automated Playwright pass clicking through 6 consecutive months, screenshotting each, and confirming both that every day cell renders its border correctly and that React's dev-mode style-conflict warning no longer fires.
+
 ## [0.27.0] — Register-aware Eucharist liturgy text; Anglican tradition complete
 
 - **Added:** the Common Worship Order One "Prayer of Preparation" (the contemporary-language equivalent of the Collect for Purity) and "Prayers of Penitence" (Confession), shown when the CW register is selected, sourced directly from Common Worship's official Order One text. © The Archbishops' Council 2000, published by Church House Publishing.

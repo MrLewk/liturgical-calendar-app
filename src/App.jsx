@@ -2256,6 +2256,22 @@ function GridView({ today, tradition, calendar, onSelectDay }) {
           const daySeason = seasonAt(seasons, date);
           const feast = feastOnDate(feasts, date);
           const dayColor = daySeason.color;
+          // Deliberately avoid mixing the `border` shorthand with a
+          // `borderBottom` longhand override in the same style object:
+          // React diffs style props individually on rerender, and that
+          // combination can silently drop the longhand's value when a grid
+          // cell's DOM node is reused for a different date (e.g. navigating
+          // between months) — see React's own dev-mode warning about this.
+          // Using only longhand properties for every side avoids the bug.
+          const sideColor = isToday
+            ? seasonAccent(withDisplay(daySeason, date, tradition, seasons), theme.mode)
+            : feast
+            ? alpha(feast.color, 0.5)
+            : "transparent";
+          const bottomColor = isToday
+            ? seasonAccent(withDisplay(daySeason, date, tradition, seasons), theme.mode)
+            : dayColor;
+          const bottomWidth = isToday ? "1px" : "3px";
           return (
             <button
               key={d}
@@ -2264,12 +2280,18 @@ function GridView({ today, tradition, calendar, onSelectDay }) {
               style={{
                 backgroundColor: isToday ? daySeason.color : theme.surface,
                 color: isToday ? "#FFFFFF" : alpha(theme.text, 0.8),
-                border: isToday
-                  ? `1px solid ${seasonAccent(withDisplay(daySeason, date, tradition, seasons), theme.mode)}`
-                  : feast
-                  ? `1px solid ${alpha(feast.color, 0.5)}`
-                  : "1px solid transparent",
-                borderBottom: isToday ? `1px solid ${seasonAccent(withDisplay(daySeason, date, tradition, seasons), theme.mode)}` : `3px solid ${dayColor}`,
+                borderTopWidth: "1px",
+                borderTopStyle: "solid",
+                borderTopColor: sideColor,
+                borderRightWidth: "1px",
+                borderRightStyle: "solid",
+                borderRightColor: sideColor,
+                borderLeftWidth: "1px",
+                borderLeftStyle: "solid",
+                borderLeftColor: sideColor,
+                borderBottomWidth: bottomWidth,
+                borderBottomStyle: "solid",
+                borderBottomColor: bottomColor,
                 boxSizing: "border-box",
               }}
             >
