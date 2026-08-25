@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.22.0] — Common Worship seasonal canticles
+
+- **Added:** Common Worship's full set of 14 seasonal Old and New Testament Canticles — one Old Testament canticle for Morning Prayer and one New Testament canticle for Evening Prayer, per liturgical season (Advent, Christmas, Epiphany, Lent, Easter, Pentecost, Ordinary Time). Extracted from the CW Common Material "Old and New Testament Canticles at Morning and Evening Prayer" page. © The Archbishops' Council 2000, published by Church House Publishing.
+- **Changed:** when Common Worship is selected, the canticle after the Old Testament reading is now the seasonally-appropriate one (e.g. "A Song of the Wilderness" in Advent, "A Song of Faith" in Easter) instead of the fixed Te Deum (Morning Prayer) / Magnificat (Evening Prayer). The 1662 BCP register is unaffected — it still always uses Te Deum and Magnificat.
+- **Added:** `seasonalCanticleKey()` in `lectionary.js`, mapping the app's existing season model onto Common Worship's 7-season canticle set. Two adjustments where the mapping isn't 1:1: the Paschal Triduum (which has no canticle of its own in this set) continues Lent's, and the long "Ordinary Time" season the app already tracks is split at Trinity Sunday to distinguish CW's short Pentecost season from Ordinary Time proper.
+- Verified via an automated 3-year sweep: zero unresolved dates, all 14 canticles genuinely used across the year, and every season transition (Ash Wednesday, Easter, Pentecost, Trinity Sunday, Advent, Christmas) lands on the exact correct date.
+- This completes the Common Worship canticle work — collects, Gospel canticles, opening canticles, and now the seasonal Old/New Testament rotation are all in place alongside the existing 1662 BCP set.
+
 ## [0.21.0] — Common Worship opening canticles
 
 - **Added:** Common Worship's opening canticle set — Venite, the Easter Anthems, Jubilate, Phos Hilaron, and Verses from Psalm 141/104 — extracted from the CW Common Material "Opening Hymn and Canticles" page. © The Archbishops' Council 2000, published by Church House Publishing.

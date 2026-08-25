@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.22.0",
+    title: "Common Worship seasonal canticles",
+    changes: [
+      { type: "Added", text: "Common Worship's full set of 14 seasonal Old and New Testament Canticles — one per liturgical season for Morning Prayer and one for Evening Prayer." },
+      { type: "Changed", text: "Under Common Worship, the canticle after the Old Testament reading is now seasonally appropriate (e.g. \"A Song of the Wilderness\" in Advent) instead of always Te Deum/Magnificat. The 1662 BCP register is unaffected." },
+      { type: "Added", text: "seasonalCanticleKey(), mapping the app's season model onto CW's 7-season canticle set, verified via an automated 3-year sweep." },
+      { type: "Info", text: "This completes the Common Worship canticle work — collects, Gospel canticles, opening canticles, and the seasonal rotation are all now in place." },
+    ],
+  },
+  {
     version: "0.21.0",
     title: "Common Worship opening canticles",
     changes: [

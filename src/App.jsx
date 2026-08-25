@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -358,9 +358,16 @@ function buildAnglicanOffice(date, service, collectSource) {
   // PM: (CW only) Phos Hilaron before the readings, Magnificat after the OT
   // lesson, Nunc Dimittis after the NT lesson. The 1662 BCP office has no
   // opening canticle at Evening Prayer.
+  // Common Worship replaces the after-OT canticle (Te Deum/Magnificat) with
+  // a seasonal alternative - see seasonalCanticleKey for the season mapping.
   const source = collectSource === "CW" ? "CW" : "1662";
   const firstCanticleKey = service === "am" ? morningFirstCanticleKey(date) : eveningFirstCanticleKey(source);
-  const secondCanticleKey = service === "am" ? "te_deum" : "magnificat";
+  let secondCanticleKey = service === "am" ? "te_deum" : "magnificat";
+  if (source === "CW") {
+    const { seasons } = liturgicalYearData("Anglican", "Gregorian", date);
+    const seasonKey = seasonAt(seasons, date)?.key;
+    secondCanticleKey = seasonalCanticleKey(date, service, seasonKey) || secondCanticleKey;
+  }
   const thirdCanticleKey = service === "am" ? "benedictus" : "nunc_dimittis";
 
   function canticleItem(key, fallbackItem) {
@@ -1641,6 +1648,20 @@ const CANTICLE_DISPLAY_NAMES = {
     phos_hilaron: "Phos hilaron - a Song of the Light",
     psalm_141_verses: "Verses from Psalm 141",
     psalm_104_verses: "Verses from Psalm 104",
+    wilderness_advent: "A Song of the Wilderness",
+    messiah_christmas: "A Song of the Messiah",
+    new_jerusalem_epiphany: "A Song of the New Jerusalem",
+    humility_lent: "A Song of Humility",
+    moses_miriam_easter: "The Song of Moses and Miriam",
+    ezekiel_pentecost: "A Song of Ezekiel",
+    david_ordinary: "A Song of David",
+    spirit_advent: "A Song of the Spirit",
+    redemption_christmas: "A Song of Redemption",
+    praise_epiphany: "A Song of Praise",
+    servant_lent: "A Song of Christ the Servant",
+    faith_easter: "A Song of Faith",
+    gods_children_pentecost: "A Song of God's Children",
+    lamb_ordinary: "A Song of the Lamb",
   },
 };
 

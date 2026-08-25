@@ -961,3 +961,55 @@ export function morningFirstCanticleKey(date) {
 export function eveningFirstCanticleKey(source = "1662") {
   return source === "CW" ? "phos_hilaron" : null;
 }
+
+/**
+ * Common Worship's seasonal Old Testament Canticle (Morning Prayer) or New
+ * Testament Canticle (Evening Prayer) key for `date` - these are seasonal
+ * alternatives that replace the fixed Te Deum/Magnificat slot after the OT
+ * reading when the CW register is selected. One canticle per season, with
+ * two adjustments the fixed 7-item CW set doesn't map onto directly:
+ *   - The Paschal Triduum (Maundy Thursday - Holy Saturday) has no canticle
+ *     of its own in this set, so it continues Lent's.
+ *   - Common Worship distinguishes a short "Pentecost" season from the long
+ *     "Ordinary Time" that follows, but this app's own season model treats
+ *     both as one continuous season running to the next Advent. That season
+ *     is split here at Trinity Sunday (Pentecost + 7 days) to match.
+ * `seasonKey` is the `key` field from westernSeasons() (e.g. "advent",
+ * "ordinary2") - the same value already used for liturgical colour/season
+ * name elsewhere, so callers don't need to duplicate season computation.
+ */
+export function seasonalCanticleKey(date, service, seasonKey) {
+  const isAM = service === "am";
+
+  let bucket = seasonKey;
+  if (bucket === "triduum") bucket = "lent";
+  if (bucket === "ordinary2") {
+    const d = dateOnly(date);
+    const { easter } = churchYearContext(d);
+    const trinity = addDays(addDays(easter, 49), 7);
+    bucket = d < trinity ? "pentecost" : "ordinary";
+  } else if (bucket === "ordinary1") {
+    bucket = "epiphany";
+  }
+
+  const AM_KEYS = {
+    advent: "wilderness_advent",
+    christmas: "messiah_christmas",
+    epiphany: "new_jerusalem_epiphany",
+    lent: "humility_lent",
+    easter: "moses_miriam_easter",
+    pentecost: "ezekiel_pentecost",
+    ordinary: "david_ordinary",
+  };
+  const PM_KEYS = {
+    advent: "spirit_advent",
+    christmas: "redemption_christmas",
+    epiphany: "praise_epiphany",
+    lent: "servant_lent",
+    easter: "faith_easter",
+    pentecost: "gods_children_pentecost",
+    ordinary: "lamb_ordinary",
+  };
+
+  return (isAM ? AM_KEYS : PM_KEYS)[bucket] || null;
+}

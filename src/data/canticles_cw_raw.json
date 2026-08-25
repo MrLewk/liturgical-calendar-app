@@ -896,5 +896,663 @@
         "b": null
       }
     ]
+  },
+  "wilderness_advent": {
+    "title": "A Song of the Wilderness (Advent)",
+    "section": "Morning Prayer",
+    "citation": "Isaiah 35.1,2b-4a,4c-6,10",
+    "verses": [
+      {
+        "number": "1",
+        "a": "The wilderness and the dry land shall rejoice,",
+        "b": "the desert shall blossom and burst into song."
+      },
+      {
+        "number": "2",
+        "a": "They shall see the glory of the Lord,",
+        "b": "the majesty of our God."
+      },
+      {
+        "number": "3",
+        "a": "Strengthen the weary hands,",
+        "b": "and make firm the feeble knees."
+      },
+      {
+        "number": "4",
+        "a": "Say to the anxious, 'Be strong, fear not, your God is coming with judgement,",
+        "b": "coming with judgement to save you.'"
+      },
+      {
+        "number": "5",
+        "a": "Then shall the eyes of the blind be opened,",
+        "b": "and the ears of the deaf unstopped;"
+      },
+      {
+        "number": "6",
+        "a": "Then shall the lame leap like a hart,",
+        "b": "and the tongue of the dumb sing for joy."
+      },
+      {
+        "number": "7",
+        "a": "For waters shall break forth in the wilderness,",
+        "b": "and streams in the desert;"
+      },
+      {
+        "number": "8",
+        "a": "The ransomed of the Lord shall return with singing,",
+        "b": "with everlasting joy upon their heads."
+      },
+      {
+        "number": "9",
+        "a": "Joy and gladness shall be theirs,",
+        "b": "and sorrow and sighing shall flee away."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "messiah_christmas": {
+    "title": "A Song of the Messiah (Christmas)",
+    "section": "Morning Prayer",
+    "citation": "Isaiah 9.2,3b,4a,6,7",
+    "verses": [
+      {
+        "number": "1",
+        "a": "The people who walked in darkness have seen a great light;",
+        "b": "those who dwelt in a land of deep darkness, upon them the light has dawned."
+      },
+      {
+        "number": "2",
+        "a": "You have increased their joy and given them great gladness;",
+        "b": "they rejoiced before you as with joy at the harvest."
+      },
+      {
+        "number": "3",
+        "a": "For you have shattered the yoke that burdened them;",
+        "b": "the collar that lay heavy on their shoulders."
+      },
+      {
+        "number": "4",
+        "a": "For to us a child is born and to us a son is given,",
+        "b": "and the government will be upon his shoulder."
+      },
+      {
+        "number": "5",
+        "a": "And his name will be called: Wonderful Counsellor; the Mighty God;",
+        "b": "the Everlasting Father; the Prince of Peace."
+      },
+      {
+        "number": "6",
+        "a": "Of the increase of his government and of peace",
+        "b": "there will be no end,"
+      },
+      {
+        "number": "7",
+        "a": "Upon the throne of David and over his kingdom,",
+        "b": "to establish and uphold it with justice and righteousness."
+      },
+      {
+        "number": "8",
+        "a": "From this time forth and for evermore;",
+        "b": "the zeal of the Lord of hosts will do this."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "new_jerusalem_epiphany": {
+    "title": "A Song of the New Jerusalem (Epiphany)",
+    "section": "Morning Prayer",
+    "citation": "Isaiah 60.1-3,11a,18,19,14b",
+    "verses": [
+      {
+        "number": "1",
+        "a": "Arise, shine out, for your light has come,",
+        "b": "the glory of the Lord is rising upon you."
+      },
+      {
+        "number": "2",
+        "a": "Though night still covers the earth,",
+        "b": "and darkness the peoples;"
+      },
+      {
+        "number": "3",
+        "a": "Above you the Holy One arises,",
+        "b": "and above you God's glory appears."
+      },
+      {
+        "number": "4",
+        "a": "The nations will come to your light,",
+        "b": "and kings to your dawning brightness."
+      },
+      {
+        "number": "5",
+        "a": "Your gates will lie open continually,",
+        "b": "shut neither by day nor by night."
+      },
+      {
+        "number": "6",
+        "a": "The sound of violence shall be heard no longer in your land,",
+        "b": "or ruin and devastation within your borders."
+      },
+      {
+        "number": "7",
+        "a": "You will call your walls, Salvation,",
+        "b": "and your gates, Praise."
+      },
+      {
+        "number": "8",
+        "a": "No more will the sun give you daylight,",
+        "b": "nor moonlight shine upon you;"
+      },
+      {
+        "number": "9",
+        "a": "But the Lord will be your everlasting light,",
+        "b": "your God will be your splendour."
+      },
+      {
+        "number": "10",
+        "a": "For you shall be called the city of God,",
+        "b": "the dwelling of the Holy One of Israel."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "humility_lent": {
+    "title": "A Song of Humility (Lent)",
+    "section": "Morning Prayer",
+    "citation": "Hosea 6.1-6",
+    "verses": [
+      {
+        "number": "1",
+        "a": "Come, let us return to the Lord",
+        "b": "who has torn us and will heal us."
+      },
+      {
+        "number": "2",
+        "a": "God has stricken us",
+        "b": "and will bind up our wounds."
+      },
+      {
+        "number": "3",
+        "a": "After two days, he will revive us,",
+        "b": "and on the third day will raise us up, that we may live in his presence."
+      },
+      {
+        "number": "4",
+        "a": "Let us strive to know the Lord;",
+        "b": "his appearing is as sure as the sunrise."
+      },
+      {
+        "number": "5",
+        "a": "He will come to us like the showers,",
+        "b": "like the spring rains that water the earth."
+      },
+      {
+        "number": "6",
+        "a": "'O Ephraim, how shall I deal with you?",
+        "b": "How shall I deal with you, O Judah?"
+      },
+      {
+        "number": "7",
+        "a": "'Your love for me is like the morning mist,",
+        "b": "like the dew that goes early away."
+      },
+      {
+        "number": "8",
+        "a": "'Therefore, I have hewn them by the prophets,",
+        "b": "and my judgement goes forth as the light."
+      },
+      {
+        "number": "9",
+        "a": "'For loyalty is my desire and not sacrifice,",
+        "b": "and the knowledge of God rather than burnt offerings.'"
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "moses_miriam_easter": {
+    "title": "The Song of Moses and Miriam (Easter)",
+    "section": "Morning Prayer",
+    "citation": "Exodus 15.1b-3,6,10,13,17",
+    "verses": [
+      {
+        "number": "1",
+        "a": "I will sing to the Lord, who has triumphed gloriously,",
+        "b": "the horse and his rider he has thrown into the sea."
+      },
+      {
+        "number": "2",
+        "a": "The Lord is my strength and my song",
+        "b": "and has become my salvation."
+      },
+      {
+        "number": "3",
+        "a": "This is my God whom I will praise,",
+        "b": "the God of my forebears whom I will exalt."
+      },
+      {
+        "number": "4",
+        "a": "The Lord is a warrior,",
+        "b": "the Lord is his name."
+      },
+      {
+        "number": "5",
+        "a": "Your right hand, O Lord, is glorious in power:",
+        "b": "your right hand, O Lord, shatters the enemy."
+      },
+      {
+        "number": "6",
+        "a": "At the blast of your nostrils, the sea covered them;",
+        "b": "they sank as lead in the mighty waters."
+      },
+      {
+        "number": "7",
+        "a": "In your unfailing love, O Lord,",
+        "b": "you lead the people whom you have redeemed."
+      },
+      {
+        "number": "8",
+        "a": "And by your invincible strength",
+        "b": "you will guide them to your holy dwelling."
+      },
+      {
+        "number": "9",
+        "a": "You will bring them in and plant them, O Lord,",
+        "b": "in the sanctuary which your hands have established."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "ezekiel_pentecost": {
+    "title": "A Song of Ezekiel (Pentecost)",
+    "section": "Morning Prayer",
+    "citation": "Ezekiel 36.24-26,28b",
+    "verses": [
+      {
+        "number": "1",
+        "a": "I will take you from the nations,",
+        "b": "and gather you from all the countries."
+      },
+      {
+        "number": "2",
+        "a": "I will sprinkle clean water upon you,",
+        "b": "and you shall be clean from all your uncleannesses."
+      },
+      {
+        "number": "3",
+        "a": "A new heart I will give you,",
+        "b": "and put a new spirit within you,"
+      },
+      {
+        "number": "4",
+        "a": "And I will remove from your body the heart of stone",
+        "b": "and give you a heart of flesh."
+      },
+      {
+        "number": "5",
+        "a": "You shall be my people,",
+        "b": "and I will be your God."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "david_ordinary": {
+    "title": "A Song of David (Ordinary Time)",
+    "section": "Morning Prayer",
+    "citation": null,
+    "verses": [
+      {
+        "number": "1",
+        "a": "Blessed are you, God of Israel, for ever and ever,",
+        "b": "for yours is the greatness, the power, the glory, the splendour and the majesty."
+      },
+      {
+        "number": "2",
+        "a": "Everything in heaven and on earth is yours;",
+        "b": "yours is the kingdom, O Lord, and you are exalted as head over all."
+      },
+      {
+        "number": "3",
+        "a": "Riches and honour come from you",
+        "b": "and you rule over all."
+      },
+      {
+        "number": "4",
+        "a": "In your hand are power and might;",
+        "b": "yours it is to give power and strength to all."
+      },
+      {
+        "number": "5",
+        "a": "And now we give you thanks, our God,",
+        "b": "and praise your glorious name."
+      },
+      {
+        "number": "6",
+        "a": "For all things come from you,",
+        "b": "and of your own have we given you."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "spirit_advent": {
+    "title": "A Song of the Spirit (Advent)",
+    "section": "Evening Prayer",
+    "citation": "Revelation 22.12-14,16,17",
+    "verses": [
+      {
+        "number": "1",
+        "a": "'Behold, I am coming soon', says the Lord, 'and bringing my reward with me,",
+        "b": "to give to everyone according to their deeds."
+      },
+      {
+        "number": "2",
+        "a": "'I am the Alpha and the Omega, the first and the last,",
+        "b": "the beginning and the end.'"
+      },
+      {
+        "number": "3",
+        "a": "Blessed are those who do God's commandments, that they may have the right to the tree of life,",
+        "b": "and may enter into the city through the gates."
+      },
+      {
+        "number": "4",
+        "a": "'I, Jesus, have sent my angel to you,",
+        "b": "with this testimony for all the churches."
+      },
+      {
+        "number": "5",
+        "a": "'I am the root and the offspring of David,",
+        "b": "I am the bright morning star.'"
+      },
+      {
+        "number": "6",
+        "a": "'Come!' say the Spirit and the Bride;",
+        "b": "'Come!' let each hearer reply!"
+      },
+      {
+        "number": "7",
+        "a": "Come forward, you who are thirsty,",
+        "b": "let those who desire take the water of life as a gift."
+      },
+      {
+        "number": null,
+        "a": "Surely I am coming soon!",
+        "b": "Amen! Come, Lord Jesus!"
+      }
+    ]
+  },
+  "redemption_christmas": {
+    "title": "A Song of Redemption (Christmas)",
+    "section": "Evening Prayer",
+    "citation": "Colossians 1.13-18a,19,20a",
+    "verses": [
+      {
+        "number": "1",
+        "a": "The Father has delivered us from the dominion of darkness,",
+        "b": "and transferred us to the kingdom of his beloved Son;"
+      },
+      {
+        "number": "2",
+        "a": "In whom we have redemption,",
+        "b": "the forgiveness of our sins."
+      },
+      {
+        "number": "3",
+        "a": "He is the image of the invisible God,",
+        "b": "the firstborn of all creation."
+      },
+      {
+        "number": "4",
+        "a": "For in him all things were created,",
+        "b": "in heaven and on earth, visible and invisible."
+      },
+      {
+        "number": "5",
+        "a": "All things were created through him and for him,",
+        "b": "he is before all things and in him all things hold together."
+      },
+      {
+        "number": "6",
+        "a": "He is the head of the body, the Church,",
+        "b": "he is the beginning, the firstborn from the dead."
+      },
+      {
+        "number": "7",
+        "a": "In him all the fullness of God was pleased to dwell;",
+        "b": "and through him God was pleased to reconcile all things."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "praise_epiphany": {
+    "title": "A Song of Praise (Epiphany)",
+    "section": "Evening Prayer",
+    "citation": "Revelation 4.11; 5.9b,10",
+    "verses": [
+      {
+        "number": null,
+        "a": "This canticle is also known as Glory and Honour",
+        "b": null
+      },
+      {
+        "number": "1",
+        "a": "You are worthy, our Lord and God,",
+        "b": "to receive glory and honour and power."
+      },
+      {
+        "number": "2",
+        "a": "For you have created all things,",
+        "b": "and by your will they have their being."
+      },
+      {
+        "number": "3",
+        "a": "You are worthy, O Lamb, for you were slain,",
+        "b": "and by your blood you ransomed for God saints from every tribe and language and nation."
+      },
+      {
+        "number": "4",
+        "a": "You have made them to be a kingdom and priests serving our God,",
+        "b": "and they will reign with you on earth."
+      },
+      {
+        "number": null,
+        "a": "To the One who sits on the throne and to the Lamb",
+        "b": "be blessing and honour, glory and might, for ever and ever. Amen."
+      }
+    ]
+  },
+  "servant_lent": {
+    "title": "A Song of Christ the Servant (Lent)",
+    "section": "Evening Prayer",
+    "citation": null,
+    "verses": [
+      {
+        "number": "1",
+        "a": "Christ suffered for you, leaving you an example,",
+        "b": "that you should follow in his steps."
+      },
+      {
+        "number": "2",
+        "a": "He committed no sin, no guile was found on his lips,",
+        "b": "when he was reviled, he did not revile in turn."
+      },
+      {
+        "number": "3",
+        "a": "When he suffered, he did not threaten,",
+        "b": "but he trusted himself to God who judges justly."
+      },
+      {
+        "number": "4",
+        "a": "Christ himself bore our sins in his body on the tree,",
+        "b": "that we might die to sin and live to righteousness."
+      },
+      {
+        "number": "5",
+        "a": "By his wounds, you have been healed, for you were straying like sheep,",
+        "b": "but have now returned to the shepherd and guardian of your souls."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "faith_easter": {
+    "title": "A Song of Faith (Easter)",
+    "section": "Evening Prayer",
+    "citation": null,
+    "verses": [
+      {
+        "number": "1",
+        "a": "Blessed be the God and Father",
+        "b": "of our Lord Jesus Christ!"
+      },
+      {
+        "number": "2",
+        "a": "By his great mercy we have been born anew to a living hope",
+        "b": "through the resurrection of Jesus Christ from the dead,"
+      },
+      {
+        "number": "3",
+        "a": "Into an inheritance that is imperishable, undefiled and unfading,",
+        "b": "kept in heaven for you,"
+      },
+      {
+        "number": "4",
+        "a": "Who are being protected by the power of God through faith for a salvation,",
+        "b": "ready to be revealed in the last time."
+      },
+      {
+        "number": "5",
+        "a": "You were ransomed from the futile ways of your ancestors",
+        "b": "not with perishable things like silver or gold"
+      },
+      {
+        "number": "6",
+        "a": "But with the precious blood of Christ",
+        "b": "like that of a lamb without spot or stain."
+      },
+      {
+        "number": "7",
+        "a": "Through him we have confidence in God, who raised him from the dead and gave him glory,",
+        "b": "so that your faith and hope are set on God."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "gods_children_pentecost": {
+    "title": "A Song of God's Children (Pentecost)",
+    "section": "Evening Prayer",
+    "citation": "Romans 8.2,14,15b-19",
+    "verses": [
+      {
+        "number": "1",
+        "a": "The law of the Spirit of life in Christ Jesus",
+        "b": "has set us free from the law of sin and death."
+      },
+      {
+        "number": "2",
+        "a": "All who are led by the Spirit of God are children of God;",
+        "b": "for we have received the Spirit that enables us to cry, 'Abba, Father'."
+      },
+      {
+        "number": "3",
+        "a": "The Spirit himself bears witness that we are children of God",
+        "b": "and if God's children, then heirs of God;"
+      },
+      {
+        "number": "4",
+        "a": "If heirs of God, then fellow-heirs with Christ;",
+        "b": "since we suffer with him now, that we may be glorified with him."
+      },
+      {
+        "number": "5",
+        "a": "These sufferings that we now endure",
+        "b": "are not worth comparing to the glory that shall be revealed."
+      },
+      {
+        "number": "6",
+        "a": "For the creation waits with eager longing",
+        "b": "for the revealing of the children of God."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "lamb_ordinary": {
+    "title": "A Song of the Lamb (Ordinary Time)",
+    "section": "Evening Prayer",
+    "citation": "Revelation 19.1b,5b,6b,7,9b",
+    "verses": [
+      {
+        "number": "1",
+        "a": "Salvation and glory and power belong to our God,",
+        "b": "whose judgements are true and just."
+      },
+      {
+        "number": "2",
+        "a": "Praise our God, all you his servants,",
+        "b": "all who fear him, both small and great."
+      },
+      {
+        "number": "3",
+        "a": "The Lord our God, the Almighty, reigns:",
+        "b": "let us rejoice and exult and give him the glory."
+      },
+      {
+        "number": "4",
+        "a": "For the marriage of the Lamb has come",
+        "b": "and his bride has made herself ready."
+      },
+      {
+        "number": "5",
+        "a": "Blessed are those who are invited",
+        "b": "to the wedding banquet of the Lamb."
+      },
+      {
+        "number": null,
+        "a": "To the One who sits on the throne and to the Lamb",
+        "b": "be blessing and honour and glory and might, for ever and ever. Amen."
+      }
+    ]
   }
 }
