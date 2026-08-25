@@ -157,6 +157,13 @@ const READINGS = {
           ref: "Collect for Purity",
           text: "Almighty God, unto whom all hearts be open, all desires known, and from whom no secrets are hid: Cleanse the thoughts of our hearts by the inspiration of thy Holy Spirit, that we may perfectly love thee, and worthily magnify thy holy Name; through Christ our Lord. Amen.",
         },
+        {
+          type: "prayer",
+          role: "Confession",
+          ref: "The General Confession",
+          text: "Almighty God, Father of our Lord Jesus Christ, Maker of all things, Judge of all men: We acknowledge and bewail our manifold sins and wickedness, which we from time to time most grievously have committed, by thought, word, and deed, against thy Divine Majesty, provoking most justly thy wrath and indignation against us. We do earnestly repent, and are heartily sorry for these our misdoings; the remembrance of them is grievous unto us; the burden of them is intolerable. Have mercy upon us, have mercy upon us, most merciful Father; for thy Son our Lord Jesus Christ's sake, forgive us all that is past; and grant that we may ever hereafter serve and please thee in newness of life, to the honour and glory of thy Name; through Jesus Christ our Lord. Amen.",
+          truncated: true,
+        },
         { type: "reading", ref: "Jeremiah 1:4–10", text: "Then the word of the Lord came unto me, saying, Before I formed thee in the belly I knew thee; and before thou camest forth out of the womb I sanctified thee, and I ordained thee a prophet unto the nations.", truncated: true },
         { type: "reading", ref: "Psalm 71:1–6", text: "In thee, O Lord, do I put my trust: let me never be put to confusion. Deliver me in thy righteousness, and cause me to escape: incline thine ear unto me, and save me." },
         { type: "reading", ref: "Hebrews 12:18–29", text: "For ye are not come unto the mount that might be touched, and that burned with fire, nor unto blackness, and darkness, and tempest.", truncated: true },
@@ -308,6 +315,21 @@ function anglicanReadingItems(date) {
   return { label: `${result.week}, ${WEEKDAY_NAME[date.getDay()]}`, items };
 }
 
+const CW_PRAYER_OF_PREPARATION = {
+  type: "prayer",
+  role: "Collect",
+  ref: "Prayer of Preparation",
+  text: "Almighty God, to whom all hearts are open, all desires known, and from whom no secrets are hidden: cleanse the thoughts of our hearts by the inspiration of your Holy Spirit, that we may perfectly love you, and worthily magnify your holy name; through Christ our Lord. Amen.",
+};
+
+const CW_PRAYERS_OF_PENITENCE = {
+  type: "prayer",
+  role: "Confession",
+  ref: "Prayers of Penitence",
+  text: "Almighty God, our heavenly Father, we have sinned against you and against our neighbour in thought and word and deed, through negligence, through weakness, through our own deliberate fault. We are truly sorry and repent of all our sins. For the sake of your Son Jesus Christ, who died for us, forgive us all that is past and grant that we may serve you in newness of life to the glory of your name. Amen.",
+  truncated: true,
+};
+
 /**
  * Builds today's REAL Anglican Eucharist readings — the Sunday Principal
  * Service (RCL) lectionary on Sundays, the Common Worship Daily
@@ -317,18 +339,20 @@ function anglicanReadingItems(date) {
  */
 function buildAnglicanEucharist(today, collectSource) {
   const fallback = READINGS.Anglican.eucharist;
-  const collect = fallback.sequence[0]; // keep the Collect for Purity as-is
+  const isCW = collectSource === "CW";
+  const collect = isCW ? CW_PRAYER_OF_PREPARATION : fallback.sequence[0]; // Prayer of Preparation (CW) or Collect for Purity (1662)
+  const confession = isCW ? CW_PRAYERS_OF_PENITENCE : fallback.sequence[1]; // Prayers of Penitence (CW) or the 1662 Communion Confession
   const isSunday = today.getDay() === 0;
 
-  const collectOfDay = collectSource === "CW" ? collectCWFor(today) : collect1662For(today);
+  const collectOfDay = isCW ? collectCWFor(today) : collect1662For(today);
   const collectItems = collectOfDay
-    ? [{ type: "prayer", role: `Collect of the Day · ${collectSource === "CW" ? "CW" : "1662"}`, ref: collectOfDay.label, text: collectOfDay.text }]
+    ? [{ type: "prayer", role: `Collect of the Day · ${isCW ? "CW" : "1662"}`, ref: collectOfDay.label, text: collectOfDay.text }]
     : [];
 
   const result = anglicanReadingItems(today);
   if (!result) {
     const gapNote = isSunday ? "Sunday reading not covered yet" : "weekday reading not covered yet";
-    return { ...fallback, label: `${shortDate(today)} · demo text (${gapNote})`, sequence: [collect, ...collectItems, ...fallback.sequence.slice(1)] };
+    return { ...fallback, label: `${shortDate(today)} · demo text (${gapNote})`, sequence: [collect, confession, ...collectItems, ...fallback.sequence.slice(2)] };
   }
   const postCommunion = collectSource === "CW" ? postCommunionCWFor(today) : null;
   const postCommunionItems = postCommunion
@@ -337,7 +361,7 @@ function buildAnglicanEucharist(today, collectSource) {
   return {
     label: `${result.label} · ${shortDate(today)}`,
     icon: "sun",
-    sequence: [collect, ...collectItems, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref })), ...postCommunionItems],
+    sequence: [collect, confession, ...collectItems, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref })), ...postCommunionItems],
   };
 }
 

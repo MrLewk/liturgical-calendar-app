@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.27.0",
+    title: "Register-aware Eucharist liturgy text; Anglican tradition complete",
+    changes: [
+      { type: "Added", text: "Common Worship's \"Prayer of Preparation\" and \"Prayers of Penitence\", shown when CW is selected, sourced from Order One's official text." },
+      { type: "Added", text: "A Confession in the Eucharist for the first time in either register. 1662 now shows the actual Holy Communion Confession, distinct from the Office's General Confession already in the app." },
+      { type: "Info", text: "This completes the Anglican tradition work for this pass: collects, canticles, Sunday Morning/Evening Prayer, Eucharist readings for fixed feasts, Post Communion prayers, and now register-appropriate Eucharist liturgy text." },
+      { type: "Not included", text: "1662's own Sunday Second Lesson and the Traditional Language register of Common Worship." },
+    ],
+  },
+  {
     version: "0.26.0",
     title: "Common Worship Post Communion prayers",
     changes: [

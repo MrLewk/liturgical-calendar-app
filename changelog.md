@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.27.0] — Register-aware Eucharist liturgy text; Anglican tradition complete
+
+- **Added:** the Common Worship Order One "Prayer of Preparation" (the contemporary-language equivalent of the Collect for Purity) and "Prayers of Penitence" (Confession), shown when the CW register is selected, sourced directly from Common Worship's official Order One text. © The Archbishops' Council 2000, published by Church House Publishing.
+- **Added:** a Confession to the Eucharist for the first time in either register — previously the Eucharist had no Confession at all, just the Collect for Purity straight into the readings. The 1662 BCP register now shows the actual Holy Communion service's own Confession ("Almighty God, Father of our Lord Jesus Christ, Maker of all things, Judge of all men...") — distinct from the Daily Office's General Confession already in the app — cross-verified against multiple independent public-domain sources. Public domain.
+- This completes the Common Worship / 1662 BCP Anglican tradition work for this pass: collects, canticles (BCP and CW, including CW's full seasonal Old/New Testament rotation), Sunday Morning and Evening Prayer for both registers, Eucharist readings for every fixed Principal Feast and Holy Day, Post Communion prayers, and now register-appropriate liturgy text for the Eucharist's opening prayers.
+- Remaining, deliberately out of scope for now: 1662's own Sunday Second Lesson (the Old Testament First Lesson was added separately; the New Testament Second Lesson still borrows the ordinary weekday cycle), and the Traditional Language register of Common Worship.
+
 ## [0.26.0] — Common Worship Post Communion prayers
 
 - **Added:** the Common Worship Post Communion prayer for the Eucharist, shown after the readings when the CW register is selected. 96 entries, reusing the same 98-title set already built for the CW Collect of the Day (Good Friday and Easter Eve are the only two collects without one, since no Communion is celebrated either day). © The Archbishops' Council 2000, published by Church House Publishing.
