@@ -443,6 +443,54 @@
         "ot": "Deuteronomy 30.1-10",
         "nt": "1 Peter 3.8-18"
       }
+    },
+    "Proper 12 (17)": {
+      "second": {
+        "psalm": "Psalm 75,76",
+        "ot": "1 Kings 6.11-14,23-38",
+        "nt": "Acts 12.1-17"
+      },
+      "third": {
+        "psalm": "Psalm 77",
+        "ot": "Song of Solomon 2",
+        "nt": "1 Peter 4.7-14"
+      }
+    },
+    "Proper 13 (18)": {
+      "second": {
+        "psalm": "Psalm 80",
+        "ot": "1 Kings 10.1-13",
+        "nt": "Acts 13.1-13"
+      },
+      "third": {
+        "psalm": "Psalm 85",
+        "ot": "Song of Solomon 5.2-16",
+        "nt": "2 Peter 1.1-15"
+      }
+    },
+    "Proper 14 (19)": {
+      "second": {
+        "psalm": "Psalm 86",
+        "ot": "1 Kings 11.41-12.20",
+        "nt": "Acts 14.8-20"
+      },
+      "third": {
+        "psalm": "Psalm 88",
+        "ot": "Song of Solomon 8.5-7",
+        "nt": "2 Peter 3.8-13"
+      }
+    },
+    "Proper 15 (20)": {
+      "second": {
+        "psalm": "Psalm 90",
+        "ot": "2 Kings 4.1-37",
+        "nt": "Acts 16.1-15"
+      },
+      "third": {
+        "psalm": "Psalm 92",
+        "ot": "Jonah 1",
+        "nt": "2 Peter 3.14-18"
+      }
     }
   },
   "B": {
@@ -889,6 +937,54 @@
         "ot": "Deuteronomy 30.1-10",
         "nt": "1 Peter 3.8-18"
       }
+    },
+    "Proper 12 (17)": {
+      "second": {
+        "psalm": "Psalm 74",
+        "ot": "Job 19.1-27a",
+        "nt": "Hebrews 8"
+      },
+      "third": {
+        "psalm": "Psalm 75",
+        "ot": "Song of Solomon 2",
+        "nt": "1 Peter 4.7-14"
+      }
+    },
+    "Proper 13 (18)": {
+      "second": {
+        "psalm": "Psalm 88",
+        "ot": "Job 28",
+        "nt": "Hebrews 11.17-31"
+      },
+      "third": {
+        "psalm": "Psalm 86",
+        "ot": "Song of Solomon 5.2-16",
+        "nt": "2 Peter 1.1-15"
+      }
+    },
+    "Proper 14 (19)": {
+      "second": {
+        "psalm": "Psalm 91",
+        "ot": "Job 39.1-40.4",
+        "nt": "Hebrews 12.1-17"
+      },
+      "third": {
+        "psalm": "Psalm 90",
+        "ot": "Song of Solomon 8.5-7",
+        "nt": "2 Peter 3.8-13"
+      }
+    },
+    "Proper 15 (20)": {
+      "second": {
+        "psalm": "Psalm 92,100",
+        "ot": "Exodus 2.23-3.10",
+        "nt": "Hebrews 13.1-15"
+      },
+      "third": {
+        "psalm": "Psalm 106.1-10",
+        "ot": "Jonah 1",
+        "nt": "2 Peter 3.14-18"
+      }
     }
   },
   "C": {
@@ -1334,6 +1430,54 @@
         "psalm": "Psalm 82,100",
         "ot": "Deuteronomy 30.1-10",
         "nt": "1 Peter 3.8-18"
+      }
+    },
+    "Proper 12 (17)": {
+      "second": {
+        "psalm": "Psalm 88",
+        "ot": "Genesis 42.1-25",
+        "nt": "1 Corinthians 10.1-24"
+      },
+      "third": {
+        "psalm": "Psalm 95",
+        "ot": "Song of Solomon 2",
+        "nt": "1 Peter 4.7-14"
+      }
+    },
+    "Proper 13 (18)": {
+      "second": {
+        "psalm": "Psalm 107.1-32",
+        "ot": "Genesis 50.4-26",
+        "nt": "1 Corinthians 14.1-19"
+      },
+      "third": {
+        "psalm": "Psalm 106.1-10",
+        "ot": "Song of Solomon 5.2-16",
+        "nt": "2 Peter 1.1-15"
+      }
+    },
+    "Proper 14 (19)": {
+      "second": {
+        "psalm": "Psalm 108,116",
+        "ot": "Isaiah 11.10-12.6",
+        "nt": "2 Corinthians 1.1-22"
+      },
+      "third": {
+        "psalm": "Psalm 115",
+        "ot": "Song of Solomon 8.5-7",
+        "nt": "2 Peter 3.8-13"
+      }
+    },
+    "Proper 15 (20)": {
+      "second": {
+        "psalm": "Psalm 119.17-32",
+        "ot": "Isaiah 28.9-22",
+        "nt": "2 Corinthians 8.1-9"
+      },
+      "third": {
+        "psalm": "Psalm 119.33-48",
+        "ot": "Jonah 1",
+        "nt": "2 Peter 3.14-18"
       }
     }
   }
