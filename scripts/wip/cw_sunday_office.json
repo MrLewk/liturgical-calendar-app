@@ -491,6 +491,54 @@
         "ot": "Jonah 1",
         "nt": "2 Peter 3.14-18"
       }
+    },
+    "Proper 16 (21)": {
+      "second": {
+        "psalm": "Psalm 95",
+        "ot": "2 Kings 6.8-23",
+        "nt": "Acts 17.15-34"
+      },
+      "third": {
+        "psalm": "Psalm 104.1-25",
+        "ot": "Jonah 2",
+        "nt": "Revelation 1"
+      }
+    },
+    "Proper 17 (22)": {
+      "second": {
+        "psalm": "Psalm 105.1-15",
+        "ot": "2 Kings 6.24-25;7.3-20",
+        "nt": "Acts 18.1-16"
+      },
+      "third": {
+        "psalm": "Psalm 107.1-32",
+        "ot": "Jonah 3.1-9",
+        "nt": "Revelation 3.14-22"
+      }
+    },
+    "Proper 18 (23)": {
+      "second": {
+        "psalm": "Psalm 108,115",
+        "ot": "Ezekiel 12.21-13.16",
+        "nt": "Acts 19.1-20"
+      },
+      "third": {
+        "psalm": "Psalm 119.17-32",
+        "ot": "Jonah 3.10-4.11",
+        "nt": "Revelation 8.1-5"
+      }
+    },
+    "Proper 19 (24)": {
+      "second": {
+        "psalm": "Psalm 119.41-64",
+        "ot": "Ezekiel 20.1-8,33-44",
+        "nt": "Acts 20.17-38"
+      },
+      "third": {
+        "psalm": "Psalm 119.65-88",
+        "ot": "Isaiah 44.24-45.8",
+        "nt": "Revelation 12.1-12"
+      }
     }
   },
   "B": {
@@ -985,6 +1033,54 @@
         "ot": "Jonah 1",
         "nt": "2 Peter 3.14-18"
       }
+    },
+    "Proper 16 (21)": {
+      "second": {
+        "psalm": "Psalm 116",
+        "ot": "Exodus 4.27-5.1",
+        "nt": "Hebrews 13.16-21"
+      },
+      "third": {
+        "psalm": "Psalm 115",
+        "ot": "Jonah 2",
+        "nt": "Revelation 1"
+      }
+    },
+    "Proper 17 (22)": {
+      "second": {
+        "psalm": "Psalm 119.1-16",
+        "ot": "Exodus 12.21-27",
+        "nt": "Matthew 4.23-5.20"
+      },
+      "third": {
+        "psalm": "Psalm 119.17-40",
+        "ot": "Jonah 3.1-9",
+        "nt": "Revelation 3.14-22"
+      }
+    },
+    "Proper 18 (23)": {
+      "second": {
+        "psalm": "Psalm 119.41-56",
+        "ot": "Exodus 14.5-31",
+        "nt": "Matthew 6.1-18"
+      },
+      "third": {
+        "psalm": "Psalm 119.57-72",
+        "ot": "Jonah 3.10-4.11",
+        "nt": "Revelation 8.1-5"
+      }
+    },
+    "Proper 19 (24)": {
+      "second": {
+        "psalm": "Psalm 119.73-88",
+        "ot": "Exodus 18.13-26",
+        "nt": "Matthew 7.1-14"
+      },
+      "third": {
+        "psalm": "Psalm 119.105-120",
+        "ot": "Isaiah 44.24-45.8",
+        "nt": "Revelation 12.1-12"
+      }
     }
   },
   "C": {
@@ -1478,6 +1574,54 @@
         "psalm": "Psalm 119.33-48",
         "ot": "Jonah 1",
         "nt": "2 Peter 3.14-18"
+      }
+    },
+    "Proper 16 (21)": {
+      "second": {
+        "psalm": "Psalm 119.49-72",
+        "ot": "Isaiah 30.8-21",
+        "nt": "2 Corinthians 9"
+      },
+      "third": {
+        "psalm": "Psalm 119.73-88",
+        "ot": "Jonah 2",
+        "nt": "Revelation 1"
+      }
+    },
+    "Proper 17 (22)": {
+      "second": {
+        "psalm": "Psalm 119.81-96",
+        "ot": "Isaiah 33.13-22",
+        "nt": "John 3.22-36"
+      },
+      "third": {
+        "psalm": "Psalm 119.161-176",
+        "ot": "Jonah 3.1-9",
+        "nt": "Revelation 3.14-22"
+      }
+    },
+    "Proper 18 (23)": {
+      "second": {
+        "psalm": "Psalm 120,121",
+        "ot": "Isaiah 43.14-44.5",
+        "nt": "John 5.30-47"
+      },
+      "third": {
+        "psalm": "Psalm 122,123",
+        "ot": "Jonah 3.10-4.11",
+        "nt": "Revelation 8.1-5"
+      }
+    },
+    "Proper 19 (24)": {
+      "second": {
+        "psalm": "Psalm 124,125",
+        "ot": "Isaiah 60",
+        "nt": "John 6.51-69"
+      },
+      "third": {
+        "psalm": "Psalm 126,127",
+        "ot": "Isaiah 44.24-45.8",
+        "nt": "Revelation 12.1-12"
       }
     }
   }
