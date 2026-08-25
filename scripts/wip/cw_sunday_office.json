@@ -611,6 +611,90 @@
         "ot": "Isaiah 59.9-20",
         "nt": "Luke 14.1-14"
       }
+    },
+    "All Saints Day": {
+      "second": {
+        "psalm": "Psalm 148,150",
+        "ot": "Isaiah 65.17-25",
+        "nt": "Hebrews 11.32-12.2"
+      },
+      "third": {
+        "psalm": "Psalm 15,84,149",
+        "ot": "Isaiah 35.1-9",
+        "nt": "Luke 9.18-27"
+      }
+    },
+    "Proper 26 (31)": {
+      "second": {
+        "psalm": "Psalm 111,117",
+        "ot": "Daniel 7.1-18",
+        "nt": "Luke 6.17-31"
+      },
+      "third": {
+        "psalm": "Psalm 33",
+        "ot": "Isaiah 66.20-23",
+        "nt": "Ephesians 1.11-23"
+      }
+    },
+    "Proper 27 (32)": {
+      "second": {
+        "psalm": "Psalm 20,82",
+        "ot": "Judges 7.2-22",
+        "nt": "John 15.9-17"
+      },
+      "third": {
+        "psalm": "Psalm 91",
+        "ot": "Deuteronomy 17.14-20",
+        "nt": "1 Timothy 2.1-7"
+      }
+    },
+    "Proper 28 (33)": {
+      "second": {
+        "psalm": "Psalm 89.19-37",
+        "ot": "1 Kings 1.15-40",
+        "nt": "Revelation 1.4-18"
+      },
+      "third": {
+        "psalm": "Psalm 98",
+        "ot": "Daniel 10.19-21",
+        "nt": "Revelation 4"
+      }
+    },
+    "Reign of Christ - Proper 29 (34)": {
+      "second": {
+        "psalm": "Psalm 93,97",
+        "ot": "2 Samuel 23.1-7",
+        "nt": "Matthew 28.16-20"
+      },
+      "third": {
+        "psalm": "Psalm 29,110",
+        "ot": "Isaiah 4.2-5.7",
+        "nt": "Luke 19.29-38"
+      }
+    },
+    "Epiphany of the Lord": {
+      "second": {
+        "psalm": "Psalm 98,100",
+        "ot": "Baruch 4.36-5.9",
+        "nt": "John 2.1-11"
+      },
+      "third": {
+        "psalm": "Psalm 132,113",
+        "ot": "Jeremiah 31.7-14",
+        "nt": "John 1.29-34"
+      }
+    },
+    "Seventh Sunday after the Epiphany": {
+      "second": {
+        "psalm": "Psalm 18.1-20",
+        "ot": "Amos 9.5-15",
+        "nt": "Ephesians 6.1-20"
+      },
+      "third": {
+        "psalm": "Psalm 21,23",
+        "ot": "Jeremiah 33.1-11",
+        "nt": "Acts 8.4-25"
+      }
     }
   },
   "B": {
@@ -1225,6 +1309,90 @@
         "ot": "Isaiah 59.9-20",
         "nt": "Luke 14.1-14"
       }
+    },
+    "All Saints Day": {
+      "second": {
+        "psalm": "Psalm 148,150",
+        "ot": "Isaiah 65.17-25",
+        "nt": "Hebrews 11.32-12.2"
+      },
+      "third": {
+        "psalm": "Psalm 15,84,149",
+        "ot": "Isaiah 35.1-9",
+        "nt": "Luke 9.18-27"
+      }
+    },
+    "Proper 26 (31)": {
+      "second": {
+        "psalm": "Psalm 145",
+        "ot": "Daniel 2.1-48",
+        "nt": "Revelation 7.9-17"
+      },
+      "third": {
+        "psalm": "Psalm 112,149",
+        "ot": "Jeremiah 31.31-34",
+        "nt": "1 John 3.1-3"
+      }
+    },
+    "Proper 27 (32)": {
+      "second": {
+        "psalm": "Psalm 46,82",
+        "ot": "Isaiah 10.33-11.9",
+        "nt": "John 14.1-29"
+      },
+      "third": {
+        "psalm": "Psalm 136",
+        "ot": "Micah 4.1-5",
+        "nt": "Philippians 4.6-9"
+      }
+    },
+    "Proper 28 (33)": {
+      "second": {
+        "psalm": "Psalm 95",
+        "ot": "Daniel 3",
+        "nt": "Matthew 13.24-30,36-43"
+      },
+      "third": {
+        "psalm": "Psalm 96",
+        "ot": "1 Samuel 9.27-10.2a,10.17-26",
+        "nt": "Matthew 13.31-35"
+      }
+    },
+    "Reign of Christ - Proper 29 (34)": {
+      "second": {
+        "psalm": "Psalm 72",
+        "ot": "Daniel 5",
+        "nt": "John 6.1-15"
+      },
+      "third": {
+        "psalm": "Psalm 29,110",
+        "ot": "Isaiah 32.1-8",
+        "nt": "Revelation 3.7-22"
+      }
+    },
+    "Epiphany of the Lord": {
+      "second": {
+        "psalm": "Psalm 98,100",
+        "ot": "Baruch 4.36-5.9",
+        "nt": "John 2.1-11"
+      },
+      "third": {
+        "psalm": "Psalm 132,113",
+        "ot": "Jeremiah 31.7-14",
+        "nt": "John 1.29-34"
+      }
+    },
+    "Seventh Sunday after the Epiphany": {
+      "second": {
+        "psalm": "Psalm 10",
+        "ot": "Numbers 22.21-23.12",
+        "nt": "Philippians 4.10-20"
+      },
+      "third": {
+        "psalm": "Psalm 9",
+        "ot": "Jeremiah 33.1-11",
+        "nt": "Acts 8.4-25"
+      }
     }
   },
   "C": {
@@ -1286,18 +1454,6 @@
         "psalm": "Psalm 105.1-11",
         "ot": "Isaiah 41.21-42.1",
         "nt": "1 John 1.1-7"
-      }
-    },
-    "Second Sunday after Christmas": {
-      "second": {
-        "psalm": "Psalm 135",
-        "ot": "1 Samuel 1.20-28",
-        "nt": "1 John 4.7-16"
-      },
-      "third": {
-        "psalm": "Psalm 87",
-        "ot": "Isaiah 12",
-        "nt": "1 Thessalonians 2.1-8"
       }
     },
     "Baptism of the Lord": {
@@ -1838,6 +1994,102 @@
         "psalm": "Psalm 119.105-128",
         "ot": "Isaiah 59.9-20",
         "nt": "Luke 14.1-14"
+      }
+    },
+    "All Saints Day": {
+      "second": {
+        "psalm": "Psalm 148,150",
+        "ot": "Isaiah 65.17-25",
+        "nt": "Hebrews 11.32-12.2"
+      },
+      "third": {
+        "psalm": "Psalm 15,84,149",
+        "ot": "Isaiah 35.1-9",
+        "nt": "Luke 9.18-27"
+      }
+    },
+    "Proper 26 (31)": {
+      "second": {
+        "psalm": "Psalm 145",
+        "ot": "Lamentations 3.22-33",
+        "nt": "John 11.1-31,32-44"
+      },
+      "third": {
+        "psalm": "Psalm 87",
+        "ot": "Job 26",
+        "nt": "Colossians 1.9-14"
+      }
+    },
+    "Proper 27 (32)": {
+      "second": {
+        "psalm": "Psalm 40",
+        "ot": "1 Kings 3.1-15",
+        "nt": "Romans 8.31-39"
+      },
+      "third": {
+        "psalm": "Psalm 20,90",
+        "ot": "Isaiah 2.1-5",
+        "nt": "James 3.13-18"
+      }
+    },
+    "Proper 28 (33)": {
+      "second": {
+        "psalm": "Psalm 93,97",
+        "ot": "Daniel 6",
+        "nt": "Matthew 13.1-9,18-23"
+      },
+      "third": {
+        "psalm": "Psalm 132",
+        "ot": "1 Samuel 16.1-13",
+        "nt": "Matthew 13.44-52"
+      }
+    },
+    "Reign of Christ - Proper 29 (34)": {
+      "second": {
+        "psalm": "Psalm 72",
+        "ot": "1 Samuel 8.4-20",
+        "nt": "John 18.33-37"
+      },
+      "third": {
+        "psalm": "Psalm 29,110",
+        "ot": "Zechariah 6.9-15",
+        "nt": "Revelation 11.15-18"
+      }
+    },
+    "Second Sunday after Christmas Day": {
+      "second": {
+        "psalm": "Psalm 135",
+        "ot": "1 Samuel 1.20-28",
+        "nt": "1 John 4.7-16"
+      },
+      "third": {
+        "psalm": "Psalm 87",
+        "ot": "Isaiah 12",
+        "nt": "1 Thessalonians 2.1-8"
+      }
+    },
+    "Epiphany of the Lord": {
+      "second": {
+        "psalm": "Psalm 98,100",
+        "ot": "Baruch 4.36-5.9",
+        "nt": "John 2.1-11"
+      },
+      "third": {
+        "psalm": "Psalm 132,113",
+        "ot": "Jeremiah 31.7-14",
+        "nt": "John 1.29-34"
+      }
+    },
+    "Seventh Sunday after the Epiphany": {
+      "second": {
+        "psalm": "Psalm 11,13",
+        "ot": "Hosea 14",
+        "nt": "Galatians 5.2-10"
+      },
+      "third": {
+        "psalm": "Psalm 10",
+        "ot": "Jeremiah 33.1-11",
+        "nt": "Acts 8.4-25"
       }
     }
   }
