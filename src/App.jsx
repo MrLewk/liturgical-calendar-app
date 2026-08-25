@@ -654,12 +654,19 @@ function firstReadingRef(tradition) {
 // of time — the same rule ReadingsView (the Prayer tab) uses to choose its
 // default segment, reused here so the Today teaser previews whichever
 // reading tapping through will actually land on.
+//
+// `date` may be a plain calendar date (e.g. the app's `today` state, which
+// is midnight-truncated and so carries no real time-of-day) - whenever the
+// represented day IS today, the AM/PM cutoff always checks the actual
+// current wall-clock time rather than whatever hour happens to be on the
+// `date` object passed in, so this gives the same answer regardless of
+// which "today" value a caller has on hand.
 function autoOfficeSegment(date) {
   const d = date || new Date();
   if (d.getDay() === 0) return "eucharist";
   const isLiveToday = !date || dateOnly(date).getTime() === dateOnly(new Date()).getTime();
   if (!isLiveToday) return "am";
-  return d.getHours() < 17 ? "am" : "pm";
+  return new Date().getHours() < 17 ? "am" : "pm";
 }
 
 // The real Old/New Testament Office citation for `date` (Old Testament
@@ -703,13 +710,39 @@ function anglicanOfficeItems(date, service) {
 }
 
 /**
+ * The real Catholic Lauds/Vespers/Compline citations for `date`, in the
+ * same { label, items } shape anglicanOfficeItems returns, so the Today
+ * teaser and day-detail sheet can show any tradition's Office without
+ * needing to know the difference. `segment` is "lauds", "vespers", or
+ * "compline"; returns null on any of the underlying resolvers' known
+ * gaps (Compline itself has none - see catholicComplineFor).
+ */
+function catholicOfficeItems(date, segment) {
+  if (segment === "compline") {
+    const result = catholicComplineFor(date);
+    if (!result) return null;
+    const items = result.psalms.map((ref, i) => ({ role: i === 0 ? "Psalm" : null, ref: displayRef(splitCitation(ref)[0] || ref) }));
+    items.push({ role: "Reading", ref: displayRef(splitCitation(result.reading)[0] || result.reading) });
+    return { label: `Night Prayer (Compline) · ${result.weekday}`, items };
+  }
+  const result = segment === "vespers" ? catholicVespersFor(date) : catholicLaudsFor(date);
+  if (!result) return null;
+  const roles = segment === "vespers" ? ["Psalm", "Psalm", "New Testament Canticle"] : ["Psalm", "Old Testament Canticle", "Psalm"];
+  const items = result.readings.map((ref, i) => ({ role: roles[i], ref: displayRef(splitCitation(ref)[0] || ref) }));
+  const label = segment === "vespers" ? "Evening Prayer (Vespers)" : "Morning Prayer (Lauds)";
+  return { label: `${label} · Week ${result.week}, ${WEEKDAY_NAME[date.getDay()]}`, items };
+}
+
+/**
  * The single reading citation to preview on the Today tab: the Sunday
- * Eucharist reading on Sundays (as before), but the real Morning or Evening
- * Prayer Office reading on weekdays — matching whichever segment
- * ReadingsView's own autoOfficeSegment will actually open to, so the
- * preview never shows a different reading than tapping through reveals.
- * Falls back to the Eucharist/demo reading on any of the Office engine's
- * known gaps, or for traditions without a real per-date lectionary yet.
+ * Eucharist/Mass reading on Sundays (as before), but the real Morning or
+ * Evening Prayer/Lauds/Vespers reading on weekdays — matching whichever
+ * segment ReadingsView's own autoOfficeSegment/autoCatholicSegment will
+ * actually open to, so the preview never shows a different reading than
+ * tapping through reveals.
+ * Falls back to the Eucharist/Mass/demo reading on any of the Office
+ * engine's known gaps, or for traditions without a real per-date
+ * lectionary yet.
  */
 function todayReadingRef(tradition, today) {
   if (tradition === "Anglican") {
@@ -717,6 +750,13 @@ function todayReadingRef(tradition, today) {
     if (segment !== "eucharist") {
       const ref = anglicanOfficeScriptureRef(today, segment);
       if (ref) return ref;
+    }
+  }
+  if (tradition === "Catholic") {
+    const segment = autoCatholicSegment(today);
+    if (segment !== "mass") {
+      const office = catholicOfficeItems(today, segment);
+      if (office?.items[0]?.ref) return office.items[0].ref;
     }
   }
   return dayReadingItems(tradition, today)[0]?.ref;
@@ -730,9 +770,9 @@ function todayReadingRef(tradition, today) {
  * autoOfficeSegment would open to for that date, so this preview never
  * shows a different service than the Prayer tab would for the same day.
  * Falls back to the Eucharist reading on any of the Office engine's known
- * gaps, and to the single fixed demo citation for Catholic/Orthodox (not
- * wired to a real per-date lectionary yet) or for any Anglican date that
- * falls in a known gap for both services.
+ * gaps, and to the single fixed demo citation for Orthodox (not wired to
+ * a real per-date lectionary yet) or for any date that falls in a known
+ * gap for both services.
  */
 function dayReadingItems(tradition, date) {
   if (tradition === "Anglican") {
@@ -745,6 +785,11 @@ function dayReadingItems(tradition, date) {
     if (result) return result.items;
   }
   if (tradition === "Catholic") {
+    const segment = autoCatholicSegment(date);
+    if (segment !== "mass") {
+      const office = catholicOfficeItems(date, segment);
+      if (office) return office.items;
+    }
     const result = catholicReadingItems(date);
     if (result) return result.items;
   }
@@ -2582,7 +2627,10 @@ function autoCatholicSegment(date) {
   if (d.getDay() === 0) return "mass";
   const isLiveToday = !date || dateOnly(date).getTime() === dateOnly(new Date()).getTime();
   if (!isLiveToday) return "lauds";
-  return d.getHours() < 17 ? "lauds" : "vespers";
+  const hour = new Date().getHours();
+  if (hour < 17) return "lauds";
+  if (hour < 21) return "vespers";
+  return "compline";
 }
 
 function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage, onOpenCanticle, collectSource }) {

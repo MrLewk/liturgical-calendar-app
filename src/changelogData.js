@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.30.1",
+    title: "Fixed Today teaser stuck on morning reading; Compline auto-selects",
+    changes: [
+      { type: "Fixed", text: "The Today tab's reading preview always showed the morning reading regardless of time of day, since the segment-picking logic checked hours on the app's midnight-truncated \"today\" state. Now always checks the real current time when the day in question is today." },
+      { type: "Added", text: "Real Lauds/Vespers content now shows in the Today teaser and day-detail sheet for Catholic on weekdays, matching how Anglican's Office already worked there." },
+      { type: "Added", text: "Compline now auto-selects too: Lauds until 5pm, Vespers 5\u20139pm, Compline from 9pm on \u2014 a lay-realistic bedtime cutoff rather than the Benedictine Rule's much earlier monastic hours." },
+    ],
+  },
+  {
     version: "0.30.0",
     title: "Catholic Divine Office: Morning, Evening & Night Prayer",
     changes: [

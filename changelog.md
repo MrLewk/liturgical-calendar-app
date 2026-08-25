@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.30.1] — Fixed Today teaser stuck on morning reading; Compline auto-selects
+
+- **Fixed:** the Today tab's "Today's Reading" preview always showed the morning Office/Lauds reading regardless of actual time of day. Root cause: `autoOfficeSegment()` and `autoCatholicSegment()` checked `date.getHours()` against the app's shared `today` state, which is deliberately midnight-truncated (`dateOnly(new Date())`) for date-comparison purposes elsewhere and so always reported hour 0. Both functions now always check the real current wall-clock time whenever the day in question is actually today, regardless of what hour happens to be on the date object a caller passes in — fixing every call site at once rather than patching around it locally.
+- **Added:** real Morning/Evening Prayer (Anglican) and Lauds/Vespers (Catholic) content to the Today teaser and day-detail sheet on weekdays for Catholic specifically — previously only Anglican's Office showed there on weekdays; Catholic fell back to demo text every day except Sunday even though real Lauds/Vespers data existed from v0.30.0.
+- **Added:** Night Prayer (Compline) now auto-selects too, both in the Prayer tab and the Today teaser: Lauds until 5pm, Vespers 5–9pm, Compline from 9pm onward. (The Rule of St. Benedict's monastic hours — Vespers ~4:30, Compline ~6 — reflect a monastery's early horarium built around eating supper before dark, not a realistic lay bedtime, so 9pm was chosen as a more representative "getting ready for bed" cutoff instead.)
+- Verified via a live browser check with the system clock mocked to 8:30pm (Vespers) and 9:30pm (Compline): the Today teaser and Prayer tab agree with each other at both times, and Compline's Tuesday psalm/reading match the source table.
+
 ## [0.30.0] — Catholic Divine Office: Morning, Evening & Night Prayer
 
 - **Added:** real Morning Prayer (Lauds), Evening Prayer (Vespers), and Night Prayer (Compline) for the Catholic tradition, for the first time alongside Daily Mass — a new "Catholic" segment set (Mass / Lauds / Vespers / Compline) in the Prayer tab, mirroring how Anglican splits Morning/Evening Prayer from the Eucharist.
