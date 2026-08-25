@@ -1129,3 +1129,23 @@ export function fixedFeastEucharistFor(date) {
   if (!entry) return null;
   return { key, ot: entry.ot, psalm: entry.psalm, nt: entry.nt, gospel: entry.gospel };
 }
+
+// ---- Common Worship Post Communion prayers ----
+
+import postCommunionsCW from "../data/post_communions_cw_raw.json";
+
+/**
+ * The Common Worship Post Communion prayer for `date`, reusing
+ * collectCWLabel so this always agrees with whichever Collect of the Day
+ * governs `date`. Returns null on Good Friday and Easter Eve, which
+ * genuinely have no Post Communion in Common Worship (no Communion is
+ * celebrated those two days), and on any date collectCWLabel doesn't
+ * resolve to a transcribed entry.
+ */
+export function postCommunionCWFor(date) {
+  const label = collectCWLabel(date);
+  if (!label) return null;
+  const text = postCommunionsCW[label];
+  if (!text) return null;
+  return { label, text };
+}

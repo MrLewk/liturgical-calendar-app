@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.26.0",
+    title: "Common Worship Post Communion prayers",
+    changes: [
+      { type: "Added", text: "The Common Worship Post Communion prayer for the Eucharist, shown after the readings when CW is selected - 96 entries, reusing the same title set as the CW Collect of the Day." },
+      { type: "Added", text: "postCommunionCWFor() in lectionary.js, reusing collectCWLabel() so it always agrees with the Collect of the Day." },
+      { type: "Fixed", text: "A data bug from the original Collects extraction where \"Harvest Thanksgiving\" had bled into \"Dedication Festival\"'s text - neither is currently reachable by the resolver, but the data is now correct." },
+    ],
+  },
+  {
     version: "0.25.0",
     title: "Eucharist readings for fixed Principal Feasts and Holy Days",
     changes: [

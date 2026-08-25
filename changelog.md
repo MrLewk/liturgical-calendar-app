@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.26.0] — Common Worship Post Communion prayers
+
+- **Added:** the Common Worship Post Communion prayer for the Eucharist, shown after the readings when the CW register is selected. 96 entries, reusing the same 98-title set already built for the CW Collect of the Day (Good Friday and Easter Eve are the only two collects without one, since no Communion is celebrated either day). © The Archbishops' Council 2000, published by Church House Publishing.
+- **Added:** `postCommunionCWFor()` in `lectionary.js`, reusing `collectCWLabel()` so the Post Communion always agrees with whichever Collect of the Day governs the date.
+- **Fixed (during development):** a real data bug from the original Collects extraction — "Harvest Thanksgiving" (the next record's title) had bled into the end of "Dedication Festival"'s text. Neither is currently reachable by the resolver (both are movable, parish-specific observances rather than fixed dates), but the underlying data is now correct.
+- 1662 BCP is unaffected — it has no Post Communion prayer of its own in this app.
+
 ## [0.25.0] — Eucharist readings for fixed Principal Feasts and Holy Days
 
 - **Added:** real Eucharist (Principal Service) readings for the 14 fixed Principal Feasts and Holy Days that fall outside the ordinary weekday cycle and previously showed demo text: Christmas Day, Stephen, John, the Holy Innocents, the Naming and Circumcision of Jesus, the Epiphany, Ash Wednesday, the three days of Holy Week, Maundy Thursday, Good Friday, Easter Eve, and Ascension Day. Sourced from the Common Worship lectionary. © The Archbishops' Council 2000, published by Church House Publishing.

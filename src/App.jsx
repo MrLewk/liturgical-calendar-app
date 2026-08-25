@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -330,10 +330,14 @@ function buildAnglicanEucharist(today, collectSource) {
     const gapNote = isSunday ? "Sunday reading not covered yet" : "weekday reading not covered yet";
     return { ...fallback, label: `${shortDate(today)} · demo text (${gapNote})`, sequence: [collect, ...collectItems, ...fallback.sequence.slice(1)] };
   }
+  const postCommunion = collectSource === "CW" ? postCommunionCWFor(today) : null;
+  const postCommunionItems = postCommunion
+    ? [{ type: "prayer", role: "Post Communion · CW", ref: postCommunion.label, text: postCommunion.text }]
+    : [];
   return {
     label: `${result.label} · ${shortDate(today)}`,
     icon: "sun",
-    sequence: [collect, ...collectItems, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref }))],
+    sequence: [collect, ...collectItems, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref })), ...postCommunionItems],
   };
 }
 
