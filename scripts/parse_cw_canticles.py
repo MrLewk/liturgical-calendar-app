@@ -87,6 +87,7 @@ def parse_table(content_table):
         else:
             verses = [{'number': None, 'a': text, 'b': None} for n, text, _ in raw_rows if n != 'BOUNDARY']
         current['verses'] = verses
+        current.pop('_stopped', None)
         canticles.append(current)
         current = None
         raw_rows = []
@@ -121,19 +122,37 @@ def parse_table(content_table):
                 current = {'title': title, 'section': section, 'citation': None}
             continue
 
-        # citation / rubric-note rows: entire text wrapped in <em>
+        # citation / rubric-note rows: entire text wrapped in <em>. Only
+        # scripture-reference-looking text (e.g. "Luke 1.46-55") is kept as
+        # the citation - rubric asides ("The canticle may end here...") and
+        # alt-version markers ("(or)") are still boundaries (they always
+        # precede either a Gloria Patri or an alternate translation we don't
+        # want to include) but aren't stored as the citation. An "(or)"-style
+        # marker appearing after real content has already started signals a
+        # strict alternate translation follows - stop collecting entirely
+        # rather than accidentally appending it (unlike other rubric asides,
+        # which mean more of the *same* text follows).
         text_td = next((t for t in tds if has_class(t, 'xx') and t.get('colspan')), None)
         if text_td is None:
             text_td = next((t for t in tds if t.get('colspan')), None)
         if text_td is not None:
             em = text_td.find('em')
             if em is not None and em.get_text(strip=True) and em.get_text(strip=True) == text_td.get_text(strip=True):
-                if current is not None:
+                if current is not None and not current.get('_stopped'):
                     note = td_text(text_td)
-                    if current['citation'] is None:
+                    looks_like_citation = bool(re.match(r'^[A-Z][a-zA-Z ]+\s+\d', note)) and 'canticle' not in note.lower()
+                    if looks_like_citation and current['citation'] is None:
                         current['citation'] = note
-                    raw_rows.append(('BOUNDARY', None, None))
+                    is_alt_marker = bool(re.match(r'^\(?or\b', note, re.IGNORECASE))
+                    has_content = any(r[0] != 'BOUNDARY' for r in raw_rows)
+                    if is_alt_marker and has_content:
+                        current['_stopped'] = True
+                    else:
+                        raw_rows.append(('BOUNDARY', None, None))
                 continue
+
+        if current is not None and current.get('_stopped'):
+            continue
 
         xx_tds = [t for t in tds if has_class(t, 'xx')]
         content_tds = xx_tds if xx_tds else [t for t in tds if t.get('colspan')]

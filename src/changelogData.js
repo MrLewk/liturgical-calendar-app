@@ -6,6 +6,17 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.21.0",
+    title: "Common Worship opening canticles",
+    changes: [
+      { type: "Added", text: "Common Worship's opening canticle set — Venite, the Easter Anthems, Jubilate, Phos Hilaron, and Verses from Psalm 141/104." },
+      { type: "Added", text: "Venite (with the Easter Anthems substituted during Easter Week) now governs the CW Morning Prayer opening canticle slot." },
+      { type: "Added", text: "Phos Hilaron now governs a new Evening Prayer opening canticle slot for Common Worship — the 1662 BCP office has no equivalent." },
+      { type: "Fixed", text: "Canticle titles are now register-aware in both the card and full-text modal, instead of always showing the BCP-style Latin title." },
+      { type: "Not included", text: "The seasonal Old/New Testament Canticle rotation remains the one substantial piece of CW canticle work still outstanding." },
+    ],
+  },
+  {
     version: "0.20.0",
     title: "Common Worship canticles",
     changes: [

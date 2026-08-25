@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.21.0] — Common Worship opening canticles
+
+- **Added:** Common Worship's opening canticle set — Venite, the Easter Anthems, Jubilate, Phos Hilaron, and Verses from Psalm 141/104 — extracted from the CW Common Material "Opening Hymn and Canticles" page. © The Archbishops' Council 2000, published by Church House Publishing.
+- **Added:** Venite (with the Easter Anthems automatically substituted during Easter Week, same rule as the 1662 register) now governs the CW Morning Prayer opening canticle slot, matching the existing BCP behaviour.
+- **Added:** Phos Hilaron now governs a new Evening Prayer opening canticle slot for the Common Worship register specifically — the 1662 BCP office has no equivalent, so this only appears when Common Worship is selected.
+- **Fixed:** canticle titles in both the compact prayer-sequence card and the full-text modal are now register-aware (e.g. "Venite - a Song of Triumph" under Common Worship vs "Venite, exultemus Domino" under 1662 BCP) rather than always showing the BCP-style Latin title.
+- **Fixed (during development):** two real extraction bugs — a mid-canticle rubric aside ("The canticle may end here...") was being captured as the citation instead of the real scripture reference, and Phos Hilaron's alternate poetic (Keble) translation was being silently concatenated onto the primary prose text instead of stopping at the source's "(or)" marker.
+- **Not included this pass:** Jubilate, both Benedicite versions, and the Psalm 141/104 verse sets were extracted but aren't wired into the resolver (no rubric currently selects them by default) - available in the data for a future settings option. The seasonal Old/New Testament Canticle rotation remains the one substantial piece of CW canticle work still outstanding.
+
 ## [0.20.0] — Common Worship canticles
 
 - **Added:** Common Worship (contemporary language) text for the four Gospel Canticles used in the Daily Office — Benedictus, Magnificat, Nunc Dimittis, and Te Deum Laudamus — extending the existing Daily Prayer Text toggle so it now governs canticles as well as collects. Sourced from the justus.anglican.org Common Worship mirror. © The Archbishops' Council 2000, published by Church House Publishing.

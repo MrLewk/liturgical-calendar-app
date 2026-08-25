@@ -946,10 +946,18 @@ export function isEasterWeek(date) {
   return d >= easter && d <= addDays(easter, 6);
 }
 
-/** The 1662 canticle key that governs Morning Prayer's first canticle slot
+/** The canticle key that governs Morning Prayer's first canticle slot
  * (normally Venite, replaced by the Easter Anthems during Easter Week).
- * Common Worship's opening canticle set isn't covered yet (a separate,
- * date-driven follow-up), so this only applies to the 1662 register. */
+ * Same key names in both the 1662 and CW canticle data, so this applies
+ * to either register - only the lookup source differs. */
 export function morningFirstCanticleKey(date) {
   return isEasterWeek(date) ? "easter_anthems" : "venite";
+}
+
+/** The canticle key that governs Evening Prayer's opening canticle slot.
+ * Only Common Worship has this - the 1662 BCP office moves straight into
+ * the psalms with no opening canticle at Evening Prayer, so this returns
+ * null for the "1662" register. */
+export function eveningFirstCanticleKey(source = "1662") {
+  return source === "CW" ? "phos_hilaron" : null;
 }

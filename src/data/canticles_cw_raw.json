@@ -494,5 +494,407 @@
         "b": null
       }
     ]
+  },
+  "venite": {
+    "title": "Venite - a Song of Triumph",
+    "section": "Morning Prayer",
+    "citation": "Psalm 95",
+    "verses": [
+      {
+        "number": "1",
+        "a": "O come, let us sing to the Lord;",
+        "b": "let us heartily rejoice in the rock of our salvation."
+      },
+      {
+        "number": "2",
+        "a": "Let us come into his presence with thanksgiving",
+        "b": "and be glad in him with psalms."
+      },
+      {
+        "number": "3",
+        "a": "For the Lord is a great God",
+        "b": "and a great king above all gods."
+      },
+      {
+        "number": "4",
+        "a": "In his hand are the depths of the earth",
+        "b": "and the heights of the mountains are his also."
+      },
+      {
+        "number": "5",
+        "a": "The sea is his, for he made it,",
+        "b": "and his hands have moulded the dry land."
+      },
+      {
+        "number": "6",
+        "a": "Come, let us worship and bow down",
+        "b": "and kneel before the Lord our Maker."
+      },
+      {
+        "number": "7",
+        "a": "For he is our God;",
+        "b": "we are the people of his pasture and the sheep of his hand."
+      },
+      {
+        "number": "8",
+        "a": "O that today you would listen to his voice:",
+        "b": "'Harden not your hearts as at Meribah, on that day at Massah in the wilderness,"
+      },
+      {
+        "number": "9",
+        "a": "'When your forebears tested me, and put me to the proof,",
+        "b": "though they had seen my works."
+      },
+      {
+        "number": "10",
+        "a": "'Forty years long I detested that generation and said,",
+        "b": "\"This people are wayward in their hearts; they do not know my ways.\""
+      },
+      {
+        "number": "11",
+        "a": "'So I swore in my wrath,",
+        "b": "\"They shall not enter into my rest.\" '"
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "easter_anthems": {
+    "title": "The Easter Anthems",
+    "section": "Morning Prayer",
+    "citation": "Romans 6.9-11",
+    "verses": [
+      {
+        "number": "1",
+        "a": "Christ our passover has been sacrificed for us:",
+        "b": "so let us celebrate the feast,"
+      },
+      {
+        "number": "2",
+        "a": "not with the old leaven of corruption and wickedness:",
+        "b": "but with the unleavened bread of sincerity and truth."
+      },
+      {
+        "number": "3",
+        "a": "Christ once raised from the dead dies no more:",
+        "b": "death has no more dominion over him."
+      },
+      {
+        "number": "4",
+        "a": "In dying he died to sin once for all:",
+        "b": "in living he lives to God."
+      },
+      {
+        "number": "5",
+        "a": "See yourselves therefore as dead to sin:",
+        "b": "and alive to God in Jesus Christ our Lord."
+      },
+      {
+        "number": "6",
+        "a": "Christ has been raised from the dead:",
+        "b": "the first fruits of those who sleep."
+      },
+      {
+        "number": "7",
+        "a": "For as by man came death:",
+        "b": "by man has come also the resurrection of the dead;"
+      },
+      {
+        "number": "8",
+        "a": "for as in Adam all die:",
+        "b": "even so in Christ shall all be made alive."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "jubilate": {
+    "title": "Jubilate - a Song of Joy",
+    "section": "Morning Prayer",
+    "citation": "Psalm 100",
+    "verses": [
+      {
+        "number": "1",
+        "a": "O be joyful in the Lord, all the earth;",
+        "b": "serve the Lord with gladness and come before his presence with a song."
+      },
+      {
+        "number": "2",
+        "a": "Know that the Lord is God;",
+        "b": "it is he that has made us and we are his; we are his people and the sheep of his pasture."
+      },
+      {
+        "number": "3",
+        "a": "Enter his gates with thanksgiving and his courts with praise;",
+        "b": "give thanks to him and bless his name."
+      },
+      {
+        "number": "4",
+        "a": "For the Lord is gracious; his steadfast love is everlasting,",
+        "b": "and his faithfulness endures from generation to generation."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "phos_hilaron": {
+    "title": "Phos hilaron - a Song of the Light",
+    "section": "Evening Prayer",
+    "citation": null,
+    "verses": [
+      {
+        "number": null,
+        "a": "O joyful light,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "from the pure glory of the eternal heavenly Father,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "O holy, blessed Jesus Christ.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "As we come to the setting of the sun",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "and see the evening light,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "we give thanks and praise to the Father and to the Son",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "and to the Holy Spirit of God.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Worthy are you at all times",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "to be sung with holy voices,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "O Son of God, O giver of life,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "and to be glorified through all creation.",
+        "b": null
+      }
+    ]
+  },
+  "psalm_141_verses": {
+    "title": "Verses from Psalm 141",
+    "section": "Evening Prayer",
+    "citation": null,
+    "verses": [
+      {
+        "number": null,
+        "a": "Let my prayer rise before you as incense,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "the lifting up of my hands as the evening sacrifice.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "O Lord, I call to you; come to me quickly;",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "hear my voice when I cry to you.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Set a watch before my mouth, O Lord,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "and guard the door of my lips;",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Let my prayer rise before you as incense,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "the lifting up of my hands as the evening sacrifice.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Let not my heart incline to any evil thing;",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "let me not be occupied in wickedness with evildoers.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "But my eyes are turned to you, Lord God;",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "in you I take refuge; do not leave me defenceless.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Let my prayer rise before you as incense,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "the lifting up of my hands as the evening sacrifice.",
+        "b": null
+      }
+    ]
+  },
+  "psalm_104_verses": {
+    "title": "Verses from Psalm 104",
+    "section": "Evening Prayer",
+    "citation": null,
+    "verses": [
+      {
+        "number": null,
+        "a": "Bless the Lord, O my soul.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "O Lord my God, how excellent is your greatness!",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "You are clothed with majesty and honour,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "wrapped in light as in a garment.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "The sun knows the time for its setting.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "You make darkness that it may be night.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Bless the Lord, O my soul.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "O Lord my God, how excellent is your greatness!",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "O Lord, how manifold are your works!",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "In wisdom you have made them all;",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "the earth is full of your creatures.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "When you send forth your spirit, they are created,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "and you renew the face of the earth.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Bless the Lord, O my soul.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "O Lord my God, how excellent is your greatness!",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "May the glory of the Lord endure for ever;",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "may the Lord rejoice in his works;",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "I will sing to the Lord as long as I live;",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "I will make music to my God while I have my being.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Bless the Lord, O my soul.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "O Lord my God, how excellent is your greatness!",
+        "b": null
+      }
+    ]
   }
 }

@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -355,23 +355,24 @@ function buildAnglicanOffice(date, service, collectSource) {
 
   // AM: Venite (or the Easter Anthems in Easter Week) before the readings,
   // Te Deum after the OT lesson, Benedictus after the NT lesson.
-  // PM: Magnificat after the OT lesson, Nunc Dimittis after the NT lesson.
-  // Common Worship's opening canticle (Venite-equivalent) isn't covered yet,
-  // so that slot is 1662-only for now.
-  const firstCanticleKey = service === "am" && collectSource !== "CW" ? morningFirstCanticleKey(date) : null;
+  // PM: (CW only) Phos Hilaron before the readings, Magnificat after the OT
+  // lesson, Nunc Dimittis after the NT lesson. The 1662 BCP office has no
+  // opening canticle at Evening Prayer.
+  const source = collectSource === "CW" ? "CW" : "1662";
+  const firstCanticleKey = service === "am" ? morningFirstCanticleKey(date) : eveningFirstCanticleKey(source);
   const secondCanticleKey = service === "am" ? "te_deum" : "magnificat";
   const thirdCanticleKey = service === "am" ? "benedictus" : "nunc_dimittis";
 
   function canticleItem(key, fallbackItem) {
-    const preview = canticlePreview(key, collectSource === "CW" ? "CW" : "1662");
+    const preview = canticlePreview(key, source);
     if (!preview) return fallbackItem;
-    const label = key === "easter_anthems" ? "The Easter Anthems" : fallbackItem?.ref || key;
-    return { type: "prayer", role: "Canticle", ref: label, canticleKey: key, canticleSource: collectSource === "CW" ? "CW" : "1662", text: preview, truncated: true };
+    const label = CANTICLE_DISPLAY_NAMES[source]?.[key] || fallbackItem?.ref || key;
+    return { type: "prayer", role: "Canticle", ref: label, canticleKey: key, canticleSource: source, text: preview, truncated: true };
   }
 
-  const collectOfDay = collectSource === "CW" ? collectCWFor(date) : collect1662For(date);
+  const collectOfDay = source === "CW" ? collectCWFor(date) : collect1662For(date);
   const collectOfDayItems = collectOfDay
-    ? [{ type: "prayer", role: `Collect of the Day · ${collectSource === "CW" ? "CW" : "1662"}`, ref: collectOfDay.label, text: collectOfDay.text }]
+    ? [{ type: "prayer", role: `Collect of the Day · ${source}`, ref: collectOfDay.label, text: collectOfDay.text }]
     : [];
   const peaceCollectItems = peaceCollect ? [peaceCollect] : [];
 
@@ -1613,16 +1614,34 @@ function ScripturePassageModal({ reference, webVersion, bibleGatewayVersion, sea
 }
 
 const CANTICLE_DISPLAY_NAMES = {
-  venite: "Venite, exultemus Domino",
-  easter_anthems: "The Easter Anthems",
-  te_deum: "Te Deum Laudamus",
-  benedicite: "Benedicite, omnia opera",
-  benedictus: "Benedictus",
-  jubilate: "Jubilate Deo",
-  magnificat: "Magnificat",
-  cantate_domino: "Cantate Domino",
-  nunc_dimittis: "Nunc dimittis",
-  deus_misereatur: "Deus misereatur",
+  "1662": {
+    venite: "Venite, exultemus Domino",
+    easter_anthems: "The Easter Anthems",
+    te_deum: "Te Deum Laudamus",
+    benedicite: "Benedicite, omnia opera",
+    benedictus: "Benedictus",
+    jubilate: "Jubilate Deo",
+    magnificat: "Magnificat",
+    cantate_domino: "Cantate Domino",
+    nunc_dimittis: "Nunc dimittis",
+    deus_misereatur: "Deus misereatur",
+  },
+  CW: {
+    benedictus: "Benedictus (The Song of Zechariah)",
+    magnificat: "Magnificat (The Song of Mary)",
+    nunc_dimittis: "Nunc dimittis (The Song of Simeon)",
+    te_deum: "Te Deum Laudamus",
+    song_of_christs_glory: "The Song of Christ's Glory",
+    great_and_wonderful: "Great and Wonderful",
+    bless_the_lord: "Bless the Lord",
+    saviour_of_the_world: "Saviour of the World",
+    venite: "Venite - a Song of Triumph",
+    easter_anthems: "The Easter Anthems",
+    jubilate: "Jubilate - a Song of Joy",
+    phos_hilaron: "Phos hilaron - a Song of the Light",
+    psalm_141_verses: "Verses from Psalm 141",
+    psalm_104_verses: "Verses from Psalm 104",
+  },
 };
 
 function CanticleModal({ canticleKey, source = "1662", season, onClose }) {
@@ -1637,7 +1656,7 @@ function CanticleModal({ canticleKey, source = "1662", season, onClose }) {
         Canticle · {isCW ? "Common Worship" : "1662 Book of Common Prayer"}
       </p>
       <h2 className="text-[19px] lg:text-[24px] mb-4" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
-        {CANTICLE_DISPLAY_NAMES[canticleKey] || canticleKey}
+        {CANTICLE_DISPLAY_NAMES[isCW ? "CW" : "1662"][canticleKey] || canticleKey}
       </h2>
 
       {!canticle && (
