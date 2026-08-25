@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -383,8 +383,14 @@ function buildAnglicanOffice(date, service, collectSource) {
     : [];
   const peaceCollectItems = peaceCollect ? [peaceCollect] : [];
 
-  const result = officeReadingFor(date, service);
-  const psalmResult = psalmFor(date, service);
+  // Common Worship Sundays use a completely separate lectionary (Second/
+  // Third Service) from the weekday Table 2 data - check that first when
+  // it applies, before falling back to the regular weekday resolution.
+  const isSunday = date.getDay() === 0;
+  const cwSunday = source === "CW" && isSunday ? secondThirdServiceFor(date, service) : null;
+
+  const result = cwSunday || officeReadingFor(date, service);
+  const psalmResult = cwSunday ? { citation: cwSunday.psalm, week: cwSunday.title } : psalmFor(date, service);
   const fallbackReadings = fallback.sequence.filter((i) => i.type === "reading");
 
   if (!result && !psalmResult) {

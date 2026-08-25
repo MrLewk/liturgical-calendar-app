@@ -6,6 +6,17 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.23.0",
+    title: "Common Worship Sunday Morning & Evening Prayer readings",
+    changes: [
+      { type: "Added", text: "Real Common Worship readings for Sunday Morning and Evening Prayer — previously the single biggest gap in the app, with roughly 95 of every 104 Sundays falling back to demo text. 58 Sunday titles × 3 lectionary years × 2 services, fully transcribed." },
+      { type: "Added", text: "secondThirdServiceFor() in lectionary.js, using CW's Second Service (Evening Prayer) and Third Service (Morning Prayer) lectionary." },
+      { type: "Added", text: "sundayTitleFor(), a shared date-to-title function so the new Sunday Office data and the existing Eucharist data always agree on which Sunday is which." },
+      { type: "Info", text: "Verified across 208 Sundays (2024-2027): 207 resolve correctly; the one gap is a pre-existing date-logic edge case, not new." },
+      { type: "Not included", text: "The 1662 BCP register - it has its own separate historic Sunday lessons table, not yet sourced." },
+    ],
+  },
+  {
     version: "0.22.0",
     title: "Common Worship seasonal canticles",
     changes: [

@@ -176,10 +176,21 @@ const ORDINAL = [
  *  - In years with an unusually long Epiphany season, the ordinal might
  *    exceed what's in the transcribed set for that particular year-letter.
  */
-export function sundayReadingFor(date) {
-  if (!isValidDate(date)) return null;
+/**
+ * Resolves `date` (must be a Sunday) to its RCL/CW title string - e.g.
+ * "First Sunday of Advent", "Proper 12 (17)", "Trinity Sunday" - using the
+ * same title vocabulary as rcl_sundays.json. Returns { sundayYear, title }
+ * with title null if date isn't a Sunday or falls outside computable range.
+ * Pure date arithmetic, no data lookup - shared by sundayReadingFor (the
+ * Principal Service / Eucharist) and secondThirdServiceFor (the CW Second/
+ * Third Service Sunday Office readings) so both always agree on which
+ * calendar Sunday is "which" Sunday, regardless of how any one data source
+ * happens to label its own pages.
+ */
+export function sundayTitleFor(date) {
+  if (!isValidDate(date)) return { sundayYear: null, title: null };
   const d = dateOnly(date);
-  if (d.getDay() !== 0) return null; // Sundays only
+  if (d.getDay() !== 0) return { sundayYear: null, title: null };
   const { advent1, advent1Next, easter, sundayYear } = churchYearContext(d);
   const ashWednesday = addDays(easter, -46);
   const pentecost = addDays(easter, 49);
@@ -189,7 +200,7 @@ export function sundayReadingFor(date) {
   const findByTitle = (re) => years.find((e) => re.test(e.title));
 
   let title = null;
-  if (d < advent1) return null; // shouldn't happen given churchYearContext
+  if (d < advent1) return { sundayYear, title: null }; // shouldn't happen given churchYearContext
   const daysSinceAdvent = daysBetween(advent1, d);
   if (daysSinceAdvent < 28) {
     const n = Math.floor(daysSinceAdvent / 7) + 1;
@@ -248,7 +259,13 @@ export function sundayReadingFor(date) {
     else title = findByTitle(new RegExp(`^Proper ${properN} \\(`))?.title;
   }
 
+  return { sundayYear, title };
+}
+
+export function sundayReadingFor(date) {
+  const { sundayYear, title } = sundayTitleFor(date);
   if (!title) return { sundayYear, title: null, readings: null };
+  const years = rclSundays[sundayYear] || [];
   const entry = years.find((e) => e.title === title);
   return { sundayYear, title, readings: entry ? entry.readings : null };
 }
@@ -1012,4 +1029,31 @@ export function seasonalCanticleKey(date, service, seasonKey) {
   };
 
   return (isAM ? AM_KEYS : PM_KEYS)[bucket] || null;
+}
+
+// ---- Common Worship Sunday Office (Second/Third Service) readings ----
+
+import cwSundayOffice from "../data/cw_sunday_office.json";
+
+/**
+ * Common Worship's Second Service (Evening Prayer) or Third Service
+ * (Morning Prayer) readings for `date`, if it's a Sunday CW has data for.
+ * Unlike Table 2 (the weekday Daily Office lectionary), Sunday Morning/
+ * Evening Prayer uses a completely separate CW lectionary keyed by the
+ * same Sunday titles as the Principal Service (see sundayTitleFor) -
+ * Second Service = Evening Prayer, Third Service = Morning Prayer, per
+ * CW's Lectionary Rule 8. Returns null if `date` isn't a Sunday, or if
+ * that Sunday's title isn't in the transcribed data.
+ */
+export function secondThirdServiceFor(date, service) {
+  if (!isValidDate(date)) return null;
+  const d = dateOnly(date);
+  if (d.getDay() !== 0) return null;
+  const { sundayYear, title } = sundayTitleFor(d);
+  if (!title) return null;
+  const yearData = cwSundayOffice[sundayYear];
+  if (!yearData || !yearData[title]) return null;
+  const entry = yearData[title][service === "am" ? "third" : "second"];
+  if (!entry) return null;
+  return { title, ot: entry.ot, nt: entry.nt, psalm: entry.psalm };
 }

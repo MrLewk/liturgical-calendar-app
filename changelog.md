@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.23.0] — Common Worship Sunday Morning & Evening Prayer readings
+
+- **Added:** Real Common Worship readings for Sunday Morning and Evening Prayer, previously the single biggest gap in the app — roughly 95 of every 104 Sundays fell back to static demo text, since the existing weekday lectionary (Table 2) structurally has no Sunday entries at all. Sunday Office readings come from an entirely separate CW lectionary (the Second and Third Service Lectionary), which has now been transcribed in full: 58 Sunday titles × 3 lectionary years (A/B/C) × 2 services, sourced from the CW "Lectionary for Sundays, Principal Feasts and Holy Days" pages. © The Archbishops' Council 2000, published by Church House Publishing.
+- **Added:** `secondThirdServiceFor()` in `lectionary.js` — Second Service = Evening Prayer, Third Service = Morning Prayer, per the Lectionary's own Rule 8. `src/data/cw_sunday_office.json`.
+- **Added:** `sundayTitleFor()`, extracted from the existing `sundayReadingFor` (Sunday Eucharist) as a standalone, reusable date→title function, so the new Sunday Office data and the existing Eucharist data are guaranteed to always agree on which calendar Sunday is which — verified via a full regression sweep before and after the refactor.
+- Verified via an automated sweep across 208 Sundays (2024–2027): 207 resolve to real text; the one gap is a pre-existing edge case in the date logic itself (also present in the current Eucharist resolution, unrelated to this change) rather than a gap in the new data.
+- Scope: this covers Common Worship only. The 1662 BCP register still shows demo text for Sunday Morning/Evening Prayer, since 1662 has its own separate historic Sunday lessons table that hasn't been sourced yet — a further follow-up.
+
 ## [0.22.0] — Common Worship seasonal canticles
 
 - **Added:** Common Worship's full set of 14 seasonal Old and New Testament Canticles — one Old Testament canticle for Morning Prayer and one New Testament canticle for Evening Prayer, per liturgical season (Advent, Christmas, Epiphany, Lent, Easter, Pentecost, Ordinary Time). Extracted from the CW Common Material "Old and New Testament Canticles at Morning and Evening Prayer" page. © The Archbishops' Council 2000, published by Church House Publishing.
