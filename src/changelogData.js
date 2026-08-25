@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.20.0",
+    title: "Common Worship canticles",
+    changes: [
+      { type: "Added", text: "Common Worship (contemporary language) text for the four Gospel Canticles — Benedictus, Magnificat, Nunc Dimittis, and Te Deum Laudamus — extending the Daily Prayer Text toggle to cover canticles as well as collects." },
+      { type: "Changed", text: "The Settings toggle previously labelled \"Collect of the Day\" is now \"Daily Prayer Text\"." },
+      { type: "Changed", text: "The CW register's Morning Prayer opening canticle slot is omitted for now, since Common Worship's opening canticle set isn't extracted yet." },
+      { type: "Not included", text: "Common Worship's opening canticles and the seasonal Old/New Testament Canticle rotation — a separate follow-up." },
+    ],
+  },
+  {
     version: "0.19.0",
     title: "First-run tradition prompt, \"Report a bug\" link",
     changes: [

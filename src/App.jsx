@@ -18,6 +18,7 @@ import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
 import canticles1662Raw from "./data/canticles_1662_raw.json";
+import canticlesCWRaw from "./data/canticles_cw_raw.json";
 
 const TRADITIONS = ["Catholic", "Anglican", "Orthodox"];
 
@@ -355,15 +356,17 @@ function buildAnglicanOffice(date, service, collectSource) {
   // AM: Venite (or the Easter Anthems in Easter Week) before the readings,
   // Te Deum after the OT lesson, Benedictus after the NT lesson.
   // PM: Magnificat after the OT lesson, Nunc Dimittis after the NT lesson.
-  const firstCanticleKey = service === "am" ? morningFirstCanticleKey(date) : null;
+  // Common Worship's opening canticle (Venite-equivalent) isn't covered yet,
+  // so that slot is 1662-only for now.
+  const firstCanticleKey = service === "am" && collectSource !== "CW" ? morningFirstCanticleKey(date) : null;
   const secondCanticleKey = service === "am" ? "te_deum" : "magnificat";
   const thirdCanticleKey = service === "am" ? "benedictus" : "nunc_dimittis";
 
   function canticleItem(key, fallbackItem) {
-    const preview = canticlePreview(key);
+    const preview = canticlePreview(key, collectSource === "CW" ? "CW" : "1662");
     if (!preview) return fallbackItem;
     const label = key === "easter_anthems" ? "The Easter Anthems" : fallbackItem?.ref || key;
-    return { type: "prayer", role: "Canticle", ref: label, canticleKey: key, text: preview, truncated: true };
+    return { type: "prayer", role: "Canticle", ref: label, canticleKey: key, canticleSource: collectSource === "CW" ? "CW" : "1662", text: preview, truncated: true };
   }
 
   const collectOfDay = collectSource === "CW" ? collectCWFor(date) : collect1662For(date);
@@ -570,7 +573,7 @@ export default function App() {
   // BibleGateway.com version code preselected on the "Open on BibleGateway" link.
   const [bibleGatewayVersion, setBibleGatewayVersion] = usePersistedState("officium-biblegateway-version", "NRSVA");
   const [scriptureRef, setScriptureRef] = useState(null); // reference string, or null when the modal is closed
-  const [openCanticle, setOpenCanticle] = useState(null); // canticle key, or null when the modal is closed
+  const [openCanticle, setOpenCanticle] = useState(null); // {key, source} or null when the modal is closed
   const resolvedWebVersion = webBibleVersion === "auto" ? DEFAULT_WEB_VERSION[tradition] || "engwebu" : webBibleVersion;
 
   const today = useToday();
@@ -794,9 +797,15 @@ export default function App() {
             />
           )}
 
-          {/* 1662 canticle sheet — reachable from any canticle in the Anglican office */}
+          {/* 1662/CW canticle sheet — reachable from any canticle in the Anglican office */}
           {openCanticle && (
-            <CanticleModal key={openCanticle} canticleKey={openCanticle} season={season} onClose={() => setOpenCanticle(null)} />
+            <CanticleModal
+              key={`${openCanticle.source}:${openCanticle.key}`}
+              canticleKey={openCanticle.key}
+              source={openCanticle.source}
+              season={season}
+              onClose={() => setOpenCanticle(null)}
+            />
           )}
 
           {/* Export / sync-to-calendar sheet */}
@@ -1084,7 +1093,7 @@ function SettingsSheet({
       {draft === "Anglican" && (
         <>
           <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: alpha(theme.text, 0.4) }}>
-            Collect of the Day
+            Daily Prayer Text
           </p>
           <div className="space-y-2 mb-2">
             {[
@@ -1616,15 +1625,16 @@ const CANTICLE_DISPLAY_NAMES = {
   deus_misereatur: "Deus misereatur",
 };
 
-function CanticleModal({ canticleKey, season, onClose }) {
+function CanticleModal({ canticleKey, source = "1662", season, onClose }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
-  const canticle = canticles1662Raw[canticleKey];
+  const isCW = source === "CW";
+  const canticle = (isCW ? canticlesCWRaw : canticles1662Raw)[canticleKey];
 
   return (
     <SheetOverlay onClose={onClose}>
       <p className="text-[11px] uppercase tracking-[0.2em] mb-1.5" style={{ color: alpha(theme.text, 0.4) }}>
-        Canticle · 1662 Book of Common Prayer
+        Canticle · {isCW ? "Common Worship" : "1662 Book of Common Prayer"}
       </p>
       <h2 className="text-[19px] lg:text-[24px] mb-4" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
         {CANTICLE_DISPLAY_NAMES[canticleKey] || canticleKey}
@@ -1650,11 +1660,10 @@ function CanticleModal({ canticleKey, season, onClose }) {
               </p>
             ))}
           </div>
-          {canticle.citation && (
-            <p className="text-[10.5px] mb-5" style={{ color: alpha(theme.text, 0.33) }}>
-              {canticle.citation} · Book of Common Prayer (1662), public domain.
-            </p>
-          )}
+          <p className="text-[10.5px] mb-5" style={{ color: alpha(theme.text, 0.33) }}>
+            {canticle.citation ? `${canticle.citation} · ` : ""}
+            {isCW ? "Common Worship, © The Archbishops' Council 2000" : "Book of Common Prayer (1662), public domain"}.
+          </p>
         </>
       )}
 
@@ -2441,7 +2450,7 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
             )}
             {item.type === "prayer" && item.truncated && item.canticleKey && (
               <button
-                onClick={() => onOpenCanticle(item.canticleKey)}
+                onClick={() => onOpenCanticle({ key: item.canticleKey, source: item.canticleSource || "1662" })}
                 className="text-[11px] lg:text-[14px] mt-2 lg:mt-3 underline decoration-dotted"
                 style={{ color: accent }}
               >

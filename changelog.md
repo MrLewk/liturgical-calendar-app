@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.20.0] — Common Worship canticles
+
+- **Added:** Common Worship (contemporary language) text for the four Gospel Canticles used in the Daily Office — Benedictus, Magnificat, Nunc Dimittis, and Te Deum Laudamus — extending the existing Daily Prayer Text toggle so it now governs canticles as well as collects. Sourced from the justus.anglican.org Common Worship mirror. © The Archbishops' Council 2000, published by Church House Publishing.
+- **Changed:** the Settings toggle previously labelled "Collect of the Day" is now "Daily Prayer Text", reflecting that it governs both collects and canticles under one setting.
+- **Changed:** the CW register's Morning Prayer opening canticle slot (BCP's Venite/Easter Anthems equivalent) is omitted rather than shown, since Common Worship's opening canticle set isn't extracted yet — a separate, larger follow-up given it's genuinely date/season-driven rather than fixed.
+- **Fixed (during development):** the source file's actual encoding was Windows-1252, not UTF-8 - decoding it as UTF-8 was silently corrupting the bullet (•) character Common Worship uses to mark the chant-division point within each verse-half.
+- **Not included this pass:** Common Worship's opening canticles and the seasonal Old/New Testament Canticle rotation (the two remaining CW canticle source pages) - genuine new resolver work, tracked as a separate follow-up.
+
 ## [0.19.0] — First-run tradition prompt, "Report a bug" link
 
 - **Added:** A one-time, lightweight prompt on first visit asking which tradition (Catholic/Anglican/Orthodox) to follow, so new users aren't stuck looking at the wrong calendar until they find Settings. Shown only after the cookie consent banner is resolved, so the two never stack in the same overlay slot; picking a tradition applies it immediately, and "I'll choose later" (or closing it) leaves the Catholic default in place — either way it's marked seen and never shown again (`officium-onboarding-seen`). Deliberately just the tradition choice, not the full Settings sheet. New `TraditionWelcome` component, reusing the existing `SheetOverlay` and tradition-button styling. The install-to-home-screen toast now waits for this prompt to resolve too, for the same reason.

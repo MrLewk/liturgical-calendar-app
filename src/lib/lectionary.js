@@ -906,14 +906,19 @@ export function collectCWFor(date) {
   return { label, text };
 }
 
-// ---- 1662 BCP Canticles ----
+// ---- 1662 BCP & Common Worship Canticles ----
 
 import canticles1662 from "../data/canticles_1662_raw.json";
+import canticlesCW from "../data/canticles_cw_raw.json";
 
 /** Flattens a canticle's verse list into a single readable string, e.g.
- * "O come, let us sing unto the Lord: let us heartily rejoice ...". */
-export function canticleText(key) {
-  const canticle = canticles1662[key];
+ * "O come, let us sing unto the Lord: let us heartily rejoice ...".
+ * `source` is "1662" or "CW" - CW currently only covers the four Gospel
+ * Canticles (Benedictus, Magnificat, Nunc Dimittis, Te Deum), not Venite/
+ * the Easter Anthems, so callers should treat a null return as "this
+ * canticle isn't available in this register yet" rather than an error. */
+export function canticleText(key, source = "1662") {
+  const canticle = (source === "CW" ? canticlesCW : canticles1662)[key];
   if (!canticle) return null;
   return canticle.verses
     .map((v) => (v.b ? `${v.a} ${v.b}` : v.a))
@@ -922,8 +927,8 @@ export function canticleText(key) {
 
 /** A short preview of a canticle's opening verse(s), truncated to roughly
  * `maxChars`, for use in the collapsed prayer-sequence card. */
-export function canticlePreview(key, maxChars = 220) {
-  const full = canticleText(key);
+export function canticlePreview(key, source = "1662", maxChars = 220) {
+  const full = canticleText(key, source);
   if (!full) return null;
   if (full.length <= maxChars) return full;
   const cut = full.slice(0, maxChars);
@@ -942,7 +947,9 @@ export function isEasterWeek(date) {
 }
 
 /** The 1662 canticle key that governs Morning Prayer's first canticle slot
- * (normally Venite, replaced by the Easter Anthems during Easter Week). */
+ * (normally Venite, replaced by the Easter Anthems during Easter Week).
+ * Common Worship's opening canticle set isn't covered yet (a separate,
+ * date-driven follow-up), so this only applies to the 1662 register. */
 export function morningFirstCanticleKey(date) {
   return isEasterWeek(date) ? "easter_anthems" : "venite";
 }

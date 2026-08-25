@@ -1,0 +1,498 @@
+{
+  "benedictus": {
+    "title": "Benedictus (The Song of Zechariah)",
+    "section": "Morning Prayer",
+    "citation": "Luke 1.68-79",
+    "verses": [
+      {
+        "number": "1",
+        "a": "Blessed be the Lord the God of Israel,",
+        "b": "who has come to his people and set them free."
+      },
+      {
+        "number": "2",
+        "a": "He has raised up for us a mighty Saviour,",
+        "b": "born of the house of his servant David."
+      },
+      {
+        "number": "3",
+        "a": "Through his holy prophets God promised of old",
+        "b": "to save us from our enemies, from the hands of all that hate us,"
+      },
+      {
+        "number": "4",
+        "a": "To show mercy to our ancestors,",
+        "b": "and to remember his holy covenant."
+      },
+      {
+        "number": "5",
+        "a": "This was the oath God swore to our father Abraham:",
+        "b": "to set us free from the hands of our enemies,"
+      },
+      {
+        "number": "6",
+        "a": "Free to worship him without fear,",
+        "b": "holy and righteous in his sight all the days of our life."
+      },
+      {
+        "number": "7",
+        "a": "And you, child, shall be called the prophet of the Most High,",
+        "b": "for you will go before the Lord to prepare his way,"
+      },
+      {
+        "number": "8",
+        "a": "To give his people knowledge of salvation",
+        "b": "by the forgiveness of all their sins."
+      },
+      {
+        "number": "9",
+        "a": "In the tender compassion of our God",
+        "b": "the dawn from on high shall break upon us,"
+      },
+      {
+        "number": "10",
+        "a": "To shine on those who dwell in darkness and the shadow of death,",
+        "b": "and to guide our feet into the way of peace."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "magnificat": {
+    "title": "Magnificat (The Song of Mary)",
+    "section": "Evening Prayer",
+    "citation": "Luke 1.46-55",
+    "verses": [
+      {
+        "number": "1",
+        "a": "My soul proclaims the greatness of the Lord, my spirit rejoices in God my Saviour;",
+        "b": "he has looked with favour on his lowly servant."
+      },
+      {
+        "number": "2",
+        "a": "From this day all generations will call me blessed;",
+        "b": "the Almighty has done great things for me and holy is his name."
+      },
+      {
+        "number": "3",
+        "a": "He has mercy on those who fear him,",
+        "b": "from generation to generation."
+      },
+      {
+        "number": "4",
+        "a": "He has shown strength with his arm",
+        "b": "and has scattered the proud in their conceit,"
+      },
+      {
+        "number": "5",
+        "a": "Casting down the mighty from their thrones",
+        "b": "and lifting up the lowly."
+      },
+      {
+        "number": "6",
+        "a": "He has filled the hungry with good things",
+        "b": "and sent the rich away empty."
+      },
+      {
+        "number": "7",
+        "a": "He has come to the aid of his servant Israel,",
+        "b": "to remember his promise of mercy,"
+      },
+      {
+        "number": "8",
+        "a": "The promise made to our ancestors,",
+        "b": "to Abraham and his children for ever."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "nunc_dimittis": {
+    "title": "Nunc dimittis (The Song of Simeon)",
+    "section": "Night Prayer",
+    "citation": "Luke 2.29-32",
+    "verses": [
+      {
+        "number": "1",
+        "a": "Now, Lord, you let your servant go in peace:",
+        "b": "your word has been fulfilled."
+      },
+      {
+        "number": "2",
+        "a": "My own eyes have seen the salvation",
+        "b": "which you have prepared in the sight of every people;"
+      },
+      {
+        "number": "3",
+        "a": "A light to reveal you to the nations",
+        "b": "and the glory of your people Israel."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "song_of_christs_glory": {
+    "title": "The Song of Christ's Glory",
+    "section": "Night Prayer",
+    "citation": "Philippians 2.5-11",
+    "verses": [
+      {
+        "number": "1",
+        "a": "Christ Jesus was in the form of God,",
+        "b": "but he did not cling to equality with God."
+      },
+      {
+        "number": "2",
+        "a": "He emptied himself, taking the form of a servant,",
+        "b": "and was born in our human likeness."
+      },
+      {
+        "number": "3",
+        "a": "Being found in human form he humbled himself,",
+        "b": "and became obedient unto death, even death on a cross."
+      },
+      {
+        "number": "4",
+        "a": "Therefore God has highly exalted him,",
+        "b": "and bestowed on him the name above every name,"
+      },
+      {
+        "number": "5",
+        "a": "That at the name of Jesus, every knee should bow,",
+        "b": "in heaven and on earth and under the earth;"
+      },
+      {
+        "number": "6",
+        "a": "And every tongue confess that Jesus Christ is Lord,",
+        "b": "to the glory of God the Father."
+      },
+      {
+        "number": null,
+        "a": "Glory to the Father and to the Son and to the Holy Spirit; as it was in the beginning is now and shall be for ever. Amen.",
+        "b": null
+      }
+    ]
+  },
+  "great_and_wonderful": {
+    "title": "Great and Wonderful",
+    "section": "Night Prayer",
+    "citation": "Revelation 15.3,4",
+    "verses": [
+      {
+        "number": "1",
+        "a": "Great and wonderful are your deeds,",
+        "b": "Lord God the Almighty."
+      },
+      {
+        "number": "2",
+        "a": "Just and true are your ways,",
+        "b": "O ruler of the nations."
+      },
+      {
+        "number": "3",
+        "a": "Who shall not revere and praise your name, O Lord?",
+        "b": "for you alone are holy."
+      },
+      {
+        "number": "4",
+        "a": "All nations shall come and worship in your presence:",
+        "b": "for your just dealings have been revealed."
+      },
+      {
+        "number": null,
+        "a": "To the One who sits on the throne and to the Lamb",
+        "b": "be blessing and honour and glory and might, for ever and ever. Amen."
+      }
+    ]
+  },
+  "bless_the_lord": {
+    "title": "Bless the Lord",
+    "section": "Night Prayer",
+    "citation": "The Song of the Three 29-34",
+    "verses": [
+      {
+        "number": "1",
+        "a": "Blessed are you, the God of our ancestors,",
+        "b": "worthy to be praised and exalted for ever."
+      },
+      {
+        "number": "2",
+        "a": "Blessed is your holy and glorious name,",
+        "b": "worthy to be praised and exalted for ever."
+      },
+      {
+        "number": "3",
+        "a": "Blessed are you, in your holy and glorious temple,",
+        "b": "worthy to be praised and exalted for ever."
+      },
+      {
+        "number": "4",
+        "a": "Blessed are you who look into the depths,",
+        "b": "worthy to be praised and exalted for ever."
+      },
+      {
+        "number": "5",
+        "a": "Blessed are you, enthroned on the cherubim,",
+        "b": "worthy to be praised and exalted for ever."
+      },
+      {
+        "number": "6",
+        "a": "Blessed are you on the throne of your kingdom,",
+        "b": "worthy to be praised and exalted for ever."
+      },
+      {
+        "number": "7",
+        "a": "Blessed are you in the heights of heaven,",
+        "b": "worthy to be praised and exalted for ever."
+      },
+      {
+        "number": null,
+        "a": "Bless the Father, the Son and the Holy Spirit, worthy to be praised and exalted for ever.",
+        "b": null
+      }
+    ]
+  },
+  "saviour_of_the_world": {
+    "title": "Saviour of the World",
+    "section": "Night Prayer",
+    "citation": null,
+    "verses": [
+      {
+        "number": "1",
+        "a": "Jesus, Saviour of the world, come to us in your mercy:",
+        "b": "we look to you to save and help us."
+      },
+      {
+        "number": "2",
+        "a": "By your cross and your life laid down, you set your people free:",
+        "b": "we look to you to save and help us."
+      },
+      {
+        "number": "3",
+        "a": "When they were ready to perish, you saved your disciples:",
+        "b": "we look to you to come to our help."
+      },
+      {
+        "number": "4",
+        "a": "In the greatness of your mercy, loose us from our chains,",
+        "b": "forgive the sins of all your people."
+      },
+      {
+        "number": "5",
+        "a": "Make yourself known as our Saviour and mighty deliverer;",
+        "b": "save and help us that we may praise you."
+      },
+      {
+        "number": "6",
+        "a": "Come now and dwell with us, Lord Christ Jesus:",
+        "b": "hear our prayer and be with us always."
+      },
+      {
+        "number": "7",
+        "a": "And when you come in your glory:",
+        "b": "make us to be one with you and to share the life of your kingdom."
+      }
+    ]
+  },
+  "te_deum": {
+    "title": "Te Deum Laudamus",
+    "section": "Night Prayer",
+    "citation": null,
+    "verses": [
+      {
+        "number": null,
+        "a": "We praise you, O God,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "we acclaim you as the Lord;",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "all creation worships you,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "the Father everlasting.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "To you all angels, all the powers of heaven,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "the cherubim and seraphim, sing in endless praise:",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Holy, holy, holy Lord, God of power and might,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "heaven and earth are full of your glory.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "The glorious company of apostles praise you.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "The noble fellowship of prophets praise you.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "The white-robed army of martyrs praise you.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Throughout the world the holy Church acclaims you:",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Father, of majesty unbounded,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "your true and only Son, worthy of all praise,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "the Holy Spirit, advocate and guide.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "You, Christ, are the King of glory,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "the eternal Son of the Father.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "When you took our flesh to set us free",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "you humbly chose the Virgin's womb.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "You overcame the sting of death",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "and opened the kingdom of heaven to all believers.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "You are seated at God's right hand in glory.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "We believe that you will come and be our judge.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Come then, Lord, and help your people,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "bought with the price of your own blood,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "and bring us with your saints",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "to glory everlasting.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Save your people, Lord, and bless your inheritance.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Govern and uphold them now and always.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Day by day we bless you.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "We praise your name for ever.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Keep us today, Lord, from all sin.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Have mercy on us, Lord, have mercy.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "Lord, show us your love and mercy,",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "for we have put our trust in you.",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "In you, Lord, is our hope:",
+        "b": null
+      },
+      {
+        "number": null,
+        "a": "let us never be put to shame.",
+        "b": null
+      }
+    ]
+  }
+}
