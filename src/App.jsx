@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -246,6 +246,22 @@ function displayRef(ref) {
  * Shared by the full Readings tab, the Today teaser, and the day-detail
  * sheet so all three agree on the same real citations for a given day.
  */
+const FEAST_LABELS = {
+  christmas_day: "Christmas Day",
+  stephen: "Stephen",
+  john: "John",
+  holy_innocents: "The Holy Innocents",
+  naming_circumcision: "The Naming and Circumcision of Jesus",
+  epiphany: "The Epiphany",
+  monday_holy_week: "Monday of Holy Week",
+  tuesday_holy_week: "Tuesday of Holy Week",
+  wednesday_holy_week: "Wednesday of Holy Week",
+  maundy_thursday: "Maundy Thursday",
+  good_friday: "Good Friday",
+  easter_eve: "Easter Eve",
+  ascension_day: "Ascension Day",
+};
+
 function anglicanReadingItems(date) {
   const isSunday = date.getDay() === 0;
 
@@ -269,6 +285,17 @@ function anglicanReadingItems(date) {
     }
     const items = refs.filter((r) => r.ref).map((r) => ({ role: r.role, ref: displayRef(r.ref) }));
     return { label: title, items };
+  }
+
+  const fixedFeast = fixedFeastEucharistFor(date);
+  if (fixedFeast) {
+    const items = [
+      { role: "First Reading", ref: displayRef(fixedFeast.ot) },
+      { role: "Psalm", ref: displayRef(`Psalm ${fixedFeast.psalm}`) },
+      { role: "Second Reading", ref: displayRef(fixedFeast.nt) },
+      { role: "Gospel", ref: displayRef(fixedFeast.gospel) },
+    ];
+    return { label: FEAST_LABELS[fixedFeast.key] || "Principal Feast", items };
   }
 
   const result = eucharistReadingFor(date);

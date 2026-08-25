@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.25.0",
+    title: "Eucharist readings for fixed Principal Feasts and Holy Days",
+    changes: [
+      { type: "Added", text: "Real Eucharist readings for the 14 fixed Principal Feasts and Holy Days that previously showed demo text: Christmas Day, Stephen, John, Holy Innocents, Naming and Circumcision, Epiphany, Ash Wednesday, the days of Holy Week, Maundy Thursday, Good Friday, Easter Eve, and Ascension Day." },
+      { type: "Added", text: "fixedFeastEucharistFor() in lectionary.js, checked before the weekday Table 6 lookup." },
+      { type: "Fixed", text: "A pre-existing bug where a date check for \"the Thu/Fri/Sat right before Ash Wednesday\" was mathematically impossible, silently breaking those three days every year. They now correctly show ordinary weekday readings." },
+      { type: "Info", text: "Verified across 4 years: the ~30 Eucharist gaps found in an earlier audit are down to a single pre-existing, unrelated edge case." },
+    ],
+  },
+  {
     version: "0.24.0",
     title: "1662 BCP Sunday First Lessons",
     changes: [

@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.25.0] — Eucharist readings for fixed Principal Feasts and Holy Days
+
+- **Added:** real Eucharist (Principal Service) readings for the 14 fixed Principal Feasts and Holy Days that fall outside the ordinary weekday cycle and previously showed demo text: Christmas Day, Stephen, John, the Holy Innocents, the Naming and Circumcision of Jesus, the Epiphany, Ash Wednesday, the three days of Holy Week, Maundy Thursday, Good Friday, Easter Eve, and Ascension Day. Sourced from the Common Worship lectionary. © The Archbishops' Council 2000, published by Church House Publishing.
+- **Added:** `fixedFeastEucharistFor()` in `lectionary.js`, checked before the weekday Table 6 lookup.
+- **Fixed:** a pre-existing bug in `delWeekLabel()` where a date-range check for "the Thu/Fri/Sat right before Ash Wednesday" was mathematically impossible — Ash Wednesday always falls on a Wednesday, so three days before is always Sunday/Monday/Tuesday, not Thursday/Friday/Saturday — silently breaking those three days every single year regardless of tradition or register. Those days now correctly fall through to ordinary DEL Week counting.
+- Verified via an automated sweep across 4 years (2024–2027): the ~30 Eucharist gaps identified in an earlier audit are now down to a single pre-existing, unrelated date-logic edge case (already documented, affecting Sunday title resolution generally, not specific to this fix).
+
 ## [0.24.0] — 1662 BCP Sunday First Lessons
 
 - **Added:** the 1662 BCP's Sunday First (Old Testament) Lesson for Morning and Evening Prayer, sourced from the 1922 Revised Table of Lessons — the table actually in standard use for the last century, rather than the original 1561/1662 table (superseded in official use since 1871, and only available today via a copyrighted modern reprint). 54 Sunday entries covering the full church year.

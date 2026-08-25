@@ -128,9 +128,6 @@ export function delWeekLabel(date) {
     const n = Math.round(daysBetween(easter, sundayAnchor) / 7) + 1;
     return { week: `Easter ${n}`, day };
   }
-  if (d >= addDays(ashWednesday, -3) && d < ashWednesday) {
-    return { week: "Days after", day }; // the Thu/Fri/Sat right before Ash Wed
-  }
   if (d >= ashWednesday && d < addDays(easter, -7)) {
     const firstSunday = addDays(easter, -42);
     const sundayAnchor = sundayOnOrBefore(d);
@@ -1088,4 +1085,47 @@ export function bcpSundayFirstLessonFor(date, service) {
   const ot = service === "am" ? entry.am : entry.pm;
   if (!ot) return null;
   return { title: label, ot };
+}
+
+// ---- Common Worship Eucharist: fixed Principal Feasts/Holy Days ----
+
+import eucharistFixedFeasts from "../data/eucharist_fixed_feasts.json";
+
+/**
+ * The Principal Service Eucharist readings for `date` if it's one of the
+ * fixed Principal Feasts/Holy Days that fall outside the ordinary weekday
+ * cycle (Christmas Day and the three days after it, Naming and
+ * Circumcision, the Epiphany, the weekdays of Holy Week, Ascension Day) -
+ * eucharistReadingFor's underlying weekday table (Table 6/DEL) has no
+ * entries for these dates at all, by design, since they're covered by
+ * their own separate propers. Same readings across all three lectionary
+ * years for every date here. Checked by month/day for fixed-calendar
+ * dates, by offset from Easter for movable ones.
+ */
+export function fixedFeastEucharistFor(date) {
+  if (!isValidDate(date)) return null;
+  const d = dateOnly(date);
+  const { easter } = churchYearContext(d);
+  const month = d.getMonth();
+  const day = d.getDate();
+
+  let key = null;
+  if (month === 11 && day === 25) key = "christmas_day";
+  else if (month === 11 && day === 26) key = "stephen";
+  else if (month === 11 && day === 27) key = "john";
+  else if (month === 11 && day === 28) key = "holy_innocents";
+  else if (month === 0 && day === 1) key = "naming_circumcision";
+  else if (month === 0 && day === 6) key = "epiphany";
+  else if (Math.round(daysBetween(easter, d)) === -46) key = "ash_wednesday";
+  else {
+    const offset = Math.round(daysBetween(easter, d));
+    const HOLY_WEEK_OFFSETS = { "-6": "monday_holy_week", "-5": "tuesday_holy_week", "-4": "wednesday_holy_week", "-3": "maundy_thursday", "-2": "good_friday", "-1": "easter_eve" };
+    if (offset === 39) key = "ascension_day";
+    else if (String(offset) in HOLY_WEEK_OFFSETS) key = HOLY_WEEK_OFFSETS[String(offset)];
+  }
+
+  if (!key) return null;
+  const entry = eucharistFixedFeasts[key];
+  if (!entry) return null;
+  return { key, ot: entry.ot, psalm: entry.psalm, nt: entry.nt, gospel: entry.gospel };
 }
