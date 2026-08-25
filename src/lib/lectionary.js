@@ -16,6 +16,7 @@ import delTable6 from "../data/del_table6.json";
 import rclSundays from "../data/rcl_sundays.json";
 import officeTable2 from "../data/office_table2.json";
 import catholicSundays from "../data/catholic_sundays.json";
+import catholicOfficePsalter from "../data/catholic_office_psalter.json";
 
 function nextSunday(date) {
   const d = dateOnly(date);
@@ -305,6 +306,26 @@ function sundayOnOrAfter(date) {
 }
 
 /**
+ * The USA-transferred Epiphany Sunday and its knock-on Baptism-of-the-Lord
+ * date for the Christmas season following `christmasDay`, shared by the
+ * Mass Sunday resolver and the Divine Office psalter-week resolver below
+ * so both always agree on where Ordinary Time actually begins.
+ */
+function christmasSeasonAnchors(christmasDay) {
+  const epiphanyYear = christmasDay.getFullYear() + 1;
+  const epiphanySunday = sundayOnOrAfter(new Date(epiphanyYear, 0, 2));
+  // If Epiphany itself falls on Jan 7 or 8, the Baptism of the Lord is
+  // celebrated the following Monday (not a Sunday) - Ordinary Time's
+  // first full week then starts that Monday, and the next Sunday is
+  // already the 2nd Sunday in Ordinary Time.
+  const baptismOnMonday = epiphanySunday.getDate() >= 7;
+  const baptismSunday = baptismOnMonday ? null : addDays(epiphanySunday, 7);
+  const baptismDate = baptismOnMonday ? addDays(epiphanySunday, 1) : baptismSunday;
+  const firstOrdinarySunday = addDays(epiphanySunday, baptismOnMonday ? 7 : 14);
+  return { epiphanySunday, baptismOnMonday, baptismSunday, baptismDate, firstOrdinarySunday };
+}
+
+/**
  * Resolves `date` to a Catholic Sunday Mass Lectionary key (e.g.
  * "advent1", "ordinary23", "christ_the_king") plus the A/B/C Sunday
  * cycle, with title null if `date` isn't a Sunday or falls in one of the
@@ -333,15 +354,7 @@ export function catholicSundayTitleFor(date) {
     // Christmas -> Epiphany -> Baptism -> Ordinary Time resumes, all
     // reckoned against the USA's transferred Epiphany (Sunday between
     // Jan 2-8) and its knock-on effect on the Baptism of the Lord.
-    const epiphanyYear = christmasYear + 1;
-    const epiphanySunday = sundayOnOrAfter(new Date(epiphanyYear, 0, 2));
-    // If Epiphany itself falls on Jan 7 or 8, the Baptism of the Lord is
-    // celebrated the following Monday (not a Sunday) - Ordinary Time's
-    // first full week then starts that Monday, and the next Sunday is
-    // already the 2nd Sunday in Ordinary Time.
-    const baptismOnMonday = epiphanySunday.getDate() >= 7;
-    const baptismSunday = baptismOnMonday ? null : addDays(epiphanySunday, 7);
-    const firstOrdinarySunday = addDays(epiphanySunday, baptismOnMonday ? 7 : 14);
+    const { epiphanySunday, baptismSunday, firstOrdinarySunday } = christmasSeasonAnchors(christmasDay);
     const holyFamilySunday = christmasDay.getDay() === 0 ? null : nextSunday(christmasDay);
 
     if (holyFamilySunday && d.getTime() === holyFamilySunday.getTime()) {
@@ -393,6 +406,146 @@ export function catholicSundayReadingFor(date) {
   if (!entry) return { sundayYear, key, title: null, readings: null };
   const readings = entry[sundayYear] || entry.ABC || null;
   return { sundayYear, key, title: entry.title, readings };
+}
+
+// ---- Catholic Divine Office (Liturgy of the Hours): Morning Prayer
+// (Lauds), Evening Prayer (Vespers), Night Prayer (Compline) ----
+//
+// Psalm/canticle citations transcribed from catholic-resources.org's
+// Four-Week Psalter tables, compiled by Fr. Felix Just, S.J. (same
+// non-commercial-with-attribution source and license already used for
+// the Sunday Mass Lectionary above). The actual Psalm text is drawn from
+// the WEB Catholic edition already bundled in the app; the Benedictus,
+// Magnificat, and Nunc Dimittis reuse the canticle text already built
+// for the Anglican Daily Office.
+//
+// KNOWN GAP: this does not yet include the "Brief Reading" each hour
+// carries after its psalmody (a separate citation set not yet sourced),
+// or the Office of Readings/Daytime Prayer hours - only Morning, Evening,
+// and Night Prayer are covered.
+const WEEKDAY_FULL = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+/** The official 1-34 Ordinary Time week number for `sundayDate` (which
+ * must actually be a Sunday), reusing the Mass Sunday resolver above so
+ * the two stay in sync; null if that Sunday isn't an Ordinary Time one
+ * (e.g. it's Christmas, Lent, or Easter, or itself a known Mass gap). */
+function officialOrdinaryWeekNumber(sundayDate) {
+  const { key } = catholicSundayTitleFor(sundayDate);
+  if (key === "baptism_of_the_lord") return 1;
+  if (key === "christ_the_king") return 34;
+  const m = /^ordinary(\d+)$/.exec(key || "");
+  return m ? Number(m[1]) : null;
+}
+
+/**
+ * Resolves `date` to a Divine Office psalter week (1-4) and weekday
+ * label, following GILH 133: the four-week cycle restarts at Week 1 on
+ * the First Sunday of Advent, the First Sunday of Ordinary Time (the
+ * Baptism of the Lord), the First Sunday of Lent, and Easter Sunday;
+ * when Ordinary Time resumes after Pentecost it continues the same
+ * numbering it had reached before Lent interrupted it, reusing the
+ * official 1-34 Ordinary Time week number already computed for the Mass
+ * Lectionary (((n-1) % 4) + 1) rather than counting afresh.
+ *
+ * KNOWN GAPS (`gap: true`, `week: null`): the Christmas Octave (Dec 25 -
+ * Jan 1) and Easter Octave (Easter Sunday - the following Saturday) use
+ * their own proper psalms rather than this rotating table, which isn't
+ * transcribed here; Ash Wednesday through the following Saturday
+ * similarly has its own proper texts before the rotation resumes on the
+ * First Sunday of Lent.
+ *
+ * SIMPLIFICATION: Christmastide after the Octave (Jan 2 through the eve
+ * of the Baptism of the Lord) is assumed to resume at Week 2 and count
+ * onward day by day - a common convention among parish guides, but not
+ * verified against an official published Ordo for every possible
+ * calendar alignment.
+ */
+export function catholicPsalterWeekFor(date) {
+  if (!isValidDate(date)) return null;
+  const d = dateOnly(date);
+  const { advent1, easter } = churchYearContext(d);
+  const christmasYear = advent1.getFullYear();
+  const christmasDay = new Date(christmasYear, 11, 25);
+  const christmasOctaveEnd = addDays(christmasDay, 7); // Jan 1
+  const ashWednesday = addDays(easter, -46);
+  const lent1Sunday = addDays(ashWednesday, 4);
+  const easterOctaveEnd = addDays(easter, 7); // Divine Mercy Sunday
+  const pentecost = addDays(easter, 49);
+  const trinity = addDays(pentecost, 7);
+  const weekday = WEEKDAY_FULL[d.getDay()];
+
+  function weekFrom(anchor) {
+    const n = 1 + Math.floor(daysBetween(anchor, d) / 7);
+    return ((n - 1) % 4) + 1;
+  }
+
+  if (d >= advent1 && d < christmasDay) return { week: weekFrom(advent1), weekday, gap: false };
+  if (d >= christmasDay && d <= christmasOctaveEnd) return { week: null, weekday, gap: true };
+
+  if (d < ashWednesday) {
+    const { baptismDate } = christmasSeasonAnchors(christmasDay);
+    if (d < baptismDate) {
+      const anchor = addDays(christmasOctaveEnd, 1);
+      const n = 2 + Math.floor(daysBetween(anchor, d) / 7);
+      return { week: ((n - 1) % 4) + 1, weekday, gap: false };
+    }
+    // Ordinary Time's first block. sundayOnOrBefore(d) normally lands on
+    // an Ordinary Time Sunday (or the Baptism of the Lord itself); the
+    // rare exception is the single Baptism-on-Monday edge day, where it
+    // lands on Epiphany instead and officialOrdinaryWeekNumber correctly
+    // returns null, gapping just that one day.
+    const n = officialOrdinaryWeekNumber(sundayOnOrBefore(d));
+    return n ? { week: ((n - 1) % 4) + 1, weekday, gap: false } : { week: null, weekday, gap: true };
+  }
+
+  if (d < lent1Sunday) return { week: null, weekday, gap: true }; // Ash Wednesday's own short week
+  if (d < easter) return { week: weekFrom(lent1Sunday), weekday, gap: false };
+  if (d <= easterOctaveEnd) return { week: null, weekday, gap: true };
+  if (d < trinity) return { week: weekFrom(easter), weekday, gap: false };
+
+  // Ordinary Time resumed after Pentecost - reuse the official 1-34 week
+  // number from the Mass Sunday Lectionary above.
+  const n = officialOrdinaryWeekNumber(sundayOnOrBefore(d));
+  return n ? { week: ((n - 1) % 4) + 1, weekday, gap: false } : { week: null, weekday, gap: true };
+}
+
+/** Morning Prayer (Lauds) citations for `date`: [Psalm, OT Canticle,
+ * Psalm], or null on a known psalter gap. */
+export function catholicLaudsFor(date) {
+  const info = catholicPsalterWeekFor(date);
+  if (!info || info.gap) return null;
+  const entry = catholicOfficePsalter.lauds[String(info.week)]?.[info.weekday];
+  return entry ? { week: info.week, weekday: info.weekday, readings: entry } : null;
+}
+
+/** Evening Prayer (Vespers) citations for `date`: [Psalm, Psalm, NT
+ * Canticle], or null on a known psalter gap. Saturday evening is always
+ * Evening Prayer I of the *following* Sunday (which may fall in the next
+ * psalter week), never a Saturday entry of its own. */
+export function catholicVespersFor(date) {
+  const d = dateOnly(date);
+  if (d.getDay() === 6) {
+    const info = catholicPsalterWeekFor(addDays(d, 1));
+    if (!info || info.gap) return null;
+    const entry = catholicOfficePsalter.vespers[String(info.week)]?.SundayI;
+    return entry ? { week: info.week, weekday: "SundayI", readings: entry } : null;
+  }
+  const info = catholicPsalterWeekFor(d);
+  if (!info || info.gap) return null;
+  const label = info.weekday === "Sunday" ? "SundayII" : info.weekday;
+  const entry = catholicOfficePsalter.vespers[String(info.week)]?.[label];
+  return entry ? { week: info.week, weekday: label, readings: entry } : null;
+}
+
+/** Night Prayer (Compline) psalm(s) and brief reading for `date` - a
+ * fixed one-week cycle, unlike Lauds/Vespers, so it has no seasonal gaps
+ * of its own. Saturday's entry (used after Evening Prayer I) and
+ * Sunday's (after Evening Prayer II) are both always available. */
+export function catholicComplineFor(date) {
+  const d = dateOnly(date);
+  const weekday = WEEKDAY_FULL[d.getDay()];
+  const entry = catholicOfficePsalter.compline[weekday];
+  return entry ? { weekday, psalms: entry.psalms, reading: entry.reading } : null;
 }
 
 

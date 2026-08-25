@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.30.0",
+    title: "Catholic Divine Office: Morning, Evening & Night Prayer",
+    changes: [
+      { type: "Added", text: "Real Morning Prayer (Lauds), Evening Prayer (Vespers), and Night Prayer (Compline) for Catholic, alongside Daily Mass — a new Mass/Lauds/Vespers/Compline segment set in the Prayer tab." },
+      { type: "Info", text: "Psalm and canticle citations transcribed from Fr. Felix Just, S.J.'s Four-Week Psalter tables at catholic-resources.org (same license as the Mass Lectionary); text comes from the bundled WEB Catholic edition, and the Benedictus/Magnificat/Nunc Dimittis reuse the Anglican canticle text already built." },
+      { type: "Added", text: "catholicPsalterWeekFor() in lectionary.js resolves any date to its 4-week psalter position per GILH §133, reusing the Mass Lectionary's official Ordinary Time week numbering so the two never drift apart." },
+      { type: "Not included", text: "The per-hour Brief Reading, the Office of Readings and Daytime Prayer hours, and proper psalms for the Christmas/Easter octaves, Ash Wednesday's week, Trinity Sunday, and Corpus Christi — all documented gaps rather than guessed data." },
+    ],
+  },
+  {
     version: "0.29.0",
     title: "Catholic Sunday Mass readings (Cycle A/B/C)",
     changes: [

@@ -1,0 +1,348 @@
+{
+  "lauds": {
+    "1": {
+      "Sunday": [
+        "Psalm 63:2-9",
+        "Daniel 3:57-88, 56",
+        "Psalm 149"
+      ],
+      "Monday": [
+        "Psalm 5:2-10, 12-13",
+        "1 Chronicles 29:10-13",
+        "Psalm 29"
+      ],
+      "Tuesday": [
+        "Psalm 24",
+        "Tobit 13:1-8",
+        "Psalm 33"
+      ],
+      "Wednesday": [
+        "Psalm 36",
+        "Judith 16:2-3a, 13-15",
+        "Psalm 47"
+      ],
+      "Thursday": [
+        "Psalm 57",
+        "Jeremiah 31:10-14",
+        "Psalm 48"
+      ],
+      "Friday": [
+        "Psalm 51",
+        "Isaiah 45:15-25",
+        "Psalm 100"
+      ],
+      "Saturday": [
+        "Psalm 119:145-152",
+        "Exodus 15:1-4a, 8-13, 17-18",
+        "Psalm 117"
+      ]
+    },
+    "2": {
+      "Sunday": [
+        "Psalm 118",
+        "Daniel 3:52-57",
+        "Psalm 150"
+      ],
+      "Monday": [
+        "Psalm 42",
+        "Sirach 36:1-5, 10-13",
+        "Psalm 19:2-7"
+      ],
+      "Tuesday": [
+        "Psalm 43",
+        "Isaiah 38:10-14, 17-20",
+        "Psalm 65"
+      ],
+      "Wednesday": [
+        "Psalm 77",
+        "1 Samuel 2:1-10",
+        "Psalm 97"
+      ],
+      "Thursday": [
+        "Psalm 80",
+        "Isaiah 12:1-6",
+        "Psalm 81"
+      ],
+      "Friday": [
+        "Psalm 51",
+        "Habakkuk 3:2-4, 13a, 15-19",
+        "Psalm 147:12-20"
+      ],
+      "Saturday": [
+        "Psalm 92",
+        "Deuteronomy 32:1-12",
+        "Psalm 8"
+      ]
+    },
+    "3": {
+      "Sunday": [
+        "Psalm 93",
+        "Daniel 3:57-88, 56",
+        "Psalm 148"
+      ],
+      "Monday": [
+        "Psalm 84",
+        "Isaiah 2:2-5",
+        "Psalm 96"
+      ],
+      "Tuesday": [
+        "Psalm 85",
+        "Isaiah 26:1-4, 7-9, 12",
+        "Psalm 67"
+      ],
+      "Wednesday": [
+        "Psalm 86",
+        "Isaiah 33:13-16",
+        "Psalm 98"
+      ],
+      "Thursday": [
+        "Psalm 87",
+        "Isaiah 40:10-17",
+        "Psalm 99"
+      ],
+      "Friday": [
+        "Psalm 51",
+        "Jeremiah 14:17-21",
+        "Psalm 100"
+      ],
+      "Saturday": [
+        "Psalm 119:145-152",
+        "Wisdom of Solomon 9:1-6, 9-11",
+        "Psalm 117"
+      ]
+    },
+    "4": {
+      "Sunday": [
+        "Psalm 118",
+        "Daniel 3:52-57",
+        "Psalm 150"
+      ],
+      "Monday": [
+        "Psalm 90",
+        "Isaiah 42:10-16",
+        "Psalm 135:1-12"
+      ],
+      "Tuesday": [
+        "Psalm 101",
+        "Daniel 3:26, 27, 29, 34-41",
+        "Psalm 144:1-10"
+      ],
+      "Wednesday": [
+        "Psalm 108",
+        "Isaiah 61:10-62:5",
+        "Psalm 146"
+      ],
+      "Thursday": [
+        "Psalm 143:1-11",
+        "Isaiah 66:10-14a",
+        "Psalm 147:1-11"
+      ],
+      "Friday": [
+        "Psalm 51",
+        "Tobit 13:8-11, 13-15",
+        "Psalm 147:12-20"
+      ],
+      "Saturday": [
+        "Psalm 92",
+        "Ezekiel 36:24-28",
+        "Psalm 8"
+      ]
+    }
+  },
+  "vespers": {
+    "1": {
+      "SundayI": [
+        "Psalm 141:1-9",
+        "Psalm 142",
+        "Philippians 2:6-11"
+      ],
+      "SundayII": [
+        "Psalm 110:1-5, 7",
+        "Psalm 114",
+        "Revelation 19:1-7"
+      ],
+      "Monday": [
+        "Psalm 11",
+        "Psalm 15",
+        "Ephesians 1:3-10"
+      ],
+      "Tuesday": [
+        "Psalm 20",
+        "Psalm 21:2-8, 14",
+        "Revelation 4:11; 5:9, 10, 12"
+      ],
+      "Wednesday": [
+        "Psalm 27:1-6",
+        "Psalm 27:7-14",
+        "Colossians 1:12-20"
+      ],
+      "Thursday": [
+        "Psalm 30",
+        "Psalm 32",
+        "Revelation 11:17-18; 12:10b-12a"
+      ],
+      "Friday": [
+        "Psalm 41",
+        "Psalm 46",
+        "Revelation 15:3-4"
+      ]
+    },
+    "2": {
+      "SundayI": [
+        "Psalm 119:105-112",
+        "Psalm 16",
+        "Philippians 2:6-11"
+      ],
+      "SundayII": [
+        "Psalm 110:1-5, 7",
+        "Psalm 115",
+        "Revelation 19:1-7"
+      ],
+      "Monday": [
+        "Psalm 45:2-10",
+        "Psalm 45:11-18",
+        "Ephesians 1:3-10"
+      ],
+      "Tuesday": [
+        "Psalm 49:2-13",
+        "Psalm 49:14-21",
+        "Revelation 4:11; 5:9, 10, 12"
+      ],
+      "Wednesday": [
+        "Psalm 62",
+        "Psalm 67",
+        "Colossians 1:12-20"
+      ],
+      "Thursday": [
+        "Psalm 72:2-11",
+        "Psalm 72:12-19",
+        "Revelation 11:17-18; 12:10b-12a"
+      ],
+      "Friday": [
+        "Psalm 116:1-9",
+        "Psalm 121",
+        "Revelation 15:3-4"
+      ]
+    },
+    "3": {
+      "SundayI": [
+        "Psalm 113",
+        "Psalm 116:10-19",
+        "Philippians 2:6-11"
+      ],
+      "SundayII": [
+        "Psalm 110:1-5, 7",
+        "Psalm 111",
+        "Revelation 19:1-7"
+      ],
+      "Monday": [
+        "Psalm 123",
+        "Psalm 124",
+        "Ephesians 1:3-10"
+      ],
+      "Tuesday": [
+        "Psalm 125",
+        "Psalm 131",
+        "Revelation 4:11; 5:9, 10, 12"
+      ],
+      "Wednesday": [
+        "Psalm 126",
+        "Psalm 127",
+        "Colossians 1:12-20"
+      ],
+      "Thursday": [
+        "Psalm 132:1-10",
+        "Psalm 132:11-18",
+        "Revelation 11:17-18; 12:10b-12a"
+      ],
+      "Friday": [
+        "Psalm 135:1-12",
+        "Psalm 135:13-21",
+        "Revelation 15:3-4"
+      ]
+    },
+    "4": {
+      "SundayI": [
+        "Psalm 122",
+        "Psalm 130",
+        "Philippians 2:6-11"
+      ],
+      "SundayII": [
+        "Psalm 110:1-5, 7",
+        "Psalm 112",
+        "Revelation 19:1-7"
+      ],
+      "Monday": [
+        "Psalm 136:1-9",
+        "Psalm 136:10-26",
+        "Ephesians 1:3-10"
+      ],
+      "Tuesday": [
+        "Psalm 137:1-6",
+        "Psalm 138",
+        "Revelation 4:11; 5:9, 10, 12"
+      ],
+      "Wednesday": [
+        "Psalm 139:1-12",
+        "Psalm 139:13-18, 23-24",
+        "Colossians 1:12-20"
+      ],
+      "Thursday": [
+        "Psalm 144:1-8",
+        "Psalm 144:9-15",
+        "Revelation 11:17-18; 12:10b-12a"
+      ],
+      "Friday": [
+        "Psalm 145:1-13a",
+        "Psalm 145:13b-21",
+        "Revelation 15:3-4"
+      ]
+    }
+  },
+  "compline": {
+    "Saturday": {
+      "psalms": [
+        "Psalm 4",
+        "Psalm 134"
+      ],
+      "reading": "Deuteronomy 6:4-7"
+    },
+    "Sunday": {
+      "psalms": [
+        "Psalm 91"
+      ],
+      "reading": "Revelation 22:4-5"
+    },
+    "Monday": {
+      "psalms": [
+        "Psalm 86"
+      ],
+      "reading": "1 Thessalonians 5:9-10"
+    },
+    "Tuesday": {
+      "psalms": [
+        "Psalm 143:1-11"
+      ],
+      "reading": "1 Peter 5:8-9a"
+    },
+    "Wednesday": {
+      "psalms": [
+        "Psalm 31:2-6",
+        "Psalm 130"
+      ],
+      "reading": "Ephesians 4:26-27"
+    },
+    "Thursday": {
+      "psalms": [
+        "Psalm 16"
+      ],
+      "reading": "1 Thessalonians 5:23"
+    },
+    "Friday": {
+      "psalms": [
+        "Psalm 88"
+      ],
+      "reading": "Jeremiah 14:9a"
+    }
+  }
+}

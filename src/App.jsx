@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -172,9 +172,10 @@ const READINGS = {
     },
   },
   Catholic: {
-    kind: "mass",
+    kind: "catholic",
     mass: {
       label: "Daily Mass",
+      icon: "sun",
       sequence: [
         {
           type: "prayer",
@@ -199,6 +200,35 @@ const READINGS = {
         { type: "reading", role: "First Reading", ref: "Ezekiel 43:1–7", text: "Afterward he brought me to the gate, even the gate that looketh toward the east: And, behold, the glory of the God of Israel came from the way of the east: and his voice was like a noise of many waters.", truncated: true },
         { type: "reading", role: "Responsorial Psalm", ref: "Psalm 85:9–14", text: "Surely his salvation is nigh them that fear him; that glory may dwell in our land. Mercy and truth are met together; righteousness and peace have kissed each other." },
         { type: "reading", role: "Gospel", ref: "Matthew 23:1–12", text: "Then spake Jesus to the multitude, and to his disciples, Saying, The scribes and the Pharisees sit in Moses' seat: All therefore whatsoever they bid you observe, that observe and do.", truncated: true },
+      ],
+    },
+    lauds: {
+      label: "Morning Prayer (Lauds)",
+      icon: "sun",
+      sequence: [
+        { type: "reading", role: "Psalm", ref: "Psalm 63:2–9", text: "O God, thou art my God; early will I seek thee: my soul thirsteth for thee, my flesh longeth for thee in a dry and thirsty land, where no water is.", truncated: true },
+        { type: "reading", role: "Old Testament Canticle", ref: "Daniel 3:57–88, 56", text: "O all ye works of the Lord, bless ye the Lord: praise him, and magnify him for ever.", truncated: true },
+        { type: "reading", role: "Psalm", ref: "Psalm 149", text: "Sing unto the Lord a new song, and his praise in the congregation of saints.", truncated: true },
+        { type: "prayer", role: "Gospel Canticle", ref: "Benedictus", text: "Blessed be the Lord God of Israel; for he hath visited and redeemed his people.", truncated: true },
+      ],
+    },
+    vespers: {
+      label: "Evening Prayer (Vespers)",
+      icon: "moon",
+      sequence: [
+        { type: "reading", role: "Psalm", ref: "Psalm 141:1–9", text: "Lord, I cry unto thee: make haste unto me; give ear unto my voice, when I cry unto thee.", truncated: true },
+        { type: "reading", role: "Psalm", ref: "Psalm 142", text: "I cried unto the Lord with my voice; with my voice unto the Lord did I make my supplication.", truncated: true },
+        { type: "reading", role: "New Testament Canticle", ref: "Philippians 2:6–11", text: "Who, being in the form of God, thought it not robbery to be equal with God: but made himself of no reputation.", truncated: true },
+        { type: "prayer", role: "Gospel Canticle", ref: "Magnificat", text: "My soul doth magnify the Lord, and my spirit hath rejoiced in God my Saviour.", truncated: true },
+      ],
+    },
+    compline: {
+      label: "Night Prayer (Compline)",
+      icon: "moon",
+      sequence: [
+        { type: "reading", role: "Psalm", ref: "Psalm 91", text: "He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty.", truncated: true },
+        { type: "reading", role: "Reading", ref: "Revelation 22:4–5", text: "And they shall see his face; and his name shall be in their foreheads.", truncated: true },
+        { type: "prayer", role: "Gospel Canticle", ref: "Nunc dimittis", text: "Lord, now lettest thou thy servant depart in peace, according to thy word.", truncated: true },
       ],
     },
   },
@@ -351,6 +381,72 @@ function buildCatholicMass(date) {
     label: `${result.label} · ${shortDate(date)}`,
     icon: fallback.icon,
     sequence: [...fixedItems, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref }))],
+  };
+}
+
+/**
+ * Builds Morning Prayer (Lauds) for `date` from the real Four-Week
+ * Psalter: two Psalms and an Old Testament Canticle, plus the Benedictus
+ * (reusing the Common Worship canticle text already built for Anglican,
+ * since no public-domain Catholic-specific translation is bundled).
+ * Falls back to the static demo entry on any of catholicPsalterWeekFor's
+ * known gaps (the Christmas/Easter octaves, Ash Wednesday's short week,
+ * Trinity Sunday, and Corpus Christi).
+ */
+function buildCatholicLauds(date) {
+  const fallback = READINGS.Catholic.lauds;
+  const result = catholicLaudsFor(date);
+  const benedictus = { type: "prayer", role: "Gospel Canticle", ref: "Benedictus", text: canticlePreview("benedictus", "CW"), truncated: true };
+  if (!result) {
+    return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
+  }
+  const roles = ["Psalm", "Old Testament Canticle", "Psalm"];
+  const items = result.readings.map((ref, i) => ({ type: "reading", role: roles[i], ref: displayRef(splitCitation(ref)[0] || ref) }));
+  return {
+    label: `${fallback.label} · Week ${result.week}, ${result.weekday} · ${shortDate(date)}`,
+    icon: fallback.icon,
+    sequence: [...items, benedictus],
+  };
+}
+
+/**
+ * Builds Evening Prayer (Vespers) for `date` the same way as Lauds, using
+ * two Psalms and a New Testament Canticle, plus the Magnificat.
+ */
+function buildCatholicVespers(date) {
+  const fallback = READINGS.Catholic.vespers;
+  const result = catholicVespersFor(date);
+  const magnificat = { type: "prayer", role: "Gospel Canticle", ref: "Magnificat", text: canticlePreview("magnificat", "CW"), truncated: true };
+  if (!result) {
+    return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
+  }
+  const roles = ["Psalm", "Psalm", "New Testament Canticle"];
+  const items = result.readings.map((ref, i) => ({ type: "reading", role: roles[i], ref: displayRef(splitCitation(ref)[0] || ref) }));
+  return {
+    label: `${fallback.label} · Week ${result.week}, ${result.weekday.replace("SundayI", "Sunday (I)").replace("SundayII", "Sunday (II)")} · ${shortDate(date)}`,
+    icon: fallback.icon,
+    sequence: [...items, magnificat],
+  };
+}
+
+/**
+ * Builds Night Prayer (Compline) for `date`: its fixed one-week cycle
+ * always resolves (no seasonal gaps), a Psalm (or two) and a brief
+ * reading, plus the Nunc Dimittis.
+ */
+function buildCatholicCompline(date) {
+  const fallback = READINGS.Catholic.compline;
+  const result = catholicComplineFor(date);
+  const nuncDimittis = { type: "prayer", role: "Gospel Canticle", ref: "Nunc dimittis", text: canticlePreview("nunc_dimittis", "CW"), truncated: true };
+  if (!result) {
+    return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
+  }
+  const psalmItems = result.psalms.map((ref, i) => ({ type: "reading", role: i === 0 ? "Psalm" : null, ref: displayRef(splitCitation(ref)[0] || ref) }));
+  const readingItem = { type: "reading", role: "Reading", ref: displayRef(splitCitation(result.reading)[0] || result.reading) };
+  return {
+    label: `${fallback.label} · ${result.weekday} · ${shortDate(date)}`,
+    icon: fallback.icon,
+    sequence: [...psalmItems, readingItem, nuncDimittis],
   };
 }
 
@@ -548,7 +644,7 @@ function buildAnglicanOffice(date, service, collectSource) {
 // Today teaser and day-detail sheet show a citation, not a prayer title.
 function firstReadingRef(tradition) {
   const data = READINGS[tradition];
-  const sequence = data.kind === "office" ? data.am.sequence : data.kind === "mass" ? data.mass.sequence : data.daily.sequence;
+  const sequence = data.kind === "office" ? data.am.sequence : data.kind === "catholic" ? data.mass.sequence : data.kind === "mass" ? data.mass.sequence : data.daily.sequence;
   const reading = sequence.find((item) => item.type === "reading");
   return reading ? reading.ref : sequence[0].ref;
 }
@@ -2481,6 +2577,14 @@ function WheelView({ season, seasons, today, tradition, calendar, variant = "sta
   );
 }
 
+function autoCatholicSegment(date) {
+  const d = date || new Date();
+  if (d.getDay() === 0) return "mass";
+  const isLiveToday = !date || dateOnly(date).getTime() === dateOnly(new Date()).getTime();
+  if (!isLiveToday) return "lauds";
+  return d.getHours() < 17 ? "lauds" : "vespers";
+}
+
 function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage, onOpenCanticle, collectSource }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
@@ -2490,12 +2594,15 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
   const anglicanAm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "am", collectSource) : null), [tradition, effectiveDate, collectSource]);
   const anglicanPm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "pm", collectSource) : null), [tradition, effectiveDate, collectSource]);
   const catholicMass = useMemo(() => (tradition === "Catholic" ? buildCatholicMass(effectiveDate) : null), [tradition, effectiveDate]);
+  const catholicLauds = useMemo(() => (tradition === "Catholic" ? buildCatholicLauds(effectiveDate) : null), [tradition, effectiveDate]);
+  const catholicVespers = useMemo(() => (tradition === "Catholic" ? buildCatholicVespers(effectiveDate) : null), [tradition, effectiveDate]);
+  const catholicCompline = useMemo(() => (tradition === "Catholic" ? buildCatholicCompline(effectiveDate) : null), [tradition, effectiveDate]);
   const data = useMemo(() => {
     if (tradition === "Anglican") return { ...READINGS.Anglican, am: anglicanAm, pm: anglicanPm, eucharist: anglicanEucharist };
-    if (tradition === "Catholic") return { ...READINGS.Catholic, mass: catholicMass };
+    if (tradition === "Catholic") return { ...READINGS.Catholic, mass: catholicMass, lauds: catholicLauds, vespers: catholicVespers, compline: catholicCompline };
     return READINGS[tradition];
-  }, [tradition, anglicanAm, anglicanPm, anglicanEucharist, catholicMass]);
-  const defaultSegment = data.kind === "office" ? autoOfficeSegment(viewDate) : data.kind === "mass" ? "mass" : "daily";
+  }, [tradition, anglicanAm, anglicanPm, anglicanEucharist, catholicMass, catholicLauds, catholicVespers, catholicCompline]);
+  const defaultSegment = data.kind === "office" ? autoOfficeSegment(viewDate) : data.kind === "catholic" ? autoCatholicSegment(viewDate) : data.kind === "mass" ? "mass" : "daily";
   const [segment, setSegment] = useState(defaultSegment);
 
   useEffect(() => {
@@ -2505,7 +2612,12 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
 
   // Guard against a stale segment from the previous tradition being used
   // on the render that happens before the effect above has run.
-  const validSegment = data.kind === "office" && ["am", "pm", "eucharist"].includes(segment) ? segment : defaultSegment;
+  const validSegment =
+    data.kind === "office" && ["am", "pm", "eucharist"].includes(segment)
+      ? segment
+      : data.kind === "catholic" && ["mass", "lauds", "vespers", "compline"].includes(segment)
+        ? segment
+        : defaultSegment;
 
   // Reset to a valid segment when tradition changes underneath us
   const segments =
@@ -2515,8 +2627,15 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
           { key: "pm", label: "Evening", icon: Moon },
           { key: "eucharist", label: "Eucharist", icon: BookOpen },
         ]
-      : null;
-  const activeData = data.kind === "office" ? data[validSegment] : data.kind === "mass" ? data.mass : data.daily;
+      : data.kind === "catholic"
+        ? [
+            { key: "mass", label: "Mass", icon: BookOpen },
+            { key: "lauds", label: "Lauds", icon: Sun },
+            { key: "vespers", label: "Vespers", icon: Moon },
+            { key: "compline", label: "Compline", icon: Moon },
+          ]
+        : null;
+  const activeData = data.kind === "office" ? data[validSegment] : data.kind === "catholic" ? data[validSegment] : data.kind === "mass" ? data.mass : data.daily;
 
   return (
     <div className="pt-2 lg:pt-0 lg:max-w-3xl">
