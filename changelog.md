@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.30.2] — Fixed unreadable truncated Gospel Canticles in the Catholic Office
+
+- **Fixed:** the Benedictus, Magnificat, and Nunc Dimittis shown at Catholic Lauds/Vespers/Compline were marked `truncated: true` but missing the `canticleKey` field the "Read full text" button requires, so the truncated preview had no way to open the full text — a real regression from v0.30.0. All six Gospel Canticle entries (the three real-data builders plus the three static demo fallbacks) now carry `canticleKey`/`canticleSource` and open correctly.
+- **Fixed:** the canticle modal itself, opened from the Catholic tab, labeled its source "Common Worship" — accurate as to where the reused translation text physically comes from, but a confusing Anglican prayer-book name to show inside Catholic content. `CanticleModal` now recognizes a `"CW-catholic"` source tag distinct from Anglican's own `"CW"`, displaying "Liturgy of the Hours" with an honest footnote explaining the text is the Common Worship translation, reused in the absence of a bundled public-domain Catholic-specific one.
+- Verified via a live browser check: tapping "Read full text" on the Benedictus from Catholic Lauds now opens the full nine-plus-verse canticle, correctly labeled.
+
 ## [0.30.1] — Fixed Today teaser stuck on morning reading; Compline auto-selects
 
 - **Fixed:** the Today tab's "Today's Reading" preview always showed the morning Office/Lauds reading regardless of actual time of day. Root cause: `autoOfficeSegment()` and `autoCatholicSegment()` checked `date.getHours()` against the app's shared `today` state, which is deliberately midnight-truncated (`dateOnly(new Date())`) for date-comparison purposes elsewhere and so always reported hour 0. Both functions now always check the real current wall-clock time whenever the day in question is actually today, regardless of what hour happens to be on the date object a caller passes in — fixing every call site at once rather than patching around it locally.

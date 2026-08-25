@@ -6,6 +6,14 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.30.2",
+    title: "Fixed unreadable truncated Gospel Canticles in the Catholic Office",
+    changes: [
+      { type: "Fixed", text: "The Benedictus/Magnificat/Nunc Dimittis at Catholic Lauds/Vespers/Compline were truncated with no way to read the rest \u2014 missing the canticleKey field the \"Read full text\" button needs. All six entries (real + demo fallback) now open correctly." },
+      { type: "Fixed", text: "The canticle modal labeled itself \"Common Worship\" even inside the Catholic tab. Now shows \"Liturgy of the Hours\" with an honest footnote about the reused translation source." },
+    ],
+  },
+  {
     version: "0.30.1",
     title: "Fixed Today teaser stuck on morning reading; Compline auto-selects",
     changes: [

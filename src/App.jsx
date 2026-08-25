@@ -209,7 +209,7 @@ const READINGS = {
         { type: "reading", role: "Psalm", ref: "Psalm 63:2–9", text: "O God, thou art my God; early will I seek thee: my soul thirsteth for thee, my flesh longeth for thee in a dry and thirsty land, where no water is.", truncated: true },
         { type: "reading", role: "Old Testament Canticle", ref: "Daniel 3:57–88, 56", text: "O all ye works of the Lord, bless ye the Lord: praise him, and magnify him for ever.", truncated: true },
         { type: "reading", role: "Psalm", ref: "Psalm 149", text: "Sing unto the Lord a new song, and his praise in the congregation of saints.", truncated: true },
-        { type: "prayer", role: "Gospel Canticle", ref: "Benedictus", text: "Blessed be the Lord God of Israel; for he hath visited and redeemed his people.", truncated: true },
+        { type: "prayer", role: "Gospel Canticle", ref: "Benedictus", canticleKey: "benedictus", canticleSource: "CW-catholic", text: canticlePreview("benedictus", "CW"), truncated: true },
       ],
     },
     vespers: {
@@ -219,7 +219,7 @@ const READINGS = {
         { type: "reading", role: "Psalm", ref: "Psalm 141:1–9", text: "Lord, I cry unto thee: make haste unto me; give ear unto my voice, when I cry unto thee.", truncated: true },
         { type: "reading", role: "Psalm", ref: "Psalm 142", text: "I cried unto the Lord with my voice; with my voice unto the Lord did I make my supplication.", truncated: true },
         { type: "reading", role: "New Testament Canticle", ref: "Philippians 2:6–11", text: "Who, being in the form of God, thought it not robbery to be equal with God: but made himself of no reputation.", truncated: true },
-        { type: "prayer", role: "Gospel Canticle", ref: "Magnificat", text: "My soul doth magnify the Lord, and my spirit hath rejoiced in God my Saviour.", truncated: true },
+        { type: "prayer", role: "Gospel Canticle", ref: "Magnificat", canticleKey: "magnificat", canticleSource: "CW-catholic", text: canticlePreview("magnificat", "CW"), truncated: true },
       ],
     },
     compline: {
@@ -228,7 +228,7 @@ const READINGS = {
       sequence: [
         { type: "reading", role: "Psalm", ref: "Psalm 91", text: "He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty.", truncated: true },
         { type: "reading", role: "Reading", ref: "Revelation 22:4–5", text: "And they shall see his face; and his name shall be in their foreheads.", truncated: true },
-        { type: "prayer", role: "Gospel Canticle", ref: "Nunc dimittis", text: "Lord, now lettest thou thy servant depart in peace, according to thy word.", truncated: true },
+        { type: "prayer", role: "Gospel Canticle", ref: "Nunc dimittis", canticleKey: "nunc_dimittis", canticleSource: "CW-catholic", text: canticlePreview("nunc_dimittis", "CW"), truncated: true },
       ],
     },
   },
@@ -396,7 +396,7 @@ function buildCatholicMass(date) {
 function buildCatholicLauds(date) {
   const fallback = READINGS.Catholic.lauds;
   const result = catholicLaudsFor(date);
-  const benedictus = { type: "prayer", role: "Gospel Canticle", ref: "Benedictus", text: canticlePreview("benedictus", "CW"), truncated: true };
+  const benedictus = { type: "prayer", role: "Gospel Canticle", ref: "Benedictus", canticleKey: "benedictus", canticleSource: "CW-catholic", text: canticlePreview("benedictus", "CW"), truncated: true };
   if (!result) {
     return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
   }
@@ -416,7 +416,7 @@ function buildCatholicLauds(date) {
 function buildCatholicVespers(date) {
   const fallback = READINGS.Catholic.vespers;
   const result = catholicVespersFor(date);
-  const magnificat = { type: "prayer", role: "Gospel Canticle", ref: "Magnificat", text: canticlePreview("magnificat", "CW"), truncated: true };
+  const magnificat = { type: "prayer", role: "Gospel Canticle", ref: "Magnificat", canticleKey: "magnificat", canticleSource: "CW-catholic", text: canticlePreview("magnificat", "CW"), truncated: true };
   if (!result) {
     return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
   }
@@ -437,7 +437,7 @@ function buildCatholicVespers(date) {
 function buildCatholicCompline(date) {
   const fallback = READINGS.Catholic.compline;
   const result = catholicComplineFor(date);
-  const nuncDimittis = { type: "prayer", role: "Gospel Canticle", ref: "Nunc dimittis", text: canticlePreview("nunc_dimittis", "CW"), truncated: true };
+  const nuncDimittis = { type: "prayer", role: "Gospel Canticle", ref: "Nunc dimittis", canticleKey: "nunc_dimittis", canticleSource: "CW-catholic", text: canticlePreview("nunc_dimittis", "CW"), truncated: true };
   if (!result) {
     return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
   }
@@ -1921,13 +1921,20 @@ const CANTICLE_DISPLAY_NAMES = {
 function CanticleModal({ canticleKey, source = "1662", season, onClose }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
-  const isCW = source === "CW";
+  const isCatholic = source === "CW-catholic";
+  const isCW = source === "CW" || isCatholic;
   const canticle = (isCW ? canticlesCWRaw : canticles1662Raw)[canticleKey];
+  const sourceLabel = isCatholic ? "Liturgy of the Hours" : isCW ? "Common Worship" : "1662 Book of Common Prayer";
+  const attribution = isCatholic
+    ? "Contemporary-English translation text (source: Common Worship, © The Archbishops' Council 2000), used here in the absence of a bundled public-domain Catholic translation."
+    : isCW
+      ? "Common Worship, © The Archbishops' Council 2000."
+      : "Book of Common Prayer (1662), public domain.";
 
   return (
     <SheetOverlay onClose={onClose}>
       <p className="text-[11px] uppercase tracking-[0.2em] mb-1.5" style={{ color: alpha(theme.text, 0.4) }}>
-        Canticle · {isCW ? "Common Worship" : "1662 Book of Common Prayer"}
+        Canticle · {sourceLabel}
       </p>
       <h2 className="text-[19px] lg:text-[24px] mb-4" style={{ fontFamily: "'Fraunces', serif", color: theme.text }}>
         {CANTICLE_DISPLAY_NAMES[isCW ? "CW" : "1662"][canticleKey] || canticleKey}
@@ -1955,7 +1962,7 @@ function CanticleModal({ canticleKey, source = "1662", season, onClose }) {
           </div>
           <p className="text-[10.5px] mb-5" style={{ color: alpha(theme.text, 0.33) }}>
             {canticle.citation ? `${canticle.citation} · ` : ""}
-            {isCW ? "Common Worship, © The Archbishops' Council 2000" : "Book of Common Prayer (1662), public domain"}.
+            {attribution}
           </p>
         </>
       )}
