@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.29.0",
+    title: "Catholic Sunday Mass readings (Cycle A/B/C)",
+    changes: [
+      { type: "Added", text: "Real Sunday Mass readings for the Catholic tradition for the first time — First Reading, Psalm, Second Reading, Gospel — covering Advent, the Christmas season, Lent, Easter, the Solemnities of the Lord, Ordinary Time (2nd–33rd Sunday), and Christ the King, across all three A/B/C cycles." },
+      { type: "Info", text: "Citations transcribed from Fr. Felix Just, S.J.'s Lectionary tables at catholic-resources.org (non-commercial use permitted with attribution); the actual reading text comes from the WEB Catholic edition already bundled in the app, same approach as the Anglican lectionaries. USCCB's own translation text was deliberately avoided since it requires a paid license." },
+      { type: "Added", text: "catholicSundayTitleFor() and catholicSundayReadingFor() in lectionary.js, and buildCatholicMass() in App.jsx, wired into the Prayer tab, the Today teaser, and the day-detail sheet." },
+      { type: "Not included", text: "The Roman weekday (Year I/II) Mass lectionary, and fixed-date Solemnities/Feasts that occasionally displace an Ordinary Sunday — both deliberate follow-ups rather than guessed data." },
+    ],
+  },
+  {
     version: "0.28.0",
     title: "Fixed intermittent missing calendar day borders",
     changes: [

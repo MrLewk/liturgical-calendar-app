@@ -15,6 +15,7 @@ import { lectionaryYearsFor, officeColumnsFor } from "../data/lectionaryYears";
 import delTable6 from "../data/del_table6.json";
 import rclSundays from "../data/rcl_sundays.json";
 import officeTable2 from "../data/office_table2.json";
+import catholicSundays from "../data/catholic_sundays.json";
 
 function nextSunday(date) {
   const d = dateOnly(date);
@@ -265,6 +266,133 @@ export function sundayReadingFor(date) {
   const years = rclSundays[sundayYear] || [];
   const entry = years.find((e) => e.title === title);
   return { sundayYear, title, readings: entry ? entry.readings : null };
+}
+
+// ---- Catholic (Roman Rite) Sunday Mass Lectionary ----
+//
+// Citations transcribed from the Lectionary for Mass (1998/2002 USA
+// Edition) tables at catholic-resources.org, compiled by Fr. Felix Just,
+// S.J. (non-commercial use permitted with attribution - see the site's
+// Copyright Notice). Only citations were taken, not any translated
+// reading text; the actual passage text is drawn from the WEB Catholic
+// edition already bundled in the app, same as the Anglican lectionaries.
+//
+// Reuses the same A/B/C Sunday-cycle table Anglican's Common Worship
+// engine already carries (lectionaryYears.js) - the Roman Lectionary and
+// the RCL it inspired share the same three-year cycle, keyed the same way
+// (by the calendar year Advent begins). Only the Sunday cycle is shared;
+// the Roman Weekday Year I/II cycle (not yet wired) follows a simpler
+// odd/even *calendar* year rule unrelated to Common Worship's own table.
+//
+// SIMPLIFICATION: the Ascension of the Lord is resolved to the 7th Sunday
+// of Easter (the majority global/USA practice where it's transferred from
+// the preceding Thursday) rather than as a fixed Thursday - dioceses that
+// keep the Thursday observance would need a settings toggle, matching the
+// 1662/CW toggle pattern, as a future follow-up.
+//
+// KNOWN GAP: fixed-date Solemnities and Feasts of the Lord/saints that
+// occasionally displace an Ordinary Time Sunday (Presentation, St
+// Joseph, Annunciation, Nativity of John the Baptist, Sts Peter & Paul,
+// Transfiguration, Assumption, Exaltation of the Cross, All Saints, All
+// Souls, Dedication of the Lateran Basilica, Immaculate Conception) are
+// not yet resolved - the Ordinary Time Sunday number is always shown
+// instead on those rare dates, a deliberate simplification for this
+// first pass rather than the wrong feast's readings.
+function sundayOnOrAfter(date) {
+  const d = dateOnly(date);
+  const offset = (7 - d.getDay()) % 7;
+  return addDays(d, offset);
+}
+
+/**
+ * Resolves `date` to a Catholic Sunday Mass Lectionary key (e.g.
+ * "advent1", "ordinary23", "christ_the_king") plus the A/B/C Sunday
+ * cycle, with title null if `date` isn't a Sunday or falls in one of the
+ * known gaps above.
+ */
+export function catholicSundayTitleFor(date) {
+  if (!isValidDate(date)) return { sundayYear: null, key: null };
+  const d = dateOnly(date);
+  if (d.getDay() !== 0) return { sundayYear: null, key: null };
+  const { advent1, advent1Next, easter, sundayYear } = churchYearContext(d);
+  const christmasYear = advent1.getFullYear();
+  const christmasDay = new Date(christmasYear, 11, 25);
+  const ashWednesday = addDays(easter, -46);
+  const pentecost = addDays(easter, 49);
+  const trinity = addDays(pentecost, 7);
+  const corpusChristi = addDays(trinity, 7);
+
+  let key = null;
+
+  if (d >= advent1 && d < christmasDay) {
+    const n = Math.floor(daysBetween(advent1, d) / 7) + 1;
+    key = `advent${Math.min(Math.max(n, 1), 4)}`;
+  } else if (d.getTime() === christmasDay.getTime()) {
+    key = "christmas_day";
+  } else if (d < ashWednesday) {
+    // Christmas -> Epiphany -> Baptism -> Ordinary Time resumes, all
+    // reckoned against the USA's transferred Epiphany (Sunday between
+    // Jan 2-8) and its knock-on effect on the Baptism of the Lord.
+    const epiphanyYear = christmasYear + 1;
+    const epiphanySunday = sundayOnOrAfter(new Date(epiphanyYear, 0, 2));
+    // If Epiphany itself falls on Jan 7 or 8, the Baptism of the Lord is
+    // celebrated the following Monday (not a Sunday) - Ordinary Time's
+    // first full week then starts that Monday, and the next Sunday is
+    // already the 2nd Sunday in Ordinary Time.
+    const baptismOnMonday = epiphanySunday.getDate() >= 7;
+    const baptismSunday = baptismOnMonday ? null : addDays(epiphanySunday, 7);
+    const firstOrdinarySunday = addDays(epiphanySunday, baptismOnMonday ? 7 : 14);
+    const holyFamilySunday = christmasDay.getDay() === 0 ? null : nextSunday(christmasDay);
+
+    if (holyFamilySunday && d.getTime() === holyFamilySunday.getTime()) {
+      key = "holy_family";
+    } else if (d.getTime() === epiphanySunday.getTime()) {
+      key = "epiphany";
+    } else if (baptismSunday && d.getTime() === baptismSunday.getTime()) {
+      key = "baptism_of_the_lord";
+    } else if (d >= firstOrdinarySunday) {
+      const n = 2 + Math.round(daysBetween(firstOrdinarySunday, d) / 7);
+      key = `ordinary${n}`;
+    }
+  } else if (d < easter) {
+    const firstSunday = addDays(ashWednesday, 4);
+    const palmSunday = addDays(easter, -7);
+    if (d.getTime() === palmSunday.getTime()) {
+      key = "palm_sunday";
+    } else if (d >= firstSunday && d < palmSunday) {
+      const n = Math.round(daysBetween(firstSunday, d) / 7) + 1;
+      key = n <= 5 ? `lent${n}` : null;
+    }
+  } else if (d.getTime() === easter.getTime()) {
+    key = "easter_sunday";
+  } else if (d <= pentecost) {
+    if (d.getTime() === pentecost.getTime()) {
+      key = "pentecost";
+    } else {
+      const n = Math.round(daysBetween(easter, d) / 7) + 1;
+      key = n === 7 ? "ascension" : n <= 6 ? `easter${n}` : null;
+    }
+  } else if (d.getTime() === trinity.getTime()) {
+    key = "trinity_sunday";
+  } else if (d.getTime() === corpusChristi.getTime()) {
+    key = "corpus_christi";
+  } else if (d > corpusChristi) {
+    const christKingSunday = addDays(advent1Next, -7);
+    const weeksBack = Math.round(daysBetween(d, christKingSunday) / 7);
+    const properN = 34 - weeksBack;
+    key = properN === 34 ? "christ_the_king" : properN >= 2 && properN <= 33 ? `ordinary${properN}` : null;
+  }
+
+  return { sundayYear, key };
+}
+
+export function catholicSundayReadingFor(date) {
+  const { sundayYear, key } = catholicSundayTitleFor(date);
+  if (!key) return { sundayYear, key: null, title: null, readings: null };
+  const entry = catholicSundays[key];
+  if (!entry) return { sundayYear, key, title: null, readings: null };
+  const readings = entry[sundayYear] || entry.ABC || null;
+  return { sundayYear, key, title: entry.title, readings };
 }
 
 

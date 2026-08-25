@@ -1,0 +1,1184 @@
+{
+  "advent1": {
+    "title": "First Sunday of Advent",
+    "A": [
+      "Isaiah 2:1-5",
+      "Psalm 122:1-2, 3-4a, 4b-5, 6-7, 8-9",
+      "Romans 13:11-14",
+      "Matthew 24:37-44"
+    ],
+    "B": [
+      "Isaiah 63:16b-17, 19b; 64:2-7",
+      "Psalm 80:2-3, 15-16, 18-19",
+      "1 Corinthians 1:3-9",
+      "Mark 13:33-37"
+    ],
+    "C": [
+      "Jeremiah 33:14-16",
+      "Psalm 25:4-5, 8-9, 10+14",
+      "1 Thessalonians 3:12-4:2",
+      "Luke 21:25-28, 34-36"
+    ]
+  },
+  "advent2": {
+    "title": "Second Sunday of Advent",
+    "A": [
+      "Isaiah 11:1-10",
+      "Psalm 72:1-2, 7-8, 12-13, 17",
+      "Romans 15:4-9",
+      "Matthew 3:1-12"
+    ],
+    "B": [
+      "Isaiah 40:1-5, 9-11",
+      "Psalm 85:9ab+10, 11-12, 13-14",
+      "2 Peter 3:8-14",
+      "Mark 1:1-8"
+    ],
+    "C": [
+      "Baruch 5:1-9",
+      "Psalm 126:1-2a, 2b-3, 4-5, 6",
+      "Philippians 1:4-6, 8-11",
+      "Luke 3:1-6"
+    ]
+  },
+  "advent3": {
+    "title": "Third Sunday of Advent",
+    "A": [
+      "Isaiah 35:1-6a, 10",
+      "Psalm 146:6c-7, 8-9a, 9b-10",
+      "James 5:7-10",
+      "Matthew 11:2-11"
+    ],
+    "B": [
+      "Isaiah 61:1-2a, 10-11",
+      "Luke 1:46-48, 49-50, 53-54",
+      "1 Thessalonians 5:16-24",
+      "John 1:6-8, 19-28"
+    ],
+    "C": [
+      "Zephaniah 3:14-18a",
+      "Isaiah 12:2-3, 4bcd, 5-6",
+      "Philippians 4:4-7",
+      "Luke 3:10-18"
+    ]
+  },
+  "advent4": {
+    "title": "Fourth Sunday of Advent",
+    "A": [
+      "Isaiah 7:10-14",
+      "Psalm 24:1-2, 3-4, 5-6",
+      "Romans 1:1-7",
+      "Matthew 1:18-24"
+    ],
+    "B": [
+      "2 Samuel 7:1-5, 8b-12, 14a, 16",
+      "Psalm 89:2-3, 4-5, 27+29",
+      "Romans 16:25-27",
+      "Luke 1:26-38"
+    ],
+    "C": [
+      "Micah 5:1-4a",
+      "Psalm 80:2-3, 15-16, 18-19",
+      "Hebrews 10:5-10",
+      "Luke 1:39-45"
+    ]
+  },
+  "christmas_day": {
+    "title": "The Nativity of the Lord (Mass during the Day)",
+    "ABC": [
+      "Isaiah 52:7-10",
+      "Psalm 98:1, 2-3a, 3b-4, 5-6",
+      "Hebrews 1:1-6",
+      "John 1:1-18"
+    ]
+  },
+  "holy_family": {
+    "title": "The Holy Family of Jesus, Mary, and Joseph",
+    "A": [
+      "Sirach 3:3-7, 14-17a",
+      "Psalm 128:1-2, 3, 4-5",
+      "Colossians 3:12-21",
+      "Matthew 2:13-15, 19-23"
+    ],
+    "B": [
+      "Genesis 15:1-6; 21:1-3",
+      "Psalm 105:1-2, 3-4, 5-6, 8-9",
+      "Hebrews 11:8, 11-12, 17-19",
+      "Luke 2:22-40"
+    ],
+    "C": [
+      "1 Samuel 1:20-22, 24-28",
+      "Psalm 84:2-3, 5-6, 9-10",
+      "1 John 3:1-2, 21-24",
+      "Luke 2:41-52"
+    ]
+  },
+  "epiphany": {
+    "title": "The Epiphany of the Lord",
+    "ABC": [
+      "Isaiah 60:1-6",
+      "Psalm 72:1-2, 7-8, 10-11, 12-13",
+      "Ephesians 3:2-3a, 5-6",
+      "Matthew 2:1-12"
+    ]
+  },
+  "baptism_of_the_lord": {
+    "title": "The Baptism of the Lord",
+    "A": [
+      "Isaiah 42:1-4, 6-7",
+      "Psalm 29:1-2, 3-4, 3b+9b-10",
+      "Acts 10:34-38",
+      "Matthew 3:13-17"
+    ],
+    "B": [
+      "Isaiah 55:1-11",
+      "Isaiah 12:2-3, 4bcd, 5-6",
+      "1 John 5:1-9",
+      "Mark 1:7-11"
+    ],
+    "C": [
+      "Isaiah 40:1-5, 9-11",
+      "Psalm 104:1b-2, 3-4, 24-25, 27-28, 29b-30",
+      "Titus 2:11-14; 3:4-7",
+      "Luke 3:15-16, 21-22"
+    ]
+  },
+  "lent1": {
+    "title": "First Sunday of Lent",
+    "A": [
+      "Genesis 2:7-9; 3:1-7",
+      "Psalm 51:3-4, 5-6, 12-13, 14+17",
+      "Romans 5:12-19",
+      "Matthew 4:1-11"
+    ],
+    "B": [
+      "Genesis 9:8-15",
+      "Psalm 25:4-5, 6-7, 8-9",
+      "1 Peter 3:18-22",
+      "Mark 1:12-15"
+    ],
+    "C": [
+      "Deuteronomy 26:4-10",
+      "Psalm 91:1-2, 10-11, 12-13, 14-15",
+      "Romans 10:8-13",
+      "Luke 4:1-13"
+    ]
+  },
+  "lent2": {
+    "title": "Second Sunday of Lent",
+    "A": [
+      "Genesis 12:1-4a",
+      "Psalm 33:4-5, 18-19, 20+22",
+      "2 Timothy 1:8b-10",
+      "Matthew 17:1-9"
+    ],
+    "B": [
+      "Genesis 22:1-2, 9a, 10-13, 15-18",
+      "Psalm 116:10+15, 16-17, 18-19",
+      "Romans 8:31b-34",
+      "Mark 9:2-10"
+    ],
+    "C": [
+      "Genesis 15:5-12, 17-18",
+      "Psalm 27:1, 7-8a, 8b-9, 13-14",
+      "Philippians 3:17-4:1",
+      "Luke 9:28b-36"
+    ]
+  },
+  "lent3": {
+    "title": "Third Sunday of Lent",
+    "A": [
+      "Exodus 17:3-7",
+      "Psalm 95:1-2, 6-7b, 7c-9",
+      "Romans 5:1-2, 5-8",
+      "John 4:5-42"
+    ],
+    "B": [
+      "Exodus 20:1-17",
+      "Psalm 19:8, 9, 10, 11",
+      "1 Corinthians 1:22-25",
+      "John 2:13-25"
+    ],
+    "C": [
+      "Exodus 3:1-8a, 13-15",
+      "Psalm 103:1-2, 3-4, 6-7, 8+11",
+      "1 Corinthians 10:1-6, 10-12",
+      "Luke 13:1-9"
+    ]
+  },
+  "lent4": {
+    "title": "Fourth Sunday of Lent",
+    "A": [
+      "1 Samuel 16:1b, 6-7, 10-13a",
+      "Psalm 23:1-3a, 3b-4, 5, 6",
+      "Ephesians 5:8-14",
+      "John 9:1-41"
+    ],
+    "B": [
+      "2 Chronicles 36:14-16, 19-23",
+      "Psalm 137:1-2, 3, 4-5, 6",
+      "Ephesians 2:4-10",
+      "John 3:14-21"
+    ],
+    "C": [
+      "Joshua 5:9a, 10-12",
+      "Psalm 34:2-3, 4-5, 6-7",
+      "2 Corinthians 5:17-21",
+      "Luke 15:1-3, 11-32"
+    ]
+  },
+  "lent5": {
+    "title": "Fifth Sunday of Lent",
+    "A": [
+      "Ezekiel 37:12-14",
+      "Psalm 130:1-2, 3-4, 5-6, 7-8",
+      "Romans 8:8-11",
+      "John 11:1-45"
+    ],
+    "B": [
+      "Jeremiah 31:31-34",
+      "Psalm 51:3-4, 12-13, 14-15",
+      "Hebrews 5:7-9",
+      "John 12:20-33"
+    ],
+    "C": [
+      "Isaiah 43:16-21",
+      "Psalm 126:1-2a, 2b-3, 4-5, 6",
+      "Philippians 3:8-14",
+      "John 8:1-11"
+    ]
+  },
+  "palm_sunday": {
+    "title": "Palm Sunday of the Passion of the Lord",
+    "A": [
+      "Isaiah 50:4-7",
+      "Psalm 22:8-9, 17-18, 19-20, 23-24",
+      "Philippians 2:6-11",
+      "Matthew 26:14-27:66"
+    ],
+    "B": [
+      "Isaiah 50:4-7",
+      "Psalm 22:8-9, 17-18, 19-20, 23-24",
+      "Philippians 2:6-11",
+      "Mark 14:1-15:47"
+    ],
+    "C": [
+      "Isaiah 50:4-7",
+      "Psalm 22:8-9, 17-18, 19-20, 23-24",
+      "Philippians 2:6-11",
+      "Luke 22:14-23:56"
+    ]
+  },
+  "easter_sunday": {
+    "title": "Easter Sunday: The Resurrection of the Lord",
+    "ABC": [
+      "Acts 10:34a, 37-43",
+      "Psalm 118:1-2, 16-17, 22-23",
+      "Colossians 3:1-4",
+      "John 20:1-9"
+    ]
+  },
+  "easter2": {
+    "title": "Second Sunday of Easter (Divine Mercy Sunday)",
+    "A": [
+      "Acts 2:42-47",
+      "Psalm 118:2-4, 13-15, 22-24",
+      "1 Peter 1:3-9",
+      "John 20:19-31"
+    ],
+    "B": [
+      "Acts 4:32-35",
+      "Psalm 118:2-4, 13-15, 22-24",
+      "1 John 5:1-6",
+      "John 20:19-31"
+    ],
+    "C": [
+      "Acts 5:12-16",
+      "Psalm 118:2-4, 13-15, 22-24",
+      "Revelation 1:9-11a, 12-13, 17-19",
+      "John 20:19-31"
+    ]
+  },
+  "easter3": {
+    "title": "Third Sunday of Easter",
+    "A": [
+      "Acts 2:14, 22-33",
+      "Psalm 16:1-2a+5, 7-8, 9-10, 11",
+      "1 Peter 1:17-21",
+      "Luke 24:13-35"
+    ],
+    "B": [
+      "Acts 3:13-15, 17-19",
+      "Psalm 4:2, 4, 7-8, 9",
+      "1 John 2:1-5a",
+      "Luke 24:35-48"
+    ],
+    "C": [
+      "Acts 5:27-32, 40b-41",
+      "Psalm 30:2+4, 5-6, 11-12a+13b",
+      "Revelation 5:11-14",
+      "John 21:1-19"
+    ]
+  },
+  "easter4": {
+    "title": "Fourth Sunday of Easter (Good Shepherd Sunday)",
+    "A": [
+      "Acts 2:14a, 36-41",
+      "Psalm 23:1-3a, 3b-4, 5, 6",
+      "1 Peter 2:20b-25",
+      "John 10:1-10"
+    ],
+    "B": [
+      "Acts 4:8-12",
+      "Psalm 118:1+8-9, 21-23, 26+21+29",
+      "1 John 3:1-2",
+      "John 10:11-18"
+    ],
+    "C": [
+      "Acts 13:14, 43-52",
+      "Psalm 100:1-2, 3, 5",
+      "Revelation 7:9, 14b-17",
+      "John 10:27-30"
+    ]
+  },
+  "easter5": {
+    "title": "Fifth Sunday of Easter",
+    "A": [
+      "Acts 6:1-7",
+      "Psalm 33:1-2, 4-5, 18-19",
+      "1 Peter 2:4-9",
+      "John 14:1-12"
+    ],
+    "B": [
+      "Acts 9:26-31",
+      "Psalm 22:26-27, 28+30, 31-32",
+      "1 John 3:18-24",
+      "John 15:1-8"
+    ],
+    "C": [
+      "Acts 14:21-27",
+      "Psalm 145:8-9, 10-11, 12-13",
+      "Revelation 21:1-5a",
+      "John 13:31-33a, 34-35"
+    ]
+  },
+  "easter6": {
+    "title": "Sixth Sunday of Easter",
+    "A": [
+      "Acts 8:5-8, 14-17",
+      "Psalm 66:1-3, 4-5, 6-7, 16+20",
+      "1 Peter 3:15-18",
+      "John 14:15-21"
+    ],
+    "B": [
+      "Acts 10:25-26, 34-35, 44-48",
+      "Psalm 98:1, 2-3a, 3b-4",
+      "1 John 4:7-10",
+      "John 15:9-17"
+    ],
+    "C": [
+      "Acts 15:1-2, 22-29",
+      "Psalm 67:2-3, 5, 6+8",
+      "Revelation 21:10-14, 22-23",
+      "John 14:23-29"
+    ]
+  },
+  "ascension": {
+    "title": "The Ascension of the Lord",
+    "A": [
+      "Acts 1:1-11",
+      "Psalm 47:2-3, 6-7, 8-9",
+      "Ephesians 1:17-23",
+      "Matthew 28:16-20"
+    ],
+    "B": [
+      "Acts 1:1-11",
+      "Psalm 47:2-3, 6-7, 8-9",
+      "Ephesians 4:1-13",
+      "Mark 16:15-20"
+    ],
+    "C": [
+      "Acts 1:1-11",
+      "Psalm 47:2-3, 6-7, 8-9",
+      "Hebrews 9:24-28; 10:19-23",
+      "Luke 24:46-53"
+    ]
+  },
+  "easter7": {
+    "title": "Seventh Sunday of Easter",
+    "A": [
+      "Acts 1:12-14",
+      "Psalm 27:1, 4, 7-8",
+      "1 Peter 4:13-16",
+      "John 17:1-11a"
+    ],
+    "B": [
+      "Acts 1:15-17, 20a, 20c-26",
+      "Psalm 103:1-2, 11-12, 19-20",
+      "1 John 4:11-16",
+      "John 17:11b-19"
+    ],
+    "C": [
+      "Acts 7:55-60",
+      "Psalm 97:1-2, 6-7, 9",
+      "Revelation 22:12-14, 16-17, 20",
+      "John 17:20-26"
+    ]
+  },
+  "pentecost": {
+    "title": "Pentecost Sunday",
+    "A": [
+      "Acts 2:1-11",
+      "Psalm 104:1+24, 29-30, 31+34",
+      "1 Corinthians 12:3b-7, 12-13",
+      "John 20:19-23"
+    ],
+    "B": [
+      "Acts 2:1-11",
+      "Psalm 104:1+24, 29-30, 31+34",
+      "Galatians 5:16-25",
+      "John 15:26-27; 16:12-15"
+    ],
+    "C": [
+      "Acts 2:1-11",
+      "Psalm 104:1+24, 29-30, 31+34",
+      "Romans 8:8-17",
+      "John 14:15-16, 23b-26"
+    ]
+  },
+  "trinity_sunday": {
+    "title": "The Most Holy Trinity",
+    "A": [
+      "Exodus 34:4b-6, 8-9",
+      "Daniel 3:52, 53, 54, 55",
+      "2 Corinthians 13:11-13",
+      "John 3:16-18"
+    ],
+    "B": [
+      "Deuteronomy 4:32-34, 39-40",
+      "Psalm 33:4-5, 6+9, 18-19, 20+22",
+      "Romans 8:14-17",
+      "Matthew 28:16-20"
+    ],
+    "C": [
+      "Proverbs 8:22-31",
+      "Psalm 8:4-5, 6-7, 8-9",
+      "Romans 5:1-5",
+      "John 16:12-15"
+    ]
+  },
+  "corpus_christi": {
+    "title": "The Most Holy Body and Blood of Christ",
+    "A": [
+      "Deuteronomy 8:2-3, 14b-16a",
+      "Psalm 147:12-13, 14-15, 19-20",
+      "1 Corinthians 10:16-17",
+      "John 6:51-58"
+    ],
+    "B": [
+      "Exodus 24:3-8",
+      "Psalm 116:12-13, 15-16, 17-18",
+      "Hebrews 9:11-15",
+      "Mark 14:12-16, 22-26"
+    ],
+    "C": [
+      "Genesis 14:18-20",
+      "Psalm 110:1, 2, 3, 4",
+      "1 Corinthians 11:23-26",
+      "Luke 9:11b-17"
+    ]
+  },
+  "christ_the_king": {
+    "title": "Our Lord Jesus Christ, King of the Universe",
+    "A": [
+      "Ezekiel 34:11-12, 15-17",
+      "Psalm 23:1-2a, 2b-3, 5, 6",
+      "1 Corinthians 15:20-26, 28",
+      "Matthew 25:31-46"
+    ],
+    "B": [
+      "Daniel 7:13-14",
+      "Psalm 93:1a, 1b-2, 5",
+      "Revelation 1:5-8",
+      "John 18:33b-37"
+    ],
+    "C": [
+      "2 Samuel 5:1-3",
+      "Psalm 122:1-2, 3-4a, 4b-5",
+      "Colossians 1:12-20",
+      "Luke 23:35-43"
+    ]
+  },
+  "ordinary2": {
+    "title": "2nd Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 49:3, 5-6",
+      "Psalm 40:2+4, 7-8a, 8b-9, 10",
+      "1 Corinthians 1:1-3",
+      "John 1:29-34"
+    ],
+    "B": [
+      "1 Samuel 3:3b-10, 19",
+      "Psalm 40:2+4, 7-8a, 8b-9, 10",
+      "1 Corinthians 6:13c-15a, 17-20",
+      "John 1:35-42"
+    ],
+    "C": [
+      "Isaiah 62:1-5",
+      "Psalm 96:1-2a, 2b-3, 7-8, 9-10",
+      "1 Corinthians 12:4-11",
+      "John 2:1-11"
+    ]
+  },
+  "ordinary3": {
+    "title": "3rd Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 8:23b-9:3",
+      "Psalm 27:1, 4, 13-14",
+      "1 Corinthians 1:10-13, 17",
+      "Matthew 4:12-23"
+    ],
+    "B": [
+      "Jonah 3:1-5, 10",
+      "Psalm 25:4-5, 6-7, 8-9",
+      "1 Corinthians 7:29-31",
+      "Mark 1:14-20"
+    ],
+    "C": [
+      "Nehemiah 8:2-4a, 5-6, 8-10",
+      "Psalm 19:8, 9, 10, 15",
+      "1 Corinthians 12:12-30",
+      "Luke 1:1-4; 4:14-21"
+    ]
+  },
+  "ordinary4": {
+    "title": "4th Sunday in Ordinary Time",
+    "A": [
+      "Zephaniah 2:3; 3:12-13",
+      "Psalm 146:6c-7, 8-9a, 9b-10",
+      "1 Corinthians 1:26-31",
+      "Matthew 5:1-12a"
+    ],
+    "B": [
+      "Deuteronomy 18:15-20",
+      "Psalm 95:1-2, 6-7b, 7c-9",
+      "1 Corinthians 7:32-35",
+      "Mark 1:21-28"
+    ],
+    "C": [
+      "Jeremiah 1:4-5, 17-19",
+      "Psalm 71:1-2, 3-4, 5-6, 15+17",
+      "1 Corinthians 12:31-13:13",
+      "Luke 4:21-30"
+    ]
+  },
+  "ordinary5": {
+    "title": "5th Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 58:7-10",
+      "Psalm 112:4-5, 6-7, 8-9",
+      "1 Corinthians 2:1-5",
+      "Matthew 5:13-16"
+    ],
+    "B": [
+      "Job 7:1-4, 6-7",
+      "Psalm 147:1-2, 3-4, 5-6",
+      "1 Corinthians 9:16-19, 22-23",
+      "Mark 1:29-39"
+    ],
+    "C": [
+      "Isaiah 6:1-2a, 3-8",
+      "Psalm 138:1-2a, 2b-3, 4-5, 7-8",
+      "1 Corinthians 15:1-11",
+      "Luke 5:1-11"
+    ]
+  },
+  "ordinary6": {
+    "title": "6th Sunday in Ordinary Time",
+    "A": [
+      "Sirach 15:16-21",
+      "Psalm 119:1-2, 4-5, 17-18, 33-34",
+      "1 Corinthians 2:6-10",
+      "Matthew 5:17-37"
+    ],
+    "B": [
+      "Leviticus 13:1-2, 44-46",
+      "Psalm 32:1-2, 5, 11",
+      "1 Corinthians 10:31-11:1",
+      "Mark 1:40-45"
+    ],
+    "C": [
+      "Jeremiah 17:5-8",
+      "Psalm 1:1-2, 3, 4+6",
+      "1 Corinthians 15:12, 16-20",
+      "Luke 6:17, 20-26"
+    ]
+  },
+  "ordinary7": {
+    "title": "7th Sunday in Ordinary Time",
+    "A": [
+      "Leviticus 19:1-2, 17-18",
+      "Psalm 103:1-2, 3-4, 8+10, 12-13",
+      "1 Corinthians 3:16-23",
+      "Matthew 5:38-48"
+    ],
+    "B": [
+      "Isaiah 43:18-19, 21-22, 24b-25",
+      "Psalm 41:2-3, 4-5, 13-14",
+      "2 Corinthians 1:18-22",
+      "Mark 2:1-12"
+    ],
+    "C": [
+      "1 Samuel 26:2, 7-9, 12-13, 22-23",
+      "Psalm 103:1-2, 3-4, 8+10, 12-13",
+      "1 Corinthians 15:45-49",
+      "Luke 6:27-38"
+    ]
+  },
+  "ordinary8": {
+    "title": "8th Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 49:14-15",
+      "Psalm 62:2-3, 6-7, 8-9",
+      "1 Corinthians 4:1-5",
+      "Matthew 6:24-34"
+    ],
+    "B": [
+      "Hosea 2:16b, 17b, 21-22",
+      "Psalm 103:1-2, 3-4, 8+10, 12-13",
+      "2 Corinthians 3:1b-6",
+      "Mark 2:18-22"
+    ],
+    "C": [
+      "Sirach 27:5-8",
+      "Psalm 92:2-3, 13-14, 15-16",
+      "1 Corinthians 15:54-58",
+      "Luke 6:39-45"
+    ]
+  },
+  "ordinary9": {
+    "title": "9th Sunday in Ordinary Time",
+    "A": [
+      "Deuteronomy 11:18, 26-28, 32",
+      "Psalm 31:2-3a, 3b-4, 17+25",
+      "Romans 3:21-25, 28",
+      "Matthew 7:21-27"
+    ],
+    "B": [
+      "Deuteronomy 5:12-15",
+      "Psalm 81:3-4, 5-6, 7-8, 10-11",
+      "2 Corinthians 4:6-11",
+      "Mark 2:23-3:6"
+    ],
+    "C": [
+      "1 Kings 8:41-43",
+      "Psalm 117:1-2",
+      "Galatians 1:1-2, 6-10",
+      "Luke 7:1-10"
+    ]
+  },
+  "ordinary10": {
+    "title": "10th Sunday in Ordinary Time",
+    "A": [
+      "Hosea 6:3-6",
+      "Psalm 50:1+8, 12-13, 14-15",
+      "Romans 4:18-25",
+      "Matthew 9:9-13"
+    ],
+    "B": [
+      "Genesis 3:9-15",
+      "Psalm 130:1-2, 3-4, 5-6, 7-8",
+      "2 Corinthians 4:13-5:1",
+      "Mark 3:20-35"
+    ],
+    "C": [
+      "1 Kings 17:17-24",
+      "Psalm 30:2+4, 5-6, 11-12a+13b",
+      "Galatians 1:11-19",
+      "Luke 7:11-17"
+    ]
+  },
+  "ordinary11": {
+    "title": "11th Sunday in Ordinary Time",
+    "A": [
+      "Exodus 19:2-6a",
+      "Psalm 100:1-2, 3, 5",
+      "Romans 5:6-11",
+      "Matthew 9:36-10:8"
+    ],
+    "B": [
+      "Ezekiel 17:22-24",
+      "Psalm 92:2-3, 13-14, 15-16",
+      "2 Corinthians 5:6-10",
+      "Mark 4:26-34"
+    ],
+    "C": [
+      "2 Samuel 12:7-10, 13",
+      "Psalm 32:1-2, 5, 7, 11",
+      "Galatians 2:16, 19-21",
+      "Luke 7:36-8:3"
+    ]
+  },
+  "ordinary12": {
+    "title": "12th Sunday in Ordinary Time",
+    "A": [
+      "Jeremiah 20:10-13",
+      "Psalm 69:8-10, 14+17, 33-35",
+      "Romans 5:12-15",
+      "Matthew 10:26-33"
+    ],
+    "B": [
+      "Job 38:1, 8-11",
+      "Psalm 107:23-24, 25-26, 28-29, 30-31",
+      "2 Corinthians 5:14-17",
+      "Mark 4:35-41"
+    ],
+    "C": [
+      "Zechariah 12:10-11; 13:1",
+      "Psalm 63:2, 3-4, 5-6, 8-9",
+      "Galatians 3:26-29",
+      "Luke 9:18-24"
+    ]
+  },
+  "ordinary13": {
+    "title": "13th Sunday in Ordinary Time",
+    "A": [
+      "2 Kings 4:8-11, 14-16a",
+      "Psalm 89:2-3, 16-17, 18-19",
+      "Romans 6:3-4, 8-11",
+      "Matthew 10:37-42"
+    ],
+    "B": [
+      "Wisdom of Solomon 1:13-15; 2:23-24",
+      "Psalm 30:2+4, 5-6, 11-12a+13b",
+      "2 Corinthians 8:7, 9, 13-15",
+      "Mark 5:21-43"
+    ],
+    "C": [
+      "1 Kings 19:16b, 19-21",
+      "Psalm 16:1-2a+5, 7-8, 9-10, 11",
+      "Galatians 5:1, 13-18",
+      "Luke 9:51-62"
+    ]
+  },
+  "ordinary14": {
+    "title": "14th Sunday in Ordinary Time",
+    "A": [
+      "Zechariah 9:9-10",
+      "Psalm 145:1-2, 8-9, 10-11, 13-14",
+      "Romans 8:9, 11-13",
+      "Matthew 11:25-30"
+    ],
+    "B": [
+      "Ezekiel 2:2-5",
+      "Psalm 123:1-2a, 2bc, 3-4",
+      "2 Corinthians 12:7-10",
+      "Mark 6:1-6"
+    ],
+    "C": [
+      "Isaiah 66:10-14c",
+      "Psalm 66:1-3, 4-5, 6-7, 16+20",
+      "Galatians 6:14-18",
+      "Luke 10:1-12, 17-20"
+    ]
+  },
+  "ordinary15": {
+    "title": "15th Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 55:10-11",
+      "Psalm 65:10, 11, 12-13, 14",
+      "Romans 8:18-23",
+      "Matthew 13:1-23"
+    ],
+    "B": [
+      "Amos 7:12-15",
+      "Psalm 85:9ab+10, 11-12, 13-14",
+      "Ephesians 1:3-14",
+      "Mark 6:7-13"
+    ],
+    "C": [
+      "Deuteronomy 30:10-14",
+      "Psalm 69:14+17, 30-31, 33-34, 36a+37",
+      "Colossians 1:15-20",
+      "Luke 10:25-37"
+    ]
+  },
+  "ordinary16": {
+    "title": "16th Sunday in Ordinary Time",
+    "A": [
+      "Wisdom of Solomon 12:13, 16-19",
+      "Psalm 86:5-6, 9-10, 15-16",
+      "Romans 8:26-27",
+      "Matthew 13:24-43"
+    ],
+    "B": [
+      "Jeremiah 23:1-6",
+      "Psalm 23:1-3a, 3b-4, 5, 6",
+      "Ephesians 2:13-18",
+      "Mark 6:30-34"
+    ],
+    "C": [
+      "Genesis 18:1-10a",
+      "Psalm 15:2-3a, 3b-4, 5",
+      "Colossians 1:24-28",
+      "Luke 10:38-42"
+    ]
+  },
+  "ordinary17": {
+    "title": "17th Sunday in Ordinary Time",
+    "A": [
+      "1 Kings 3:5, 7-12",
+      "Psalm 119:57+72, 76-77, 127-128, 129-130",
+      "Romans 8:28-30",
+      "Matthew 13:44-52"
+    ],
+    "B": [
+      "2 Kings 4:42-44",
+      "Psalm 145:10-11, 15-16, 17-18",
+      "Ephesians 4:1-6",
+      "John 6:1-15"
+    ],
+    "C": [
+      "Genesis 18:20-32",
+      "Psalm 138:1-2a, 2b-3, 6-7a, 7b-8",
+      "Colossians 2:12-14",
+      "Luke 11:1-13"
+    ]
+  },
+  "ordinary18": {
+    "title": "18th Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 55:1-3",
+      "Psalm 145:8-9, 15-16, 17-18",
+      "Romans 8:35, 37-39",
+      "Matthew 14:13-21"
+    ],
+    "B": [
+      "Exodus 16:2-4, 12-15",
+      "Psalm 78:3-4, 23-24, 25+54",
+      "Ephesians 4:17, 20-24",
+      "John 6:24-35"
+    ],
+    "C": [
+      "Ecclesiastes 1:2; 2:21-23",
+      "Psalm 90:3-4, 5-6, 12-13, 14+17",
+      "Colossians 3:1-5, 9-11",
+      "Luke 12:13-21"
+    ]
+  },
+  "ordinary19": {
+    "title": "19th Sunday in Ordinary Time",
+    "A": [
+      "1 Kings 19:9a, 11-13a",
+      "Psalm 85:9ab+10, 11-12, 13-14",
+      "Romans 9:1-5",
+      "Matthew 14:22-33"
+    ],
+    "B": [
+      "1 Kings 19:4-8",
+      "Psalm 34:2-3, 4-5, 6-7, 8-9",
+      "Ephesians 4:30-5:2",
+      "John 6:41-51"
+    ],
+    "C": [
+      "Wisdom of Solomon 18:6-9",
+      "Psalm 33:1+12, 18-19, 20-22",
+      "Hebrews 11:1-2, 8-19",
+      "Luke 12:32-48"
+    ]
+  },
+  "ordinary20": {
+    "title": "20th Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 56:1, 6-7",
+      "Psalm 67:2-3, 5, 6+8",
+      "Romans 11:13-15, 29-32",
+      "Matthew 15:21-28"
+    ],
+    "B": [
+      "Proverbs 9:1-6",
+      "Psalm 34:2-3, 4-5, 6-7",
+      "Ephesians 5:15-20",
+      "John 6:51-58"
+    ],
+    "C": [
+      "Jeremiah 38:4-6, 8-10",
+      "Psalm 40:2, 3, 4, 18",
+      "Hebrews 12:1-4",
+      "Luke 12:49-53"
+    ]
+  },
+  "ordinary21": {
+    "title": "21st Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 22:19-23",
+      "Psalm 138:1-2a, 2b-3, 6+8",
+      "Romans 11:33-36",
+      "Matthew 16:13-20"
+    ],
+    "B": [
+      "Joshua 24:1-2a, 15-17, 18b",
+      "Psalm 34:2-3, 16-17, 18-19, 20-21",
+      "Ephesians 5:21-32",
+      "John 6:60-69"
+    ],
+    "C": [
+      "Isaiah 66:18-21",
+      "Psalm 117:1, 2",
+      "Hebrews 12:5-7, 11-13",
+      "Luke 13:22-30"
+    ]
+  },
+  "ordinary22": {
+    "title": "22nd Sunday in Ordinary Time",
+    "A": [
+      "Jeremiah 20:7-9",
+      "Psalm 63:2, 3-4, 5-6, 8-9",
+      "Romans 12:1-2",
+      "Matthew 16:21-27"
+    ],
+    "B": [
+      "Deuteronomy 4:1-2, 6-8",
+      "Psalm 15:2-3a, 3b-4a, 4b-5",
+      "James 1:17-18, 21b-22, 27",
+      "Mark 7:1-8, 14-15, 21-23"
+    ],
+    "C": [
+      "Sirach 3:17-18, 20, 28-29",
+      "Psalm 68:4-5, 6-7, 10-11",
+      "Hebrews 12:18-19, 22-24a",
+      "Luke 14:1, 7-14"
+    ]
+  },
+  "ordinary23": {
+    "title": "23rd Sunday in Ordinary Time",
+    "A": [
+      "Ezekiel 33:7-9",
+      "Psalm 95:1-2, 6-7b, 7c-9",
+      "Romans 13:8-10",
+      "Matthew 18:15-20"
+    ],
+    "B": [
+      "Isaiah 35:4-7a",
+      "Psalm 146:6c-7, 8-9a, 9b-10",
+      "James 2:1-5",
+      "Mark 7:31-37"
+    ],
+    "C": [
+      "Wisdom of Solomon 9:13-18b",
+      "Psalm 90:3-4, 5-6, 12-13, 14+17",
+      "Philemon 9-10, 12-17",
+      "Luke 14:25-33"
+    ]
+  },
+  "ordinary24": {
+    "title": "24th Sunday in Ordinary Time",
+    "A": [
+      "Sirach 27:30-28:7",
+      "Psalm 103:1-2, 3-4, 9-10, 11-12",
+      "Romans 14:7-9",
+      "Matthew 18:21-35"
+    ],
+    "B": [
+      "Isaiah 50:4-9a",
+      "Psalm 116:1-2, 3-4, 5-6, 8-9",
+      "James 2:14-18",
+      "Mark 8:27-35"
+    ],
+    "C": [
+      "Exodus 32:7-11, 13-14",
+      "Psalm 51:3-4, 12-13, 17+19",
+      "1 Timothy 1:12-17",
+      "Luke 15:1-32"
+    ]
+  },
+  "ordinary25": {
+    "title": "25th Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 55:6-9",
+      "Psalm 145:2-3, 8-9, 17-18",
+      "Philippians 1:20c-24, 27a",
+      "Matthew 20:1-16a"
+    ],
+    "B": [
+      "Wisdom of Solomon 2:12, 17-20",
+      "Psalm 54:3-4, 5, 6-8",
+      "James 3:16-4:3",
+      "Mark 9:30-37"
+    ],
+    "C": [
+      "Amos 8:4-7",
+      "Psalm 113:1-2, 4-6, 7-8",
+      "1 Timothy 2:1-8",
+      "Luke 16:1-13"
+    ]
+  },
+  "ordinary26": {
+    "title": "26th Sunday in Ordinary Time",
+    "A": [
+      "Ezekiel 18:25-28",
+      "Psalm 25:4-5, 6-7, 8-9",
+      "Philippians 2:1-11",
+      "Matthew 21:28-32"
+    ],
+    "B": [
+      "Numbers 11:25-29",
+      "Psalm 19:8, 10, 12-13, 14",
+      "James 5:1-6",
+      "Mark 9:38-43, 45, 47-48"
+    ],
+    "C": [
+      "Amos 6:1a, 4-7",
+      "Psalm 146:6c-7, 8-9a, 9b-10",
+      "1 Timothy 6:11-16",
+      "Luke 16:19-31"
+    ]
+  },
+  "ordinary27": {
+    "title": "27th Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 5:1-7",
+      "Psalm 80:9+12, 13-14, 15-16, 19-20",
+      "Philippians 4:6-9",
+      "Matthew 21:33-43"
+    ],
+    "B": [
+      "Genesis 2:18-24",
+      "Psalm 128:1-2, 3, 4-5, 6",
+      "Hebrews 2:9-11",
+      "Mark 10:2-16"
+    ],
+    "C": [
+      "Habakkuk 1:2-3; 2:2-4",
+      "Psalm 95:1-2, 6-7b, 7c-9",
+      "2 Timothy 1:6-8, 13-14",
+      "Luke 17:5-10"
+    ]
+  },
+  "ordinary28": {
+    "title": "28th Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 25:6-10a",
+      "Psalm 23:1-3a, 3b-4, 5, 6",
+      "Philippians 4:12-14, 19-20",
+      "Matthew 22:1-14"
+    ],
+    "B": [
+      "Wisdom of Solomon 7:7-11",
+      "Psalm 90:12-13, 14-15, 16-17",
+      "Hebrews 4:12-13",
+      "Mark 10:17-30"
+    ],
+    "C": [
+      "2 Kings 5:14-17",
+      "Psalm 98:1, 2-3a, 3b-4",
+      "2 Timothy 2:8-13",
+      "Luke 17:11-19"
+    ]
+  },
+  "ordinary29": {
+    "title": "29th Sunday in Ordinary Time",
+    "A": [
+      "Isaiah 45:1, 4-6",
+      "Psalm 96:1+3, 4-5, 7-8, 9-10",
+      "1 Thessalonians 1:1-5b",
+      "Matthew 22:15-21"
+    ],
+    "B": [
+      "Isaiah 53:10-11",
+      "Psalm 33:4-5, 18-19, 20+22",
+      "Hebrews 4:14-16",
+      "Mark 10:35-45"
+    ],
+    "C": [
+      "Exodus 17:8-13",
+      "Psalm 121:1-2, 3-4, 5-6, 7-8",
+      "2 Timothy 3:14-4:2",
+      "Luke 18:1-8"
+    ]
+  },
+  "ordinary30": {
+    "title": "30th Sunday in Ordinary Time",
+    "A": [
+      "Exodus 22:20-26",
+      "Psalm 18:2-3a, 3b-4, 47+51",
+      "1 Thessalonians 1:5c-10",
+      "Matthew 22:34-40"
+    ],
+    "B": [
+      "Jeremiah 31:7-9",
+      "Psalm 126:1-2a, 2b-3, 4-5, 6",
+      "Hebrews 5:1-6",
+      "Mark 10:46-52"
+    ],
+    "C": [
+      "Sirach 35:12-14, 16-18",
+      "Psalm 34:2-3, 17-18, 19+23",
+      "2 Timothy 4:6-8, 16-18",
+      "Luke 18:9-14"
+    ]
+  },
+  "ordinary31": {
+    "title": "31st Sunday in Ordinary Time",
+    "A": [
+      "Malachi 1:14b-2:2b, 8-10",
+      "Psalm 131:1, 2, 3",
+      "1 Thessalonians 2:7b-9, 13",
+      "Matthew 23:1-12"
+    ],
+    "B": [
+      "Deuteronomy 6:2-6",
+      "Psalm 18:2-3a, 3b-4, 47+51",
+      "Hebrews 7:23-28",
+      "Mark 12:28b-34"
+    ],
+    "C": [
+      "Wisdom of Solomon 11:22-12:2",
+      "Psalm 145:1-2, 8-9, 10-11, 13b-14",
+      "2 Thessalonians 1:11-2:2",
+      "Luke 19:1-10"
+    ]
+  },
+  "ordinary32": {
+    "title": "32nd Sunday in Ordinary Time",
+    "A": [
+      "Wisdom of Solomon 6:12-16",
+      "Psalm 63:2, 3-4, 5-6, 7-8",
+      "1 Thessalonians 4:13-18",
+      "Matthew 25:1-13"
+    ],
+    "B": [
+      "1 Kings 17:10-16",
+      "Psalm 146:6c-7, 8-9a, 9b-10",
+      "Hebrews 9:24-28",
+      "Mark 12:38-44"
+    ],
+    "C": [
+      "2 Maccabees 7:1-2, 9-14",
+      "Psalm 17:1, 5-6, 8+15",
+      "2 Thessalonians 2:16-3:5",
+      "Luke 20:27-38"
+    ]
+  },
+  "ordinary33": {
+    "title": "33rd Sunday in Ordinary Time",
+    "A": [
+      "Proverbs 31:10-13, 19-20, 30-31",
+      "Psalm 128:1-2, 3, 4-5",
+      "1 Thessalonians 5:1-6",
+      "Matthew 25:14-30"
+    ],
+    "B": [
+      "Daniel 12:1-3",
+      "Psalm 16:5+8, 9-10, 11",
+      "Hebrews 10:11-14, 18",
+      "Mark 13:24-32"
+    ],
+    "C": [
+      "Malachi 3:19-20a",
+      "Psalm 98:5-6, 7-8, 9",
+      "2 Thessalonians 3:7-12",
+      "Luke 21:5-19"
+    ]
+  }
+}

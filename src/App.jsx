@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -315,6 +315,45 @@ function anglicanReadingItems(date) {
   return { label: `${result.week}, ${WEEKDAY_NAME[date.getDay()]}`, items };
 }
 
+/**
+ * The real Catholic Sunday Mass reading citations for `date` (First
+ * Reading, Psalm, Second Reading, Gospel), or null on a weekday (the
+ * Roman weekday lectionary isn't wired yet - a follow-up alongside the
+ * Anglican DEL work) or on any of catholicSundayTitleFor's known gaps.
+ */
+function catholicReadingItems(date) {
+  if (date.getDay() !== 0) return null;
+  const result = catholicSundayReadingFor(date);
+  if (!result || !result.readings) return null;
+  const roles = ["First Reading", "Psalm", "Second Reading", "Gospel"];
+  const items = result.readings
+    .map((r, i) => ({ role: roles[i] || "Reading", ref: displayRef(splitCitation(r)[0] || r) }))
+    .filter((r) => r.ref);
+  return { label: result.title, items };
+}
+
+/**
+ * Builds the real Catholic Sunday Mass reading for `date`, keeping the
+ * fixed prayer text (Penitential Act, Gloria, opening Collect placeholder)
+ * from the demo entry and only replacing the readings themselves. Falls
+ * back to the static demo entry on a weekday or any known gap.
+ */
+function buildCatholicMass(date) {
+  const fallback = READINGS.Catholic.mass;
+  const fixedItems = fallback.sequence.filter((i) => i.type === "prayer");
+  const result = catholicReadingItems(date);
+  if (!result) {
+    const isSunday = date.getDay() === 0;
+    const gapNote = isSunday ? "Sunday reading not covered yet" : "weekday reading not covered yet";
+    return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (${gapNote})` };
+  }
+  return {
+    label: `${result.label} · ${shortDate(date)}`,
+    icon: fallback.icon,
+    sequence: [...fixedItems, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref }))],
+  };
+}
+
 const CW_PRAYER_OF_PREPARATION = {
   type: "prayer",
   role: "Collect",
@@ -607,6 +646,10 @@ function dayReadingItems(tradition, date) {
       if (office) return office.items;
     }
     const result = anglicanReadingItems(date);
+    if (result) return result.items;
+  }
+  if (tradition === "Catholic") {
+    const result = catholicReadingItems(date);
     if (result) return result.items;
   }
   return [{ role: null, ref: firstReadingRef(tradition) }];
@@ -2446,10 +2489,12 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
   const anglicanEucharist = useMemo(() => (tradition === "Anglican" ? buildAnglicanEucharist(effectiveDate, collectSource) : null), [tradition, effectiveDate, collectSource]);
   const anglicanAm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "am", collectSource) : null), [tradition, effectiveDate, collectSource]);
   const anglicanPm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "pm", collectSource) : null), [tradition, effectiveDate, collectSource]);
+  const catholicMass = useMemo(() => (tradition === "Catholic" ? buildCatholicMass(effectiveDate) : null), [tradition, effectiveDate]);
   const data = useMemo(() => {
-    if (tradition !== "Anglican") return READINGS[tradition];
-    return { ...READINGS.Anglican, am: anglicanAm, pm: anglicanPm, eucharist: anglicanEucharist };
-  }, [tradition, anglicanAm, anglicanPm, anglicanEucharist]);
+    if (tradition === "Anglican") return { ...READINGS.Anglican, am: anglicanAm, pm: anglicanPm, eucharist: anglicanEucharist };
+    if (tradition === "Catholic") return { ...READINGS.Catholic, mass: catholicMass };
+    return READINGS[tradition];
+  }, [tradition, anglicanAm, anglicanPm, anglicanEucharist, catholicMass]);
   const defaultSegment = data.kind === "office" ? autoOfficeSegment(viewDate) : data.kind === "mass" ? "mass" : "daily";
   const [segment, setSegment] = useState(defaultSegment);
 
