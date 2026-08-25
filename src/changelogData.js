@@ -6,6 +6,14 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.30.3",
+    title: "Fixed five false/dead-end \"truncated\" prayer texts",
+    changes: [
+      { type: "Fixed", text: "Several fixed prayers across Catholic, Anglican, and Orthodox were flagged truncated with a trailing \"\u2026\" but no way to read further \u2014 the expand button only renders for prayer items with a canticleKey or scriptureRef. Catholic's Gloria in excelsis was genuinely cut off and now shows its full text; four other items (Catholic's Collect, Anglican's Evening Prayer and Eucharist Confessions, Common Worship's Prayers of Penitence, and two Orthodox hymns) already had complete text but were incorrectly flagged truncated anyway." },
+      { type: "Info", text: "Verified with a script scanning every prayer-type item in App.jsx for this exact pattern \u2014 zero remaining instances." },
+    ],
+  },
+  {
     version: "0.30.2",
     title: "Fixed unreadable truncated Gospel Canticles in the Catholic Office",
     changes: [

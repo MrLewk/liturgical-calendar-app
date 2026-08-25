@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.30.3] — Fixed five false/dead-end "truncated" prayer texts
+
+- **Fixed:** a class of bug found across the demo prayer text (not just Catholic) — several fixed prayers were flagged `truncated: true` and showed a trailing "…" with no way to read further, since the "Read full text" button only ever renders for a `prayer` item carrying a `canticleKey` or `scriptureRef`. Found and fixed five instances:
+  - **Catholic Mass's Gloria in excelsis** was genuinely cut off mid-prayer; now shows the complete traditional text through to "Amen."
+  - **Catholic Mass's Collect**, **Anglican Evening Prayer's Confession**, **Anglican Eucharist's Confession**, and **Common Worship's Prayers of Penitence** all already had complete text ending properly (with "Amen." or a natural full stop) but were incorrectly flagged truncated anyway, adding a false "…" after an already-finished prayer.
+  - Two **Orthodox** items (the Resurrectional Troparion and the Axion Estin) had the same false-truncation flag on already-complete text.
+- Verified by writing a small script to scan every `type: "prayer"` object literal in `App.jsx` for `truncated: true` without an accompanying `canticleKey`/`scriptureRef`, confirming zero remaining instances after the fix, plus a live browser check of the corrected Gloria.
+
 ## [0.30.2] — Fixed unreadable truncated Gospel Canticles in the Catholic Office
 
 - **Fixed:** the Benedictus, Magnificat, and Nunc Dimittis shown at Catholic Lauds/Vespers/Compline were marked `truncated: true` but missing the `canticleKey` field the "Read full text" button requires, so the truncated preview had no way to open the full text — a real regression from v0.30.0. All six Gospel Canticle entries (the three real-data builders plus the three static demo fallbacks) now carry `canticleKey`/`canticleSource` and open correctly.

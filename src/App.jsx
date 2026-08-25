@@ -113,7 +113,6 @@ const READINGS = {
           role: "Confession",
           ref: "General Confession",
           text: "Almighty and most merciful Father, we have erred and strayed from thy ways like lost sheep. We have followed too much the devices and desires of our own hearts. But thou, O Lord, have mercy upon us, miserable offenders.",
-          truncated: true,
         },
         { type: "reading", ref: "Job 1:1–22", text: "There was a man in the land of Uz, whose name was Job; and that man was perfect and upright, and one that feared God, and eschewed evil.", truncated: true },
         {
@@ -162,7 +161,6 @@ const READINGS = {
           role: "Confession",
           ref: "The General Confession",
           text: "Almighty God, Father of our Lord Jesus Christ, Maker of all things, Judge of all men: We acknowledge and bewail our manifold sins and wickedness, which we from time to time most grievously have committed, by thought, word, and deed, against thy Divine Majesty, provoking most justly thy wrath and indignation against us. We do earnestly repent, and are heartily sorry for these our misdoings; the remembrance of them is grievous unto us; the burden of them is intolerable. Have mercy upon us, have mercy upon us, most merciful Father; for thy Son our Lord Jesus Christ's sake, forgive us all that is past; and grant that we may ever hereafter serve and please thee in newness of life, to the honour and glory of thy Name; through Jesus Christ our Lord. Amen.",
-          truncated: true,
         },
         { type: "reading", ref: "Jeremiah 1:4–10", text: "Then the word of the Lord came unto me, saying, Before I formed thee in the belly I knew thee; and before thou camest forth out of the womb I sanctified thee, and I ordained thee a prophet unto the nations.", truncated: true },
         { type: "reading", ref: "Psalm 71:1–6", text: "In thee, O Lord, do I put my trust: let me never be put to confusion. Deliver me in thy righteousness, and cause me to escape: incline thine ear unto me, and save me." },
@@ -187,15 +185,13 @@ const READINGS = {
           type: "prayer",
           role: "Canticle",
           ref: "Gloria in excelsis",
-          text: "Glory be to God on high, and in earth peace, good will towards men. We praise thee, we bless thee, we worship thee, we glorify thee, we give thanks to thee for thy great glory, O Lord God, heavenly King, God the Father Almighty.",
-          truncated: true,
+          text: "Glory be to God on high, and in earth peace, good will towards men. We praise thee, we bless thee, we worship thee, we glorify thee, we give thanks to thee, for thy great glory, O Lord God, heavenly King, God the Father Almighty. O Lord, the only-begotten Son Jesus Christ; O Lord God, Lamb of God, Son of the Father, that takest away the sins of the world, have mercy upon us. Thou that takest away the sins of the world, have mercy upon us. Thou that takest away the sins of the world, receive our prayer. Thou that sittest at the right hand of God the Father, have mercy upon us. For thou only art holy; thou only art the Lord; thou only, O Christ, with the Holy Ghost, art most high in the glory of God the Father. Amen.",
         },
         {
           type: "prayer",
           role: "Collect",
           ref: "Opening Prayer",
           text: "O God, from whom all holy desires, all good counsels, and all just works do proceed: give unto thy servants that peace which the world cannot give, that our hearts may be set to obey thy commandments; through the merits of Jesus Christ our Saviour. Amen.",
-          truncated: true,
         },
         { type: "reading", role: "First Reading", ref: "Ezekiel 43:1–7", text: "Afterward he brought me to the gate, even the gate that looketh toward the east: And, behold, the glory of the God of Israel came from the way of the east: and his voice was like a noise of many waters.", truncated: true },
         { type: "reading", role: "Responsorial Psalm", ref: "Psalm 85:9–14", text: "Surely his salvation is nigh them that fear him; that glory may dwell in our land. Mercy and truth are met together; righteousness and peace have kissed each other." },
@@ -248,7 +244,6 @@ const READINGS = {
           role: "Troparion",
           ref: "Resurrectional Troparion, Tone 1",
           text: "While the stone was sealed by the Jews, and the soldiers were guarding thy most pure body, thou didst rise on the third day, O Saviour, granting life to the world. Wherefore the powers of heaven cried out to thee, O Giver of Life: Glory to thy resurrection, O Christ.",
-          truncated: true,
         },
         { type: "reading", role: "Epistle", ref: "1 Corinthians 9:2–12", text: "If I be not an apostle unto others, yet doubtless I am to you: for the seal of mine apostleship are ye in the Lord. Mine answer to them that do examine me is this.", truncated: true },
         { type: "reading", role: "Gospel", ref: "Matthew 18:23–35", text: "Therefore is the kingdom of heaven likened unto a certain king, which would take account of his servants. And when he had begun to reckon, one was brought unto him, which owed him ten thousand talents.", truncated: true },
@@ -257,7 +252,6 @@ const READINGS = {
           role: "Hymn to the Theotokos",
           ref: "Axion Estin",
           text: "It is truly meet to bless thee, O Theotokos, ever blessed and most pure, and the Mother of our God. More honorable than the Cherubim, and more glorious beyond compare than the Seraphim, thou who without corruption gavest birth to God the Word, true Theotokos, we magnify thee.",
-          truncated: true,
         },
       ],
     },
@@ -462,7 +456,6 @@ const CW_PRAYERS_OF_PENITENCE = {
   role: "Confession",
   ref: "Prayers of Penitence",
   text: "Almighty God, our heavenly Father, we have sinned against you and against our neighbour in thought and word and deed, through negligence, through weakness, through our own deliberate fault. We are truly sorry and repent of all our sins. For the sake of your Son Jesus Christ, who died for us, forgive us all that is past and grant that we may serve you in newness of life to the glory of your name. Amen.",
-  truncated: true,
 };
 
 /**
