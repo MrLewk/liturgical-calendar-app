@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.40.0",
+    title: "Fasting indications, all three traditions",
+    changes: [
+      { type: "Added", text: "A \"Fasting\" card on the Today tab and Calendar day-detail sheet for all three traditions, showing on any day with an actual fasting/abstinence observance and staying hidden on ordinary days." },
+      { type: "Info", text: "Catholic follows the modern universal norm plus UK Friday abstinence; Anglican follows the 1662 BCP Table of Fasts (Lent, Ember Days, Rogation Days, Fridays); Orthodox follows the standard Slavic fasting calendar (the four fasting seasons, weekly Wed/Fri, and the fast-free weeks that lift it)." },
+      { type: "Info", text: "Each tradition has documented simplifications (e.g. finer traditional fasting grades, feast-day exceptions) rather than silently guessed-at detail \u2014 a deliberately simple first pass." },
+      { type: "Info", text: "Verified with a 100-year sweep across all three functions (zero errors, realistic day-count proportions) after catching and fixing a real date-range bug in the Orthodox pre-Lenten fast-free week." },
+    ],
+  },
+  {
     version: "0.39.0",
     title: "Orthodox Sunday Matins Gospel (Eothinon)",
     changes: [

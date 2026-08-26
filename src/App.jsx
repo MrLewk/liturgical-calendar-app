@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon, Monitor, X } from "lucide-react";
+import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon, Monitor, X, UtensilsCrossed } from "lucide-react";
 import { useTheme } from "./ThemeContext";
 import { alpha, seasonAccent } from "./theme";
 import UpdateToast from "./UpdateToast";
@@ -9,6 +9,7 @@ import { usePersistedState } from "./usePersistedState";
 import { loadGoogleAnalytics, disableGoogleAnalytics } from "./analytics";
 import { CHANGELOG } from "./changelogData";
 import { liturgicalYearData, seasonAt, feastOnDate, upcomingFeasts, withDisplay } from "./lib/feasts";
+import { fastingFor } from "./lib/fasting";
 import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
@@ -2535,6 +2536,7 @@ function DayDetailSheet({ date, tradition, calendar, onClose, onOpenFeast, onOpe
   const accent = seasonAccent(season, theme.mode);
   const feast = feastOnDate(feasts, date);
   const readingItems = dayReadingItems(tradition, date, calendar);
+  const fasting = fastingFor(tradition, date, calendar);
 
   return (
     <SheetOverlay onClose={onClose}>
@@ -2581,6 +2583,20 @@ function DayDetailSheet({ date, tradition, calendar, onClose, onOpenFeast, onOpe
           ))}
         </div>
       </button>
+
+      {fasting && (
+        <div className="w-full rounded-2xl p-4 mb-3 flex items-center gap-3" style={{ backgroundColor: theme.surface }}>
+          <UtensilsCrossed size={18} color={accent} />
+          <div className="flex-1">
+            <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.4) }}>
+              Fasting
+            </p>
+            <p className="text-[13px]" style={{ color: theme.text }}>
+              {fasting.label}
+            </p>
+          </div>
+        </div>
+      )}
 
       {feast ? (
         <button
@@ -2638,6 +2654,7 @@ function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFea
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   const readingRef = todayReadingRef(tradition, today, calendar);
+  const fasting = fastingFor(tradition, today, calendar);
   return (
     <div className="pt-2 lg:pt-0 lg:grid lg:grid-cols-[1fr_420px] lg:gap-10 lg:items-start">
       <div>
@@ -2687,6 +2704,22 @@ function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFea
             </p>
           </div>
         </div>
+
+        {/* Fasting card — only shown on a day with an actual observance */}
+        {fasting && (
+          <div className="rounded-2xl p-4 lg:p-5 mb-4 lg:mb-5 flex items-center gap-3 lg:gap-4" style={{ backgroundColor: theme.surface }}>
+            <UtensilsCrossed size={18} className="lg:hidden flex-shrink-0" color={accent} />
+            <UtensilsCrossed size={22} className="hidden lg:block flex-shrink-0" color={accent} />
+            <div>
+              <p className="text-[13px] lg:text-[16px]" style={{ color: theme.text }}>
+                Fasting
+              </p>
+              <p className="text-[11px] lg:text-[14px]" style={{ color: alpha(theme.text, 0.4) }}>
+                {fasting.label}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Reading teaser — clicks through to the full Readings tab */}
         <button
