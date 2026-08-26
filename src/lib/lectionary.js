@@ -22,6 +22,7 @@ import catholicFixedFeastDates from "../data/catholic_fixed_feast_dates.json";
 import catholicOfficeReadingsBiblical from "../data/catholic_office_readings_biblical.json";
 import orthodoxSundayReadings from "../data/orthodox_sunday_readings.json";
 import orthodoxFixedFeastReadings from "../data/orthodox_fixed_feast_readings.json";
+import orthodoxMatinsGospels from "../data/orthodox_matins_gospels.json";
 
 function nextSunday(date) {
   const d = dateOnly(date);
@@ -1964,4 +1965,55 @@ export function orthodoxFixedFeastReadingFor(date, calendarStyle = "Gregorian") 
   const epistle = entry.Epistle?.slavic || entry.Epistle?.common;
   if (!gospel || !epistle) return null;
   return { epistle, gospel };
+}
+
+// Fixed-date Great Feasts that outrank and fully replace the Sunday
+// Resurrection Matins Gospel when they land on a Sunday (Palm Sunday,
+// Ascension, and Pentecost are also Great Feasts but are movable and
+// already excluded by the Holy-Week-to-Pentecost window above; Annunciation
+// isn't in the transcribed fixed-feast table at all, see that function's
+// own note). Everything else in the ~85-entry fixed-feast table is an
+// ordinary commemoration that does NOT preempt the Eothinon -- a Sunday
+// combined with a minor saint's day still reads the regular Resurrection
+// Gospel alongside the day's own propers.
+const GREAT_FEAST_MONTH_DAYS = new Set(["9-8", "9-14", "11-21", "12-25", "1-6", "2-2", "8-6", "8-15"]);
+
+function isGreatFeastDay(date, calendarStyle) {
+  const d = dateOnly(date);
+  const nominal = calendarStyle === "Julian" ? addDays(d, -julianOffset(d.getFullYear())) : d;
+  return GREAT_FEAST_MONTH_DAYS.has(`${nominal.getMonth() + 1}-${nominal.getDate()}`);
+}
+
+/**
+ * The Sunday Matins Resurrection Gospel ("Eothinon") citation for `date`,
+ * or null if `date` isn't a Sunday, falls in the no-Eothinon window from
+ * Holy Week through Pentecost, or is preempted by a fixed-date Great
+ * Feast (whose own Matins Gospel replaces the Sunday Resurrection cycle
+ * entirely -- see isGreatFeastDay; deliberately narrower than the full
+ * fixed-feast reading table, since only Vigil-rank feasts preempt the
+ * Eothinon, not every minor commemoration in that table).
+ *
+ * The eleven citations are a small, fixed, universally-documented list
+ * (unchanged across Slavic and Greek practice, unlike the Epistle/Gospel
+ * lectionary) -- cross-checked here against both Hapgood's 1906 Service
+ * Book and independent modern sources, rather than pulled from the same
+ * pdist-table transcription as the other readings.
+ *
+ * The cycle runs continuously from the Sunday after Pentecost through to
+ * (but not including) Palm Sunday of the following year, so a pre-Lenten
+ * Sunday (negative pdist, e.g. Zacchaeus Sunday) continues counting from
+ * the *previous* year's Pentecost rather than restarting.
+ */
+export function orthodoxMatinsGospelFor(date, calendarStyle = "Gregorian") {
+  const ctx = orthodoxYearContext(date, calendarStyle);
+  if (ctx.d.getDay() !== 0) return null;
+  const { pdist } = ctx;
+  if (pdist > -8 && pdist < 50) return null;
+  if (isGreatFeastDay(date, calendarStyle)) return null;
+
+  const previousPascha = orthodoxPascha(ctx.pascha.getFullYear() - 1);
+  const precedingPdist = pdist >= 0 ? pdist : daysBetween(previousPascha, ctx.d);
+  const nthSunday = Math.floor((precedingPdist - 49) / 7);
+  const index = (((nthSunday - 1) % 11) + 11) % 11;
+  return orthodoxMatinsGospels[index];
 }

@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.39.0",
+    title: "Orthodox Sunday Matins Gospel (Eothinon)",
+    changes: [
+      { type: "Added", text: "The real Sunday Matins Resurrection Gospel (\"Eothinon\") to the Matins segment \u2014 the eleven-week cycle of Gospel readings recounting Christ's post-Resurrection appearances, read every Sunday at Matins outside Holy Week through Pentecost." },
+      { type: "Info", text: "The eleven citations are cross-checked against both Hapgood's 1906 Service Book and independent modern sources. The cycle runs continuously across the Pascha year boundary, so pre-Lenten Sundays correctly continue counting from the previous year's Pentecost." },
+      { type: "Info", text: "Verified with a 100-year sweep (5,270 Sundays) \u2014 the ~19% gap rate matches the expected structural rate from the Holy-Week-to-Pentecost window and Great Feast collisions almost exactly." },
+    ],
+  },
+  {
     version: "0.38.0",
     title: "Orthodox Vespers and Matins (fixed framework)",
     changes: [

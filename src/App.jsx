@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor, orthodoxSundayReadingFor, orthodoxWeekdayReadingFor, orthodoxFixedFeastReadingFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor, orthodoxSundayReadingFor, orthodoxWeekdayReadingFor, orthodoxFixedFeastReadingFor, orthodoxMatinsGospelFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -661,6 +661,28 @@ function buildOrthodoxReadings(date, calendarStyle) {
     label: `${fallback.label} · ${shortDate(date)}`,
     icon: fallback.icon,
     sequence: [...openingItems, ...readingItems, ...closingItems],
+  };
+}
+
+/**
+ * Builds the Orthodox Matins segment for `date`: the fixed framework
+ * (Six Psalms, Great Litany, "God Is the Lord", Psalms of Praise, etc.)
+ * with the real Sunday Matins Resurrection Gospel ("Eothinon") inserted
+ * where it belongs in the service, right after "God Is the Lord" and
+ * before the Psalms of Praise. Weekdays and the handful of
+ * feast-preempted or no-Eothinon Sundays simply have no Gospel item --
+ * that's correct liturgically, not a gap needing a fallback note, since
+ * the rest of the Matins framework is fixed and unaffected either way.
+ */
+function buildOrthodoxMatins(date, calendarStyle) {
+  const fallback = READINGS.Orthodox.matins;
+  const gospel = orthodoxMatinsGospelFor(date, calendarStyle);
+  if (!gospel) return fallback;
+  const insertIndex = fallback.sequence.findIndex((i) => i.ref === "God Is the Lord") + 1;
+  const gospelItem = { type: "reading", role: "Matins Gospel", ref: displayRef(splitCitation(gospel)[0] || gospel) };
+  return {
+    ...fallback,
+    sequence: [...fallback.sequence.slice(0, insertIndex), gospelItem, ...fallback.sequence.slice(insertIndex)],
   };
 }
 
@@ -3055,6 +3077,10 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
     () => (tradition === "Orthodox" ? buildOrthodoxReadings(effectiveDate, orthodoxCalendar) : null),
     [tradition, effectiveDate, orthodoxCalendar]
   );
+  const orthodoxMatins = useMemo(
+    () => (tradition === "Orthodox" ? buildOrthodoxMatins(effectiveDate, orthodoxCalendar) : null),
+    [tradition, effectiveDate, orthodoxCalendar]
+  );
   const data = useMemo(() => {
     if (tradition === "Anglican") return { ...READINGS.Anglican, am: anglicanAm, pm: anglicanPm, eucharist: anglicanEucharist };
     if (tradition === "Catholic")
@@ -3067,7 +3093,7 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
         office_of_readings: catholicOfficeOfReadings,
         daytime_prayer: catholicDaytimePrayer,
       };
-    if (tradition === "Orthodox") return { ...READINGS.Orthodox, daily: orthodoxDaily };
+    if (tradition === "Orthodox") return { ...READINGS.Orthodox, daily: orthodoxDaily, matins: orthodoxMatins };
     return READINGS[tradition];
   }, [
     tradition,
@@ -3081,6 +3107,7 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
     catholicOfficeOfReadings,
     catholicDaytimePrayer,
     orthodoxDaily,
+    orthodoxMatins,
   ]);
   const defaultSegment =
     data.kind === "office"

@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.39.0] — Orthodox Sunday Matins Gospel (Eothinon)
+
+- **Added:** the real Sunday Matins Resurrection Gospel ("Eothinon") to the Matins segment, inserted right after "God Is the Lord" and before the Psalms of Praise — the eleven-week cycle of Gospel readings recounting Christ's post-Resurrection appearances, read every Sunday at Matins outside Holy Week through Pentecost.
+- **Source:** the eleven citations are a small, fixed, universally-documented list (unchanged across Slavic and Greek practice) — cross-checked here against both Isabel Hapgood's 1906 Service Book (already fetched for the Vespers/Matins framework) and independent modern sources, rather than pulled from the same pdist-table transcription as the other readings.
+- **Added:** `orthodoxMatinsGospelFor()` in `lectionary.js`, reusing the same `orthodoxYearContext()` machinery as the Sunday/weekday readings. The cycle runs continuously from the Sunday after Pentecost through to (but not including) Palm Sunday of the following year, so a pre-Lenten Sunday (negative pdist, e.g. Zacchaeus Sunday) correctly continues counting from the *previous* year's Pentecost rather than restarting.
+- One real bug caught before shipping: my first pass suppressed the Eothinon on any date carrying *any* transcribed fixed-feast reading — but only Vigil-rank Great Feasts should preempt it, not every minor saint's commemoration in that ~85-entry table. Testing surfaced roughly half of summer Sundays incorrectly showing no Gospel; fixed by checking against a narrow, explicit list of the nine fixed-date Great Feasts instead (the three movable ones — Palm Sunday, Ascension, Pentecost — were already correctly excluded by the Holy-Week-to-Pentecost window).
+- Verified via a 100-year sweep (2000–2100, 5,270 Sundays): the resulting ~19% gap rate matches the expected structural rate almost exactly (9 Sundays/year excluded by the Holy-Week-to-Pentecost window, plus ~1/year from Great Feast collisions). Manually confirmed the full 11-citation cycle runs in the correct order with no repeats or skips across a real span of Sundays, and that it correctly continues counting across the Pascha year boundary. Live browser check confirms it renders in the right place in the Matins sequence for a real date (Sunday, August 23, 2026 → Matthew 28:16-20), with a working "Read full passage" link.
+
 ## [0.38.0] — Orthodox Vespers and Matins (fixed framework)
 
 - **Added:** real Vespers (evening) and Matins (morning) content for Orthodox, alongside the existing Daily Cycle readings — the Prayer tab now has a three-segment bar (Matins / Daily Cycle / Vespers) mirroring Catholic's multi-hour layout, defaulting to Matins in the morning and Vespers from 5pm.
