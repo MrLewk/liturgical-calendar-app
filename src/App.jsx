@@ -335,9 +335,10 @@ const READINGS = {
     },
   },
   Orthodox: {
-    kind: "epistle-gospel",
+    kind: "orthodox",
     daily: {
       label: "Daily Cycle",
+      icon: "book",
       sequence: [
         {
           type: "prayer",
@@ -358,6 +359,105 @@ const READINGS = {
           role: "Hymn to the Theotokos",
           ref: "Axion Estin",
           text: "It is truly meet to bless thee, O Theotokos, ever blessed and most pure, and the Mother of our God. More honorable than the Cherubim, and more glorious beyond compare than the Seraphim, thou who without corruption gavest birth to God the Word, true Theotokos, we magnify thee.",
+        },
+      ],
+    },
+    // Vespers and Matins are the fixed, unvarying framework of the two
+    // Hours -- the Psalms, litanies, and canticles that stay the same
+    // every day, as distinct from the variable tone-based hymnography
+    // (troparia, stichera, the 8-tone Octoechos cycle) which isn't
+    // covered here. Text transcribed from Isabel Hapgood's "Service Book
+    // of the Holy Orthodox-Catholic Apostolic Church" (1906), public
+    // domain -- the Great Litany's wording is identical in both Hours
+    // since it's the same fixed litany read at both, per Hapgood's own
+    // text. The Six Psalms and the Vespers/Lauds Psalms are cited, not
+    // reproduced in full, so "Read full passage" pulls the real text
+    // from the app's own bundled WEB Psalter, same as every other
+    // Psalm citation in the app.
+    vespers: {
+      label: "Vespers",
+      icon: "moon",
+      sequence: [
+        {
+          type: "prayer",
+          role: "Opening Prayers",
+          ref: "Trisagion",
+          text: "Holy God, Holy Mighty, Holy Immortal, have mercy on us. (Thrice.) Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto ages of ages. Amen.",
+        },
+        { type: "reading", role: "Psalm", ref: "Psalm 104" },
+        {
+          type: "prayer",
+          role: "The Great Litany",
+          ref: "In Peace Let Us Pray",
+          text: "In peace let us pray to the Lord. For the peace that is from above, and for the salvation of our souls: Lord, have mercy. For the peace of the whole world; for the welfare of God's holy Churches, and for the union of them all: Lord, have mercy. For this holy Temple, and for those who with faith, devoutness, and in the fear of God have entered therein: Lord, have mercy. For healthful seasons; for abundance of the fruits of the earth, and for peaceful times: Lord, have mercy. For those who travel by sea or by land; for the sick and the suffering; for those who are in captivity, and for their salvation: Lord, have mercy. That he will deliver us from all tribulation, wrath, peril and necessity: Lord, have mercy. Succour us, save us, have mercy upon us, and keep us, O God, by thy grace: Lord, have mercy. Calling to remembrance our most holy, undefiled, most blessed and glorious Lady, the Birth-giver of God and ever-virgin Mary, with all the Saints, let us commend ourselves, and each other, and all our life unto Christ our God. To thee, O Lord.",
+          truncated: true,
+        },
+        { type: "reading", role: "Psalm", ref: "Psalm 141:1–2" },
+        {
+          type: "prayer",
+          role: "Hymn",
+          ref: "O Gladsome Light",
+          text: "O gladsome radiance of the holy glory of the Father immortal, heavenly, holy, blessed, Jesus Christ! In that we now are come unto the setting of the sun, and behold the light of even, we hymn thee, Father, Son, and Holy Spirit, God. For meet is it that at all times thou shouldest be magnified by voices propitious, O Son of God, who bestowest life. For which cause all the world doth glorify thee.",
+        },
+        {
+          type: "prayer",
+          role: "Song of Simeon",
+          ref: "Nunc Dimittis",
+          text: "Lord, now lettest thou thy servant depart in peace, according to thy word. For mine eyes have seen thy salvation, which thou hast prepared before the face of all people. To be a light to lighten the Gentiles, and to be the glory of thy people Israel.",
+        },
+        {
+          type: "prayer",
+          role: "Closing Prayers",
+          ref: "Trisagion, Lord's Prayer & Dismissal",
+          text: "O Holy God, Holy Mighty, Holy Immortal One, have mercy upon us. (Thrice.) Glory to the Father, and to the Son, and to the Holy Spirit, now, and ever, and unto ages of ages. Amen. Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come. Thy will be done on earth, as it is in heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us; and lead us not into temptation, but deliver us from the Evil One. For thine is the kingdom, and the power, and the glory, of the Father, and of the Son, and of the Holy Spirit, now, and ever, and unto ages of ages. Amen. The blessing of the Lord, through his grace and loving-kindness, be upon you always, now, and ever, and unto ages of ages. Amen.",
+          truncated: true,
+        },
+      ],
+    },
+    matins: {
+      label: "Matins",
+      icon: "sun",
+      sequence: [
+        {
+          type: "prayer",
+          role: "Opening Prayers",
+          ref: "Trisagion",
+          text: "Holy God, Holy Mighty, Holy Immortal, have mercy on us. (Thrice.) Glory to the Father, and to the Son, and to the Holy Spirit, both now and ever, and unto ages of ages. Amen.",
+        },
+        {
+          type: "prayer",
+          role: "Invitatory",
+          ref: "Glory to God in the Highest",
+          text: "Glory to God in the highest, and on earth peace, good will toward men. (Thrice.) O Lord, thou shalt open my lips, and my mouth shall declare thy praise. (Twice.)",
+        },
+        { type: "reading", role: "The Six Psalms", ref: "Psalm 3" },
+        { type: "reading", role: null, ref: "Psalm 38" },
+        { type: "reading", role: null, ref: "Psalm 63" },
+        { type: "reading", role: null, ref: "Psalm 88" },
+        { type: "reading", role: null, ref: "Psalm 103" },
+        { type: "reading", role: null, ref: "Psalm 143" },
+        {
+          type: "prayer",
+          role: "The Great Litany",
+          ref: "In Peace Let Us Pray",
+          text: "In peace let us pray to the Lord. For the peace that is from above, and for the salvation of our souls: Lord, have mercy. For the peace of the whole world; for the welfare of God's holy Churches, and for the union of them all: Lord, have mercy. For this holy Temple, and for those who with faith, devoutness, and in the fear of God have entered therein: Lord, have mercy. For healthful seasons; for abundance of the fruits of the earth, and for peaceful times: Lord, have mercy. For those who travel by sea or by land; for the sick and the suffering; for those who are in captivity, and for their salvation: Lord, have mercy. That he will deliver us from all tribulation, wrath, peril and necessity: Lord, have mercy. Succour us, save us, have mercy upon us, and keep us, O God, by thy grace: Lord, have mercy. Calling to remembrance our most holy, undefiled, most blessed and glorious Lady, the Birth-giver of God and ever-virgin Mary, with all the Saints, let us commend ourselves, and each other, and all our life unto Christ our God. To thee, O Lord.",
+          truncated: true,
+        },
+        {
+          type: "prayer",
+          role: "Resurrectional Hymn",
+          ref: "God Is the Lord",
+          text: "God is the Lord, and hath appeared unto us; blessed is he that cometh in the Name of the Lord.",
+        },
+        { type: "reading", role: "Psalms of Praise", ref: "Psalm 148" },
+        { type: "reading", role: null, ref: "Psalm 149" },
+        { type: "reading", role: null, ref: "Psalm 150" },
+        {
+          type: "prayer",
+          role: "Closing Prayers",
+          ref: "Trisagion, Lord's Prayer & Dismissal",
+          text: "O Holy God, Holy Mighty, Holy Immortal One, have mercy upon us. (Thrice.) Glory to the Father, and to the Son, and to the Holy Spirit, now, and ever, and unto ages of ages. Amen. Our Father, who art in heaven, hallowed be thy Name. Thy kingdom come. Thy will be done on earth, as it is in heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us; and lead us not into temptation, but deliver us from the Evil One. For thine is the kingdom, and the power, and the glory, of the Father, and of the Son, and of the Holy Spirit, now, and ever, and unto ages of ages. Amen. The blessing of the Lord, through his grace and loving-kindness, be upon you always, now, and ever, and unto ages of ages. Amen.",
+          truncated: true,
         },
       ],
     },
@@ -2924,6 +3024,19 @@ function autoCatholicSegment(date) {
   return "compline";
 }
 
+/**
+ * Picks Matins in the morning, Vespers once evening starts (5pm), the
+ * Daily Cycle (readings) always on a live "today" so the Epistle/Gospel
+ * stay easy to find, otherwise falls back to Matins for a non-today date.
+ */
+function autoOrthodoxSegment(date) {
+  const isLiveToday = !date || dateOnly(date).getTime() === dateOnly(new Date()).getTime();
+  if (!isLiveToday) return "matins";
+  const hour = new Date().getHours();
+  if (hour < 17) return "matins";
+  return "vespers";
+}
+
 function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage, onOpenCanticle, collectSource, massForm, orthodoxCalendar }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
@@ -2969,7 +3082,16 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
     catholicDaytimePrayer,
     orthodoxDaily,
   ]);
-  const defaultSegment = data.kind === "office" ? autoOfficeSegment(viewDate) : data.kind === "catholic" ? autoCatholicSegment(viewDate) : data.kind === "mass" ? "mass" : "daily";
+  const defaultSegment =
+    data.kind === "office"
+      ? autoOfficeSegment(viewDate)
+      : data.kind === "catholic"
+        ? autoCatholicSegment(viewDate)
+        : data.kind === "orthodox"
+          ? autoOrthodoxSegment(viewDate)
+          : data.kind === "mass"
+            ? "mass"
+            : "daily";
   const [segment, setSegment] = useState(defaultSegment);
 
   useEffect(() => {
@@ -2984,7 +3106,9 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
       ? segment
       : data.kind === "catholic" && ["mass", "lauds", "vespers", "compline", "office_of_readings", "daytime_prayer"].includes(segment)
         ? segment
-        : defaultSegment;
+        : data.kind === "orthodox" && ["daily", "vespers", "matins"].includes(segment)
+          ? segment
+          : defaultSegment;
 
   // Reset to a valid segment when tradition changes underneath us
   const segments =
@@ -3003,8 +3127,23 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
             { key: "vespers", label: "Vespers", icon: Moon },
             { key: "compline", label: "Compline", icon: Moon },
           ]
-        : null;
-  const activeData = data.kind === "office" ? data[validSegment] : data.kind === "catholic" ? data[validSegment] : data.kind === "mass" ? data.mass : data.daily;
+        : data.kind === "orthodox"
+          ? [
+              { key: "matins", label: "Matins", icon: Sun },
+              { key: "daily", label: "Daily Cycle", icon: BookOpen },
+              { key: "vespers", label: "Vespers", icon: Moon },
+            ]
+          : null;
+  const activeData =
+    data.kind === "office"
+      ? data[validSegment]
+      : data.kind === "catholic"
+        ? data[validSegment]
+        : data.kind === "orthodox"
+          ? data[validSegment]
+          : data.kind === "mass"
+            ? data.mass
+            : data.daily;
 
   return (
     <div className="pt-2 lg:pt-0 lg:max-w-3xl">

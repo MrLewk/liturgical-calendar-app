@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.38.0",
+    title: "Orthodox Vespers and Matins (fixed framework)",
+    changes: [
+      { type: "Added", text: "Real Vespers and Matins content for Orthodox alongside the existing Daily Cycle readings \u2014 a three-segment Prayer tab (Matins / Daily Cycle / Vespers) mirroring Catholic's multi-hour layout." },
+      { type: "Info", text: "Sourced from Isabel Hapgood's 1906 Service Book (public domain). Covers the fixed, unvarying framework only \u2014 Psalms, litanies, canticles \u2014 not the variable tone-based hymnography (troparia, stichera, the 8-tone cycle), which needs a separate source and is a known gap." },
+      { type: "Info", text: "The Six Psalms (Matins) and Vespers/Lauds Psalms are cited, not reproduced in full, so \"Read full passage\" pulls the real text from the app's bundled WEB Psalter \u2014 numbering double-checked against Western/Masoretic vs Septuagint conventions and verified correct." },
+    ],
+  },
+  {
     version: "0.37.0",
     title: "Orthodox fixed-feast Epistle/Gospel readings (Slavic tradition)",
     changes: [

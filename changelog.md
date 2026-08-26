@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.38.0] — Orthodox Vespers and Matins (fixed framework)
+
+- **Added:** real Vespers (evening) and Matins (morning) content for Orthodox, alongside the existing Daily Cycle readings — the Prayer tab now has a three-segment bar (Matins / Daily Cycle / Vespers) mirroring Catholic's multi-hour layout, defaulting to Matins in the morning and Vespers from 5pm.
+- **Source:** Isabel Hapgood's *Service Book of the Holy Orthodox-Catholic Apostolic Church* (1906), public domain — the same kind of century-old English liturgical translation already used for the Catholic TLM text. Covers the fixed, unvarying framework only (Psalms, litanies, canticles) — not the variable tone-based hymnography (troparia, stichera, the 8-tone Octoechos cycle), which would need a separate data source and is a known gap, not an oversight.
+- **Vespers:** Trisagion opening, Psalm 104, the Great Litany, "Lord, I Have Cried" (Psalm 141) opening verses, "O Gladsome Light" (Phos Hilaron), the Song of Simeon (Nunc Dimittis, in Hapgood's own wording rather than the app's existing 1662/CW translations, to keep the Orthodox text register consistent), and the closing Trisagion/Lord's Prayer/dismissal.
+- **Matins:** Trisagion opening, the angelic invitatory ("Glory to God in the highest..."), the Six Psalms (Psalms 3, 38, 63, 88, 103, 143 — cited, not reproduced in full, so "Read full passage" pulls the real text from the app's own bundled WEB Psalter), the Great Litany, "God Is the Lord," the Psalms of Praise (148–150), and the same closing.
+- Since Vespers/Matins' fixed framework doesn't vary by date (unlike the Epistle/Gospel readings), this is static content — no date-resolution engine needed, unlike the last three versions' work.
+- One numbering check worth noting: the Six Psalms are traditionally cited in Septuagint numbering (3, 37, 62, 87, 102, 142), but the app's bundled WEB Psalter uses Western/Masoretic numbering (confirmed by checking Psalms 9–11 aren't merged the way the Septuagint merges them) — so they're cited here as 3, 38, 63, 88, 103, 143, verified against the bundled text to resolve to the correct psalm.
+- Live browser check confirms both new segments render correctly with working "Read full passage" links, and Psalm 3 resolves to the correct text.
+
 ## [0.37.0] — Orthodox fixed-feast Epistle/Gospel readings (Slavic tradition)
 
 - **Added:** real Epistle/Gospel citations for Orthodox fixed-date feasts (Slavic tradition) — the Twelve Great Feasts (except Annunciation, see below) and ~75 other major fixed commemorations now show their own proper readings instead of falling through to the ordinary Sunday/weekday cycle. A fixed feast's reading correctly takes priority over the ordinary cycle when both exist for the same date — e.g. the Presentation of the Theotokos landing on a Sunday reads its own Gospel, not that Sunday's.
