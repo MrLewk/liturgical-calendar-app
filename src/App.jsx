@@ -1132,9 +1132,9 @@ export default function App() {
 
       {/* Main column — offset by the sidebar's fixed width on desktop, since a
           position:fixed element is removed from normal document flow. */}
-      <div className="flex-1 flex items-center justify-center lg:items-stretch lg:justify-stretch lg:ml-[280px]">
+      <div className="flex-1 flex items-center justify-center lg:items-stretch lg:justify-stretch lg:ml-[280px] min-w-0">
         <div
-          className="relative w-full max-w-[480px] lg:max-w-none flex flex-col h-[100dvh] sm:h-[calc(100dvh-3rem)] lg:h-[100dvh] sm:my-6 sm:rounded-[2rem] sm:shadow-2xl lg:my-0 lg:rounded-none lg:shadow-none overflow-hidden lg:overflow-visible"
+          className="relative w-full min-w-0 max-w-[480px] lg:max-w-none flex flex-col h-[100dvh] sm:h-[calc(100dvh-3rem)] lg:h-[100dvh] sm:my-6 sm:rounded-[2rem] sm:shadow-2xl lg:my-0 lg:rounded-none lg:shadow-none overflow-hidden lg:overflow-visible"
           style={{ backgroundColor: theme.bg }}
         >
           {/* Mobile header — hidden on desktop, where the sidebar covers this role.
@@ -1166,8 +1166,11 @@ export default function App() {
 
           {/* Scrollable content — min-h-0 is required here so this area scrolls
               internally instead of stretching the flex column (which would drag
-              the header and tab bar along with it) */}
-          <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-4 lg:px-12 lg:py-10 no-scrollbar">
+              the header and tab bar along with it). overflow-x-hidden + min-w-0
+              stop a wide child (e.g. a horizontally-scrolling tab row) from
+              expanding this flex item and dragging the whole page sideways -
+              overflow-x-auto on that child then scrolls just itself, contained. */}
+          <div className="flex-1 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden px-5 pb-4 lg:px-12 lg:py-10 no-scrollbar">
             {content}
           </div>
 

@@ -6,6 +6,13 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.34.1",
+    title: "Fixed whole-page horizontal shift from the 6-tab Prayer segment bar",
+    changes: [
+      { type: "Fixed", text: "The Prayer tab's 6-hour segment bar could drag the entire page sideways on mobile instead of scrolling just the tab row \u2014 a flexbox min-width propagation issue fixed at two points in the app's outer layout." },
+    ],
+  },
+  {
     version: "0.34.0",
     title: "Office of Readings & Daytime Prayer: all five hours now covered",
     changes: [

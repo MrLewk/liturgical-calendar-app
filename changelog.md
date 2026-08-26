@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.34.1] — Fixed whole-page horizontal shift from the 6-tab Prayer segment bar
+
+- **Fixed:** on mobile, the Prayer tab's 6-hour segment bar (added in v0.34.0) could drag the *entire page* sideways instead of just scrolling the tab row itself — the header would shift out of view, showing a horizontally-cropped mid-scroll state with no way to tell what had happened. Root cause: a classic flexbox gotcha, where a flex child's intrinsic content width (the tab row, wider than the screen once a tab scrolled into view) propagates upward through ancestors missing `min-width: 0`, forcing the whole app shell wider than the viewport rather than being contained. Two ancestors in the flex chain needed the fix, not just the tab row's immediate parent.
+- Verified by inspecting actual computed scroll widths before and after (the page's `scrollWidth` no longer exceeds `window.innerWidth`) and visually confirming the header stays fixed in place while scrolling through all 6 tabs, including navigating directly to Compline (the tab furthest from the default view).
+
 ## [0.34.0] — Office of Readings & Daytime Prayer: all five hours now covered
 
 - **Added:** Office of Readings (three Psalms + the real biblical First Reading, single-year cycle) and Daytime Prayer (three Psalms, same 4-week rotation as Lauds/Vespers) — the Prayer tab now covers all five traditional hours of the Liturgy of the Hours for Catholic, up from three.
