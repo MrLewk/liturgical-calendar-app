@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.35.0",
+    title: "Orthodox Sunday Epistle/Gospel readings (Slavic tradition)",
+    changes: [
+      { type: "Added", text: "Real Sunday Epistle/Gospel citations for Orthodox (Slavic/OCA/ROCOR tradition) for the first time \u2014 the Prayer tab, Today teaser, and Calendar day-detail sheet now all show the actual Byzantine-rite readings instead of one fixed demo entry." },
+      { type: "Info", text: "Citations transcribed from orthocal-python (Brian Glass, building on Paul Kachur's algorithm), MIT licensed; passage text itself comes from the app's own bundled WEB translation. Ports the full Byzantine Paschal-distance (pdist) resolution algorithm, including the \"Lukan jump\" and Slavic \"reserve\" Sunday mechanism, reusing the app's existing Julian/Gregorian Pascha helpers." },
+      { type: "Info", text: "Weekday readings, fixed-feast (Menaion) readings, and Greek-tradition UI toggle aren't covered yet \u2014 honest gaps, not guesses." },
+      { type: "Info", text: "Verified with a 100-year automated sweep (5,270 Sundays, 0 gaps, 0 errors) and cross-checked against orthocal.info; also confirmed the pie-chart/Wheel view's season boundaries are correct and gap-free for every tradition." },
+    ],
+  },
+  {
     version: "0.34.1",
     title: "Fixed whole-page horizontal shift from the 6-tab Prayer segment bar",
     changes: [

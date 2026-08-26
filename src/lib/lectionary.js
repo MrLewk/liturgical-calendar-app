@@ -10,7 +10,7 @@
 // Those need the same date -> week-label resolver (this file), just a
 // different data table to look up into — see TODOs below.
 
-import { addDays, adventSunday, westernEaster, dateOnly, daysBetween, sundayOnOrBefore } from "./dates";
+import { addDays, adventSunday, westernEaster, orthodoxPascha, julianFixedDateInGregorian, dateOnly, daysBetween, sundayOnOrBefore } from "./dates";
 import { lectionaryYearsFor, officeColumnsFor } from "../data/lectionaryYears";
 import delTable6 from "../data/del_table6.json";
 import rclSundays from "../data/rcl_sundays.json";
@@ -20,6 +20,7 @@ import catholicOfficePsalter from "../data/catholic_office_psalter.json";
 import catholicWeekdays from "../data/catholic_weekdays.json";
 import catholicFixedFeastDates from "../data/catholic_fixed_feast_dates.json";
 import catholicOfficeReadingsBiblical from "../data/catholic_office_readings_biblical.json";
+import orthodoxSundayReadings from "../data/orthodox_sunday_readings.json";
 
 function nextSunday(date) {
   const d = dateOnly(date);
@@ -1718,4 +1719,146 @@ export function postCommunionCWFor(date) {
   const text = postCommunionsCW[label];
   if (!text) return null;
   return { label, text };
+}
+
+// ---- Orthodox (Byzantine) Sunday Epistle/Gospel Lectionary ----
+//
+// Resolves a Sunday to its Epistle/Gospel citations via the Byzantine
+// Paschal-distance (pdist) system: every reading is keyed to a fixed
+// offset in days from Pascha (Julian Paschalion), except for a run of
+// weeks each autumn where the continuous read-through of Luke's Gospel
+// gets interrupted by the fixed Nativity/Theophany feasts (the "Lukan
+// jump") and has to either skip ahead or, in Slavic practice, resume from
+// Sunday Gospels saved earlier in the year ("reserves", replayed on the
+// Sundays between Theophany and the Triodion -- Greek practice has no
+// equivalent mechanism and simply continues the numbered sequence).
+//
+// Citation data (transcribed facts, not the reading text itself) and this
+// pdist algorithm are adapted from orthocal-python (Brian Glass, building
+// on Paul Kachur's original algorithm), MIT licensed:
+// https://github.com/brianglass/orthocal-python -- its Reading/Pericope
+// fixture data is tagged "common" (shared Byzantine base) and "slavic"
+// (OCA/ROCOR-specific overrides); only the Slavic-tradition path is wired
+// here for now. Passage text itself comes from our own bundled WEB data,
+// same as every other tradition in the app.
+
+function mod7(n) {
+  return ((n % 7) + 7) % 7;
+}
+
+/** Given a Pascha-distance, the Pascha-distances of the Saturday/Sunday
+ * immediately before and after it (itself included if it's already that
+ * weekday). Mirrors orthocal's datetools.surrounding_weekends exactly. */
+function surroundingWeekends(distance) {
+  const weekday = mod7(distance);
+  return {
+    satBefore: distance - weekday - 1,
+    sunBefore: distance - 7 + mod7(7 - weekday),
+    satAfter: distance + 7 - mod7(weekday + 1),
+    sunAfter: distance + 7 - weekday,
+  };
+}
+
+function orthodoxFixedDate(calendarStyle, year, month, day) {
+  return calendarStyle === "Julian" ? julianFixedDateInGregorian(year, month, day) : new Date(year, month - 1, day);
+}
+
+/**
+ * The Slavic-tradition Sunday Epistle/Gospel citations for `date`, or
+ * null if `date` isn't a Sunday or falls outside the transcribed range
+ * (the underlying table only covers the Sunday cycle; fixed-feast and
+ * weekday readings aren't wired yet -- an honest gap, not a guess).
+ * `calendarStyle` is "Gregorian" (New Calendar) or "Julian" (Old
+ * Calendar) -- it only affects which real-world date each Sunday lands
+ * on, not the pdist math itself (Pascha and everything measured from it
+ * already uses the same Julian Paschalion either way).
+ */
+export function orthodoxSundayReadingFor(date, calendarStyle = "Gregorian") {
+  const d = dateOnly(date);
+  if (d.getDay() !== 0) return null;
+
+  // Find the Byzantine liturgical year containing `date`. Each such year
+  // is anchored to a single Pascha and runs from the Sunday of Zacchaeus
+  // (77 days before that Pascha) through Nativity/Theophany of the
+  // following winter, up to the eve of the NEXT Zacchaeus Sunday -- i.e.
+  // Nativity and Theophany belong to the autumn/winter AFTER their
+  // year's Pascha, not before it. Try this calendar year's Pascha first;
+  // if that puts `date` earlier than Zacchaeus, it actually belongs to
+  // the liturgical year anchored to the PREVIOUS calendar year's Pascha
+  // (whose Nativity/Theophany extend into this calendar year's January).
+  let year = d.getFullYear();
+  let pascha = orthodoxPascha(year);
+  let pdist = daysBetween(pascha, d);
+  if (pdist < -77) {
+    year -= 1;
+    pascha = orthodoxPascha(year);
+    pdist = daysBetween(pascha, d);
+  }
+  const nextPascha = orthodoxPascha(year + 1);
+
+  const elevationPdist = daysBetween(pascha, orthodoxFixedDate(calendarStyle, year, 9, 14));
+  const { sunAfter: sunAfterElevation } = surroundingWeekends(elevationPdist);
+
+  const theophanyPdist = daysBetween(pascha, orthodoxFixedDate(calendarStyle, year + 1, 1, 6));
+  const { satBefore: satBeforeTheophany, sunAfter: sunAfterTheophany } = surroundingWeekends(theophanyPdist);
+
+  const nativityPdist = daysBetween(pascha, orthodoxFixedDate(calendarStyle, year, 12, 25));
+  const nativityWeekday = mod7(nativityPdist);
+  const forefathers = nativityPdist - 14 + mod7(7 - nativityWeekday);
+
+  const lukanJump = 49 + 1 + 7 * 17 - (sunAfterElevation + 1);
+  const firstSunLuke = sunAfterElevation + 7;
+  const lukanJumpThreshold = sunAfterElevation;
+
+  const nextPaschaPdist = daysBetween(pascha, nextPascha);
+  const sunBeforeZaccheus = nextPaschaPdist - 12 * 7;
+  const extraSundays = Math.floor((sunBeforeZaccheus - sunAfterTheophany) / 7);
+
+  // Slavic "reserves": Sunday Gospels displaced by the Lukan jump and by
+  // the Nativity/Theophany festal cycle, saved and re-read on the Sundays
+  // between Theophany and the Triodion.
+  const reserves = [];
+  const firstLuke18 = 49 + 7 * 18;
+  const thirteenthLuke = firstLuke18 + 7 * 13;
+  if (extraSundays) {
+    const forefathersJump = forefathers + lukanJump + 7;
+    for (let p = forefathersJump; p <= thirteenthLuke; p += 7) reserves.push(p);
+    const remainder = extraSundays - reserves.length;
+    if (remainder > 0) {
+      const start = firstLuke18 - remainder * 7;
+      const end = firstLuke18 - 6;
+      for (let p = start; p < end; p += 7) reserves.push(p);
+    }
+  }
+
+  let gospelPdist;
+  const reserveIndex = Math.floor((pdist - sunAfterTheophany) / 7) - 1;
+  if (pdist === firstSunLuke + 10 * 7) {
+    gospelPdist = forefathers + lukanJump;
+  } else if (pdist > sunAfterTheophany && extraSundays > 1 && reserveIndex >= 0 && reserveIndex < reserves.length) {
+    gospelPdist = reserves[reserveIndex];
+  } else if (pdist > satBeforeTheophany) {
+    gospelPdist = daysBetween(nextPascha, d);
+  } else if (pdist > lukanJumpThreshold) {
+    gospelPdist = pdist + lukanJump;
+  } else {
+    gospelPdist = pdist;
+  }
+
+  let epistlePdist;
+  if (pdist === 49 + 29 * 7) {
+    epistlePdist = forefathers;
+  } else if (pdist >= 49 + 32 * 7) {
+    epistlePdist = daysBetween(nextPascha, d);
+  } else {
+    epistlePdist = pdist;
+  }
+
+  const gospelEntry = orthodoxSundayReadings[String(gospelPdist)]?.Gospel;
+  const epistleEntry = orthodoxSundayReadings[String(epistlePdist)]?.Epistle;
+  const gospel = gospelEntry?.slavic || gospelEntry?.common;
+  const epistle = epistleEntry?.slavic || epistleEntry?.common;
+  if (!gospel || !epistle) return null;
+
+  return { epistle, gospel, pdist };
 }

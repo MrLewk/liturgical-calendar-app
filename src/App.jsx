@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor, orthodoxSundayReadingFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -513,6 +513,39 @@ function buildCatholicMass(date, massForm) {
 }
 
 /**
+ * Builds the Orthodox "Daily Cycle" entry for `date`: the real Slavic-
+ * tradition Sunday Epistle/Gospel citations swapped into the fixed
+ * Trisagion/Troparion/Axion Estin liturgy text, the same way the Catholic
+ * Mass builder keeps its opening/closing prayers and only swaps the
+ * readings. Falls back to the static demo entry on weekdays and on any
+ * Sunday outside the transcribed pdist range (both honest gaps, not
+ * guesses -- see orthodoxSundayReadingFor). `calendarStyle` should match
+ * whatever New/Old Calendar setting governs the rest of the Orthodox tab.
+ */
+function buildOrthodoxReadings(date, calendarStyle) {
+  const fallback = READINGS.Orthodox.daily;
+  const firstReadingIndex = fallback.sequence.findIndex((i) => i.type === "reading");
+  const lastReadingIndex = fallback.sequence.map((i) => i.type).lastIndexOf("reading");
+  const openingItems = fallback.sequence.slice(0, firstReadingIndex);
+  const closingItems = fallback.sequence.slice(lastReadingIndex + 1);
+  const result = orthodoxSundayReadingFor(date, calendarStyle);
+  if (!result) {
+    const isSunday = date.getDay() === 0;
+    const gapNote = isSunday ? "Sunday reading not covered yet" : "weekday reading not covered yet";
+    return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (${gapNote})` };
+  }
+  const readingItems = [
+    { type: "reading", role: "Epistle", ref: displayRef(splitCitation(result.epistle)[0] || result.epistle) },
+    { type: "reading", role: "Gospel", ref: displayRef(splitCitation(result.gospel)[0] || result.gospel) },
+  ];
+  return {
+    label: `${fallback.label} · ${shortDate(date)}`,
+    icon: fallback.icon,
+    sequence: [...openingItems, ...readingItems, ...closingItems],
+  };
+}
+
+/**
  * Builds Morning Prayer (Lauds) for `date` from the real Four-Week
  * Psalter: two Psalms and an Old Testament Canticle, plus the Benedictus
  * (reusing the Common Worship canticle text already built for Anglican,
@@ -918,7 +951,7 @@ function catholicOfficeItems(date, segment) {
  * engine's known gaps, or for traditions without a real per-date
  * lectionary yet.
  */
-function todayReadingRef(tradition, today) {
+function todayReadingRef(tradition, today, calendarStyle) {
   if (tradition === "Anglican") {
     const segment = autoOfficeSegment(today);
     if (segment !== "eucharist") {
@@ -933,7 +966,7 @@ function todayReadingRef(tradition, today) {
       if (office?.items[0]?.ref) return office.items[0].ref;
     }
   }
-  return dayReadingItems(tradition, today)[0]?.ref;
+  return dayReadingItems(tradition, today, calendarStyle)[0]?.ref;
 }
 
 /**
@@ -944,11 +977,12 @@ function todayReadingRef(tradition, today) {
  * autoOfficeSegment would open to for that date, so this preview never
  * shows a different service than the Prayer tab would for the same day.
  * Falls back to the Eucharist reading on any of the Office engine's known
- * gaps, and to the single fixed demo citation for Orthodox (not wired to
- * a real per-date lectionary yet) or for any date that falls in a known
- * gap for both services.
+ * gaps, and for Orthodox to the real Slavic Sunday Epistle/Gospel where
+ * covered (weekdays still fall back to the single fixed demo citation --
+ * not wired to a real per-date lectionary yet), and to the single fixed
+ * demo citation for any date that falls in a known gap for both services.
  */
-function dayReadingItems(tradition, date) {
+function dayReadingItems(tradition, date, calendarStyle) {
   if (tradition === "Anglican") {
     const segment = autoOfficeSegment(date);
     if (segment !== "eucharist") {
@@ -966,6 +1000,15 @@ function dayReadingItems(tradition, date) {
     }
     const result = catholicReadingItems(date);
     if (result) return result.items;
+  }
+  if (tradition === "Orthodox") {
+    const result = orthodoxSundayReadingFor(date, calendarStyle);
+    if (result) {
+      return [
+        { role: "Epistle", ref: displayRef(splitCitation(result.epistle)[0] || result.epistle) },
+        { role: "Gospel", ref: displayRef(splitCitation(result.gospel)[0] || result.gospel) },
+      ];
+    }
   }
   return [{ role: null, ref: firstReadingRef(tradition) }];
 }
@@ -1072,6 +1115,7 @@ export default function App() {
           onOpenCanticle={setOpenCanticle}
           collectSource={collectSource}
           massForm={massForm}
+          orthodoxCalendar={calendar}
         />
       )}
       {tab === "feasts" && (
@@ -2349,7 +2393,7 @@ function DayDetailSheet({ date, tradition, calendar, onClose, onOpenFeast, onOpe
   const season = useMemo(() => withDisplay(seasonAt(seasons, date), date, tradition, seasons), [seasons, date, tradition]);
   const accent = seasonAccent(season, theme.mode);
   const feast = feastOnDate(feasts, date);
-  const readingItems = dayReadingItems(tradition, date);
+  const readingItems = dayReadingItems(tradition, date, calendar);
 
   return (
     <SheetOverlay onClose={onClose}>
@@ -2452,7 +2496,7 @@ const COLOR_MEANING = {
 function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFeast, onOpenReadings, onOpenExport, tradition, calendar }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
-  const readingRef = todayReadingRef(tradition, today);
+  const readingRef = todayReadingRef(tradition, today, calendar);
   return (
     <div className="pt-2 lg:pt-0 lg:grid lg:grid-cols-[1fr_420px] lg:gap-10 lg:items-start">
       <div>
@@ -2861,7 +2905,7 @@ function autoCatholicSegment(date) {
   return "compline";
 }
 
-function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage, onOpenCanticle, collectSource, massForm }) {
+function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage, onOpenCanticle, collectSource, massForm, orthodoxCalendar }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   const effectiveDate = viewDate || today;
@@ -2875,6 +2919,10 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
   const catholicCompline = useMemo(() => (tradition === "Catholic" ? buildCatholicCompline(effectiveDate) : null), [tradition, effectiveDate]);
   const catholicOfficeOfReadings = useMemo(() => (tradition === "Catholic" ? buildCatholicOfficeOfReadings(effectiveDate) : null), [tradition, effectiveDate]);
   const catholicDaytimePrayer = useMemo(() => (tradition === "Catholic" ? buildCatholicDaytimePrayer(effectiveDate) : null), [tradition, effectiveDate]);
+  const orthodoxDaily = useMemo(
+    () => (tradition === "Orthodox" ? buildOrthodoxReadings(effectiveDate, orthodoxCalendar) : null),
+    [tradition, effectiveDate, orthodoxCalendar]
+  );
   const data = useMemo(() => {
     if (tradition === "Anglican") return { ...READINGS.Anglican, am: anglicanAm, pm: anglicanPm, eucharist: anglicanEucharist };
     if (tradition === "Catholic")
@@ -2887,6 +2935,7 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
         office_of_readings: catholicOfficeOfReadings,
         daytime_prayer: catholicDaytimePrayer,
       };
+    if (tradition === "Orthodox") return { ...READINGS.Orthodox, daily: orthodoxDaily };
     return READINGS[tradition];
   }, [
     tradition,
@@ -2899,6 +2948,7 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
     catholicCompline,
     catholicOfficeOfReadings,
     catholicDaytimePrayer,
+    orthodoxDaily,
   ]);
   const defaultSegment = data.kind === "office" ? autoOfficeSegment(viewDate) : data.kind === "catholic" ? autoCatholicSegment(viewDate) : data.kind === "mass" ? "mass" : "daily";
   const [segment, setSegment] = useState(defaultSegment);
