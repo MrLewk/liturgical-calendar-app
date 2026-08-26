@@ -6,6 +6,23 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.32.0",
+    title: "Traditional Latin Mass toggle for Catholic",
+    changes: [
+      { type: "Added", text: "A Mass Text toggle in Settings for Catholic \u2014 Novus Ordo (current) or Traditional Latin (1962, pre-Vatican II) \u2014 mirroring the existing BCP/Common Worship toggle for Anglican. Only the fixed prayers differ; the daily Scripture readings are the same current Lectionary either way." },
+      { type: "Info", text: "Traditional Latin content adapted from a public-domain 1921 Missal etext (Canon onward); the Confiteor and Kyrie \u2014 short, centuries-old, unchanged formulas \u2014 rendered directly in matching period English. Avoided a copyrighted 2010 ICEL PDF that has no usage grant." },
+    ],
+  },
+  {
+    version: "0.31.0",
+    title: "Catholic weekday Mass Lectionary + fixed Solemnities/Feasts",
+    changes: [
+      { type: "Added", text: "The Roman weekday Mass Lectionary (Year I/II) \u2014 real readings for every weekday, not just Sundays, across Advent, Christmas, Lent, Easter, and the full 34-week Ordinary Time cycle. Year I/II is odd/even by calendar year, drifting independently from the Sunday A/B/C cycle." },
+      { type: "Added", text: "Nine fixed-date Solemnities/Feasts that can displace an Ordinary Time Sunday when they fall on one (Presentation, Nativity of John the Baptist, Sts. Peter & Paul, Transfiguration, Assumption, Exaltation of the Holy Cross, All Saints, All Souls, Dedication of the Lateran Basilica) \u2014 closing a gap flagged in v0.29.0. These now show their own proper readings on a weekday too, without interrupting the surrounding week's numbering." },
+      { type: "Info", text: "Found and fixed four real bugs via a 100-year automated sweep during this work, cutting the unexplained gap rate from over 12% to 1.64% with every remaining gap accounted for (Christmas Day, Jan 1, the Easter Triduum, or the rare Jan 6 edge)." },
+    ],
+  },
+  {
     version: "0.30.3",
     title: "Fixed five false/dead-end \"truncated\" prayer texts",
     changes: [

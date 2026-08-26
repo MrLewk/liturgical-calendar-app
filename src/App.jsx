@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -198,6 +198,63 @@ const READINGS = {
         { type: "reading", role: "Gospel", ref: "Matthew 23:1–12", text: "Then spake Jesus to the multitude, and to his disciples, Saying, The scribes and the Pharisees sit in Moses' seat: All therefore whatsoever they bid you observe, that observe and do.", truncated: true },
       ],
     },
+    mass_tlm: {
+      label: "Daily Mass (Traditional Latin)",
+      icon: "sun",
+      sequence: [
+        {
+          type: "prayer",
+          role: "Penitential Act",
+          ref: "Confiteor (full traditional form)",
+          text: "I confess to almighty God, to blessed Mary ever Virgin, to blessed Michael the Archangel, to blessed John the Baptist, to the holy Apostles Peter and Paul, to all the Saints, and to you, Father, that I have sinned exceedingly in thought, word, and deed, through my fault, through my fault, through my most grievous fault. Therefore I beseech blessed Mary ever Virgin, blessed Michael the Archangel, blessed John the Baptist, the holy Apostles Peter and Paul, all the Saints, and you, Father, to pray for me to the Lord our God.",
+        },
+        {
+          type: "prayer",
+          role: "Kyrie",
+          ref: "Kyrie eleison",
+          text: "Lord, have mercy. Lord, have mercy. Lord, have mercy. Christ, have mercy. Christ, have mercy. Christ, have mercy. Lord, have mercy. Lord, have mercy. Lord, have mercy.",
+        },
+        {
+          type: "prayer",
+          role: "Canticle",
+          ref: "Gloria in excelsis",
+          text: "Glory be to God on high, and in earth peace, good will towards men. We praise thee, we bless thee, we worship thee, we glorify thee, we give thanks to thee, for thy great glory, O Lord God, heavenly King, God the Father Almighty. O Lord, the only-begotten Son Jesus Christ; O Lord God, Lamb of God, Son of the Father, that takest away the sins of the world, have mercy upon us. Thou that takest away the sins of the world, have mercy upon us. Thou that takest away the sins of the world, receive our prayer. Thou that sittest at the right hand of God the Father, have mercy upon us. For thou only art holy; thou only art the Lord; thou only, O Christ, with the Holy Ghost, art most high in the glory of God the Father. Amen.",
+        },
+        { type: "reading", role: "First Reading", ref: "Ezekiel 43:1–7", text: "Afterward he brought me to the gate, even the gate that looketh toward the east: And, behold, the glory of the God of Israel came from the way of the east: and his voice was like a noise of many waters.", truncated: true },
+        { type: "reading", role: "Responsorial Psalm", ref: "Psalm 85:9–14", text: "Surely his salvation is nigh them that fear him; that glory may dwell in our land. Mercy and truth are met together; righteousness and peace have kissed each other." },
+        { type: "reading", role: "Gospel", ref: "Matthew 23:1–12", text: "Then spake Jesus to the multitude, and to his disciples, Saying, The scribes and the Pharisees sit in Moses' seat: All therefore whatsoever they bid you observe, that observe and do.", truncated: true },
+        {
+          type: "prayer",
+          role: "Eucharistic Prayer",
+          ref: "Te igitur (the Roman Canon)",
+          text: "Wherefore, O most merciful Father, we humbly pray and beseech thee, through Jesus Christ thy Son our Lord, that thou wouldst vouchsafe to receive and bless these gifts, these offerings, this holy and unblemished sacrifice, which in the first place we offer thee for thy holy Catholic Church, that it may please thee to grant her peace, as also to protect, unite, and govern her throughout the world, together with thy servant our Pope, our Bishop, and all orthodox believers who keep the catholic and apostolic faith.",
+        },
+        {
+          type: "prayer",
+          role: "Eucharistic Prayer",
+          ref: "The Words of Consecration",
+          text: "Who, the day before he suffered, took bread into his holy and venerable hands, and with his eyes lifted up to heaven, unto thee, God his almighty Father, giving thanks to thee, he blessed, brake, and gave to his disciples, saying: Take and eat ye all of this, for this is my Body. In like manner, after he had supped, taking also this excellent chalice into his holy and adorable hands, and giving thanks to thee, he blessed, and gave it to his disciples, saying: Take, and drink ye all of this, for this is the Chalice of my Blood, of the new and eternal testament, the mystery of faith, which shall be shed for you and for many unto the remission of sins. As often as ye shall do these things, ye shall do them in memory of me.",
+        },
+        {
+          type: "prayer",
+          role: "Eucharistic Prayer",
+          ref: "Per ipsum (the closing doxology)",
+          text: "By him, and with him, and in him, is to thee, God the Father almighty, in the unity of the Holy Ghost, all honour and glory, for ever and ever. Amen.",
+        },
+        {
+          type: "prayer",
+          role: "Agnus Dei",
+          ref: "Lamb of God",
+          text: "Lamb of God, who takest away the sins of the world, have mercy on us. Lamb of God, who takest away the sins of the world, have mercy on us. Lamb of God, who takest away the sins of the world, grant us peace.",
+        },
+        {
+          type: "prayer",
+          role: "Dismissal",
+          ref: "Ite, missa est",
+          text: "The Lord be with you. And with thy spirit. Go, you are dismissed. Thanks be to God.",
+        },
+      ],
+    },
     lauds: {
       label: "Morning Prayer (Lauds)",
       icon: "sun",
@@ -345,15 +402,40 @@ function anglicanReadingItems(date) {
  * Roman weekday lectionary isn't wired yet - a follow-up alongside the
  * Anglican DEL work) or on any of catholicSundayTitleFor's known gaps.
  */
+const CATHOLIC_SEASON_LABELS = {
+  advent: "Advent Weekday",
+  christmas: "Christmas Weekday",
+  lent: "Lenten Weekday",
+  easter: "Easter Weekday",
+  ordinary: "Weekday in Ordinary Time",
+};
+
+/**
+ * The real Catholic Mass reading citations for `date`: the Sunday
+ * Lectionary (First Reading, Psalm, Second Reading, Gospel) on Sundays;
+ * the weekday Lectionary (First Reading, Psalm, Gospel - no second
+ * reading on ferial weekdays) otherwise; or, on a fixed Solemnity/Feast
+ * that happens to fall on a weekday, that feast's own four-reading set.
+ * Returns null on any of the underlying resolvers' known gaps.
+ */
 function catholicReadingItems(date) {
-  if (date.getDay() !== 0) return null;
-  const result = catholicSundayReadingFor(date);
+  if (date.getDay() === 0) {
+    const result = catholicSundayReadingFor(date);
+    if (!result || !result.readings) return null;
+    const roles = ["First Reading", "Psalm", "Second Reading", "Gospel"];
+    const items = result.readings
+      .map((r, i) => ({ role: roles[i] || "Reading", ref: displayRef(splitCitation(r)[0] || r) }))
+      .filter((r) => r.ref);
+    return { label: result.title, items };
+  }
+  const result = catholicWeekdayReadingFor(date);
   if (!result || !result.readings) return null;
-  const roles = ["First Reading", "Psalm", "Second Reading", "Gospel"];
+  const roles = result.readings.length === 4 ? ["First Reading", "Psalm", "Second Reading", "Gospel"] : ["First Reading", "Psalm", "Gospel"];
   const items = result.readings
     .map((r, i) => ({ role: roles[i] || "Reading", ref: displayRef(splitCitation(r)[0] || r) }))
     .filter((r) => r.ref);
-  return { label: result.title, items };
+  const label = result.title || CATHOLIC_SEASON_LABELS[result.season] || "Daily Mass";
+  return { label, items };
 }
 
 /**
@@ -362,9 +444,12 @@ function catholicReadingItems(date) {
  * from the demo entry and only replacing the readings themselves. Falls
  * back to the static demo entry on a weekday or any known gap.
  */
-function buildCatholicMass(date) {
-  const fallback = READINGS.Catholic.mass;
-  const fixedItems = fallback.sequence.filter((i) => i.type === "prayer");
+function buildCatholicMass(date, massForm) {
+  const fallback = massForm === "traditional_latin" ? READINGS.Catholic.mass_tlm : READINGS.Catholic.mass;
+  const firstReadingIndex = fallback.sequence.findIndex((i) => i.type === "reading");
+  const lastReadingIndex = fallback.sequence.map((i) => i.type).lastIndexOf("reading");
+  const openingItems = fallback.sequence.slice(0, firstReadingIndex);
+  const closingItems = fallback.sequence.slice(lastReadingIndex + 1);
   const result = catholicReadingItems(date);
   if (!result) {
     const isSunday = date.getDay() === 0;
@@ -374,7 +459,7 @@ function buildCatholicMass(date) {
   return {
     label: `${result.label} · ${shortDate(date)}`,
     icon: fallback.icon,
-    sequence: [...fixedItems, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref }))],
+    sequence: [...openingItems, ...result.items.map((item) => ({ type: "reading", role: item.role, ref: item.ref })), ...closingItems],
   };
 }
 
@@ -805,6 +890,7 @@ export default function App() {
   const [tab, setTab] = useState("today");
   const [tradition, setTradition] = usePersistedState("officium-tradition", "Catholic");
   const [collectSource, setCollectSource] = usePersistedState("officium-collect-source", "1662");
+  const [massForm, setMassForm] = usePersistedState("officium-mass-form", "novus_ordo");
   const [showSettings, setShowSettings] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [selectedFeast, setSelectedFeast] = useState(null);
@@ -889,6 +975,7 @@ export default function App() {
           onOpenPassage={setScriptureRef}
           onOpenCanticle={setOpenCanticle}
           collectSource={collectSource}
+          massForm={massForm}
         />
       )}
       {tab === "feasts" && (
@@ -1030,6 +1117,8 @@ export default function App() {
               onChangeBibleGatewayVersion={setBibleGatewayVersion}
               collectSource={collectSource}
               onChangeCollectSource={setCollectSource}
+              massForm={massForm}
+              onChangeMassForm={setMassForm}
             />
           )}
 
@@ -1262,6 +1351,8 @@ function SettingsSheet({
   onChangeBibleGatewayVersion,
   collectSource,
   onChangeCollectSource,
+  massForm,
+  onChangeMassForm,
 }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
@@ -1377,6 +1468,44 @@ function SettingsSheet({
           </div>
           <p className="text-[11px] mb-5" style={{ color: alpha(theme.text, 0.33) }}>
             Common Worship text © The Archbishops' Council 2000, published by Church House Publishing.
+          </p>
+        </>
+      )}
+
+      {draft === "Catholic" && (
+        <>
+          <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: alpha(theme.text, 0.4) }}>
+            Mass Text
+          </p>
+          <div className="space-y-2 mb-2">
+            {[
+              { key: "novus_ordo", label: "Novus Ordo", sub: "Current Order of Mass" },
+              { key: "traditional_latin", label: "Traditional Latin (1962)", sub: "Tridentine Mass, pre-Vatican II" },
+            ].map((o) => (
+              <button
+                key={o.key}
+                onClick={() => onChangeMassForm(o.key)}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-left"
+                style={{
+                  backgroundColor: massForm === o.key ? alpha(season.color, 0.2) : theme.bg,
+                  border: massForm === o.key ? `1px solid ${accent}` : "1px solid transparent",
+                }}
+              >
+                <div>
+                  <p className="text-[13.5px]" style={{ color: theme.text }}>
+                    {o.label}
+                  </p>
+                  <p className="text-[10.5px] mt-0.5" style={{ color: alpha(theme.text, 0.4) }}>
+                    {o.sub}
+                  </p>
+                </div>
+                {massForm === o.key && <span style={{ color: accent }}>●</span>}
+              </button>
+            ))}
+          </div>
+          <p className="text-[11px] mb-5" style={{ color: alpha(theme.text, 0.33) }}>
+            Scripture readings are the same either way, from the current Lectionary. Traditional Latin text
+            adapted from a 1921 Missal (public domain) and rendered in period English elsewhere.
           </p>
         </>
       )}
@@ -2633,7 +2762,7 @@ function autoCatholicSegment(date) {
   return "compline";
 }
 
-function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage, onOpenCanticle, collectSource }) {
+function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpenPassage, onOpenCanticle, collectSource, massForm }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   const effectiveDate = viewDate || today;
@@ -2641,7 +2770,7 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
   const anglicanEucharist = useMemo(() => (tradition === "Anglican" ? buildAnglicanEucharist(effectiveDate, collectSource) : null), [tradition, effectiveDate, collectSource]);
   const anglicanAm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "am", collectSource) : null), [tradition, effectiveDate, collectSource]);
   const anglicanPm = useMemo(() => (tradition === "Anglican" ? buildAnglicanOffice(effectiveDate, "pm", collectSource) : null), [tradition, effectiveDate, collectSource]);
-  const catholicMass = useMemo(() => (tradition === "Catholic" ? buildCatholicMass(effectiveDate) : null), [tradition, effectiveDate]);
+  const catholicMass = useMemo(() => (tradition === "Catholic" ? buildCatholicMass(effectiveDate, massForm) : null), [tradition, effectiveDate, massForm]);
   const catholicLauds = useMemo(() => (tradition === "Catholic" ? buildCatholicLauds(effectiveDate) : null), [tradition, effectiveDate]);
   const catholicVespers = useMemo(() => (tradition === "Catholic" ? buildCatholicVespers(effectiveDate) : null), [tradition, effectiveDate]);
   const catholicCompline = useMemo(() => (tradition === "Catholic" ? buildCatholicCompline(effectiveDate) : null), [tradition, effectiveDate]);

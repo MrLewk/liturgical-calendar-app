@@ -1,0 +1,38 @@
+{
+  "presentation": {
+    "month": 2,
+    "day": 2
+  },
+  "nativity_of_john_baptist": {
+    "month": 6,
+    "day": 24
+  },
+  "sts_peter_and_paul": {
+    "month": 6,
+    "day": 29
+  },
+  "transfiguration": {
+    "month": 8,
+    "day": 6
+  },
+  "assumption": {
+    "month": 8,
+    "day": 15
+  },
+  "exaltation_of_the_cross": {
+    "month": 9,
+    "day": 14
+  },
+  "all_saints": {
+    "month": 11,
+    "day": 1
+  },
+  "all_souls": {
+    "month": 11,
+    "day": 2
+  },
+  "dedication_of_lateran": {
+    "month": 11,
+    "day": 9
+  }
+}
