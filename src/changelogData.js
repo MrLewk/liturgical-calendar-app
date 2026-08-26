@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.34.0",
+    title: "Office of Readings & Daytime Prayer: all five hours now covered",
+    changes: [
+      { type: "Added", text: "Office of Readings (Psalms + real biblical First Reading) and Daytime Prayer (Psalms) \u2014 the Prayer tab now covers all five hours of the Liturgy of the Hours, up from three." },
+      { type: "Info", text: "Sourced from catholic-resources.org's Psalter and Office of Readings citation pages, same license as everything else. The patristic Second Reading isn't included \u2014 a separate, more complex copyright question left as an honest gap." },
+      { type: "Fixed", text: "The Prayer tab's segment bar now scrolls horizontally on mobile with six hours instead of squeezing them all to fit." },
+    ],
+  },
+  {
     version: "0.33.0",
     title: "Real current Novus Ordo Mass text (ICEL 2010)",
     changes: [

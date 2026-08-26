@@ -19,6 +19,7 @@ import catholicSundays from "../data/catholic_sundays.json";
 import catholicOfficePsalter from "../data/catholic_office_psalter.json";
 import catholicWeekdays from "../data/catholic_weekdays.json";
 import catholicFixedFeastDates from "../data/catholic_fixed_feast_dates.json";
+import catholicOfficeReadingsBiblical from "../data/catholic_office_readings_biblical.json";
 
 function nextSunday(date) {
   const d = dateOnly(date);
@@ -560,6 +561,143 @@ export function catholicWeekdayReadingFor(date) {
   return entry ? { season, key, readings: entry } : null;
 }
 
+// ---- Office of Readings & Daytime Prayer season/day resolver ----
+//
+// Shares the same season-boundary dates as catholicWeekdayReadingFor
+// above, but (unlike the Mass Lectionary) both these hours are prayed
+// every day including Sunday, so this resolves Sundays too, with its
+// own key scheme matching catholic_office_readings_biblical.json - most
+// notably the Christmas season, which splits into two separate
+// weekday-named blocks (the days from Jan 2 up to Epiphany Sunday, and
+// the days from Epiphany Sunday up to the Baptism of the Lord) since
+// unlike the Mass Lectionary's Christmas octave, this citation table
+// keys those two stretches by weekday name rather than calendar date.
+function catholicOfficeSeasonKeyFor(date) {
+  if (!isValidDate(date)) return null;
+  const d = dateOnly(date);
+  const wd = WEEKDAY_SHORT[d.getDay()];
+
+  const { advent1, easter } = churchYearContext(d);
+  const christmasYear = advent1.getFullYear();
+  const christmasDay = new Date(christmasYear, 11, 25);
+  const ashWednesday = addDays(easter, -46);
+  const lent1Sunday = addDays(ashWednesday, 4);
+  const palmSunday = addDays(easter, -7);
+  const easterOctaveEnd = addDays(easter, 7);
+  const pentecost = addDays(easter, 49);
+  const trinity = addDays(pentecost, 7);
+  const corpusChristi = addDays(trinity, 7);
+
+  const fixedKey = fixedFeastKeyForDate(d);
+  if (fixedKey && catholicOfficeReadingsBiblical.fixed_feasts[fixedKey]) {
+    return { season: "fixed_feasts", key: fixedKey };
+  }
+  if (d.getTime() === trinity.getTime()) return { season: "movable_feasts", key: "trinity_sunday" };
+  if (d.getTime() === corpusChristi.getTime()) return { season: "movable_feasts", key: "corpus_christi" };
+
+  if (d >= advent1 && d < christmasDay) {
+    if (d.getMonth() === 11 && d.getDate() >= 17 && d.getDate() <= 24) {
+      return { season: "advent", key: `dec${d.getDate()}` };
+    }
+    const n = Math.min(Math.floor(daysBetween(advent1, d) / 7) + 1, 3);
+    return { season: "advent", key: `w${n}_${wd}` };
+  }
+  if (d.getTime() === christmasDay.getTime()) return { season: "christmas", key: "dec25" };
+  if (d > christmasDay && d <= addDays(christmasDay, 6)) {
+    const holyFamilySunday = christmasDay.getDay() === 0 ? null : nextSunday(christmasDay);
+    if (holyFamilySunday && d.getTime() === holyFamilySunday.getTime()) return { season: "christmas", key: "holy_family" };
+    return { season: "christmas", key: `dec${d.getDate()}` };
+  }
+  if (d < ashWednesday) {
+    const { epiphanySunday, baptismDate } = christmasSeasonAnchors(christmasDay);
+    if (d.getTime() === new Date(christmasYear + 1, 0, 1).getTime()) return { season: "christmas", key: "jan1" };
+    if (d < epiphanySunday) return { season: "christmas", key: `jan2_${wd}` };
+    if (d.getTime() === epiphanySunday.getTime()) return { season: "christmas", key: "epiphany" };
+    if (d < baptismDate) return { season: "christmas", key: `post_epiphany_${wd}` };
+    if (d.getTime() === baptismDate.getTime() && d.getDay() === 0) return { season: "christmas", key: "baptism_of_the_lord" };
+    const { firstOrdinarySunday } = christmasSeasonAnchors(christmasDay);
+    const n = d < firstOrdinarySunday ? 1 : officialOrdinaryWeekNumber(sundayOnOrBefore(d));
+    return n ? { season: "ordinary", key: `w${n}_${wd}` } : null;
+  }
+  if (d >= ashWednesday && d < lent1Sunday) {
+    const LABELS = { 3: "ashwed", 4: "thu_after_ashwed", 5: "fri_after_ashwed", 6: "sat_after_ashwed" };
+    const key = LABELS[d.getDay()];
+    return key ? { season: "lent", key } : null;
+  }
+  if (d >= lent1Sunday && d < palmSunday) {
+    const n = Math.floor(daysBetween(lent1Sunday, d) / 7) + 1;
+    return n >= 1 && n <= 5 ? { season: "lent", key: `w${n}_${wd}` } : null;
+  }
+  if (d.getTime() === palmSunday.getTime()) return { season: "lent", key: "palm_sunday" };
+  if (d > palmSunday && d < easter) {
+    const LABELS = { 1: "holyweek_mon", 2: "holyweek_tue", 3: "holyweek_wed" };
+    const key = LABELS[d.getDay()];
+    return key ? { season: "lent", key } : null; // Triduum - known gap
+  }
+  if (d.getTime() === easter.getTime()) return { season: "easter", key: "easter_sunday" };
+  if (d.getTime() === easterOctaveEnd.getTime()) return { season: "easter", key: "w2_sun" };
+  if (d > easter && d < easterOctaveEnd) {
+    const LABELS = { 1: "octave_mon", 2: "octave_tue", 3: "octave_wed", 4: "octave_thu", 5: "octave_fri", 6: "octave_sat" };
+    const key = LABELS[d.getDay()];
+    return key ? { season: "easter", key } : null;
+  }
+  if (d.getTime() === pentecost.getTime()) return { season: "easter", key: "pentecost" };
+  if (d > easterOctaveEnd && d < pentecost) {
+    const n = Math.floor(daysBetween(easter, d) / 7) + 1;
+    if (n === 7) return { season: "easter", key: "ascension" };
+    return n >= 2 && n <= 6 ? { season: "easter", key: `w${n}_${wd}` } : null;
+  }
+  if (d > pentecost && d < trinity) {
+    const n = officialOrdinaryWeekNumber(trinity);
+    return n ? { season: "ordinary", key: `w${n}_${wd}` } : null;
+  }
+  if (d > trinity && d < corpusChristi) {
+    const n = officialOrdinaryWeekNumber(corpusChristi);
+    return n ? { season: "ordinary", key: `w${n}_${wd}` } : null;
+  }
+  if (d > corpusChristi) {
+    const n = officialOrdinaryWeekNumber(sundayOnOrBefore(d));
+    return n ? { season: "ordinary", key: `w${n}_${wd}` } : null;
+  }
+  return null;
+}
+
+/**
+ * The Office of Readings' Scripture portion for `date`: three Psalms
+ * (from the 4-week Psalter) plus the real biblical First Reading
+ * citation, every day of the year including Sundays. Does not include
+ * the patristic/magisterial Second Reading, which is ICEL's own
+ * specific translated excerpting - a separate, more complex copyright
+ * question left as an honest gap rather than guessed at.
+ */
+export function catholicOfficeOfReadingsFor(date) {
+  const psalterInfo = catholicPsalterWeekFor(date);
+  const seasonKey = catholicOfficeSeasonKeyFor(date);
+  if (!seasonKey) return null;
+  const reading = catholicOfficeReadingsBiblical[seasonKey.season]?.[seasonKey.key];
+  if (!reading) return null;
+  const d = dateOnly(date);
+  const wd = WEEKDAY_FULL[d.getDay()];
+  let psalms = null;
+  if (psalterInfo && !psalterInfo.gap) {
+    psalms = catholicOfficePsalter.office_of_readings[String(psalterInfo.week)]?.[wd] || null;
+  }
+  return { reading, psalms, week: psalterInfo?.gap ? null : psalterInfo?.week, weekday: wd };
+}
+
+/**
+ * Daytime Prayer's three Psalms for `date` (from the 4-week Psalter),
+ * every day of the year including Sundays. The very brief reading this
+ * hour also carries isn't sourced (same gap as Lauds/Vespers' Brief
+ * Reading), so only the psalmody is real here.
+ */
+export function catholicDaytimePrayerFor(date) {
+  const psalterInfo = catholicPsalterWeekFor(date);
+  if (!psalterInfo || psalterInfo.gap) return null;
+  const psalms = catholicOfficePsalter.daytime_prayer[String(psalterInfo.week)]?.[psalterInfo.weekday];
+  return psalms ? { week: psalterInfo.week, weekday: psalterInfo.weekday, psalms } : null;
+}
+
 // ---- Catholic Divine Office (Liturgy of the Hours): Morning Prayer
 // (Lauds), Evening Prayer (Vespers), Night Prayer (Compline) ----
 //
@@ -634,18 +772,18 @@ export function catholicPsalterWeekFor(date) {
   if (d >= christmasDay && d <= christmasOctaveEnd) return { week: null, weekday, gap: true };
 
   if (d < ashWednesday) {
-    const { baptismDate } = christmasSeasonAnchors(christmasDay);
+    const { baptismDate, firstOrdinarySunday } = christmasSeasonAnchors(christmasDay);
     if (d < baptismDate) {
       const anchor = addDays(christmasOctaveEnd, 1);
       const n = 2 + Math.floor(daysBetween(anchor, d) / 7);
       return { week: ((n - 1) % 4) + 1, weekday, gap: false };
     }
-    // Ordinary Time's first block. sundayOnOrBefore(d) normally lands on
-    // an Ordinary Time Sunday (or the Baptism of the Lord itself); the
-    // rare exception is the single Baptism-on-Monday edge day, where it
-    // lands on Epiphany instead and officialOrdinaryWeekNumber correctly
-    // returns null, gapping just that one day.
-    const n = officialOrdinaryWeekNumber(sundayOnOrBefore(d));
+    // Ordinary Time's first block. Before the first real Sunday, this
+    // stretch is always week 1 (matching the Baptism of the Lord itself)
+    // - using sundayOnOrBefore() here would break in the rare years the
+    // Baptism falls on a Monday, since the preceding Sunday is still
+    // Epiphany, not an Ordinary Time Sunday.
+    const n = d < firstOrdinarySunday ? 1 : officialOrdinaryWeekNumber(sundayOnOrBefore(d));
     return n ? { week: ((n - 1) % 4) + 1, weekday, gap: false } : { week: null, weekday, gap: true };
   }
 

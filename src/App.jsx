@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -314,6 +314,25 @@ const READINGS = {
         { type: "prayer", role: "Gospel Canticle", ref: "Nunc dimittis", canticleKey: "nunc_dimittis", canticleSource: "CW-catholic", text: canticlePreview("nunc_dimittis", "CW"), truncated: true },
       ],
     },
+    office_of_readings: {
+      label: "Office of Readings",
+      icon: "sun",
+      sequence: [
+        { type: "reading", role: "Psalm", ref: "Psalm 1", text: "Blessed is the man that walketh not in the counsel of the ungodly, nor standeth in the way of sinners, nor sitteth in the seat of the scornful.", truncated: true },
+        { type: "reading", role: "Psalm", ref: "Psalm 2", text: "Why do the heathen rage, and the people imagine a vain thing?", truncated: true },
+        { type: "reading", role: "Psalm", ref: "Psalm 3", text: "Lord, how are they increased that trouble me! Many are they that rise up against me.", truncated: true },
+        { type: "reading", role: "Scripture Reading", ref: "Sirach 1:1–18", text: "All wisdom cometh from the Lord, and is with him for ever.", truncated: true },
+      ],
+    },
+    daytime_prayer: {
+      label: "Daytime Prayer",
+      icon: "sun",
+      sequence: [
+        { type: "reading", role: "Psalm", ref: "Psalm 118:1–9", text: "O give thanks unto the Lord, for he is good: because his mercy endureth for ever.", truncated: true },
+        { type: "reading", role: "Psalm", ref: "Psalm 118:10–18", text: "All nations compassed me about: but in the name of the Lord will I destroy them.", truncated: true },
+        { type: "reading", role: "Psalm", ref: "Psalm 118:19–29", text: "Open to me the gates of righteousness: I will go into them, and I will praise the Lord.", truncated: true },
+      ],
+    },
   },
   Orthodox: {
     kind: "epistle-gospel",
@@ -556,6 +575,53 @@ function buildCatholicCompline(date) {
     label: `${fallback.label} · ${result.weekday} · ${shortDate(date)}`,
     icon: fallback.icon,
     sequence: [...psalmItems, readingItem, nuncDimittis],
+  };
+}
+
+/**
+ * Builds the Office of Readings' Scripture portion for `date`: three
+ * Psalms plus the real biblical First Reading citation. The patristic
+ * Second Reading isn't included (a documented gap, not guessed at), so
+ * this hour is intentionally shorter than a full Office of Readings.
+ * Falls back to the static demo entry on any of the underlying
+ * resolvers' known gaps.
+ */
+function buildCatholicOfficeOfReadings(date) {
+  const fallback = READINGS.Catholic.office_of_readings;
+  const result = catholicOfficeOfReadingsFor(date);
+  if (!result) {
+    return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
+  }
+  const items = [];
+  if (result.psalms) {
+    result.psalms.forEach((ref, i) => items.push({ type: "reading", role: i === 0 ? "Psalm" : null, ref: displayRef(splitCitation(ref)[0] || ref) }));
+  }
+  items.push({ type: "reading", role: "Scripture Reading", ref: displayRef(splitCitation(result.reading)[0] || result.reading) });
+  const weekLabel = result.week ? `Week ${result.week}, ${result.weekday}` : result.weekday;
+  return {
+    label: `${fallback.label} · ${weekLabel} · ${shortDate(date)}`,
+    icon: fallback.icon,
+    sequence: items,
+  };
+}
+
+/**
+ * Builds Daytime Prayer (Terce/Sext/None) for `date`: three Psalms only
+ * - this hour's own very brief reading isn't sourced (the same gap as
+ * Lauds/Vespers' Brief Reading). Falls back to the static demo entry on
+ * any of catholicPsalterWeekFor's known gaps.
+ */
+function buildCatholicDaytimePrayer(date) {
+  const fallback = READINGS.Catholic.daytime_prayer;
+  const result = catholicDaytimePrayerFor(date);
+  if (!result) {
+    return { ...fallback, label: `${fallback.label} · ${shortDate(date)} · demo text (not covered yet)` };
+  }
+  const items = result.psalms.map((ref, i) => ({ type: "reading", role: i === 0 ? "Psalm" : null, ref: displayRef(splitCitation(ref)[0] || ref) }));
+  return {
+    label: `${fallback.label} · Week ${result.week}, ${result.weekday} · ${shortDate(date)}`,
+    icon: fallback.icon,
+    sequence: items,
   };
 }
 
@@ -2804,11 +2870,33 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
   const catholicLauds = useMemo(() => (tradition === "Catholic" ? buildCatholicLauds(effectiveDate) : null), [tradition, effectiveDate]);
   const catholicVespers = useMemo(() => (tradition === "Catholic" ? buildCatholicVespers(effectiveDate) : null), [tradition, effectiveDate]);
   const catholicCompline = useMemo(() => (tradition === "Catholic" ? buildCatholicCompline(effectiveDate) : null), [tradition, effectiveDate]);
+  const catholicOfficeOfReadings = useMemo(() => (tradition === "Catholic" ? buildCatholicOfficeOfReadings(effectiveDate) : null), [tradition, effectiveDate]);
+  const catholicDaytimePrayer = useMemo(() => (tradition === "Catholic" ? buildCatholicDaytimePrayer(effectiveDate) : null), [tradition, effectiveDate]);
   const data = useMemo(() => {
     if (tradition === "Anglican") return { ...READINGS.Anglican, am: anglicanAm, pm: anglicanPm, eucharist: anglicanEucharist };
-    if (tradition === "Catholic") return { ...READINGS.Catholic, mass: catholicMass, lauds: catholicLauds, vespers: catholicVespers, compline: catholicCompline };
+    if (tradition === "Catholic")
+      return {
+        ...READINGS.Catholic,
+        mass: catholicMass,
+        lauds: catholicLauds,
+        vespers: catholicVespers,
+        compline: catholicCompline,
+        office_of_readings: catholicOfficeOfReadings,
+        daytime_prayer: catholicDaytimePrayer,
+      };
     return READINGS[tradition];
-  }, [tradition, anglicanAm, anglicanPm, anglicanEucharist, catholicMass, catholicLauds, catholicVespers, catholicCompline]);
+  }, [
+    tradition,
+    anglicanAm,
+    anglicanPm,
+    anglicanEucharist,
+    catholicMass,
+    catholicLauds,
+    catholicVespers,
+    catholicCompline,
+    catholicOfficeOfReadings,
+    catholicDaytimePrayer,
+  ]);
   const defaultSegment = data.kind === "office" ? autoOfficeSegment(viewDate) : data.kind === "catholic" ? autoCatholicSegment(viewDate) : data.kind === "mass" ? "mass" : "daily";
   const [segment, setSegment] = useState(defaultSegment);
 
@@ -2822,7 +2910,7 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
   const validSegment =
     data.kind === "office" && ["am", "pm", "eucharist"].includes(segment)
       ? segment
-      : data.kind === "catholic" && ["mass", "lauds", "vespers", "compline"].includes(segment)
+      : data.kind === "catholic" && ["mass", "lauds", "vespers", "compline", "office_of_readings", "daytime_prayer"].includes(segment)
         ? segment
         : defaultSegment;
 
@@ -2836,8 +2924,10 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
         ]
       : data.kind === "catholic"
         ? [
-            { key: "mass", label: "Mass", icon: BookOpen },
+            { key: "office_of_readings", label: "Office", icon: BookOpen },
             { key: "lauds", label: "Lauds", icon: Sun },
+            { key: "daytime_prayer", label: "Daytime", icon: Sun },
+            { key: "mass", label: "Mass", icon: BookOpen },
             { key: "vespers", label: "Vespers", icon: Moon },
             { key: "compline", label: "Compline", icon: Moon },
           ]
@@ -2871,12 +2961,12 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
       )}
 
       {segments && (
-        <div className="flex gap-1.5 lg:gap-2.5 mb-4 lg:mb-6 mt-3 lg:mt-5">
+        <div className={`flex gap-1.5 lg:gap-2.5 mb-4 lg:mb-6 mt-3 lg:mt-5 ${segments.length > 4 ? "overflow-x-auto" : ""}`}>
           {segments.map((s) => (
             <button
               key={s.key}
               onClick={() => setSegment(s.key)}
-              className="flex-1 rounded-xl py-2 lg:py-3 flex items-center justify-center gap-1.5 lg:gap-2 text-[12px] lg:text-[15px]"
+              className={`${segments.length > 4 ? "flex-shrink-0" : "flex-1"} rounded-xl py-2 lg:py-3 px-3 lg:px-4 flex items-center justify-center gap-1.5 lg:gap-2 text-[12px] lg:text-[15px] whitespace-nowrap`}
               style={{
                 backgroundColor: validSegment === s.key ? season.color : theme.surface,
                 color: validSegment === s.key ? "#FFFFFF" : alpha(theme.text, 0.53),

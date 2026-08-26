@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.34.0] — Office of Readings & Daytime Prayer: all five hours now covered
+
+- **Added:** Office of Readings (three Psalms + the real biblical First Reading, single-year cycle) and Daytime Prayer (three Psalms, same 4-week rotation as Lauds/Vespers) — the Prayer tab now covers all five traditional hours of the Liturgy of the Hours for Catholic, up from three.
+- **Source:** Psalm citations and the full Proper of Seasons biblical First Reading cycle (Advent through Christ the King, plus the nine fixed Solemnities/Feasts and Trinity Sunday/Corpus Christi) transcribed from catholic-resources.org's complete Psalter tables and its dedicated Office of Readings biblical-citations page — same source and license as everything else. `src/data/catholic_office_readings_biblical.json` adds 400+ entries.
+- **Known gap, by design:** the Office of Readings' patristic/magisterial Second Reading isn't included — that's ICEL's own specific translated excerpting, a separate and more complex copyright question than a plain citation table, so this hour is intentionally just its Scripture portion rather than a guess at the rest. Individual saints' days (e.g. Dec 26–28) also aren't covered, consistent with how the rest of the app skips saint-specific propers.
+- **UI:** the Prayer tab's segment bar now scrolls horizontally on mobile once there are more than four hours, rather than squeezing six tabs into equal-width slots.
+- Four real bugs found and fixed via a 100-year sweep on the new resolvers (same bug family as the Mass/Office work): a Trinity-to-Corpus-Christi gap, Divine Mercy Sunday not routing to its own citation, and the Baptism-of-the-Lord-on-Monday edge case not resolving correctly in two different resolvers.
+- Verified via automated 100-year sweeps (Office of Readings: 1.80% gap rate, all four categories accounted for and nothing unexplained; Daytime Prayer matches the existing Psalter's known gap rate exactly, as expected since it shares the same rotation) plus a live browser check confirming both new hours show real, correct content and the scrolling tab bar works.
+
 ## [0.33.0] — Real current Novus Ordo Mass text (ICEL 2010)
 
 - **Added:** the actual current Order of Mass text for the Novus Ordo option — Confiteor, Gloria, a full Eucharistic Prayer II (Preface, Institution Narrative, Doxology), Agnus Dei, and the Concluding Rite — replacing the earlier older-register placeholder text used since the Catholic tradition first shipped.
