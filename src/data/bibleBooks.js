@@ -136,6 +136,9 @@ export const BIBLE_BOOKS = [
       "1ki",
       "1kin",
       "1kings",
+      "3 kgs",
+      "3 kdms",
+      "3kgs",
       "first kgs",
       "first ki",
       "first kin",
@@ -162,6 +165,9 @@ export const BIBLE_BOOKS = [
       "2ki",
       "2kin",
       "2kings",
+      "4 kgs",
+      "4 kdms",
+      "4kgs",
       "ii kgs",
       "ii ki",
       "ii kin",
@@ -507,7 +513,11 @@ export const BIBLE_BOOKS = [
   {
     "code": "ISA",
     "name": "Isaiah",
-    "aliases": []
+    "aliases": [
+      "isa",
+      "isaiah",
+      "is"
+    ]
   },
   {
     "code": "JER",

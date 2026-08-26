@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.41.0",
+    title: "Orthodox Vespers Old Testament readings (paremias)",
+    changes: [
+      { type: "Added", text: "Real Vesperal Old Testament readings (\"paremias\") for ~66 fixed dates, inserted into the Vespers segment right after \"O Gladsome Light\" \u2014 the Twelve Great Feasts (including Nativity and Theophany, correctly on their Eve dates) plus other major commemorations." },
+      { type: "Fixed", text: "The book-alias table had no abbreviations for Isaiah, and no Septuagint \"Kingdoms\" numbering (3/4 Kgs = Western 1/2 Kings) \u2014 both needed for these citations and now fixed." },
+      { type: "Info", text: "Saints/commemorations of the day looked into but not built \u2014 the source data used throughout this Orthodox work doesn't include it, and it would need genuinely new research rather than further extraction." },
+    ],
+  },
+  {
     version: "0.40.0",
     title: "Fasting indications, all three traditions",
     changes: [

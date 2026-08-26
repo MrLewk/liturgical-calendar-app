@@ -14,7 +14,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor, orthodoxSundayReadingFor, orthodoxWeekdayReadingFor, orthodoxFixedFeastReadingFor, orthodoxMatinsGospelFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor, orthodoxSundayReadingFor, orthodoxWeekdayReadingFor, orthodoxFixedFeastReadingFor, orthodoxMatinsGospelFor, orthodoxVespersOldTestamentFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -684,6 +684,28 @@ function buildOrthodoxMatins(date, calendarStyle) {
   return {
     ...fallback,
     sequence: [...fallback.sequence.slice(0, insertIndex), gospelItem, ...fallback.sequence.slice(insertIndex)],
+  };
+}
+
+/**
+ * Builds the Orthodox Vespers segment for `date`: the fixed framework
+ * with the real Vesperal Old Testament readings ("paremias") inserted
+ * after "O Gladsome Light" and before the Song of Simeon, matching where
+ * they fall in the actual service. Only ~66 fixed dates have transcribed
+ * paremias (the Twelve Great Feasts plus other major commemorations);
+ * every other date simply has no reading items inserted, which is
+ * correct -- an ordinary day's Vespers doesn't have paremias at all,
+ * that's not a gap needing a fallback note.
+ */
+function buildOrthodoxVespers(date, calendarStyle) {
+  const fallback = READINGS.Orthodox.vespers;
+  const citations = orthodoxVespersOldTestamentFor(date, calendarStyle);
+  if (!citations || !citations.length) return fallback;
+  const insertIndex = fallback.sequence.findIndex((i) => i.role === "Hymn") + 1;
+  const readingItems = citations.map((citation) => ({ type: "reading", role: "Old Testament", ref: displayRef(splitCitation(citation)[0] || citation) }));
+  return {
+    ...fallback,
+    sequence: [...fallback.sequence.slice(0, insertIndex), ...readingItems, ...fallback.sequence.slice(insertIndex)],
   };
 }
 
@@ -3114,6 +3136,10 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
     () => (tradition === "Orthodox" ? buildOrthodoxMatins(effectiveDate, orthodoxCalendar) : null),
     [tradition, effectiveDate, orthodoxCalendar]
   );
+  const orthodoxVespers = useMemo(
+    () => (tradition === "Orthodox" ? buildOrthodoxVespers(effectiveDate, orthodoxCalendar) : null),
+    [tradition, effectiveDate, orthodoxCalendar]
+  );
   const data = useMemo(() => {
     if (tradition === "Anglican") return { ...READINGS.Anglican, am: anglicanAm, pm: anglicanPm, eucharist: anglicanEucharist };
     if (tradition === "Catholic")
@@ -3126,7 +3152,7 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
         office_of_readings: catholicOfficeOfReadings,
         daytime_prayer: catholicDaytimePrayer,
       };
-    if (tradition === "Orthodox") return { ...READINGS.Orthodox, daily: orthodoxDaily, matins: orthodoxMatins };
+    if (tradition === "Orthodox") return { ...READINGS.Orthodox, daily: orthodoxDaily, matins: orthodoxMatins, vespers: orthodoxVespers };
     return READINGS[tradition];
   }, [
     tradition,
@@ -3141,6 +3167,7 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
     catholicDaytimePrayer,
     orthodoxDaily,
     orthodoxMatins,
+    orthodoxVespers,
   ]);
   const defaultSegment =
     data.kind === "office"

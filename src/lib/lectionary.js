@@ -23,6 +23,7 @@ import catholicOfficeReadingsBiblical from "../data/catholic_office_readings_bib
 import orthodoxSundayReadings from "../data/orthodox_sunday_readings.json";
 import orthodoxFixedFeastReadings from "../data/orthodox_fixed_feast_readings.json";
 import orthodoxMatinsGospels from "../data/orthodox_matins_gospels.json";
+import orthodoxVespersOtReadings from "../data/orthodox_vespers_ot_readings.json";
 
 function nextSunday(date) {
   const d = dateOnly(date);
@@ -2016,4 +2017,23 @@ export function orthodoxMatinsGospelFor(date, calendarStyle = "Gregorian") {
   const nthSunday = Math.floor((precedingPdist - 49) / 7);
   const index = (((nthSunday - 1) % 11) + 11) % 11;
   return orthodoxMatinsGospels[index];
+}
+
+/**
+ * The ordered list of Vesperal Old Testament ("paremia") citations for
+ * `date`, or null if it's not one of the ~66 transcribed fixed dates.
+ * For the two feasts with an elaborate Eve service (Nativity, Theophany)
+ * the readings are correctly keyed to the Eve's own date (Dec 24, Jan 5)
+ * rather than the feast day itself, matching real practice -- an
+ * ordinary calendar-date lookup naturally gets this right without any
+ * special-casing, since that's simply the date the readings are read on.
+ * Uses the same nominal-month/day resolution as
+ * orthodoxFixedFeastReadingFor, for the same reason (a paremia set
+ * doesn't depend on Pascha at all).
+ */
+export function orthodoxVespersOldTestamentFor(date, calendarStyle = "Gregorian") {
+  const d = dateOnly(date);
+  const nominal = calendarStyle === "Julian" ? addDays(d, -julianOffset(d.getFullYear())) : d;
+  const key = `${nominal.getMonth() + 1}-${nominal.getDate()}`;
+  return orthodoxVespersOtReadings[key] || null;
 }

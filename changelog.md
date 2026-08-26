@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.41.0] — Orthodox Vespers Old Testament readings (paremias)
+
+- **Added:** the real Vesperal Old Testament readings ("paremias") for ~66 fixed dates, inserted into the Vespers segment right after "O Gladsome Light" — the Twelve Great Feasts (Nativity and Theophany included) plus a range of other major commemorations. Correctly appear on the *Eve* for Nativity and Theophany specifically (Dec 24 and Jan 5), matching real practice where the Vesperal Liturgy with its readings happens the evening before, not on the feast day itself.
+- **Source:** same transcription approach as the rest of the Orthodox work — citations only, from orthocal-python's `common`/`slavic`-tagged Vespers Reading records, MIT licensed.
+- **Added:** `orthodoxVespersOldTestamentFor()` in `lectionary.js`, returning the full ordered list for a date (up to 13 readings, for Theophany Eve) rather than a single citation.
+- **Fixed a real gap found along the way:** the app's book-alias table had no abbreviations at all for Isaiah (`isa` didn't resolve), and no Septuagint "Kingdoms" numbering aliases (`3 Kgs`/`4 Kgs`, used throughout Orthodox Old Testament citations for what Western Bibles call 1 & 2 Kings) — both needed for these citations to resolve to real text, and both fixed in `bibleBooks.js`.
+- Verified against the same 85-fixed-date scope already used for the Epistle/Gospel readings; all citations checked to resolve against the bundled WEB text before wiring in. Live browser check confirms the full 13-reading Theophany Eve sequence renders in the correct order and position within the service, with working "Read full passage" links.
+- Looked into saints/commemorations of the day as a further step, but that data isn't in the bundled fixture this work has drawn from — it would need genuinely new research into a public-domain saints database, not just further extraction from what's already been sourced. Left as an open item rather than attempted with a weak source.
+
 ## [0.40.0] — Fasting indications, all three traditions
 
 - **Added:** a "Fasting" card on the Today tab and the Calendar day-detail sheet, for all three traditions — Catholic, Anglican, and Orthodox — showing on any day with an actual fasting/abstinence observance, and simply not appearing on an ordinary day. This is a new feature area, not an Orthodox-specific addition.
