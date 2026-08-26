@@ -4,7 +4,7 @@
 seasons, feast days, and daily prayer that runs alongside the ordinary calendar. It supports **Catholic, Anglican,
 and Orthodox** traditions, each with their own season boundaries, feast days, liturgical colors, and daily office.
 
-🔗 **[Open the app](https://liturgical-calendar-year.vercel.app/)** — installable as a PWA, works offline.
+🔗 **[Open the app](https://officiumliturgy.com)** — installable as a PWA, works offline.
 
 ## What it does
 
@@ -45,9 +45,9 @@ working Calendar/Chart/Prayer/Feasts UI across all three traditions.
 | | Weekday | Sunday |
 |---|---|---|
 | Anglican Eucharist | ✅ Real (Common Worship Daily Eucharistic Lectionary) | ✅ Real (Revised Common Lectionary, Years A/B/C) |
-| Anglican Morning/Evening Prayer | 🚧 Demo text | 🚧 Demo text |
-| Catholic Mass | 🚧 Demo text | 🚧 Demo text |
-| Orthodox daily cycle | 🚧 Demo text | 🚧 Demo text |
+| Anglican Morning/Evening Prayer | ✅ Real | ✅ Real |
+| Catholic Mass | ✅ Real | ✅ Real |
+| Orthodox daily cycle | ✅ Real | ✅ Real |
 
 The Anglican Eucharist reading shown for today's date is the actual citation from the Common Worship lectionary —
 tap it to read the real passage. Everything still marked "demo text" above shows a fixed placeholder reading
