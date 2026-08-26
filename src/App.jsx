@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor, orthodoxSundayReadingFor, orthodoxWeekdayReadingFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor, orthodoxSundayReadingFor, orthodoxWeekdayReadingFor, orthodoxFixedFeastReadingFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -513,11 +513,17 @@ function buildCatholicMass(date, massForm) {
 }
 
 /**
- * The real Orthodox (Slavic) Epistle/Gospel citations for `date`, whether
- * it's a Sunday or a weekday -- picks the matching resolver so callers
- * don't need to know which one applies.
+ * The real Orthodox (Slavic) Epistle/Gospel citations for `date`,
+ * whatever kind of day it is -- a fixed Great Feast's own reading takes
+ * priority over the ordinary Sunday/weekday cycle when both exist for
+ * the same date (matching Orthodox practice: a Great Feast landing on a
+ * Sunday is read instead of, not alongside, that Sunday's own Gospel),
+ * otherwise falls through to whichever of the Sunday/weekday resolvers
+ * applies.
  */
 function orthodoxReadingFor(date, calendarStyle) {
+  const fixedFeast = orthodoxFixedFeastReadingFor(date, calendarStyle);
+  if (fixedFeast) return fixedFeast;
   return date.getDay() === 0 ? orthodoxSundayReadingFor(date, calendarStyle) : orthodoxWeekdayReadingFor(date, calendarStyle);
 }
 

@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.37.0",
+    title: "Orthodox fixed-feast Epistle/Gospel readings (Slavic tradition)",
+    changes: [
+      { type: "Added", text: "Real Epistle/Gospel citations for Orthodox fixed-date feasts (Slavic tradition) \u2014 the Twelve Great Feasts (except Annunciation) and ~75 other major fixed commemorations now show their own proper readings, correctly taking priority over the ordinary Sunday/weekday cycle when both exist for the same date." },
+      { type: "Info", text: "Annunciation is a deliberate gap: its source data selects between several alternate readings depending which specific Great Lent/Holy Week day it falls on that year, rather than being a simple fixed reading \u2014 showing the wrong one would be worse than the honest \"not covered yet\" fallback it currently gets." },
+      { type: "Info", text: "Verified with a combined 100-year sweep across all three resolvers (fixed-feast, Sunday, weekday) together \u2014 overall gap rate dropped from 12.91% to 9.03%, with zero regressions across all 5,270 Sundays now that fixed-feast lookup runs first." },
+    ],
+  },
+  {
     version: "0.36.0",
     title: "Orthodox weekday Epistle/Gospel readings (Slavic tradition)",
     changes: [

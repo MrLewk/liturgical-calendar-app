@@ -10,7 +10,7 @@
 // Those need the same date -> week-label resolver (this file), just a
 // different data table to look up into — see TODOs below.
 
-import { addDays, adventSunday, westernEaster, orthodoxPascha, julianFixedDateInGregorian, dateOnly, daysBetween, sundayOnOrBefore } from "./dates";
+import { addDays, adventSunday, westernEaster, orthodoxPascha, julianFixedDateInGregorian, julianOffset, dateOnly, daysBetween, sundayOnOrBefore } from "./dates";
 import { lectionaryYearsFor, officeColumnsFor } from "../data/lectionaryYears";
 import delTable6 from "../data/del_table6.json";
 import rclSundays from "../data/rcl_sundays.json";
@@ -21,6 +21,7 @@ import catholicWeekdays from "../data/catholic_weekdays.json";
 import catholicFixedFeastDates from "../data/catholic_fixed_feast_dates.json";
 import catholicOfficeReadingsBiblical from "../data/catholic_office_readings_biblical.json";
 import orthodoxSundayReadings from "../data/orthodox_sunday_readings.json";
+import orthodoxFixedFeastReadings from "../data/orthodox_fixed_feast_readings.json";
 
 function nextSunday(date) {
   const d = dateOnly(date);
@@ -1933,4 +1934,34 @@ export function orthodoxWeekdayReadingFor(date, calendarStyle = "Gregorian") {
 
   const result = lookupReading(gospelPdist, epistlePdist);
   return result ? { ...result, pdist } : null;
+}
+
+/**
+ * The Slavic-tradition Epistle/Gospel citations for a Great Feast or
+ * other fixed-date commemoration falling on `date`, or null if `date`
+ * doesn't carry one of the ~85 transcribed fixed-date readings (the
+ * Twelve Great Feasts plus a range of other major fixed commemorations
+ * -- not every saint's day in the calendar has its own Epistle/Gospel
+ * transcribed here). On a handful of dates carrying more than one
+ * commemoration, only the primary one's reading is included; a secondary
+ * commemoration sharing that date isn't a wrong answer, just an
+ * untranscribed one for now.
+ *
+ * `calendarStyle` works by finding the "nominal" Old-Calendar month/day
+ * a real date corresponds to when Julian is selected (e.g. real-world
+ * Jan 7 is nominal Dec 25 on the Old Calendar), then looking that
+ * month/day up directly -- equivalent to, but simpler than, the pdist
+ * year-anchoring the Sunday/weekday resolvers need, since a fixed feast
+ * doesn't depend on Pascha at all.
+ */
+export function orthodoxFixedFeastReadingFor(date, calendarStyle = "Gregorian") {
+  const d = dateOnly(date);
+  const nominal = calendarStyle === "Julian" ? addDays(d, -julianOffset(d.getFullYear())) : d;
+  const key = `${nominal.getMonth() + 1}-${nominal.getDate()}`;
+  const entry = orthodoxFixedFeastReadings[key];
+  if (!entry) return null;
+  const gospel = entry.Gospel?.slavic || entry.Gospel?.common;
+  const epistle = entry.Epistle?.slavic || entry.Epistle?.common;
+  if (!gospel || !epistle) return null;
+  return { epistle, gospel };
 }
