@@ -8,14 +8,17 @@ and Orthodox** traditions, each with their own season boundaries, feast days, li
 
 ## What it does
 
-The liturgical year isn't a fixed grid — it moves. Easter (and Orthodox Pascha) falls on a different date every
-year, and everything from Ash Wednesday to the start of Advent shifts around it. Officium tracks where you are in
-that cycle right now, and lets you look ahead or back.
+The liturgical year isn't a fixed grid — it moves. Easter (and Orthodox Pascha, calculated separately) falls on a
+different date every year, and everything from Ash Wednesday to the start of Advent shifts around it. Officium
+tracks where you are in that cycle right now, and lets you look ahead or back.
 
-- **Today** — your current season, its liturgical color, how far through it you are, and what's coming next
+- **Today** — your current season, its liturgical color, a fasting/abstinence indicator on days it applies, how far through the season you are, and what's coming next
 - **Calendar** — a familiar month-by-month grid, with each day colored by its liturgical season and feast days marked
 - **Chart** — a circular, at-a-glance view of the whole year — Advent, Christmas, Lent, Easter, and Ordinary Time laid out as a wheel instead of a list, so you can see the shape of the year rather than just the next date
-- **Prayer** — the Daily Office for your tradition: Morning/Evening/Eucharist prayer (Anglican, Book of Common Prayer), Mass readings and key prayers (Catholic), and the daily cycle and key prayers (Orthodox) — all traditional or public-domain text
+- **Prayer** — the Daily Office for your tradition, with real, date-driven scripture readings throughout (see [Status](#status)):
+  - **Anglican** — Morning/Evening Prayer (1662 Book of Common Prayer or Common Worship) and the Eucharistic lectionary
+  - **Catholic** — all five hours of the Liturgy of the Hours (Office of Readings, Lauds, Daytime Prayer, Vespers, Compline) plus Mass, with a Novus Ordo/Traditional Latin Mass toggle
+  - **Orthodox** — Matins, the Daily Cycle (Epistle/Gospel), and Vespers, including the Sunday Resurrection Gospel cycle and Vesperal Old Testament readings on major feasts
 - **Feasts** — a browsable list of upcoming feast days with short biographies of the saints and events behind them
 
 Switch tradition at any time (Catholic / Anglican / Orthodox), and Orthodox users can further choose between the
@@ -24,8 +27,9 @@ Gregorian ("New Calendar") and Julian ("Old Calendar") reckonings, since these c
 ## Why
 
 Most calendar apps only know about the civil year. If you've ever lost track of whether you're in Ordinary Time or
-Lent, or wanted a quick reference for which color the vestments should be this Sunday, this app is for that. It's
-built to be glanced at daily — light enough to open on your phone each morning, with a proper desktop layout too.
+Lent, wanted a quick reference for which color the vestments should be this Sunday, or needed to check whether
+today's a fasting day, this app is for that. It's built to be glanced at daily — light enough to open on your
+phone each morning, with a proper desktop layout too.
 
 ## Privacy
 
@@ -38,20 +42,35 @@ mind at any time from Settings. Full details are in the in-app Privacy Policy (S
 
 The core app is fully built: real season/feast-date calculations for any year (Western Easter and Orthodox Pascha
 algorithms, not lookup tables), full-text scripture readings from the public-domain World English Bible, and a
-working Calendar/Chart/Prayer/Feasts UI across all three traditions.
+working Calendar/Chart/Prayer/Feasts UI across all three traditions. Every tradition now has real, date-driven
+lectionary content — see the table below for exactly what's real versus a documented gap.
 
-**Lectionary accuracy varies by tradition and reading type right now:**
+| | Sunday | Weekday | Fixed feasts |
+|---|---|---|---|
+| Anglican Eucharist | ✅ Real (Revised Common Lectionary, Years A/B/C) | ✅ Real (Common Worship Daily Eucharistic Lectionary) | ✅ Real |
+| Anglican Morning/Evening Prayer | ✅ Real (1662 & Common Worship) | ✅ Real | ✅ Real |
+| Catholic Mass | ✅ Real (Years A/B/C) | ✅ Real (Years I/II) | ✅ Real |
+| Catholic Office (all 5 hours) | ✅ Real | ✅ Real | ✅ Real major feasts |
+| Orthodox Daily Cycle (Epistle/Gospel) | ✅ Real (Slavic tradition) | ✅ Real (Slavic tradition) | ✅ Real (Slavic tradition) |
+| Orthodox Matins/Vespers | ✅ Real fixed framework + Sunday Gospel cycle & feast-day OT readings | | |
 
-| | Weekday | Sunday |
-|---|---|---|
-| Anglican Eucharist | ✅ Real (Common Worship Daily Eucharistic Lectionary) | ✅ Real (Revised Common Lectionary, Years A/B/C) |
-| Anglican Morning/Evening Prayer | ✅ Real | ✅ Real |
-| Catholic Mass | ✅ Real | ✅ Real |
-| Orthodox daily cycle | ✅ Real | ✅ Real |
+**Known, documented gaps** (shown honestly as a fallback rather than guessed at):
 
-The Anglican Eucharist reading shown for today's date is the actual citation from the Common Worship lectionary —
-tap it to read the real passage. Everything still marked "demo text" above shows a fixed placeholder reading
-regardless of the date; see [Roadmap](#roadmap).
+- **Orthodox** — Great Lent weekday readings (there genuinely is no Divine Liturgy, and so no Epistle/Gospel, on
+  an ordinary Lenten weekday in Byzantine practice), the Annunciation's Epistle/Gospel (its readings vary by which
+  Holy Week/Lent day it falls on each year rather than being a simple fixed citation), tone-based hymnography
+  (troparia, stichera, the 8-tone Octoechos cycle — would need an entirely different data source), saints/
+  commemorations of the day, and a Greek-tradition toggle (the data exists but the underlying Sunday-numbering
+  algorithm is meaningfully more complex and still labeled "beta" even by its upstream source)
+- **Catholic** — the Office of Readings' patristic/magisterial Second Reading (a separate, more complex copyright
+  question than a plain citation), and the fuller fasting calendar the Traditional Latin Mass historically observed
+- **Anglican** — the 1662 Book of Common Prayer's list of feast Vigils, and Common Worship's seasonal Old/New
+  Testament canticle rotation (currently a fixed set rather than date-driven)
+- **All three traditions** — fasting/abstinence indications are a simple daily indicator (fast/no-fast plus a
+  strictness level), not a full multi-grade rule engine, and don't yet account for a feast day lifting an
+  otherwise-fasting day
+
+Full version-by-version detail is in [changelog.md](./changelog.md).
 
 ## Tech stack
 
@@ -74,22 +93,26 @@ npm run preview  # serve the production build locally
 
 ## Roadmap
 
-1. **Anglican Daily Office** — Morning/Evening Prayer Old/New Testament readings (Common Worship Table 2) and the
-   psalm tables (Tables 3-5), replacing the current demo text the same way the Eucharist reading was
-2. **Catholic Mass readings** — the Roman Lectionary's Sunday (Years A/B/C) and weekday (Years I/II) cycles
-3. **Orthodox daily cycle** — the Byzantine lectionary, which follows Pascha rather than the Western calendar and
-   needs its own engine (structurally unrelated to the Western tables above)
+Roughly in priority order:
+
+1. **Orthodox saints/commemorations of the day** and **Greek-tradition toggle** — both flagged above as open gaps;
+   the Greek one in particular needs a genuinely separate Sunday-numbering algorithm, not just a data swap
+2. **Common Worship seasonal canticle rotation** — replacing the current fixed Old/New Testament canticles with
+   the proper date-driven rotation
+3. **2019 ACNA Book of Common Prayer** — the next full prayer-book edition to add, after 1662 and Common Worship
 4. **Calendar export** — `.ics` download and Google Calendar sync, so feast days and season changes show up
    alongside your other events
-5. Licensing review for prayer/reading translations (currently public-domain/traditional text only)
+5. Further-out prayer-book editions under consideration: 1979 TEC, 1928 USA
+6. Licensing review for prayer/reading translations (currently public-domain/traditional text only)
 
 ## Contributing
 
 This is a solo, early-stage project — issues and suggestions are welcome via the
 [GitHub issue tracker](https://github.com/MrLewk/liturgical-calendar-app/issues). Pull requests are welcome too,
-though given large parts of the lectionary data are still demo text (see [Status](#status)), it's worth opening an
-issue first to check a change fits the roadmap.
+though given some lectionary data is still a documented gap (see [Status](#status)), it's worth opening an issue
+first to check a change fits the roadmap.
 
 ## License
 
 See [LICENSE](./LICENSE).
+
