@@ -6,6 +6,14 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.33.0",
+    title: "Real current Novus Ordo Mass text (ICEL 2010)",
+    changes: [
+      { type: "Added", text: "The actual current Order of Mass text \u2014 Confiteor, Gloria, a full Eucharistic Prayer II, Agnus Dei, and Concluding Rite \u2014 replacing the earlier placeholder text for the Novus Ordo option." },
+      { type: "Info", text: "Used under ICEL's own published policy for free non-commercial internet reproduction of approved texts, with the required attribution now shown in the Prayer tab footer. A written confirmation was also requested from ICEL by email as a precaution, matching the same step taken for Common Worship." },
+    ],
+  },
+  {
     version: "0.32.0",
     title: "Traditional Latin Mass toggle for Catholic",
     changes: [

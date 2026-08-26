@@ -178,14 +178,14 @@ const READINGS = {
         {
           type: "prayer",
           role: "Penitential Act",
-          ref: "Confiteor (traditional form)",
-          text: "I confess to Almighty God, to blessed Mary ever Virgin, to blessed Michael the Archangel, to the holy Apostles Peter and Paul, to all the Saints, and to you, that I have sinned exceedingly, in thought, word, and deed: through my fault, through my fault, through my most grievous fault.",
+          ref: "Confiteor",
+          text: "I confess to almighty God and to you, my brothers and sisters, that I have greatly sinned, in my thoughts and in my words, in what I have done and in what I have failed to do, through my fault, through my fault, through my most grievous fault; therefore I ask blessed Mary ever-Virgin, all the Angels and Saints, and you, my brothers and sisters, to pray for me to the Lord our God.",
         },
         {
           type: "prayer",
           role: "Canticle",
           ref: "Gloria in excelsis",
-          text: "Glory be to God on high, and in earth peace, good will towards men. We praise thee, we bless thee, we worship thee, we glorify thee, we give thanks to thee, for thy great glory, O Lord God, heavenly King, God the Father Almighty. O Lord, the only-begotten Son Jesus Christ; O Lord God, Lamb of God, Son of the Father, that takest away the sins of the world, have mercy upon us. Thou that takest away the sins of the world, have mercy upon us. Thou that takest away the sins of the world, receive our prayer. Thou that sittest at the right hand of God the Father, have mercy upon us. For thou only art holy; thou only art the Lord; thou only, O Christ, with the Holy Ghost, art most high in the glory of God the Father. Amen.",
+          text: "Glory to God in the highest, and on earth peace to people of good will. We praise you, we bless you, we adore you, we glorify you, we give you thanks for your great glory, Lord God, heavenly King, O God, almighty Father. Lord Jesus Christ, Only Begotten Son, Lord God, Lamb of God, Son of the Father, you take away the sins of the world, have mercy on us; you take away the sins of the world, receive our prayer; you are seated at the right hand of the Father, have mercy on us. For you alone are the Holy One, you alone are the Lord, you alone are the Most High, Jesus Christ, with the Holy Spirit, in the glory of God the Father. Amen.",
         },
         {
           type: "prayer",
@@ -196,6 +196,36 @@ const READINGS = {
         { type: "reading", role: "First Reading", ref: "Ezekiel 43:1–7", text: "Afterward he brought me to the gate, even the gate that looketh toward the east: And, behold, the glory of the God of Israel came from the way of the east: and his voice was like a noise of many waters.", truncated: true },
         { type: "reading", role: "Responsorial Psalm", ref: "Psalm 85:9–14", text: "Surely his salvation is nigh them that fear him; that glory may dwell in our land. Mercy and truth are met together; righteousness and peace have kissed each other." },
         { type: "reading", role: "Gospel", ref: "Matthew 23:1–12", text: "Then spake Jesus to the multitude, and to his disciples, Saying, The scribes and the Pharisees sit in Moses' seat: All therefore whatsoever they bid you observe, that observe and do.", truncated: true },
+        {
+          type: "prayer",
+          role: "Eucharistic Prayer II",
+          ref: "Preface",
+          text: "Father, it is our duty and our salvation, always and everywhere to give you thanks through your beloved Son, our Lord Jesus Christ. He is the Word through whom you made the universe, the Savior you sent to redeem us. By the power of the Holy Spirit he took flesh and was born of the Virgin Mary.",
+        },
+        {
+          type: "prayer",
+          role: "Eucharistic Prayer II",
+          ref: "Institution Narrative",
+          text: "Before he was given up to death, a death he freely accepted, he took bread and gave you thanks. He broke the bread, gave it to his disciples, and said: Take this, all of you, and eat of it, for this is my Body, which will be given up for you. When supper was ended, he took the cup. Again he gave you thanks and praise, gave the cup to his disciples, and said: Take this, all of you, and drink from it, for this is the chalice of my Blood, the Blood of the new and eternal covenant, which will be poured out for you and for many for the forgiveness of sins. Do this in memory of me.",
+        },
+        {
+          type: "prayer",
+          role: "Eucharistic Prayer II",
+          ref: "Doxology",
+          text: "Through him, and with him, and in him, O God, almighty Father, in the unity of the Holy Spirit, all glory and honor is yours, for ever and ever. Amen.",
+        },
+        {
+          type: "prayer",
+          role: "Agnus Dei",
+          ref: "Lamb of God",
+          text: "Lamb of God, you take away the sins of the world, have mercy on us. Lamb of God, you take away the sins of the world, have mercy on us. Lamb of God, you take away the sins of the world, grant us peace.",
+        },
+        {
+          type: "prayer",
+          role: "Dismissal",
+          ref: "Concluding Rite",
+          text: "The Lord be with you. And with your spirit. May almighty God bless you: the Father, and the Son, and the Holy Spirit. Amen. Go forth, the Mass is ended. Thanks be to God.",
+        },
       ],
     },
     mass_tlm: {
@@ -2934,10 +2964,27 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
       </div>
 
       <p className="text-[10px] lg:text-[13px] mt-4 lg:mt-6 leading-relaxed" style={{ color: alpha(theme.text, 0.27) }}>
-        Scripture readings use the World English Bible (public domain). Prayers and traditions are from the 1662 Book of Common Prayer, Anglican lectionaries, and ancient liturgical sources.
+        {readingsFooterText(tradition, validSegment, massForm)}
       </p>
     </div>
   );
+}
+
+function readingsFooterText(tradition, segment, massForm) {
+  const base = "Scripture readings use the World English Bible (public domain).";
+  if (tradition === "Catholic" && segment === "mass" && massForm !== "traditional_latin") {
+    return `${base} The English translation of the Order of Mass (Penitential Act, Gloria, Eucharistic Prayer II, Agnus Dei, Concluding Rite) © 2010, International Committee on English in the Liturgy, Inc. All rights reserved, reproduced under ICEL's published policy for free non-commercial internet use.`;
+  }
+  if (tradition === "Catholic" && segment === "mass") {
+    return `${base} Traditional Latin Mass text adapted from a 1921 Missal (public domain); the Confiteor and Kyrie are rendered in matching period English.`;
+  }
+  if (tradition === "Catholic") {
+    return `${base} Psalm and canticle citations are from the Four-Week Psalter and Lectionary for Mass tables at catholic-resources.org (Fr. Felix Just, S.J.), used with attribution under the site's non-commercial policy.`;
+  }
+  if (tradition === "Orthodox") {
+    return `${base} Prayers and traditions are from ancient liturgical sources.`;
+  }
+  return `${base} Prayers and traditions are from the 1662 Book of Common Prayer, Anglican lectionaries, and ancient liturgical sources.`;
 }
 
 function FeastsView({ tradition, calendar, today, onSelectFeast }) {

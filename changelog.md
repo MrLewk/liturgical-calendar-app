@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.33.0] — Real current Novus Ordo Mass text (ICEL 2010)
+
+- **Added:** the actual current Order of Mass text for the Novus Ordo option — Confiteor, Gloria, a full Eucharistic Prayer II (Preface, Institution Narrative, Doxology), Agnus Dei, and the Concluding Rite — replacing the earlier older-register placeholder text used since the Catholic tradition first shipped.
+- **Source:** the official English translation of the Roman Missal, Third Edition, © 2010 International Committee on English in the Liturgy, Inc. Used under ICEL's own published policy permitting free non-commercial internet reproduction of approved texts without needing individual permission, provided there's no charge to access the text, the wording is exact and unaltered, and the required copyright acknowledgment is displayed — all of which this satisfies (Officium is entirely free to use; its "Buy Me a Coffee" link is a voluntary donation, not a paywall). The attribution now appears in the Prayer tab's footer whenever the Mass tab is showing this text.
+- As a precaution, given this is the most significant copyrighted text used in the app to date — a specific written confirmation from ICEL was requested by email, the same precautionary step taken for the Common Worship collects in earlier releases.
+- **Kept:** the Traditional Latin (1962) option unchanged, with its own distinct footer attribution, so both Mass Text settings now show real, accurate period-appropriate text rather than one being a placeholder.
+- Verified via a live browser check: both toggle states render completely with no dead-end truncation (re-ran the audit script from v0.30.3 against all the new content first), and each shows its own correct, distinct attribution.
+
 ## [0.32.0] — Traditional Latin Mass toggle for Catholic
 
 - **Added:** a Mass Text toggle in Settings for Catholic — "Novus Ordo" (current Order of Mass) or "Traditional Latin (1962)" (the Tridentine Mass, pre-Vatican II) — mirroring the existing 1662 BCP/Common Worship toggle pattern for Anglican. Persisted per-device like the other settings.
