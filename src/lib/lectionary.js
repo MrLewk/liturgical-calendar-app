@@ -1764,28 +1764,13 @@ function orthodoxFixedDate(calendarStyle, year, month, day) {
 }
 
 /**
- * The Slavic-tradition Sunday Epistle/Gospel citations for `date`, or
- * null if `date` isn't a Sunday or falls outside the transcribed range
- * (the underlying table only covers the Sunday cycle; fixed-feast and
- * weekday readings aren't wired yet -- an honest gap, not a guess).
- * `calendarStyle` is "Gregorian" (New Calendar) or "Julian" (Old
- * Calendar) -- it only affects which real-world date each Sunday lands
- * on, not the pdist math itself (Pascha and everything measured from it
- * already uses the same Julian Paschalion either way).
+ * Computes the shared Byzantine-year context (Pascha anchor, Lukan jump,
+ * Nativity/Theophany-adjacent pdists, Slavic reserve Sundays) that both
+ * the Sunday and weekday reading resolvers need. See
+ * orthodoxSundayReadingFor's docstring for the year-anchoring logic.
  */
-export function orthodoxSundayReadingFor(date, calendarStyle = "Gregorian") {
+function orthodoxYearContext(date, calendarStyle) {
   const d = dateOnly(date);
-  if (d.getDay() !== 0) return null;
-
-  // Find the Byzantine liturgical year containing `date`. Each such year
-  // is anchored to a single Pascha and runs from the Sunday of Zacchaeus
-  // (77 days before that Pascha) through Nativity/Theophany of the
-  // following winter, up to the eve of the NEXT Zacchaeus Sunday -- i.e.
-  // Nativity and Theophany belong to the autumn/winter AFTER their
-  // year's Pascha, not before it. Try this calendar year's Pascha first;
-  // if that puts `date` earlier than Zacchaeus, it actually belongs to
-  // the liturgical year anchored to the PREVIOUS calendar year's Pascha
-  // (whose Nativity/Theophany extend into this calendar year's January).
   let year = d.getFullYear();
   let pascha = orthodoxPascha(year);
   let pdist = daysBetween(pascha, d);
@@ -1800,11 +1785,19 @@ export function orthodoxSundayReadingFor(date, calendarStyle = "Gregorian") {
   const { sunAfter: sunAfterElevation } = surroundingWeekends(elevationPdist);
 
   const theophanyPdist = daysBetween(pascha, orthodoxFixedDate(calendarStyle, year + 1, 1, 6));
-  const { satBefore: satBeforeTheophany, sunAfter: sunAfterTheophany } = surroundingWeekends(theophanyPdist);
+  const {
+    satBefore: satBeforeTheophany,
+    sunBefore: sunBeforeTheophany,
+    satAfter: satAfterTheophany,
+    sunAfter: sunAfterTheophany,
+  } = surroundingWeekends(theophanyPdist);
 
   const nativityPdist = daysBetween(pascha, orthodoxFixedDate(calendarStyle, year, 12, 25));
   const nativityWeekday = mod7(nativityPdist);
   const forefathers = nativityPdist - 14 + mod7(7 - nativityWeekday);
+  const { sunBefore: sunBeforeNativity, sunAfter: sunAfterNativity } = surroundingWeekends(nativityPdist);
+
+  const annunciationPdist = daysBetween(pascha, orthodoxFixedDate(calendarStyle, year, 3, 25));
 
   const lukanJump = 49 + 1 + 7 * 17 - (sunAfterElevation + 1);
   const firstSunLuke = sunAfterElevation + 7;
@@ -1831,34 +1824,113 @@ export function orthodoxSundayReadingFor(date, calendarStyle = "Gregorian") {
     }
   }
 
+  // Days on which even the ordinary daily-cycle readings are suppressed
+  // entirely, in favor of a Great Feast's own readings taking over. Doesn't
+  // include the Sunday entries (sunBeforeTheophany etc.) since those never
+  // collide with weekday resolution in the first place.
+  const noDaily = new Set([
+    theophanyPdist - 5,
+    theophanyPdist - 1,
+    theophanyPdist,
+    nativityPdist - 1,
+    nativityPdist,
+    nativityPdist + 1,
+  ]);
+  if (satAfterTheophany === theophanyPdist + 1) noDaily.add(satAfterTheophany);
+  if (mod7(annunciationPdist) === 6) noDaily.add(annunciationPdist); // Saturday
+
+  return {
+    d,
+    pascha,
+    nextPascha,
+    pdist,
+    sunAfterElevation,
+    satBeforeTheophany,
+    sunBeforeTheophany,
+    sunAfterTheophany,
+    forefathers,
+    sunBeforeNativity,
+    sunAfterNativity,
+    lukanJump,
+    firstSunLuke,
+    lukanJumpThreshold,
+    extraSundays,
+    reserves,
+    noDaily,
+  };
+}
+
+function lookupReading(gospelPdist, epistlePdist) {
+  const gospelEntry = orthodoxSundayReadings[String(gospelPdist)]?.Gospel;
+  const epistleEntry = orthodoxSundayReadings[String(epistlePdist)]?.Epistle;
+  const gospel = gospelEntry?.slavic || gospelEntry?.common;
+  const epistle = epistleEntry?.slavic || epistleEntry?.common;
+  if (!gospel || !epistle) return null;
+  return { epistle, gospel };
+}
+
+/**
+ * The Slavic-tradition Sunday Epistle/Gospel citations for `date`, or
+ * null if `date` isn't a Sunday or falls outside the transcribed range
+ * (the underlying table only covers the Sunday cycle; fixed-feast
+ * readings aren't wired yet -- an honest gap, not a guess).
+ * `calendarStyle` is "Gregorian" (New Calendar) or "Julian" (Old
+ * Calendar) -- it only affects which real-world date each Sunday lands
+ * on, not the pdist math itself (Pascha and everything measured from it
+ * already uses the same Julian Paschalion either way).
+ */
+export function orthodoxSundayReadingFor(date, calendarStyle = "Gregorian") {
+  const ctx = orthodoxYearContext(date, calendarStyle);
+  if (ctx.d.getDay() !== 0) return null;
+  const { pdist, nextPascha, d } = ctx;
+
   let gospelPdist;
-  const reserveIndex = Math.floor((pdist - sunAfterTheophany) / 7) - 1;
-  if (pdist === firstSunLuke + 10 * 7) {
-    gospelPdist = forefathers + lukanJump;
-  } else if (pdist > sunAfterTheophany && extraSundays > 1 && reserveIndex >= 0 && reserveIndex < reserves.length) {
-    gospelPdist = reserves[reserveIndex];
-  } else if (pdist > satBeforeTheophany) {
+  const reserveIndex = Math.floor((pdist - ctx.sunAfterTheophany) / 7) - 1;
+  if (pdist === ctx.firstSunLuke + 10 * 7) {
+    gospelPdist = ctx.forefathers + ctx.lukanJump;
+  } else if (pdist > ctx.sunAfterTheophany && ctx.extraSundays > 1 && reserveIndex >= 0 && reserveIndex < ctx.reserves.length) {
+    gospelPdist = ctx.reserves[reserveIndex];
+  } else if (pdist > ctx.satBeforeTheophany) {
     gospelPdist = daysBetween(nextPascha, d);
-  } else if (pdist > lukanJumpThreshold) {
-    gospelPdist = pdist + lukanJump;
+  } else if (pdist > ctx.lukanJumpThreshold) {
+    gospelPdist = pdist + ctx.lukanJump;
   } else {
     gospelPdist = pdist;
   }
 
   let epistlePdist;
   if (pdist === 49 + 29 * 7) {
-    epistlePdist = forefathers;
+    epistlePdist = ctx.forefathers;
   } else if (pdist >= 49 + 32 * 7) {
     epistlePdist = daysBetween(nextPascha, d);
   } else {
     epistlePdist = pdist;
   }
 
-  const gospelEntry = orthodoxSundayReadings[String(gospelPdist)]?.Gospel;
-  const epistleEntry = orthodoxSundayReadings[String(epistlePdist)]?.Epistle;
-  const gospel = gospelEntry?.slavic || gospelEntry?.common;
-  const epistle = epistleEntry?.slavic || epistleEntry?.common;
-  if (!gospel || !epistle) return null;
+  const result = lookupReading(gospelPdist, epistlePdist);
+  return result ? { ...result, pdist } : null;
+}
 
-  return { epistle, gospel, pdist };
+/**
+ * The Slavic-tradition weekday Epistle/Gospel citations for `date`, or
+ * null if `date` is a Sunday, falls on a day where the daily-cycle
+ * readings are suppressed by a Great Feast (Theophany/Nativity eve and
+ * feast day, a Saturday Annunciation, etc. -- see orthodoxYearContext's
+ * noDaily set), or falls outside the transcribed range. Great Lent
+ * weekdays are also an honest gap here: there's no Epistle/Gospel at
+ * Divine Liturgy on an ordinary Lenten weekday in Byzantine practice (the
+ * Presanctified Liturgy uses Old Testament readings instead, not wired
+ * up yet), so the underlying table has no entries there by design.
+ */
+export function orthodoxWeekdayReadingFor(date, calendarStyle = "Gregorian") {
+  const ctx = orthodoxYearContext(date, calendarStyle);
+  if (ctx.d.getDay() === 0) return null;
+  const { pdist, nextPascha, d } = ctx;
+  if (ctx.noDaily.has(pdist)) return null;
+
+  const gospelPdist = pdist > ctx.satBeforeTheophany ? daysBetween(nextPascha, d) : pdist > ctx.lukanJumpThreshold ? pdist + ctx.lukanJump : pdist;
+  const epistlePdist = pdist >= 49 + 32 * 7 ? daysBetween(nextPascha, d) : pdist;
+
+  const result = lookupReading(gospelPdist, epistlePdist);
+  return result ? { ...result, pdist } : null;
 }

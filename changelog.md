@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.36.0] — Orthodox weekday Epistle/Gospel readings (Slavic tradition)
+
+- **Added:** real weekday Epistle/Gospel citations for Orthodox (Slavic tradition), extending v0.35.0's Sunday-only readings to every day of the week — the Prayer tab, Today teaser, and Calendar day-detail sheet now show real citations on ordinary weekdays too, not just Sundays.
+- **Added:** `orthodoxWeekdayReadingFor()` in `lectionary.js`, sharing the same Byzantine Paschal-distance year context (`orthodoxYearContext()`, factored out of the Sunday resolver this pass) but without the Sunday-only overrides (Forefathers Sunday, the Slavic reserve-Sunday replay) — weekday resolution only needs the Lukan-jump adjustment and the next-Pascha-cycle wraparound.
+- **Added:** the `noDaily` suppression set — specific days (Theophany eve/forefeast/feast, Nativity eve/feast/synaxis, a Saturday Annunciation) where even the ordinary daily-cycle readings are suppressed in favor of a Great Feast's own readings, matching orthocal-python's own model.
+- **Honest gap, not a bug:** Great Lent weekdays (Clean Monday through Holy Wednesday) and Cheesefare Wednesday/Friday show no Epistle/Gospel, because there genuinely is no Divine Liturgy — and therefore no Epistle/Gospel reading — on an ordinary Lenten weekday in Byzantine practice (the Presanctified Liturgy uses Old Testament readings instead, not wired up yet). Saturdays throughout Lent are unaffected and still show real readings.
+- Verified via a 100-year automated sweep (2000–2100, 31,620 weekdays): 12.91% fall in a known/documented gap (Great Lent/Cheesefare weekdays plus the festal-suppression days above), 0 unexplained gaps, 0 errors. Independently cross-checked against orthocal.info's live page for August 25, 2026 (2 Corinthians 8:16-9:5 / Mark 3:13-19) — exact match — and confirmed the Lukan jump lands exactly where orthocal-python's own documentation describes it (Monday of the 18th week after Pentecost jumping straight to Luke 3:19-22). Live browser check confirms the Prayer tab, Today teaser, and day-detail sheet all agree for both a Sunday and an ordinary weekday.
+
 ## [0.35.0] — Orthodox Sunday Epistle/Gospel readings (Slavic tradition)
 
 - **Added:** real Sunday Epistle/Gospel citations for the Orthodox tradition for the first time — the Prayer tab, Today teaser, and Calendar day-detail sheet all now show the actual Byzantine-rite Sunday readings instead of a single fixed demo entry, for the Slavic (OCA/ROCOR) tradition specifically. Greek-tradition citations exist in the same underlying table but aren't wired to a UI toggle yet — a likely next step, not a silent gap (see below).

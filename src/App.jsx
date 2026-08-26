@@ -13,7 +13,7 @@ import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
-import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor, orthodoxSundayReadingFor } from "./lib/lectionary";
+import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor, orthodoxSundayReadingFor, orthodoxWeekdayReadingFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
 import { parseReference, formatReference } from "./lib/bibleRef";
 import { bookDisplayName } from "./data/bibleBooks";
@@ -513,14 +513,27 @@ function buildCatholicMass(date, massForm) {
 }
 
 /**
+ * The real Orthodox (Slavic) Epistle/Gospel citations for `date`, whether
+ * it's a Sunday or a weekday -- picks the matching resolver so callers
+ * don't need to know which one applies.
+ */
+function orthodoxReadingFor(date, calendarStyle) {
+  return date.getDay() === 0 ? orthodoxSundayReadingFor(date, calendarStyle) : orthodoxWeekdayReadingFor(date, calendarStyle);
+}
+
+/**
  * Builds the Orthodox "Daily Cycle" entry for `date`: the real Slavic-
- * tradition Sunday Epistle/Gospel citations swapped into the fixed
+ * tradition Epistle/Gospel citations swapped into the fixed
  * Trisagion/Troparion/Axion Estin liturgy text, the same way the Catholic
  * Mass builder keeps its opening/closing prayers and only swaps the
- * readings. Falls back to the static demo entry on weekdays and on any
- * Sunday outside the transcribed pdist range (both honest gaps, not
- * guesses -- see orthodoxSundayReadingFor). `calendarStyle` should match
- * whatever New/Old Calendar setting governs the rest of the Orthodox tab.
+ * readings. Falls back to the static demo entry on any date outside the
+ * transcribed pdist range -- Great Lent weekdays (no Epistle/Gospel at
+ * Divine Liturgy in Byzantine practice), a handful of Nativity/Theophany-
+ * adjacent days where the daily cycle is suppressed in favor of the
+ * feast's own readings, and fixed-feast readings generally, are all
+ * honest gaps, not guesses -- see orthodoxSundayReadingFor and
+ * orthodoxWeekdayReadingFor. `calendarStyle` should match whatever
+ * New/Old Calendar setting governs the rest of the Orthodox tab.
  */
 function buildOrthodoxReadings(date, calendarStyle) {
   const fallback = READINGS.Orthodox.daily;
@@ -528,7 +541,7 @@ function buildOrthodoxReadings(date, calendarStyle) {
   const lastReadingIndex = fallback.sequence.map((i) => i.type).lastIndexOf("reading");
   const openingItems = fallback.sequence.slice(0, firstReadingIndex);
   const closingItems = fallback.sequence.slice(lastReadingIndex + 1);
-  const result = orthodoxSundayReadingFor(date, calendarStyle);
+  const result = orthodoxReadingFor(date, calendarStyle);
   if (!result) {
     const isSunday = date.getDay() === 0;
     const gapNote = isSunday ? "Sunday reading not covered yet" : "weekday reading not covered yet";
@@ -1002,7 +1015,7 @@ function dayReadingItems(tradition, date, calendarStyle) {
     if (result) return result.items;
   }
   if (tradition === "Orthodox") {
-    const result = orthodoxSundayReadingFor(date, calendarStyle);
+    const result = orthodoxReadingFor(date, calendarStyle);
     if (result) {
       return [
         { role: "Epistle", ref: displayRef(splitCitation(result.epistle)[0] || result.epistle) },

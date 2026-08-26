@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.36.0",
+    title: "Orthodox weekday Epistle/Gospel readings (Slavic tradition)",
+    changes: [
+      { type: "Added", text: "Real weekday Epistle/Gospel citations for Orthodox (Slavic tradition), extending last version's Sunday-only readings to every ordinary weekday \u2014 the Prayer tab, Today teaser, and Calendar day-detail sheet all show real citations now." },
+      { type: "Info", text: "Great Lent weekdays and Cheesefare Wednesday/Friday intentionally show no reading \u2014 there's genuinely no Divine Liturgy (and so no Epistle/Gospel) on an ordinary Lenten weekday in Byzantine practice. Saturdays throughout Lent are unaffected." },
+      { type: "Info", text: "Verified with a 100-year sweep (31,620 weekdays, 12.91% honest gap rate matching Lent/Cheesefare/festal-suppression days, 0 unexplained gaps) and cross-checked against orthocal.info's live output \u2014 exact match, including the Lukan-jump date." },
+    ],
+  },
+  {
     version: "0.35.0",
     title: "Orthodox Sunday Epistle/Gospel readings (Slavic tradition)",
     changes: [
