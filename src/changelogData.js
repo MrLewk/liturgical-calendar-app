@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.41.1",
+    title: "Common Worship Daily Office fix",
+    changes: [
+      { type: "Fixed", text: "Anglican Morning and Evening Prayer under Common Worship were showing the correct canticles and Collect of the Day, but the Confession and closing prayer(s) always silently fell back to 1662 BCP wording regardless of the selected source \u2014 reported by a vicar reviewing the app. The overall shape of the office stayed BCP-shaped even under CW; only the canticles and Collect of the Day were actually being swapped." },
+      { type: "Added", text: "The real Common Worship: Daily Prayer fixed texts \u2014 the \"Prayers of Penitence\" confession and the Morning/Evening \"Conclusion\" \u2014 sourced from justus.anglican.org (\u00a9 The Archbishops' Council of the Church of England, non-commercial use with attribution). CW's Order One has no equivalent to 1662's extra \"Collect for Peace\", so that's now correctly omitted under CW." },
+      { type: "Fixed", text: "The Prayer tab's footer attribution always credited the 1662 Book of Common Prayer regardless of the selected source; it now credits Common Worship when CW is active." },
+    ],
+  },
+  {
     version: "0.41.0",
     title: "Orthodox Vespers Old Testament readings (paremias)",
     changes: [

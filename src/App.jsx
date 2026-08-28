@@ -836,6 +836,32 @@ const CW_PRAYERS_OF_PENITENCE = {
   text: "Almighty God, our heavenly Father, we have sinned against you and against our neighbour in thought and word and deed, through negligence, through weakness, through our own deliberate fault. We are truly sorry and repent of all our sins. For the sake of your Son Jesus Christ, who died for us, forgive us all that is past and grant that we may serve you in newness of life to the glory of your name. Amen.",
 };
 
+// Common Worship: Daily Prayer's fixed Confession and closing "Conclusion"
+// texts for Morning/Evening Prayer (Order One) - entirely different wording
+// from the 1662 BCP office, source: Common Worship: Daily Prayer, ©
+// The Archbishops' Council of the Church of England, non-commercial use with
+// attribution per the CofE copyright team.
+const CW_DAILY_CONFESSION = {
+  type: "prayer",
+  role: "Confession",
+  ref: "Prayers of Penitence",
+  text: "Most merciful God, we confess to you, before the whole company of heaven and one another, that we have sinned in thought, word and deed, and in what we have failed to do. Forgive us our sins, heal us by your Spirit and raise us to new life in Christ. Amen.",
+};
+
+const CW_MORNING_CONCLUSION = {
+  type: "prayer",
+  role: "Conclusion",
+  ref: "The Conclusion",
+  text: "The Lord bless us, and preserve us from all evil, and keep us in eternal life. Amen. Let us bless the Lord. Thanks be to God.",
+};
+
+const CW_EVENING_CONCLUSION = {
+  type: "prayer",
+  role: "Conclusion",
+  ref: "The Conclusion",
+  text: "The grace of our Lord Jesus Christ, and the love of God, and the fellowship of the Holy Spirit, be with us all evermore. Amen. Let us bless the Lord. Thanks be to God.",
+};
+
 /**
  * Builds today's REAL Anglican Eucharist readings — the Sunday Principal
  * Service (RCL) lectionary on Sundays, the Common Worship Daily
@@ -910,9 +936,19 @@ function splitPsalmCitation(raw) {
 function buildAnglicanOffice(date, service, collectSource) {
   const fallback = READINGS.Anglican[service];
   const byRole = (role, ref) => fallback.sequence.find((i) => i.role === role && (!ref || i.ref === ref));
-  const confession = fallback.sequence[0];
-  const peaceCollect = byRole("Collect", "Collect for Peace");
-  const finalCollect = fallback.sequence[fallback.sequence.length - 1];
+  const source = collectSource === "CW" ? "CW" : "1662";
+  // Common Worship's Daily Prayer confession and closing "Conclusion" are
+  // completely different fixed texts from the 1662 office's - these
+  // previously always fell back to the 1662 wording regardless of which
+  // source was selected, so the overall shape of the office stayed
+  // BCP-shaped even under CW. Only the canticles and Collect of the Day
+  // were actually being swapped.
+  const confession = source === "CW" ? CW_DAILY_CONFESSION : fallback.sequence[0];
+  // CW's Order One office has no separate "Collect for Peace" - it goes
+  // straight from the Collect of the Day to the Lord's Prayer and
+  // Conclusion, so there's nothing to swap this in for under CW.
+  const peaceCollect = source === "CW" ? null : byRole("Collect", "Collect for Peace");
+  const finalCollect = source === "CW" ? (service === "am" ? CW_MORNING_CONCLUSION : CW_EVENING_CONCLUSION) : fallback.sequence[fallback.sequence.length - 1];
 
   // AM: Venite (or the Easter Anthems in Easter Week) before the readings,
   // Te Deum after the OT lesson, Benedictus after the NT lesson.
@@ -921,7 +957,6 @@ function buildAnglicanOffice(date, service, collectSource) {
   // opening canticle at Evening Prayer.
   // Common Worship replaces the after-OT canticle (Te Deum/Magnificat) with
   // a seasonal alternative - see seasonalCanticleKey for the season mapping.
-  const source = collectSource === "CW" ? "CW" : "1662";
   const firstCanticleKey = service === "am" ? morningFirstCanticleKey(date) : eveningFirstCanticleKey(source);
   let secondCanticleKey = service === "am" ? "te_deum" : "magnificat";
   if (source === "CW") {
@@ -3352,13 +3387,13 @@ function ReadingsView({ tradition, season, today, viewDate, onBackToToday, onOpe
       </div>
 
       <p className="text-[10px] lg:text-[13px] mt-4 lg:mt-6 leading-relaxed" style={{ color: alpha(theme.text, 0.27) }}>
-        {readingsFooterText(tradition, validSegment, massForm)}
+        {readingsFooterText(tradition, validSegment, massForm, collectSource)}
       </p>
     </div>
   );
 }
 
-function readingsFooterText(tradition, segment, massForm) {
+function readingsFooterText(tradition, segment, massForm, collectSource) {
   const base = "Scripture readings use the World English Bible (public domain).";
   if (tradition === "Catholic" && segment === "mass" && massForm !== "traditional_latin") {
     return `${base} The English translation of the Order of Mass (Penitential Act, Gloria, Eucharistic Prayer II, Agnus Dei, Concluding Rite) © 2010, International Committee on English in the Liturgy, Inc. All rights reserved, reproduced under ICEL's published policy for free non-commercial internet use.`;
@@ -3371,6 +3406,9 @@ function readingsFooterText(tradition, segment, massForm) {
   }
   if (tradition === "Orthodox") {
     return `${base} Prayers and traditions are from ancient liturgical sources.`;
+  }
+  if (collectSource === "CW") {
+    return `${base} Prayers and traditions are from Common Worship (© The Archbishops' Council of the Church of England, used under its non-commercial policy) and Anglican lectionaries.`;
   }
   return `${base} Prayers and traditions are from the 1662 Book of Common Prayer, Anglican lectionaries, and ancient liturgical sources.`;
 }

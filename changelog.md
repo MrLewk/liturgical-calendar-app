@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.41.1] — Common Worship Daily Office fix
+
+- **Fixed:** Anglican Morning and Evening Prayer under Common Worship were showing the correct canticles and Collect of the Day, but the Confession and closing prayer(s) always silently fell back to 1662 BCP wording regardless of which source was selected — reported by a vicar reviewing the app, who noticed the office's overall shape stayed BCP-shaped even under CW. Root cause: `buildAnglicanOffice()` only branched the canticles/collect on the selected source, not the Confession or closing collects; the Eucharist builder had already been fixed for this but the Daily Office builder never was.
+- **Added:** the real Common Worship: Daily Prayer fixed texts — the "Prayers of Penitence" confession and the Morning/Evening "Conclusion" — sourced from justus.anglican.org (© The Archbishops' Council of the Church of England, non-commercial use with attribution, the same terms already confirmed for the CW collects). CW's Order One also has no equivalent to 1662's extra "Collect for Peace", so that's now correctly omitted under CW rather than carried over from the 1662 sequence.
+- **Fixed:** the Prayer tab's footer attribution always credited the 1662 Book of Common Prayer regardless of which source was selected; it now credits Common Worship when CW is active.
+- **Verified:** build + lint clean (13 baseline warnings, no new ones); Playwright check confirms CW Morning and Evening Prayer both show the correct confession/conclusion text with no 1662 leftovers, and that 1662 mode is unaffected.
+
 ## [0.41.0] — Orthodox Vespers Old Testament readings (paremias)
 
 - **Added:** the real Vesperal Old Testament readings ("paremias") for ~66 fixed dates, inserted into the Vespers segment right after "O Gladsome Light" — the Twelve Great Feasts (Nativity and Theophany included) plus a range of other major commemorations. Correctly appear on the *Eve* for Nativity and Theophany specifically (Dec 24 and Jan 5), matching real practice where the Vesperal Liturgy with its readings happens the evening before, not on the feast day itself.
