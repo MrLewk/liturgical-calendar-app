@@ -6,6 +6,16 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.43.0",
+    title: "Offline reliability: fonts, scripture loading, and a full offline download",
+    changes: [
+      { type: "Fixed", text: "The app could get stuck on a blank loading screen with no signal at all (e.g. in a church building). Root cause: fonts were loaded from a render-blocking Google Fonts link, an external request not covered by offline caching. Fixed by self-hosting the fonts so they're bundled and available offline from the first visit \u2014 no external request at all." },
+      { type: "Fixed", text: "Opening a scripture reading whose text wasn't cached yet could hang on \u201cLoading passage\u2026\u201d forever if the connection dropped mid-request. Fetching a passage now times out after 8 seconds and checks for a connection up front, surfacing a clear error instead of hanging indefinitely." },
+      { type: "Fixed", text: "Caught during testing: the fix above was masking real offline/timeout errors behind a misleading \u201cisn't available in this edition\u201d message for some books. Fixed so the real, honest error now shows instead." },
+      { type: "Added", text: "A \u201cDownload for offline\u201d control in Settings \u2192 Bible text. Downloads the full current WEB edition (~5MB, 81 books) in one go with live progress, rather than relying on each book caching itself the first time it happens to be opened." },
+    ],
+  },
+  {
     version: "0.42.0",
     title: "Fasting levels explainer",
     changes: [

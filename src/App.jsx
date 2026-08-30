@@ -12,7 +12,7 @@ import { liturgicalYearData, seasonAt, feastOnDate, upcomingFeasts, withDisplay 
 import { fastingFor, FASTING_LEVEL_INFO } from "./lib/fasting";
 import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
-import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
+import { getPassage, bibleGatewayUrl, downloadVersionForOffline, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
 import { BIBLEGATEWAY_VERSIONS } from "./data/bibleGatewayVersions";
 import { eucharistReadingFor, sundayReadingFor, officeReadingFor, psalmFor, collect1662For, collectCWFor, canticlePreview, morningFirstCanticleKey, eveningFirstCanticleKey, seasonalCanticleKey, secondThirdServiceFor, bcpSundayFirstLessonFor, fixedFeastEucharistFor, postCommunionCWFor, catholicSundayReadingFor, catholicLaudsFor, catholicVespersFor, catholicComplineFor, catholicWeekdayReadingFor, catholicOfficeOfReadingsFor, catholicDaytimePrayerFor, orthodoxSundayReadingFor, orthodoxWeekdayReadingFor, orthodoxFixedFeastReadingFor, orthodoxMatinsGospelFor, orthodoxVespersOldTestamentFor } from "./lib/lectionary";
 import { splitCitation } from "./lib/citationNormalize";
@@ -1255,6 +1255,26 @@ export default function App() {
   const [openCanticle, setOpenCanticle] = useState(null); // {key, source} or null when the modal is closed
   const resolvedWebVersion = webBibleVersion === "auto" ? DEFAULT_WEB_VERSION[tradition] || "engwebu" : webBibleVersion;
 
+  // Which WEB editions have been fully downloaded for offline reading (see
+  // "Download for offline" in Settings > Bible text), persisted so the
+  // button still shows "Downloaded" on a later visit. Download progress
+  // itself is deliberately NOT persisted — it's only meaningful mid-download.
+  const [offlineBibleVersions, setOfflineBibleVersions] = usePersistedState("officium-offline-bible-versions", {});
+  const [bibleDownload, setBibleDownload] = useState({ status: "idle" }); // idle | downloading | error
+  const handleDownloadBibleOffline = async (version) => {
+    setBibleDownload({ status: "downloading", done: 0, total: 1 });
+    try {
+      const result = await downloadVersionForOffline(version, (progress) =>
+        setBibleDownload({ status: "downloading", ...progress })
+      );
+      if (result.downloaded === 0) throw new Error("Nothing downloaded — check your connection.");
+      setOfflineBibleVersions((prev) => ({ ...prev, [version]: true }));
+      setBibleDownload({ status: "idle" });
+    } catch {
+      setBibleDownload({ status: "error" });
+    }
+  };
+
   const today = useToday();
   const { seasons, feasts } = useMemo(() => liturgicalYearData(tradition, calendar, today), [tradition, calendar, today]);
   const season = useMemo(() => withDisplay(seasonAt(seasons, today), today, tradition, seasons), [seasons, today, tradition]);
@@ -1457,6 +1477,10 @@ export default function App() {
               onOpenChangelog={() => setShowChangelog(true)}
               webBibleVersion={webBibleVersion}
               onChangeWebBibleVersion={setWebBibleVersion}
+              resolvedWebVersion={resolvedWebVersion}
+              offlineBibleVersions={offlineBibleVersions}
+              bibleDownload={bibleDownload}
+              onDownloadBibleOffline={handleDownloadBibleOffline}
               bibleGatewayVersion={bibleGatewayVersion}
               onChangeBibleGatewayVersion={setBibleGatewayVersion}
               collectSource={collectSource}
@@ -1696,6 +1720,10 @@ function SettingsSheet({
   onOpenChangelog,
   webBibleVersion,
   onChangeWebBibleVersion,
+  resolvedWebVersion,
+  offlineBibleVersions,
+  bibleDownload,
+  onDownloadBibleOffline,
   bibleGatewayVersion,
   onChangeBibleGatewayVersion,
   collectSource,
@@ -1917,10 +1945,43 @@ function SettingsSheet({
           </button>
         ))}
       </div>
-      <p className="text-[11px] mb-4" style={{ color: alpha(theme.text, 0.33) }}>
+      <p className="text-[11px] mb-3" style={{ color: alpha(theme.text, 0.33) }}>
         Used for the full passage text shown when you tap a scripture reading. All three are the public-domain
-        World English Bible, so they can be read offline.
+        World English Bible, so they can be read offline — but by default each book only downloads the first
+        time you open it. Download the whole edition below if you want it all available before you lose signal.
       </p>
+
+      <button
+        onClick={() => onDownloadBibleOffline(resolvedWebVersion)}
+        disabled={bibleDownload.status === "downloading"}
+        className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-left mb-1"
+        style={{
+          backgroundColor: theme.bg,
+          border: `1px solid ${offlineBibleVersions[resolvedWebVersion] ? accent : "transparent"}`,
+          opacity: bibleDownload.status === "downloading" ? 0.7 : 1,
+        }}
+      >
+        <div>
+          <p className="text-[13.5px]" style={{ color: theme.text }}>
+            {bibleDownload.status === "downloading"
+              ? `Downloading… ${bibleDownload.done}/${bibleDownload.total}`
+              : offlineBibleVersions[resolvedWebVersion]
+                ? "Downloaded for offline"
+                : "Download for offline"}
+          </p>
+          <p className="text-[10.5px] mt-0.5" style={{ color: alpha(theme.text, 0.4) }}>
+            {WEB_VERSION_LABELS[resolvedWebVersion]} · ~5 MB
+          </p>
+        </div>
+        <Download size={16} color={offlineBibleVersions[resolvedWebVersion] ? accent : alpha(theme.text, 0.5)} />
+      </button>
+      {bibleDownload.status === "error" ? (
+        <p className="text-[10.5px] mb-4" style={{ color: "#C97227" }}>
+          Download didn't finish — check your connection and try again.
+        </p>
+      ) : (
+        <div className="mb-4" />
+      )}
 
       <label className="text-[11px] uppercase tracking-[0.2em] mb-2 block" style={{ color: alpha(theme.text, 0.4) }}>
         BibleGateway link version
