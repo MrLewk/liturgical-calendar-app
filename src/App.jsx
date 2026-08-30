@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon, Monitor, X, UtensilsCrossed, Info } from "lucide-react";
+import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon, Monitor, X, UtensilsCrossed, Info, Check } from "lucide-react";
 import { useTheme } from "./ThemeContext";
 import { alpha, seasonAccent } from "./theme";
 import UpdateToast from "./UpdateToast";
@@ -1260,18 +1260,23 @@ export default function App() {
   // button still shows "Downloaded" on a later visit. Download progress
   // itself is deliberately NOT persisted — it's only meaningful mid-download.
   const [offlineBibleVersions, setOfflineBibleVersions] = usePersistedState("officium-offline-bible-versions", {});
-  const [bibleDownload, setBibleDownload] = useState({ status: "idle" }); // idle | downloading | error
+  const [bibleDownload, setBibleDownload] = useState({ status: "idle" }); // idle | downloading | error, { message } on error
   const handleDownloadBibleOffline = async (version) => {
     setBibleDownload({ status: "downloading", done: 0, total: 1 });
     try {
-      const result = await downloadVersionForOffline(version, (progress) =>
-        setBibleDownload({ status: "downloading", ...progress })
-      );
-      if (result.downloaded === 0) throw new Error("Nothing downloaded — check your connection.");
+      await downloadVersionForOffline(version, (progress) => setBibleDownload({ status: "downloading", ...progress }));
       setOfflineBibleVersions((prev) => ({ ...prev, [version]: true }));
       setBibleDownload({ status: "idle" });
-    } catch {
-      setBibleDownload({ status: "error" });
+    } catch (err) {
+      // downloadVersionForOffline() already distinguishes "you're offline"
+      // from "nothing downloaded" from other failures — surface its real
+      // message rather than a single generic one, since the fix a person
+      // needs (connect to the internet, vs. just try again) differs.
+      setOfflineBibleVersions((prev) => {
+        const { [version]: _drop, ...rest } = prev;
+        return rest;
+      });
+      setBibleDownload({ status: "error", message: err.message });
     }
   };
 
@@ -1953,12 +1958,12 @@ function SettingsSheet({
 
       <button
         onClick={() => onDownloadBibleOffline(resolvedWebVersion)}
-        disabled={bibleDownload.status === "downloading"}
+        disabled={bibleDownload.status === "downloading" || !!offlineBibleVersions[resolvedWebVersion]}
         className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-left mb-1"
         style={{
           backgroundColor: theme.bg,
           border: `1px solid ${offlineBibleVersions[resolvedWebVersion] ? accent : "transparent"}`,
-          opacity: bibleDownload.status === "downloading" ? 0.7 : 1,
+          opacity: bibleDownload.status === "downloading" ? 0.7 : offlineBibleVersions[resolvedWebVersion] ? 0.6 : 1,
         }}
       >
         <div>
@@ -1966,18 +1971,31 @@ function SettingsSheet({
             {bibleDownload.status === "downloading"
               ? `Downloading… ${bibleDownload.done}/${bibleDownload.total}`
               : offlineBibleVersions[resolvedWebVersion]
-                ? "Downloaded for offline"
-                : "Download for offline"}
+                ? "Already downloaded"
+                : "Download for offline reading"}
           </p>
           <p className="text-[10.5px] mt-0.5" style={{ color: alpha(theme.text, 0.4) }}>
             {WEB_VERSION_LABELS[resolvedWebVersion]} · ~5 MB
           </p>
         </div>
-        <Download size={16} color={offlineBibleVersions[resolvedWebVersion] ? accent : alpha(theme.text, 0.5)} />
+        {offlineBibleVersions[resolvedWebVersion] ? (
+          <Check size={16} color={accent} />
+        ) : (
+          <Download size={16} color={alpha(theme.text, 0.5)} />
+        )}
       </button>
+      {offlineBibleVersions[resolvedWebVersion] && bibleDownload.status !== "downloading" && (
+        <button
+          onClick={() => onDownloadBibleOffline(resolvedWebVersion)}
+          className="text-[10.5px] mb-2 underline"
+          style={{ color: alpha(theme.text, 0.4) }}
+        >
+          Download again
+        </button>
+      )}
       {bibleDownload.status === "error" ? (
         <p className="text-[10.5px] mb-4" style={{ color: "#C97227" }}>
-          Download didn't finish — check your connection and try again.
+          {bibleDownload.message || "Download didn't finish — check your connection and try again."}
         </p>
       ) : (
         <div className="mb-4" />

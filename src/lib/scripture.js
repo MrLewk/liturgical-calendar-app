@@ -27,14 +27,46 @@ const CODE_FALLBACK = {
 
 const bookCache = new Map(); // `${version}/${code}` -> parsed JSON (or in-flight promise)
 
-// Books are only cached offline (via the service worker's CacheFirst rule)
-// the first time they're actually opened while online — see the note in
-// vite.config.js. So a book that's never been read before genuinely isn't
-// available offline, and on a real connection a request can also just
-// stall (e.g. signal dropping mid-fetch) rather than failing outright.
-// Without a timeout, a bare fetch() leaves the caller stuck on "Loading
-// passage…" forever. Aborting after a few seconds turns that into the
-// existing, already-handled error state instead.
+// Same cache name as the CacheFirst runtime rule in vite.config.js. Writing
+// to it directly (rather than relying on the service worker to intercept
+// fetch() and populate it) matters because a page isn't actually controlled
+// by the service worker until its first reload after install — any fetch
+// made before that reload (e.g. tapping "Download for offline" in the very
+// first session) would otherwise go straight to the network and cache
+// nothing, silently. Reading from it directly first also means a
+// previously-downloaded book works offline even if the service worker
+// somehow isn't in control at that moment.
+const BIBLE_CACHE_NAME = "bible-text";
+
+async function readFromCache(url) {
+  if (typeof caches === "undefined") return null;
+  try {
+    const cache = await caches.open(BIBLE_CACHE_NAME);
+    const match = await cache.match(url);
+    return match ? await match.clone().json() : null;
+  } catch {
+    return null; // Cache Storage unavailable or corrupt entry — fall through to network
+  }
+}
+
+async function writeToCache(url, response) {
+  if (typeof caches === "undefined") return;
+  try {
+    const cache = await caches.open(BIBLE_CACHE_NAME);
+    await cache.put(url, response.clone());
+  } catch {
+    // Non-fatal — the read still succeeds this time, it just won't be
+    // available offline next time.
+  }
+}
+
+// Books are only cached offline the first time they're actually opened
+// while online — see the note on BIBLE_CACHE_NAME above. So a book that's
+// never been read before genuinely isn't available offline, and on a real
+// connection a request can also just stall (e.g. signal dropping mid-fetch)
+// rather than failing outright. Without a timeout, a bare fetch() leaves
+// the caller stuck on "Loading passage…" forever. Aborting after a few
+// seconds turns that into the existing, already-handled error state instead.
 const FETCH_TIMEOUT_MS = 8000;
 
 async function fetchBook(version, code) {
@@ -42,6 +74,11 @@ async function fetchBook(version, code) {
   if (bookCache.has(cacheKey)) return bookCache.get(cacheKey);
 
   const promise = (async () => {
+    const url = `/bible/${version}/${code}.json`;
+
+    const cached = await readFromCache(url);
+    if (cached) return cached;
+
     if (typeof navigator !== "undefined" && navigator.onLine === false) {
       throw new Error("You're offline and this passage hasn't been downloaded yet.");
     }
@@ -49,7 +86,7 @@ async function fetchBook(version, code) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     try {
-      const res = await fetch(`/bible/${version}/${code}.json`, { signal: controller.signal });
+      const res = await fetch(url, { signal: controller.signal });
       if (!res.ok) {
         // Distinguished from network/offline/timeout failures below — this
         // is the one case getPassage() should react to by trying
@@ -59,6 +96,7 @@ async function fetchBook(version, code) {
         err.notFound = true;
         throw err;
       }
+      await writeToCache(url, res.clone());
       return await res.json();
     } catch (err) {
       if (err.name === "AbortError") {
@@ -156,39 +194,54 @@ export async function getPassage(refString, version) {
 const ALL_BOOK_CODES = [...new Set(BIBLE_BOOKS.map((b) => b.code))];
 
 /**
- * Fetches every book of a given WEB edition so the service worker's
- * CacheFirst rule caches all of it up front, rather than one book at a
- * time as someone happens to open readings. Meant for a "download for
- * offline" setting, not called on every app load. Uses a plain fetch
- * (bypassing bookCache) so the ~5MB of parsed text isn't held in memory
- * for the rest of the session — the point here is populating the service
- * worker's cache, not the in-memory one. Skips codes that don't apply to
- * this edition; reports { done, total } after each attempt so callers can
- * show progress.
+ * Fetches every book of a given WEB edition and writes it straight into
+ * Cache Storage (see BIBLE_CACHE_NAME above) so it's available offline
+ * immediately — not dependent on the service worker being in control of
+ * the page yet. Meant for a "download for offline" setting, not called on
+ * every app load. Uses a plain fetch (bypassing bookCache) so the ~5MB of
+ * parsed text isn't held in memory for the rest of the session. Skips
+ * codes that don't apply to this edition; reports { done, total } after
+ * each attempt so callers can show progress.
+ *
+ * Refuses to start while offline rather than "succeeding" on whatever
+ * happens to already be cached from previous sessions — a person tapping
+ * this specifically wants a real download, and a false "done" would leave
+ * them stranded on exactly the readings they haven't opened before.
  */
 export async function downloadVersionForOffline(version, onProgress) {
+  if (typeof navigator !== "undefined" && navigator.onLine === false) {
+    throw new Error("You're offline — connect to the internet and try again.");
+  }
+  if (typeof caches === "undefined") {
+    throw new Error("Offline storage isn't available in this browser.");
+  }
+
+  const cache = await caches.open(BIBLE_CACHE_NAME);
   const total = ALL_BOOK_CODES.length;
   let done = 0;
   let downloaded = 0;
   for (const code of ALL_BOOK_CODES) {
+    const url = `/bible/${version}/${code}.json`;
     try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
       try {
-        const res = await fetch(`/bible/${version}/${code}.json`, { signal: controller.signal });
+        const res = await fetch(url, { signal: controller.signal });
         if (res.ok) {
-          await res.blob(); // drain the body so the SW actually caches a complete response
+          await cache.put(url, res.clone());
           downloaded++;
         }
       } finally {
         clearTimeout(timeout);
       }
     } catch {
-      // Not part of this edition, offline, or a transient failure — move on.
+      // Not part of this edition, connection dropped mid-book, or a
+      // transient failure — move on rather than aborting the whole run.
     }
     done++;
     onProgress?.({ done, total, downloaded });
   }
+  if (downloaded === 0) throw new Error("Nothing downloaded — check your connection and try again.");
   return { done, total, downloaded };
 }
 

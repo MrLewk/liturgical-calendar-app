@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.44.0",
+    title: "Offline download fix: it wasn't actually downloading anything",
+    changes: [
+      { type: "Fixed", text: "The \u201cDownload for offline\u201d control looked like it worked, but readings still failed to load offline afterward. Root cause: caching only happened via the service worker, which doesn't control a page until its first reload after install \u2014 so downloading in that first session cached nothing, silently. Fixed by writing straight into the same offline storage the service worker reads from, which works regardless of its control state." },
+      { type: "Fixed", text: "Attempting the download while offline could \u201csucceed\u201d with real-looking progress from whatever was already in the browser's ordinary cache. It now checks the connection first and fails immediately with a clear \u201cyou're offline\u201d message." },
+      { type: "Changed", text: "Button copy is now \u201cDownload for offline reading\u201d, and once downloaded it visibly disables (checkmark, \u201cAlready downloaded\u201d) with a small \u201cDownload again\u201d link for re-running it." },
+    ],
+  },
+  {
     version: "0.43.0",
     title: "Offline reliability: fonts, scripture loading, and a full offline download",
     changes: [
