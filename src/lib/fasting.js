@@ -161,3 +161,79 @@ export function fastingFor(tradition, date, calendarStyle) {
   if (tradition === "Orthodox") return orthodoxFastingFor(date, calendarStyle);
   return null;
 }
+
+// ---------------------------------------------------------------------
+// Static "what does this mean" reference content for each tradition's
+// fasting levels, shown from an info link on the Fasting card rather
+// than computed per-date. Order matters — displayed strictest-first.
+// Each entry's `level` matches the `level` values returned above, so the
+// UI can highlight whichever row corresponds to today's observance.
+// ---------------------------------------------------------------------
+export const FASTING_LEVEL_INFO = {
+  Catholic: {
+    intro:
+      "The Latin Rite's fasting and abstinence discipline, per the 1983 Code of Canon Law plus the UK bishops' 2011 restoration of year-round Friday abstinence.",
+    levels: [
+      {
+        level: "strict",
+        title: "Fast & abstinence",
+        description:
+          "One full meal, with two smaller meals that together don't add up to a full meal — and no meat. Kept on Ash Wednesday and Good Friday.",
+      },
+      {
+        level: "abstinence",
+        title: "Abstinence",
+        description: "No meat, with no limit on the amount eaten. Kept on Fridays, especially through Lent.",
+      },
+    ],
+    note: "This reflects the modern Novus Ordo norm, not the fuller fasting calendar historically kept in the Traditional Latin Mass (all of Lent as fast days, Ember days, vigils).",
+  },
+  Anglican: {
+    intro:
+      "The 1662 Book of Common Prayer's \"Table of Fasts\" — days of fasting and self-denial rather than a fixed food code.",
+    levels: [
+      {
+        level: "strict",
+        title: "The two great fasts",
+        description: "Ash Wednesday and Good Friday, the most solemn fasts of the year.",
+      },
+      {
+        level: "fast",
+        title: "Lent, Ember & Rogation days",
+        description:
+          "The Forty Days of Lent, the four sets of Ember Days through the year, and the three Rogation Days before Ascension — traditionally kept with simpler meals and a measure of self-denial.",
+      },
+      {
+        level: "abstinence",
+        title: "Friday abstinence",
+        description: "No meat, kept every Friday of the year except Christmas Day.",
+      },
+    ],
+    note: "The BCP itself doesn't prescribe specific food rules for these days beyond \"fasting and abstinence\" — the practical detail has always been left to conscience and custom.",
+  },
+  Orthodox: {
+    intro:
+      "Orthodox fasting centres on abstaining from animal products — and, on the strictest days, wine and oil too — across the rhythm of the whole church year, not just single days.",
+    levels: [
+      {
+        level: "strict",
+        title: "Strict fast",
+        description:
+          "No meat, dairy, eggs, wine, or oil. The most ascetic days — weekdays of Great Lent, Holy Week, the Dormition Fast, and the eves of Nativity and Theophany.",
+      },
+      {
+        level: "fast",
+        title: "Fast — wine & oil permitted",
+        description:
+          "No meat, dairy, or eggs, but wine and oil are allowed. The everyday rhythm of the four fasting seasons and the weekly Wednesday/Friday fast.",
+      },
+      {
+        level: "fast-free",
+        title: "Fast-free",
+        description:
+          "No fasting restrictions at all. The weeks that lift the fast entirely — Bright Week, the week after Pentecost, and Nativity to Theophany Eve.",
+      },
+    ],
+    note: "This app uses a simplified two-level fasting/strict system. Real practice has finer traditional grades (e.g. fish permitted on certain feast days) that aren't reflected here.",
+  },
+};

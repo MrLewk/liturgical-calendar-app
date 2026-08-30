@@ -6,6 +6,15 @@
 // history for GitHub/repo visitors.
 export const CHANGELOG = [
   {
+    version: "0.42.0",
+    title: "Fasting levels explainer",
+    changes: [
+      { type: "Added", text: "An info link on the Fasting card (Today tab and Calendar day-detail sheet) opening a short explainer of what each tradition's fasting levels mean \u2014 Catholic, Anglican, and Orthodox each get their own breakdown, sourced from the same norms already used to compute the daily fasting label." },
+      { type: "Info", text: "Prompted by user feedback that the per-day fasting labels aren't self-explanatory to someone new to a tradition." },
+      { type: "Fixed", text: "The explainer sheet initially rendered behind the day-detail sheet in the DOM stacking order, so tapping the info icon from a day's detail view did nothing visible. Fixed by rendering it last so it always stacks on top." },
+    ],
+  },
+  {
     version: "0.41.1",
     title: "Common Worship Daily Office fix",
     changes: [

@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [0.42.0] — Fasting levels explainer
+
+- **Added:** an info link on the Fasting card (Today tab and the Calendar day-detail sheet) opening a short explainer of what each tradition's fasting levels actually mean — Catholic (fast & abstinence / abstinence), Anglican (the two great fasts / Lent, Ember & Rogation days / Friday abstinence), and Orthodox (strict fast / fast with wine & oil permitted / fast-free) — sourced from the same norms already cited in `fasting.js` (1983 Code of Canon Law, the 1662 BCP Table of Fasts, and the four Orthodox fasting seasons). Prompted by user feedback that the per-day fasting labels aren't self-explanatory to someone new to a tradition.
+- Each tradition's explainer includes a short note on where the app's model simplifies real practice (e.g. the TLM's fuller Lenten fasting calendar isn't attempted; Orthodox fish-permitted days within a fasting period aren't distinguished from the general fast level) — consistent with the app's existing approach of surfacing known gaps rather than glossing over them.
+- **Fixed a real bug caught during testing:** the explainer sheet initially rendered behind the day-detail sheet in the DOM stacking order, so tapping the info icon from a day's detail view did nothing visible — the tap was being intercepted by the sheet underneath. Fixed by rendering the explainer last so it always stacks on top of whichever card opened it.
+- Verified: build + lint clean (13 baseline warnings, no new ones); Playwright check confirms the info icon and explainer content render correctly for all three traditions, from both the Today tab and the day-detail sheet, and that closing the explainer correctly returns to the sheet it was opened from.
+
 ## [0.41.1] — Common Worship Daily Office fix
 
 - **Fixed:** Anglican Morning and Evening Prayer under Common Worship were showing the correct canticles and Collect of the Day, but the Confession and closing prayer(s) always silently fell back to 1662 BCP wording regardless of which source was selected — reported by a vicar reviewing the app, who noticed the office's overall shape stayed BCP-shaped even under CW. Root cause: `buildAnglicanOffice()` only branched the canticles/collect on the selected source, not the Confession or closing collects; the Eucharist builder had already been fixed for this but the Daily Office builder never was.

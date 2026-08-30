@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon, Monitor, X, UtensilsCrossed } from "lucide-react";
+import { Flame, CalendarDays, CircleDot, Star, Settings2, ChevronRight, ChevronLeft, Download, BookOpen, Sun, Moon, SunMoon, Monitor, X, UtensilsCrossed, Info } from "lucide-react";
 import { useTheme } from "./ThemeContext";
 import { alpha, seasonAccent } from "./theme";
 import UpdateToast from "./UpdateToast";
@@ -9,7 +9,7 @@ import { usePersistedState } from "./usePersistedState";
 import { loadGoogleAnalytics, disableGoogleAnalytics } from "./analytics";
 import { CHANGELOG } from "./changelogData";
 import { liturgicalYearData, seasonAt, feastOnDate, upcomingFeasts, withDisplay } from "./lib/feasts";
-import { fastingFor } from "./lib/fasting";
+import { fastingFor, FASTING_LEVEL_INFO } from "./lib/fasting";
 import { buildIcs, downloadIcs } from "./lib/ics";
 import { dateOnly, daysBetween } from "./lib/dates";
 import { getPassage, bibleGatewayUrl, DEFAULT_WEB_VERSION, WEB_VERSION_LABELS } from "./lib/scripture";
@@ -1233,6 +1233,7 @@ export default function App() {
   const [showExport, setShowExport] = useState(false);
   const [selectedFeast, setSelectedFeast] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [showFastingInfo, setShowFastingInfo] = useState(false);
   // The date the Prayer & Readings tab is showing. null = today (the live
   // clock); set to a specific date when opened from a day-detail sheet so
   // that day's actual readings show, not today's.
@@ -1295,6 +1296,7 @@ export default function App() {
             setTab("readings");
           }}
           onOpenExport={() => setShowExport(true)}
+          onOpenFastingInfo={() => setShowFastingInfo(true)}
           tradition={tradition}
           calendar={calendar}
         />
@@ -1522,8 +1524,13 @@ export default function App() {
                 setTab("readings");
                 setSelectedDay(null);
               }}
+              onOpenFastingInfo={() => setShowFastingInfo(true)}
             />
           )}
+
+          {/* Fasting levels explainer — reachable from the info link on any Fasting card. Rendered
+              last so it stacks above the Today view or day-detail sheet it was opened from. */}
+          {showFastingInfo && <FastingInfoModal tradition={tradition} onClose={() => setShowFastingInfo(false)} />}
         </div>
       </div>
 
@@ -2586,7 +2593,46 @@ function FeastModal({ feast, onClose }) {
   );
 }
 
-function DayDetailSheet({ date, tradition, calendar, onClose, onOpenFeast, onOpenReadingsForDay }) {
+function FastingInfoModal({ tradition, onClose }) {
+  const theme = useTheme();
+  const info = FASTING_LEVEL_INFO[tradition];
+  if (!info) return null;
+  return (
+    <SheetOverlay onClose={onClose}>
+      <p className="text-[11px] uppercase tracking-[0.2em] mb-1 text-center" style={{ color: alpha(theme.text, 0.4) }}>
+        {tradition}
+      </p>
+      <h2
+        className="text-[22px] leading-tight mb-3 text-center"
+        style={{ fontFamily: "'Fraunces', serif", color: theme.text }}
+      >
+        Fasting levels
+      </h2>
+      <p className="text-[13px] leading-relaxed mb-5" style={{ color: alpha(theme.text, 0.8) }}>
+        {info.intro}
+      </p>
+      <div className="space-y-3">
+        {info.levels.map((lvl) => (
+          <div key={lvl.level} className="rounded-xl p-3.5" style={{ backgroundColor: theme.bg }}>
+            <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: alpha(theme.text, 0.33) }}>
+              {lvl.title}
+            </p>
+            <p className="text-[12px] leading-relaxed" style={{ color: alpha(theme.text, 0.67) }}>
+              {lvl.description}
+            </p>
+          </div>
+        ))}
+      </div>
+      {info.note && (
+        <p className="text-[11px] leading-relaxed mt-4" style={{ color: alpha(theme.text, 0.4) }}>
+          {info.note}
+        </p>
+      )}
+    </SheetOverlay>
+  );
+}
+
+function DayDetailSheet({ date, tradition, calendar, onClose, onOpenFeast, onOpenReadingsForDay, onOpenFastingInfo }) {
   const theme = useTheme();
   const { seasons, feasts } = useMemo(() => liturgicalYearData(tradition, calendar, date), [tradition, calendar, date]);
   const season = useMemo(() => withDisplay(seasonAt(seasons, date), date, tradition, seasons), [seasons, date, tradition]);
@@ -2652,6 +2698,9 @@ function DayDetailSheet({ date, tradition, calendar, onClose, onOpenFeast, onOpe
               {fasting.label}
             </p>
           </div>
+          <button onClick={onOpenFastingInfo} aria-label="What does this mean?" className="p-1 -m-1 flex-shrink-0">
+            <Info size={16} color={alpha(theme.text, 0.33)} />
+          </button>
         </div>
       )}
 
@@ -2707,7 +2756,7 @@ const COLOR_MEANING = {
   "#C97BA0": "Rose — a brief turn toward joy amid a penitential season",
 };
 
-function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFeast, onOpenReadings, onOpenExport, tradition, calendar }) {
+function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFeast, onOpenReadings, onOpenExport, onOpenFastingInfo, tradition, calendar }) {
   const theme = useTheme();
   const accent = seasonAccent(season, theme.mode);
   const readingRef = todayReadingRef(tradition, today, calendar);
@@ -2767,7 +2816,7 @@ function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFea
           <div className="rounded-2xl p-4 lg:p-5 mb-4 lg:mb-5 flex items-center gap-3 lg:gap-4" style={{ backgroundColor: theme.surface }}>
             <UtensilsCrossed size={18} className="lg:hidden flex-shrink-0" color={accent} />
             <UtensilsCrossed size={22} className="hidden lg:block flex-shrink-0" color={accent} />
-            <div>
+            <div className="flex-1">
               <p className="text-[13px] lg:text-[16px]" style={{ color: theme.text }}>
                 Fasting
               </p>
@@ -2775,6 +2824,10 @@ function TodayView({ season, seasons, today, nextFeast, progressPct, onSelectFea
                 {fasting.label}
               </p>
             </div>
+            <button onClick={onOpenFastingInfo} aria-label="What does this mean?" className="p-1 -m-1 flex-shrink-0">
+              <Info size={16} className="lg:hidden" color={alpha(theme.text, 0.33)} />
+              <Info size={19} className="hidden lg:block" color={alpha(theme.text, 0.33)} />
+            </button>
           </div>
         )}
 
